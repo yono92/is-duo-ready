@@ -3,21 +3,16 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from '@/components/ui/link';
-import { statuses } from '@/lib/directory/types';
+import { statuses, type Locale } from '@/lib/directory/types';
+import { pageMetadata } from '@/lib/data/seo';
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; section: string }>;
+  params: Promise<{ locale: Locale; section: string }>;
 }): Promise<Metadata> {
   const { locale, section } = await params;
-  const t = await getTranslations({ locale, namespace: 'Nav' });
-  return {
-    title: section === 'methodology' ? `${t('methodology')} · Is Duo Ready?` : 'Is Duo Ready?',
-    alternates: {
-      canonical: `/${locale}/${section}`,
-      languages: { ko: `/ko/${section}`, en: `/en/${section}` },
-    },
-  };
+  if (section !== 'methodology') notFound();
+  return pageMetadata(locale, 'methodology');
 }
 export default async function InfoPage({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;

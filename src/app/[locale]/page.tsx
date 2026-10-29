@@ -13,15 +13,14 @@ import { FixtureNotice } from '@/components/fixture-notice';
 import { DirectoryControls } from '@/components/directory/controls';
 import { AppCard } from '@/components/directory/app-card';
 import { ButtonLink } from '@/components/ui/button';
+import { pageMetadata, websiteStructuredData } from '@/lib/data/seo';
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  return {
-    alternates: { canonical: `/${locale}`, languages: { ko: '/ko', en: '/en', 'x-default': '/' } },
-  };
+  return pageMetadata(locale, 'home');
 }
 export default async function Home({
   params,
@@ -42,6 +41,10 @@ export default async function Home({
     redirect({ href: `/?${queryString({ ...query, page: result.page })}`, locale });
   return (
     <main id="main">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: websiteStructuredData(locale) }}
+      />
       <section className="hero-surface">
         <div className="hero site-width">
           <div className="hero-copy">

@@ -13,6 +13,7 @@ import { AppIcon } from '@/components/app-icon';
 import { StatusBadge } from '@/components/status-badge';
 import { HistoryList } from '@/components/directory/history-list';
 import { AppStoreBadge } from '@/components/app-store-badge';
+import { appMetadata } from '@/lib/data/seo';
 
 export async function generateMetadata({
   params,
@@ -21,15 +22,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const result = await getPublishedApp(slug);
-  const app = result && 'app' in result ? result.app : null;
-  const canonical = result && 'redirect' in result ? result.redirect : slug;
-  return {
-    title: app ? `${app.names[locale]} · Is Duo Ready?` : 'Is Duo Ready?',
-    alternates: {
-      canonical: `/${locale}/apps/${canonical}`,
-      languages: { ko: `/ko/apps/${canonical}`, en: `/en/apps/${canonical}` },
-    },
-  };
+  if (!result) notFound();
+  if ('redirect' in result) return {};
+  return appMetadata(locale, result.app);
 }
 
 export default async function AppDetail({

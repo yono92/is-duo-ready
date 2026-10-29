@@ -20,7 +20,7 @@ Independent test: incomplete real content reports blockers; hosted build exclude
 - [x] T009 [US3] Exclude development render from hosted files and page in assets/development/, src/lib/device-asset.ts and deployment packaging; test direct URL denial.
 - [x] T010 [US3] Add scripts/release-check.ts reporting actual publication/translation/evidence/category/icon gaps and docs/release.md backup/rollback instructions.
 - [ ] T011 [US3] Complete authenticated deployed-browser checks after provisioning a permanent administrator. Provider login/session/private/public/storage/TLS checks and actual application deployment/public-browser checks passed; record evidence in docs/verification.md.
-- [ ] T012 [US3] Complete content review and publication. Approved Production application deployment is complete under T019; no extra DB/quota upgrade is needed after the user’s scope correction.
+- [x] T012 [US3] Complete initial content publication under the latest owner decision: supported22 + qualified unknown106. T020 records live verification; permanent admin remains T011.
 ## Phase 6 — cross-cutting
 - [x] T013 Run lint/typecheck/unit/DB/admin/fixture E2E/build/production guards and record actual results in docs/verification.md.
 - [x] T014 Update README.md, .env.example, docs/assets.md, docs/environments.md and tasks with completed versus external-blocked items.
@@ -28,11 +28,11 @@ Independent test: incomplete real content reports blockers; hosted build exclude
 ## Dependencies and execution
 T001→T002→T003/T005. T004 depends on provider access; T006/T007 follow config contract; T008
 requires hosted secrets and schema. T009/T010 can proceed independently from external provisioning.
-T011 requires a permanent Production administrator; T012 requires verified content. T013/T014
+T011 requires a permanent Production administrator; T012 is complete under the latest initial-publication decision. T013/T014
 finish local work without relabeling blocked external tasks. Research was delegated per speckit-plan;
 shared code edits and browser suites remain sequential. Tests for new contracts precede implementation.
 
-Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Vercel Production. Preview environment variables removed. Existing project IDs/data retained; names changed to is-duo-ready. The actual application is deployed; T011/T012 remain incomplete for permanent admin/authenticated browser checks and content publication. The later T019 run passed default Turbopack builds locally and on Vercel; earlier T013 build restrictions remain historical evidence.
+Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Vercel Production. Preview environment variables removed. Existing project IDs/data retained; names changed to is-duo-ready. The actual application is deployed; T011 remains incomplete for permanent admin/authenticated browser checks; T012 content publication is now complete. The later T019 run passed default Turbopack builds locally and on Vercel; earlier T013 build restrictions remain historical evidence.
 
 ## Post-publication source maintenance — user request 2026-10-29
 - [x] T015 Convert authored JavaScript to strict TypeScript, update command/preload entrypoints, and verify lint/types/unit/DB/browser/build behavior; detailed run outcomes remain in docs/verification.md.
@@ -40,9 +40,15 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 
 ## Official badge publication — user decision 2026-10-29
 - [x] T017 Record approval to publish apps with directly verified official Made for iPhone Duo badges, without an additional per-app approval or device evaluation; distinguish badge observations from release notes and human review timestamps in docs/PRD.md and this feature spec.
-- [ ] T018 Verify app-specific official badges and KR availability, record source/wording/observation provenance, complete required content, publish eligible apps through the existing publication flow and verify public records. Initial VLLO/Timepage web checks did not establish badge presence; the existing 22 release-note candidates are not a verified badge list. Application deployment is complete under T019; T011/T012 track remaining authenticated checks and content.
+- [ ] T018 Verify app-specific official badges and KR availability, record source/wording/observation provenance, complete required content, publish eligible apps through the existing publication flow and verify public records. Initial VLLO/Timepage web checks did not establish badge presence; the existing 22 release-note candidates are not a verified badge list. Application deployment is complete under T019; This badge investigation is optional after the latest owner decision; T020 publishes the initial wording-based and qualified-unknown batch.
 
 ## Vercel connection — user request 2026-10-29
 - [x] T019 Deploy a fixed source snapshot to the existing Production project, verify GitHub/main connection and live domain, repair upload dependency exclusions, and verify public pages, anonymous admin denial, development asset denial and noindex. Keep unpublished app data private and record source provenance and remaining content/admin work in docs/release.md and docs/verification.md.
 
-- [ ] T020 Publish the initial 128 apps under the latest owner decision, verify anonymous supported/unverified counts, filters, detail evidence and icons on the deployed site.
+- [x] T020 Publish the initial 128 apps under the latest owner decision, verify anonymous supported/unverified counts, filters, detail evidence and icons on the deployed site.
+
+## 공유 미리보기·SEO — 사용자 요청 2026-10-29
+- [x] T021 한 파일 SEO 설정·메타데이터 helper·페이지별 제목/설명/canonical/hreflang/OG/Twitter·홈 WebSite 구조화 데이터를 구현한다.
+- [x] T022 한국어/영어 1200×630 자체 브랜드 공유 이미지를 구현하고 로컬 글꼴 출처를 기록한다.
+- [x] T023 검색 색인 opt-in을 보존하며 실제 운영 소셜 봇 접근·사이트맵 언어 대체 URL·초기 HTML head 메타데이터를 정리한다.
+- [x] T024 단위/raw HTML/PNG 검증과 저장소 필수 검사를 수행하고 SEO 관리 문서·검증 기록을 남긴다.

@@ -6,7 +6,7 @@ import { routing } from '@/i18n/routing';
 import { Link } from '@/components/ui/link';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
-import { indexingAllowed } from '@/lib/data/seo';
+import { pageMetadata, siteVerification } from '@/lib/data/seo';
 import '../globals.css';
 export async function generateMetadata({
   params,
@@ -15,14 +15,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const validLocale = hasLocale(routing.locales, locale) ? locale : 'en';
-  const t = await getTranslations({ locale: validLocale, namespace: 'Metadata' });
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-    title: t('title'),
-    description: t(
-      process.env.DIRECTORY_DATA_SOURCE === 'postgres' ? 'publicDescription' : 'description',
-    ),
-    robots: { index: indexingAllowed(process.env), follow: indexingAllowed(process.env) },
+    ...pageMetadata(validLocale, 'home'),
+    verification: siteVerification(),
   };
 }
 export default async function LocaleLayout({

@@ -11,7 +11,7 @@ There is no separate Preview database. Do not give Preview builds Production cre
 
 ## Current implementation status
 
-As of2026-10-29, five schema migrations are applied to the maintainer's hosted project and repository checksums match. It holds128 actual KR app drafts,128 original icon files,22 evidence records and44 translations. Source/destination hashes match; repeat data transfer is a no-op. No apps have been published and no human review timestamps were invented. These operational datasets are not included in Git.
+Before the initial publication on 2026-10-29, five schema migrations were applied to the maintainer's hosted project and repository checksums match. It holds128 actual KR app drafts,128 original icon files,22 evidence records and44 translations. Source/destination hashes match; repeat data transfer is a no-op. No apps have been published and no human review timestamps were invented. These operational datasets are not included in Git.
 
 Actual provider checks passed for verified TLS, login/getUser/refresh/logout, revoked-session denial, ordinary/admin/revoked/anonymous RLS and private Storage. Disposable test identities were removed. No permanent hosted administrator has been provisioned.
 
@@ -39,7 +39,7 @@ The content allowlist excludes Auth identities, local admins, visitor submission
 
 ## Readiness
 
-The initial dataset has0 published apps,65 missing categories,128 missing human reviews,106 missing evidence/current bilingual summaries, and0 missing/corrupt icon files. `release:check` deliberately exits1 for incomplete content. Do not fabricate evidence or review dates to make it pass. Development device artwork is excluded from the public repository and hosted deployment. Automatic collection scheduling is not enabled.
+Historical pre-publication check: the initial dataset had0 published apps,65 missing categories,128 missing human reviews,106 missing evidence/current bilingual summaries, and0 missing/corrupt icon files. `release:check` deliberately exits1 for incomplete content. Do not fabricate evidence or review dates to make it pass. Development device artwork is excluded from the public repository and hosted deployment. Automatic collection scheduling is not enabled.
 
 ## Backup and recovery
 
@@ -50,3 +50,14 @@ The initial dataset has0 published apps,65 missing categories,128 missing human 
 5. Keep `PUBLIC_INDEXING=false` until content and deployment gates pass. Grant hosted administrator access deliberately in that environment's private allow-list; never copy local administrator credentials.
 
 Operational credentials, provider IDs and detailed private deployment records stay in ignored local configuration/records. [Verification](verification.md) distinguishes local tests, provider tests and uncompleted deployed checks.
+
+
+## Initial full-directory release — 2026-10-29
+
+The latest owner instruction authorized publishing all 128 existing KR apps. Production now has 22 supported apps with preserved official release-note evidence and 106 `unknown` apps displayed as “미지원 · 근거 미확인” / “Unsupported · unverified”. No official non-support evidence or device test was invented. Migration 006 extends categories; 65 null categories were filled from their stored Apple primary genres. The original local collection DB is unchanged.
+
+`node --import tsx scripts/publish-initial-directory.ts --target=production --project-ref=ixinxqxbwrkywulzlipt --source=docs/data/initial-app-import.json` first ran with rollback, then with `--apply` after the new UI deployment. The script only accepts the original complete draft batch; rerunning after publication refuses to overwrite it. The pre-publication backup is private under `.data/release/`. The batch uses an ephemeral operation ID through the existing authenticated publication function, deletes its transaction-local allow-list entry before commit, and leaves no persistent administrator. There are 128 publication events and 128 public history records. Publication/update timestamps are actual execution timestamps, not claimed human/device-test dates.
+
+Vercel production deployment: `dpl_3tofw434PXJHr5pQxXc8aFMMqafQ`, promoted to [is-duo-ready.vercel.app](https://is-duo-ready.vercel.app/ko). Uploaded 231 files from a fixed working-tree snapshot with SHA-256 `b0fc24cd34b4e762f31cf251a8cccbfa7848c4fb46bfcfc0f74819c1a3b1898b`. Remote default Turbopack build passed. Secrets, local observations, test files and development-only artwork were excluded.
+
+Production `release:check`: published128, drafts0, all missing-content counters0, icons128, corrupt/missing files0, ready=true. Browser verified total128 and the unverified filter106. Public HTTP checks passed for supported22, unverified106, English128, Social Networking5, supported/unverified details and a real image/jpeg icon. Anonymous admin collection API remains401; development artwork remains404. Existing noindex policy and permanent-admin setup are separate from this content release.

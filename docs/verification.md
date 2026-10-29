@@ -822,3 +822,55 @@ DB·아이콘 데이터, 개발용 원본 PNG는 Git에서 제외한다. 독립 
 - 변경한 테스트·운영 검사 스크립트 Prettier, `git diff --check`: PASS.
 
 이 확인에서 운영 DB나 공개 상태를 변경하거나 별도 배포 명령을 실행하지 않았다.
+
+## 2026-10-29 — initial complete-directory publication
+
+Latest owner instruction supersedes the badge-only initial gate: publish the 22 stored official support-wording entries and expose the remaining 106 with the qualified label `미지원 · 근거 미확인` / `Unsupported · unverified`. Internal `unknown` remains distinct from officially evidenced `unsupported`. Update dates describe publication, not device testing or an invented human review.
+
+- Migration 006 extends categories using stored KR Lookup primary genres; no grants/RLS changes. Created with Supabase CLI then moved to the repository's numbered migration runner convention. Local migration + 15 DB integration checks passed. Hosted migration applied through the connector (the hosted runtime URL is a transaction pool; setup correctly refused session advisory-lock migrations on port 6543). The repository checksum history was recorded in the same migration transaction.
+- `publish-initial-directory.ts` verifies the exact original 128 IDs, 22 unchanged official quotes and draft state; creates a private backup on apply; fills 65 missing categories and 106 bilingual summaries/reasons; calls the existing authenticated-role `publish_app` function. The random batch actor is explicitly an automation operation, not a human/Auth identity. Its allow-list row is removed before commit; no persistent admin credentials are created.
+- Production dry-run completed and rolled back: anonymous results supported=22, unknown=106. Post-rollback DB confirmed public entries=0, drafts=128, evidence=22, admins=0.
+- `npm run lint`, `npm run typecheck`, `npm test` (61/61), `npm run test:db` (15/15), `DUO_TEST_PORT=3395 npm run test:e2e` (21/21) passed. Two local `npm run build` attempts hit a Turbopack PostCSS process/port EPERM; `npm run build -- --webpack` passed. Remote default Turbopack build is separately checked at deployment.
+- Supabase security advisor: no new warning/error; existing INFO for deliberately private RLS-enabled `app_private.submission_limits` with no direct-access policy remains ([reference](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)).
+
+- Final apply succeeded: published128, supported22, unknown106, categories missing0, evidence remains22, admin allow-list remains0, audit/history128 each. `release:check` passed with all missing counters0 and all128 icon files valid.
+- Vercel default Turbopack build and promotion succeeded: `dpl_3tofw434PXJHr5pQxXc8aFMMqafQ`. Fixed snapshot digest `b0fc24cd34b4e762f31cf251a8cccbfa7848c4fb46bfcfc0f74819c1a3b1898b` (231 files). Existing dynamic filesystem tracing warnings remain nonfatal.
+- Live browser confirmed128 apps and status filter106. Nine live HTTP assertions passed: supported22, unknown106, en128, social-networking5, VLLO official quote/detail, KakaoTalk qualified unknown/detail, real icon200 image/jpeg, anonymous admin API401, development-only image404. Local fixture browser suite remains distinct from these actual production content checks.
+
+
+## 2026-10-29 — 공유 미리보기·SEO 설정
+
+사용자는 공개 링크 미리보기와 SEO 관리를 요청하고 코드 한 파일 관리 방식을 선택했다.
+`src/messages/seo.ts`에 양 언어 제목·설명·공유 이미지 문구·소유권 확인 설정을 모았다.
+공개 페이지별 OG/Twitter/canonical/hreflang, 앱 설명 원문 fallback, 홈 WebSite JSON-LD,
+사이트맵의 언어 대체 URL, 운영 소셜 봇 robots 예외와 최초 HTML head 메타데이터를 연결했다.
+검색 색인 opt-in, fixture/Preview 차단, 관리자 인증·noindex 경계는 유지했다.
+
+- 실제 공개 `/ko` HTML 읽기: 기존 description/canonical/hreflang 및 noindex 확인.
+  OG/Twitter 이미지 태그가 없음을 확인했다. web 도구 접근은 실패했고 공개 curl 읽기로 확인했다.
+- `npm run lint`: 최종 PASS.
+- `npm run typecheck`: 최종 PASS. 첫 Webpack 시도에서 새 robots 테스트의 override 타입 오류를
+  발견하여 수정했고 최종 build의 TypeScript 검사도 PASS.
+- `npm test`: 최종 16 files / 78 tests PASS (SEO 단위 18건 포함).
+- `npm run test:e2e`: 최초 26 PASS / 2 FAIL. 디자인 수정 중 이미지 버전을 1→2로 바꿨으나
+  이미 실행 중인 두 메타데이터 테스트가 이전 URL을 기대했다. 기대값을 설정에서 읽도록 수정 후
+  해당 두 건 PASS. 최종 이미지·잘못된 언어 404 수정까지 포함해 SEO 7건 + 기존 404 1건,
+  합계 8건을 다시 실행하여 모두 PASS(4.4s). 최초 실행과 재실행을 합친 결과이며 단일 28/28
+  전체 실행으로 기록하지 않는다. 기존 ko/en·라이트/다크·반응형·접근성·기기·URL 흐름은 최초 실행 통과.
+- `npm run build`: 기본 및 권한 확장 재시도 FAIL. 기존 CSS를 처리하는 Turbopack 내부 포트
+  생성이 EPERM으로 차단됐다. `npm run build -- --webpack`: 최종 PASS.
+- 완성된 production build를 로컬 127.0.0.1:3369에서 실행해 ko/en 초기 HTML head와 PNG 응답을
+  확인했다. PNG는 각각 42,727 / 47,465 bytes, 실제 디코딩 1200×630. 잘못된 페이지/이미지 locale은
+  404. 테스트 서버는 확인 후 종료했다. 기본 샌드박스의 listen EPERM 때문에 로컬 서버는 권한 확장 실행했다.
+- production route NFT trace에 Regular/ExtraBold 두 폰트 파일이 포함됨을 확인했다.
+  이미지는 외부 요청/DB 없이 렌더링하며 로컬 OFL 원본 출처·해시는 docs/assets.md에 기록했다.
+- 최초 단순 카드에 대한 사용자 피드백을 반영해 큰 굵은 두 줄 제목·확대 브랜드 심볼·하단 정보 구성으로
+  재작업했다. 최종 ko/en 이미지를 직접 시각 검토했고 잘림이나 한글 누락이 없었다.
+  실제 production 결과는 `test-results/seo/{ko,en}-production.png`에 보관했다(Git 제외).
+- 변경 소스 Prettier와 `git diff --check`: PASS. React 검토에서 서버 컴포넌트 유지,
+  기존 DB 조회 cache 재사용, 정적 폰트 병렬 읽기, JSON-LD의 `<` 이스케이프를 확인했다.
+
+기존 Three.js Clock 및 React 클라이언트 script 경고가 브라우저 로그에 남았다.
+운영 환경 변수·DB·검색 소유권 계정·배포는 변경하지 않았다. 따라서 실제 공유 URL은 아직 이전 배포이며
+이번 변경은 재배포해야 반영된다. PUBLIC_INDEXING=false도 유지되므로 검색 공개는 별도 설정이다.
+관리 방법과 배포 후 확인 항목은 docs/seo.md에 기록했다. 작업 시작 전에 존재하던 문서 변경은 보존했다.

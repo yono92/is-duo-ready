@@ -6,6 +6,7 @@ The root MIT license covers original Is Duo Ready? code and documentation. It do
 - **Apple design reference**: `docs/references/apple-design-analysis.md` retains its separate [VoltAgent MIT license](docs/references/apple-design-analysis.LICENSE).
 - **App Store badge**: `public/badges/app-store.svg` is Apple's unchanged marketing asset, not MIT-licensed project artwork. Source and conditions: [asset register](docs/assets.md), [App Store marketing guidelines](https://developer.apple.com/app-store/marketing/guidelines/). Use it only under Apple's terms; no ownership or endorsement is claimed.
 - **Supabase CA**: `src/lib/db/supabase-ca.ts` contains the public certificate supplied by Supabase for verified database TLS. Its source and fingerprint are recorded in that file.
+- **Nanum Gothic**: the unmodified Regular and ExtraBold fonts used for social preview images are Copyright NHN Corporation, distributed under the [SIL Open Font License 1.1](src/lib/seo/assets/OFL.txt). Sources and hashes are recorded in the [asset register](docs/assets.md).
 - **Dependencies**: packages in `package.json` / `package-lock.json` retain their own licenses. Installed package license files must accompany distributions where required. Lucide icons use the ISC license; original project branding is separate.
 - **Excluded materials**: actual app-icon files, database/import exports, deployment credentials and the development device render are not distributed in Git. App metadata and externally sourced evidence are not blanket-relicensed under MIT.
 

@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { indexingAllowed } from '@/lib/data/seo';
+import { indexingAllowed, languageAlternates, siteOrigin } from '@/lib/data/seo';
 import { database } from '@/lib/db/server';
 export const dynamic = 'force-dynamic';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -13,19 +13,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         )
       ).rows,
   );
-  const origin = process.env.NEXT_PUBLIC_SITE_URL!;
+  const origin = siteOrigin();
   return ['ko', 'en'].flatMap((locale) => [
     ...['', '/updates', '/methodology'].map((path) => ({
       url: new URL(`/${locale}${path}`, origin).toString(),
+      alternates: { languages: languageAlternates(path) },
     })),
     ...apps.map((app) => ({
-      url: new URL(`/${locale}/apps/${app.slug}`, origin).toString(),
+      url: new URL(`/${locale}/apps/${encodeURIComponent(app.slug)}`, origin).toString(),
       lastModified: app.reviewed_at,
       alternates: {
-        languages: {
-          ko: new URL(`/ko/apps/${app.slug}`, origin).toString(),
-          en: new URL(`/en/apps/${app.slug}`, origin).toString(),
-        },
+        languages: languageAlternates(`/apps/${encodeURIComponent(app.slug)}`),
       },
     })),
   ]);

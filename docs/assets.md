@@ -69,3 +69,11 @@ No permission request, external project or deployment was made in this task.
 ## 006 — 개발 기기 렌더 배포 제외
 
 원본은 `assets/development/iphone-duo-render.png`로 이동했습니다. 로컬 전용 `/device/iphone-duo-render.png` 라우트는 Vercel에서 404를 반환하고 홈에서도 제외됩니다. `.vercelignore`가 원본 폴더를 업로드에서 제외합니다. 이 조치는 공개 사용 권리 승인을 의미하지 않습니다.
+
+## 2026-10-29 — 링크 공유 이미지
+
+- `/api/og/ko`, `/api/og/en`: 저장소에서 직접 작성한 1200×630 PNG 카드. 기존 자체 제작 듀오 심볼과 서비스 설명만 사용하며 Apple 사진·로고·실제 앱 아이콘·지원 수치·확인 날짜를 포함하지 않는다. `src/messages/seo.ts`의 언어별 `image` 문구와 대체 텍스트를 사용한다.
+- `src/lib/seo/assets/NanumGothic-Regular.ttf`: [Google Fonts 원본](https://github.com/google/fonts/blob/main/ofl/nanumgothic/NanumGothic-Regular.ttf)을 2026-10-29 내려받아 변경 없이 보관했다. NHN Corporation 저작권, SIL Open Font License 1.1이며 동봉된 `OFL.txt`에 원본 고지와 라이선스를 보존한다. SHA-256: `76f45ef4a6bcff344c837c95a7dcc26e017e38b5846d5ae0cdcb5b86be2e2d31`, 2,054,744 bytes.
+- `src/lib/seo/assets/NanumGothic-ExtraBold.ttf`: [같은 글꼴의 ExtraBold 원본](https://github.com/google/fonts/blob/main/ofl/nanumgothic/NanumGothic-ExtraBold.ttf), 같은 저작권·SIL OFL 1.1을 적용한다. 변경하지 않은 원본이며 SHA-256: `5c4568e5295a8c52bc30e7efa1ea6d2de43556268ef42daba93540a1ece691ae`, 2,112,720 bytes. 큰 두 줄 제목과 브랜드 이름에 사용한다.
+- 폰트는 이미지 생성용 Node 서버에서 로컬 파일로 읽는다. 웹 페이지의 시스템 글꼴은 유지하고 이미지 요청 시 외부 폰트 서버를 호출하지 않는다. 전체 원본을 보관하여 SEO 문구의 한국어 변경에 따른 글리프 누락을 방지한다.
+- 사용자의 후속 디자인 요청에 따라 inset 카드를 제거하고 흰 바탕의 비대칭 구성, 굵은 두 줄 제목, 오른쪽의 확대된 자체 제작 두 패널·체크 모티프, 하단 구분선·정보 항목·도메인으로 재구성했다. 그림자·그라디언트·공식 기기 이미지를 사용하지 않는다.

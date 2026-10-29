@@ -135,11 +135,6 @@
     "description": "주소를 확인하거나 앱 목록으로 돌아가세요.",
     "home": "앱 목록으로"
   },
-  "Metadata": {
-    "title": "Is Duo Ready? — 아이폰 듀오 앱 지원 현황",
-    "description": "아이폰 듀오 앱 지원 현황의 개발용 미리보기입니다. 표시된 앱과 지원 상태는 가상 예시입니다.",
-    "publicDescription": "한국 앱스토어의 아이폰 듀오 앱 지원 여부와 공식 자료, 최근 변경 내용을 확인하세요."
-  },
   "Admin": {
     "navigation": "관리자 메뉴",
     "overview": "운영 현황",

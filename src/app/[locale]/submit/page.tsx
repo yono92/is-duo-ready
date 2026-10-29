@@ -3,9 +3,15 @@ import { getTranslations } from 'next-intl/server';
 import { dataSource, getPublishedApp } from '@/lib/data/directory';
 import { SubmissionForm } from '@/components/operations/submission-form';
 import { Link } from '@/components/ui/link';
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Submission');
-  return { title: `${t('title')} · Is Duo Ready?`, robots: { index: false, follow: true } };
+import { pageMetadata } from '@/lib/data/seo';
+import type { Locale } from '@/lib/directory/types';
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return pageMetadata(locale, 'submit');
 }
 export default async function SubmitPage({
   searchParams,

@@ -7,20 +7,14 @@ import { HistoryList } from '@/components/directory/history-list';
 import { RoutePagination } from '@/components/ui/route-pagination';
 import { parseQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
+import { pageMetadata } from '@/lib/data/seo';
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'Nav' });
-  return {
-    title: `${t('updates')} · Is Duo Ready?`,
-    alternates: {
-      canonical: `/${locale}/updates`,
-      languages: { ko: '/ko/updates', en: '/en/updates' },
-    },
-  };
+  return pageMetadata(locale, 'updates');
 }
 export default async function Updates({
   params,

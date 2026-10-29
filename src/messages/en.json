@@ -135,11 +135,6 @@
     "description": "Check the address or return to the app list.",
     "home": "Back to apps"
   },
-  "Metadata": {
-    "title": "Is Duo Ready? — iPhone Duo app support",
-    "description": "A development preview of iPhone Duo app support. The apps and support labels shown are fictional examples.",
-    "publicDescription": "Check iPhone Duo app support, official sources and recent changes for the South Korea App Store."
-  },
   "Admin": {
     "navigation": "Admin navigation",
     "overview": "Overview",

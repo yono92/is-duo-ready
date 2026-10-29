@@ -8,6 +8,8 @@ if (
 export default createNextIntlPlugin('./src/i18n/request.ts')({
   poweredByHeader: false,
   devIndicators: false,
+  // Kakao and other HTML-only share crawlers need metadata in the initial head.
+  htmlLimitedBots: /.*/,
   distDir:
     process.env.DUO_TEST_RUN === '1'
       ? testPort

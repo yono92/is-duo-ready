@@ -35,7 +35,7 @@ npm run dev -- --hostname 127.0.0.1
 - 관리자: [로그인](http://127.0.0.1:3000/ko/admin/login), [앱 가져오기](http://127.0.0.1:3000/ko/admin/apps/import)
 - 개발용 이메일은 `admin@duo-ready.local`입니다. 생성된 비밀번호는 Git에서 제외된 `.env.local`의 `LOCAL_ADMIN_PASSWORD`를 확인하세요. 파일 권한은 `0600`이며 명령 출력에 비밀번호를 남기지 않습니다.
 - 로컬 인증은 명시적 개발용입니다. `NODE_ENV=production` 또는 `VERCEL` 환경에서는 차단합니다. 운영 Supabase Auth 검증을 대신하지 않습니다.
-- 현재 일반 DB에는 실제 KR 앱 128개를 초안으로 가져왔고, 22개는 직접적인 지원 근거와 한국어·영어 설명을 준비했습니다. 사람의 공개 승인은 아직 하지 않아 공개 목록은 비어 있습니다. [초기 데이터·공개 승인 대상](docs/initial-data.md)을 확인하세요.
+- 운영 DB의 실제 KR 앱 128개를 공개했습니다. 공식 지원 문구 22개는 지원, 나머지 106개는 “미지원 · 근거 미확인”으로 표시합니다. 원본 수집·검토 기록은 [초기 데이터](docs/initial-data.md), 공개 실행 기록은 [출시 기록](docs/release.md)을 확인하세요. 로컬 수집 DB는 별도이며 운영 공개를 역동기화하지 않습니다.
 
 UI 시안만 볼 때는 `DIRECTORY_DATA_SOURCE=fixtures npm run dev`로 시작합니다.
 DB 모드는 `DIRECTORY_DATA_SOURCE=postgres`이며 조회 오류를 fixture로 대체하지 않습니다.
@@ -136,7 +136,7 @@ PostgreSQL 트랜잭션에서 `anon`/`authenticated` 역할과 RLS를 적용합�
 - **콘텐츠**: 후보 약 200개와 실제 앱 약 100개의 근거 조사·검토. 가져오기 도구 완성과 별도입니다.
 - **자산**: 기기 렌더의 공개 사용 권리는 미해결입니다. 앱 아이콘의 판촉 표시 조건과 출처는 [자산 기록](docs/assets.md)에 정리했습니다.
 
-006에서 기존 Supabase와 Vercel 프로젝트를 `is-duo-ready` 운영용으로 정리했습니다. 실제 앱은 [운영 사이트](https://is-duo-ready.vercel.app/ko)에 배포했으며, 공개 승인된 앱은 아직 0개입니다. 별도 Preview 환경은 사용하지 않습니다. 배포 소스·검증·남은 관리자/콘텐츠 작업은 [출시 기록](docs/release.md)을 확인하세요. 공개 색인은 `PUBLIC_INDEXING=true`,
+006에서 기존 Supabase와 Vercel 프로젝트를 `is-duo-ready` 운영용으로 정리했습니다. 실제 앱은 [운영 사이트](https://is-duo-ready.vercel.app/ko)에 배포했으며, 초기 앱 128개가 공개되었습니다(지원 22개, 근거 미확인 106개). 별도 Preview 환경은 사용하지 않습니다. 배포 소스·검증·남은 관리자/콘텐츠 작업은 [출시 기록](docs/release.md)을 확인하세요. 공개 색인은 `PUBLIC_INDEXING=true`,
 `NODE_ENV=production`, `VERCEL_ENV=production`, `DIRECTORY_DATA_SOURCE=postgres`, 공개 HTTPS origin이 모두 필요합니다.
 개발·Preview에서는 noindex이고 fixture 앱은 사이트맵에서 제외합니다.
 
@@ -162,3 +162,8 @@ References: [styling](https://astryx.atmeta.com/docs/styling-overview), [themes]
 ## 라이선스와 자산
 
 직접 작성한 코드는 [MIT](LICENSE)로 공개합니다. 제3자 의존성·App Store 배지·상표·출처 자료는 각 원저작자의 조건을 따르며 MIT 재허가 대상이 아닙니다. [제3자 고지](THIRD_PARTY_NOTICES.md)와 [자산 기록](docs/assets.md)을 확인하세요. 운영 데이터, 환경 비밀 값, 가져오기 원본, 공개 사용 권리가 정리되지 않은 기기 렌더는 Git에 포함하지 않습니다. 기기 렌더 없이도 새 clone을 실행할 수 있습니다.
+
+### 공유 미리보기·SEO
+
+한국어·영어 검색 제목, 설명, 공유 카드 문구는 `src/messages/seo.ts`에서 관리합니다.
+이미지 확인 경로, 검색 색인 설정과 검색엔진 소유권 확인 방법은 [SEO 관리](docs/seo.md)를 참고하세요.

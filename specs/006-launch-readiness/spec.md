@@ -84,3 +84,10 @@
 ## Initial directory publication — latest owner decision, 2026-10-29
 
 Publish the original 128-app batch: 22 with stored explicit official support wording; 106 as internal `unknown`, displayed as “미지원 · 근거 미확인” / “Unsupported · unverified”. This supersedes the badge-only gate for this batch. Preserve source observations, distinguish update/publication dates from device tests, fill 65 categories from stored Apple primary genre IDs, and record the owner-authorized CLI batch provenance. Use the existing authenticated/RLS publish transaction; no persistent admin account or automatic collector publishing.
+
+## 공유 미리보기·SEO — 2026-10-29
+- 한국어·영어의 제목·설명·이미지 문구·검색 소유권 확인 값을 코드 한 파일에서 관리한다. 관리자 설정 UI나 DB 변경은 없다.
+- 홈·지원 안내·업데이트·제보·앱 상세 링크는 해당 페이지의 canonical, 언어 대체 URL, OG/Twitter 제목·설명과 1200×630 브랜드 PNG를 제공한다. 앱 설명은 기존 원문 fallback을 사용한다.
+- 카카오·Slack·Twitter 등 비-JavaScript 수집기의 최초 HTML head에 메타데이터를 제공한다. 이미지 렌더는 외부 요청·DB 없이 동작한다.
+- 검색 색인은 기존 PUBLIC_INDEXING opt-in을 유지한다. 실제 운영 사이트의 소셜 수집은 별도 허용하며 로컬·fixture·Preview는 계속 robots 차단한다. 관리자·API 비공개 경계, 공개 앱 전용 사이트맵, 실제 검토일을 보존한다.
+- 양 언어 raw HTML·PNG 치수·메타데이터 fallback·색인 경계와 필수 저장소 검증을 실행하고 실제 배포 여부를 별도로 기록한다.
