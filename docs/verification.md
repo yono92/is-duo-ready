@@ -468,3 +468,11 @@ Turbopack에는 앞선 제한 환경의 포트 생성 오류가 캐시되어 첫
 ## Open-source publication preparation (2026-10-29)
 
 User explicitly requested a public GitHub repository. Original code uses MIT; third-party notices and Spec Kit/VoltAgent licenses are preserved. Added contribution/security/issue/PR guidance and read-only CI with pinned official action commits. Local envs, DB/icon exports, working imports, deployment metadata and unapproved device render are excluded from Git. Fresh clones omit the optional render without showing a broken image. Public-repository and CI outcomes are recorded after upload.
+
+### Publication outcome
+
+- Published [yono92/is-duo-ready](https://github.com/yono92/is-duo-ready) as a public repository on `main`; initial commit `b9b1af3a869d4fbd83f177798fab6789a5e052a7`. GitHub recognizes the MIT license. Issues, Discussions and private vulnerability reporting are enabled.
+- Audited all 279 staged files before upload, including comparisons against actual configured hosted credentials: no secret matches or excluded operational files were staged. App data, original icons, private environment files and deployment records remain outside Git.
+- [First GitHub CI run](https://github.com/yono92/is-duo-ready/actions/runs/40855538941): dependency installation, lint, TypeScript, 53 unit tests, database setup/migrations and 15 DB integration tests passed. Browser suite: 31/37 passed, 6 failed. One import accessibility case reported an empty document title; four public-data locale/theme cases reported horizontal overflow; one review/alias case matched duplicate review text. These failures remain unresolved in the published initial commit.
+- Subsequent fixture E2E, build and production checks were skipped after the browser failure. Do not treat this run as a passing release gate. Local UI edits made after the initial commit are outside that CI result and are not included in this publication-record update.
+- Repository publication did not connect Vercel Git deployment or deploy the actual application.
