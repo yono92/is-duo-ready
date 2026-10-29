@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { AdminError, assertAdmin } from '@/lib/admin/auth';
 import { uuid } from '@/lib/admin/input';
 import { parseImport } from '@/lib/import/input';
-import { ImportError } from '@/lib/import/apple.mjs';
+import { ImportError } from '@/lib/import/apple.ts';
 import {
   createImportRun,
   processImportRow,

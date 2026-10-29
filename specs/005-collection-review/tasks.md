@@ -7,14 +7,14 @@
 - [x] T001 Complete specification/design/checklist in specs/005-collection-review/ and verify existing ignore/config boundaries.
 
 ## Phase 2 — Foundation
-- [x] T002 Add real DB workflow/security tests in tests/integration/operations.test.mjs for candidate deduplication, rate limiting, atomic approval and role isolation.
+- [x] T002 Add real DB workflow/security tests in tests/integration/operations.test.ts for candidate deduplication, rate limiting, atomic approval and role isolation.
 - [x] T003 Add db/migrations/004_collection_review.sql with RLS and constrained entities: target interval_hours 24..168, URL <=2000, approval_note 1..1000; payload object <=150000 bytes; review states pending/deferred/approved/rejected and positive revision; submission body 10..4000; attempts 0..3; SHA256 fingerprints unique across terminal states.
 
 ## Phase 3 — US1 collection (P1)
 Independent test: repeated content generates one candidate, failures preserve success/public data, lease recovery and forbidden hosts fail closed.
 - [x] T004 [P] [US1] Add adapter boundary tests in tests/unit/collection.test.ts for DNS, redirects, robots, body/time bounds and fingerprint behavior.
-- [x] T005 [US1] Implement src/lib/collection/web.mjs with approved exact host, pinned public IPv4, 8s abort, <=2MiB response, robots checks and <=2 retries.
-- [x] T006 [US1] Implement src/lib/collection/worker.mjs and scripts/collect.mjs with committed 5-minute lease, one target/request, <=5 targets/batch, attempts and backoff; share import lock/clock; local-only watch.
+- [x] T005 [US1] Implement src/lib/collection/web.ts with approved exact host, pinned public IPv4, 8s abort, <=2MiB response, robots checks and <=2 retries.
+- [x] T006 [US1] Implement src/lib/collection/worker.ts and scripts/collect.ts with committed 5-minute lease, one target/request, <=5 targets/batch, attempts and backoff; share import lock/clock; local-only watch.
 - [x] T007 [US1] Implement src/app/[locale]/admin/(protected)/collections/page.tsx and localized forms with explicit official/terms confirmation, pause/retry/status.
 
 ## Phase 4 — US2 review (P1)
@@ -42,3 +42,9 @@ Deliver and verify US1 collection first, then transactional review, then intake.
 
 ## Completion
 2026-10-29: 14/14 complete for local implementation and verification. See docs/verification.md for actual commands, counts, failure corrections and remaining 006 hosted/scheduler setup. No real submissions, monitored targets or public approvals were created in the main DB.
+
+## TanStack Query 도입 — 2026-10-29
+
+- [ ] T015 정확한 의존성 버전, 화면별 QueryClient, 인증된 수집 현황 GET 및 15초 갱신/오류 UI를 구현한다.
+- [ ] T016 수집 화면 액션 완료 후 캐시 무효화를 연결하고 API 권한·자동 갱신·일시 장애 복구·권한 회수 회귀 테스트를 추가한다.
+- [ ] T017 lint/typecheck/unit/fixture E2E/관리자 E2E/build를 실행하고 실제 결과와 상태 관리 기준을 기록한다.

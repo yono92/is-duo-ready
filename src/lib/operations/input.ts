@@ -1,4 +1,4 @@
-import { appleId } from '@/lib/import/apple.mjs';
+import { appleId } from '@/lib/import/apple.ts';
 import { InputError, publicSourceUrl } from '@/lib/admin/input';
 
 export function parseSubmission(form: FormData) {

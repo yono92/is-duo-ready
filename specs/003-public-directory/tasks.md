@@ -9,7 +9,7 @@
 - [x] T002 Add explicit source mode and fictional/real DTO types in src/lib/data/directory.ts, src/lib/directory/types.ts; preserve fixture gate and fail on DB errors without fallback.
 ## Phase 3: US1 — Real public directory
 Independent test: only published rows visible across search/filter/sort/pages in either locale.
-- [x] T003 [US1] Write non-owner public query/search/pagination/error tests in tests/integration/directory.test.mjs; enforce q<=100, page<=10000 and 24 rows per page.
+- [x] T003 [US1] Write non-owner public query/search/pagination/error tests in tests/integration/directory.test.ts; enforce q<=100, page<=10000 and 24 rows per page.
 - [x] T004 [US1] Implement PostgreSQL public query adapter and SSR listing in src/lib/data/, src/app/[locale]/page.tsx; deterministic tie-breaking and error/empty/unavailable states.
 ## Phase 4: US2 — Detail and sources
 Independent test: actual reviewed evidence/versions versus null fields, stale translations and hidden/old slugs.

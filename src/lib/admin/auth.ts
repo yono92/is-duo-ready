@@ -2,7 +2,7 @@ import 'server-only';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { database, hostedSessionActive } from '@/lib/db/server';
-import { verifiedSessionId } from './hosted-session.mjs';
+import { verifiedSessionId } from './hosted-session.ts';
 import { createAuthClient } from '@/lib/supabase/auth';
 import { localAuthConfig, localSessionActor } from './local-auth';
 import type { Locale } from '@/lib/directory/types';

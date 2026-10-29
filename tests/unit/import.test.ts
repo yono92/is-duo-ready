@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { parseImport } from '@/lib/import/input';
-import { appleId, lookupApple, normalizeApple } from '@/lib/import/apple.mjs';
+import { appleId, lookupApple, normalizeApple } from '@/lib/import/apple.ts';
 
 const url = 'https://apps.apple.com/kr/app/test/id123456';
 const response = {

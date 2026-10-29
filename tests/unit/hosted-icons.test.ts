@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { createHash } from 'node:crypto';
-import { supabaseIconStorage } from '../../src/lib/icons/hosted.mjs';
+import { supabaseIconStorage } from '../../src/lib/icons/hosted.ts';
 
 const env = {
   NEXT_PUBLIC_SUPABASE_URL: 'https://testproject.supabase.co',

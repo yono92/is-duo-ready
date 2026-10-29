@@ -3,9 +3,9 @@ import { revalidatePath } from 'next/cache';
 import { assertAdmin, AdminError } from '@/lib/admin/auth';
 import { InputError, uuid, revision } from '@/lib/admin/input';
 import { database } from '@/lib/db/server';
-import { runCollection } from '@/lib/collection/worker.mjs';
-import { monitorUrl, CollectionError } from '@/lib/collection/web.mjs';
-import { appleId } from '@/lib/import/apple.mjs';
+import { runCollection } from '@/lib/collection/worker.ts';
+import { monitorUrl, CollectionError } from '@/lib/collection/web.ts';
+import { appleId } from '@/lib/import/apple.ts';
 
 export type OperationState = { error?: string; success?: string };
 function safeError(error: unknown) {

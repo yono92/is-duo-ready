@@ -3,8 +3,8 @@ import { createHash } from 'node:crypto';
 import type { PoolClient } from 'pg';
 import { database } from '@/lib/db/server';
 import type { ImportInput, Proposal } from './input';
-import { ImportError, lookupApple } from './apple.mjs';
-import { collectIcon } from '@/lib/icons/storage.mjs';
+import { ImportError, lookupApple } from './apple.ts';
+import { collectIcon } from '@/lib/icons/storage.ts';
 
 export type ImportRow = {
   number: number;

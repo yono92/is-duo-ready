@@ -19,7 +19,7 @@ Pre-design and post-design: I evidence is explicitly reviewed; II imports save p
 
 ## Project Structure
 Documentation: spec.md, plan.md, research.md, data-model.md, contracts/workflow.md, quickstart.md, tasks.md, checklists/requirements.md.
-Implementation: src/lib/import/, src/app/[locale]/admin/apps/import/, src/messages/, scripts/probe-app-store.mjs, docs/import-validation.md, tests/unit/import.test.ts, tests/integration/import.test.ts, tests/e2e/admin.spec.ts.
+Implementation: src/lib/import/, src/app/[locale]/admin/apps/import/, src/messages/, scripts/probe-app-store.ts, docs/import-validation.md, tests/unit/import.test.ts, tests/integration/import.test.ts, tests/e2e/admin.spec.ts.
 
 ## Dependencies and delivery
 

@@ -1,10 +1,11 @@
+import type { RequestOptions } from '../../src/lib/collection/web.ts';
 import { describe, expect, it } from 'vitest';
 import {
   allowedIPv4,
   monitorUrl,
   robotsAllows,
   fetchOfficial,
-} from '../../src/lib/collection/web.mjs';
+} from '../../src/lib/collection/web.ts';
 
 describe('official source boundary', () => {
   it('rejects private, reserved, literal IP and unapproved host URLs', () => {
@@ -98,7 +99,7 @@ describe('official source boundary', () => {
 // Exercise the transport seam: the actual request receives a pinned resolver, not a second DNS lookup.
 import { EventEmitter } from 'node:events';
 import { PassThrough } from 'node:stream';
-import { requestText } from '../../src/lib/collection/web.mjs';
+import { requestText } from '../../src/lib/collection/web.ts';
 it('pins a validated public DNS result and rejects mixed private answers before opening a socket', async () => {
   let opened = 0;
   const request = (
@@ -131,15 +132,18 @@ it('pins a validated public DNS result and rejects mixed private answers before 
     return req;
   };
   const result = await requestText('https://example.com/news', 'example.com', {
-    resolver: async () => [{ address: '8.8.8.8' }],
-    request,
+    resolver: async () => [{ address: '8.8.8.8', family: 4 }],
+    request: request as unknown as RequestOptions['request'],
   });
   expect(result.text).toBe('safe text');
   expect(opened).toBe(1);
   await expect(
     requestText('https://example.com/news', 'example.com', {
-      resolver: async () => [{ address: '8.8.8.8' }, { address: '127.0.0.1' }],
-      request,
+      resolver: async () => [
+        { address: '8.8.8.8', family: 4 },
+        { address: '127.0.0.1', family: 4 },
+      ],
+      request: request as unknown as RequestOptions['request'],
     }),
   ).rejects.toThrow('blockedAddress');
   expect(opened).toBe(1);
@@ -172,8 +176,8 @@ it('bounds DNS resolution, redirects and streamed body size', async () => {
     };
     await expect(
       requestText('https://example.com/news', 'example.com', {
-        resolver: async () => [{ address: '8.8.8.8' }],
-        request,
+        resolver: async () => [{ address: '8.8.8.8', family: 4 }],
+        request: request as unknown as RequestOptions['request'],
       }),
     ).rejects.toThrow(code);
   }
@@ -186,11 +190,15 @@ it('refuses the local scheduler in hosted and production environments before ope
     { VERCEL_ENV: 'preview' },
     { NODE_ENV: 'production' },
   ] as const) {
-    const result = spawnSync(process.execPath, ['scripts/collect.mjs'], {
-      cwd: process.cwd(),
-      env: { ...process.env, ...env },
-      encoding: 'utf8',
-    });
+    const result = spawnSync(
+      process.execPath,
+      ['--import', import.meta.resolve('tsx'), 'scripts/collect.ts'],
+      {
+        cwd: process.cwd(),
+        env: { ...process.env, ...env },
+        encoding: 'utf8',
+      },
+    );
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('Local collection could not run');
     expect(result.stderr).not.toContain('postgresql://');
@@ -216,8 +224,8 @@ it('aborts a stalled response body at the overall deadline', async () => {
   };
   await expect(
     requestText('https://example.com/news', 'example.com', {
-      resolver: async () => [{ address: '8.8.8.8' }],
-      request,
+      resolver: async () => [{ address: '8.8.8.8', family: 4 }],
+      request: request as unknown as RequestOptions['request'],
       timeoutMs: 5,
     }),
   ).rejects.toThrow('timeout');

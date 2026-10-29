@@ -2,8 +2,8 @@
 
 - Product source of truth: docs/PRD.md. Service name: Is Duo Ready?; package/project id: duo-ready.
 - UI work must follow DESIGN.md: Apple-inspired visual tokens with Notion-style directory structure.
-- Read .specify/memory/constitution.md and active specs/001-design-app-directory before changes.
-- Spec Kit 1.0.13 uses `.agents/skills/speckit-*/SKILL.md`; use installed skills, not legacy slash prompts.
+- Read docs/engineering-principles.md and active specs/001-design-app-directory before changes.
+- Optional local Spec Kit/agent tooling is excluded from Git; product specifications remain in specs/.
 - Stack: Next.js App Router, strict TypeScript, Astryx, Tailwind 4, Supabase; future target Vercel.
 - Check installed Next.js docs in node_modules/next/dist/docs and official docs for changed APIs.
 - Locale ko/en and store country KR are independent. All user-facing text belongs in messages.

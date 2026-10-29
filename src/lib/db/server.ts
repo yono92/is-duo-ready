@@ -1,8 +1,8 @@
 import 'server-only';
 import { Pool, type PoolClient } from 'pg';
-import { withActor } from './transaction.mjs';
-import { liveHostedSession } from '@/lib/admin/hosted-session.mjs';
-import { connectionOptions } from './connection.mjs';
+import { withActor } from './transaction.ts';
+import { liveHostedSession } from '@/lib/admin/hosted-session.ts';
+import { connectionOptions } from './connection.ts';
 
 const globalDb = globalThis as unknown as { duoPool?: Pool };
 function pool() {

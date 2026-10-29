@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { requireAdmin } from '@/lib/admin/auth';
 import { uuid } from '@/lib/admin/input';
 import { getImportRun, listImportRuns } from '@/lib/import/repository';
-import { ImportError } from '@/lib/import/apple.mjs';
+import { ImportError } from '@/lib/import/apple.ts';
 import { ImportForm, ImportProgress } from '@/components/admin/import-form';
 import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/lib/directory/types';

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import type { Client } from 'pg';
-import { connect, asActor } from '../integration/helpers.mjs';
+import { connect, asActor } from '../integration/helpers.ts';
 
 async function seed(suffix: string) {
   const client = await connect();
@@ -36,7 +36,7 @@ async function seed(suffix: string) {
     ],
   };
   try {
-    return await asActor(client, process.env.LOCAL_ADMIN_USER_ID, async (db: Client) => {
+    return await asActor(client, process.env.LOCAL_ADMIN_USER_ID!, async (db: Client) => {
       const app = (
         await db.query('SELECT app_private.save_app($1::jsonb,NULL) AS app', [
           JSON.stringify(payload),
@@ -137,19 +137,26 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
     await expect(visitor.getByRole('heading', { level: 1 })).toContainText('Fictional public');
   }
   await page.goto('/en/admin/login');
-  await page.getByLabel('Email', { exact: true }).fill(process.env.LOCAL_ADMIN_EMAIL!);
-  await page.getByLabel('Password', { exact: true }).fill(process.env.LOCAL_ADMIN_PASSWORD!);
+  await page
+    .getByRole('main')
+    .getByLabel('Email', { exact: true })
+    .fill(process.env.LOCAL_ADMIN_EMAIL!);
+  await page
+    .getByRole('main')
+    .getByLabel('Password', { exact: true })
+    .fill(process.env.LOCAL_ADMIN_PASSWORD!);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL(/\/admin\/apps$/);
   await page.goto(`/en/admin/apps/${app.id}`);
   const renamed = `${app.slug}-renamed`;
-  await page.getByLabel('Page address', { exact: true }).fill(renamed);
+  await page.getByRole('main').getByLabel('Page address', { exact: true }).fill(renamed);
   await page
     .getByRole('combobox', { name: 'Proposed support status', exact: true })
     .selectOption('planned');
   await page.getByRole('button', { name: 'Save draft changes', exact: true }).click();
   await expect(page).toHaveURL(/saved=1/);
   await page
+    .getByRole('main')
     .getByLabel('Public change reason', { exact: true })
     .fill('Fictional cache and alias review');
   await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
@@ -159,26 +166,29 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
     await visitor.goto(`/${locale}/apps/${app.slug}?q=Fictional`);
     await expect(visitor).toHaveURL(new RegExp(`/${locale}/apps/${renamed}\\?q=Fictional`));
     await expect(
-      visitor.getByText('Fictional cache and alias review', { exact: true }),
+      visitor.getByRole('main').getByText('Fictional cache and alias review', { exact: true }),
     ).toBeVisible();
     await expect(visitor.locator('link[rel="canonical"]')).toHaveAttribute(
       'href',
       new RegExp(`/${locale}/apps/${renamed}$`),
     );
     await visitor.goto(`/${locale}?q=${encodeURIComponent(`공개검증8${info.repeatEachIndex}201`)}`);
-    await expect(visitor.getByTestId('app-card')).toHaveCount(1);
-    await expect(visitor.getByTestId('app-card')).toContainText(
+    await expect(visitor.getByRole('main').getByTestId('app-card')).toHaveCount(1);
+    await expect(visitor.getByRole('main').getByTestId('app-card')).toContainText(
       locale === 'ko' ? '지원 예정' : 'Support planned',
     );
     await visitor.goto(`/${locale}/updates`);
     await expect(
-      visitor.getByText('Fictional cache and alias review', { exact: true }),
+      visitor.getByRole('main').getByText('Fictional cache and alias review', { exact: true }),
     ).toBeVisible();
   }
   await page
     .getByRole('combobox', { name: 'Publication action', exact: true })
     .selectOption('archive');
-  await page.getByLabel('Public change reason', { exact: true }).fill('Fictional cache archival');
+  await page
+    .getByRole('main')
+    .getByLabel('Public change reason', { exact: true })
+    .fill('Fictional cache archival');
   await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
   await page.getByRole('button', { name: 'Apply reviewed change', exact: true }).click();
   await expect(page.getByText('Archived', { exact: true })).toBeVisible();
@@ -190,10 +200,10 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
       );
     }
     await visitor.goto(`/${locale}?q=${encodeURIComponent(`공개검증8${info.repeatEachIndex}201`)}`);
-    await expect(visitor.getByTestId('app-card')).toHaveCount(0);
+    await expect(visitor.getByRole('main').getByTestId('app-card')).toHaveCount(0);
     await visitor.goto(`/${locale}/updates`);
     await expect(
-      visitor.getByText('Fictional cache and alias review', { exact: true }),
+      visitor.getByRole('main').getByText('Fictional cache and alias review', { exact: true }),
     ).toHaveCount(0);
   }
   await visitor.close();

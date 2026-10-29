@@ -13,7 +13,7 @@ Use a KR App Store URL and primary sources. Label uncertain claims as unverified
 
 1. 저장소를 fork하고 작업 브랜치를 만듭니다. Fork the repository and create a focused branch.
 2. README의 Node22·로컬 PostgreSQL 설정으로 실행합니다. Production 자격 증명을 사용하지 마세요.
-3. `docs/PRD.md`, `DESIGN.md`, `AGENTS.md`, `.specify/memory/constitution.md`와 관련 feature spec을 읽습니다.
+3. `docs/PRD.md`, `DESIGN.md`, `AGENTS.md`, `docs/engineering-principles.md`와 관련 feature spec을 읽습니다.
 4. 사용자 문구는 `src/messages/ko.json`, `en.json` 양쪽에 넣습니다. locale과 스토어 country KR을 혼동하지 마세요.
 5. DB 변경은 새 migration과 RLS를 포함합니다. 기존 migration은 수정하지 않습니다.
 6. 관련 검사와 아래 기본 검사를 실행하고 PR에 결과·제약을 기록합니다.

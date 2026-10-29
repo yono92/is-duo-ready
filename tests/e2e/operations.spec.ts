@@ -3,7 +3,7 @@ import type { Client } from 'pg';
 import AxeBuilder from '@axe-core/playwright';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
-import { connect, asActor } from '../integration/helpers.mjs';
+import { connect, asActor } from '../integration/helpers.ts';
 
 async function login(page: Page, locale: 'ko' | 'en') {
   const t = (locale === 'ko' ? ko : en).Admin;
@@ -22,7 +22,7 @@ async function login(page: Page, locale: 'ko' | 'en') {
 async function seed(id: string) {
   const db = await connect();
   try {
-    return await asActor(db, process.env.LOCAL_ADMIN_USER_ID, async (db: Client) => {
+    return await asActor(db, process.env.LOCAL_ADMIN_USER_ID!, async (db: Client) => {
       const app = (
         await db.query('SELECT app_private.save_app($1,NULL) AS app', [
           {
@@ -347,7 +347,7 @@ test('new submission links only after app creation, and denied actions cannot mu
     ).toBe(before);
     // Revoke allowlist after the form was rendered; the server action must re-check it.
     await db.query('UPDATE app_private.admin_users SET enabled=false WHERE user_id=$1', [
-      process.env.LOCAL_ADMIN_USER_ID,
+      process.env.LOCAL_ADMIN_USER_ID!,
     ]);
     try {
       const response = await page.request.post(request.url(), {
@@ -361,7 +361,7 @@ test('new submission links only after app creation, and denied actions cannot mu
       expect(await response.text()).toContain('forbidden');
     } finally {
       await db.query('UPDATE app_private.admin_users SET enabled=true WHERE user_id=$1', [
-        process.env.LOCAL_ADMIN_USER_ID,
+        process.env.LOCAL_ADMIN_USER_ID!,
       ]);
     }
     expect(

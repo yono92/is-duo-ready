@@ -3,8 +3,8 @@ import sharp from 'sharp';
 import type { Client } from 'pg';
 import { unlink } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { connect, asActor } from '../integration/helpers.mjs';
-import { inspectIcon, localIconStorage } from '../../src/lib/icons/storage.mjs';
+import { connect, asActor } from '../integration/helpers.ts';
+import { inspectIcon, localIconStorage } from '../../src/lib/icons/storage.ts';
 
 test('stored icons render offline, require draft authorization and disappear after archival', async ({
   page,
@@ -63,8 +63,14 @@ test('stored icons render offline, require draft authorization and disappear aft
     expect((await context.request.get(`/api/app-icons/${app.id}`)).status()).toBe(404);
     expect((await context.request.get(`/api/admin/app-icons/${app.id}`)).status()).toBe(404);
     await page.goto('/en/admin/login');
-    await page.getByLabel('Email', { exact: true }).fill(process.env.LOCAL_ADMIN_EMAIL!);
-    await page.getByLabel('Password', { exact: true }).fill(process.env.LOCAL_ADMIN_PASSWORD!);
+    await page
+      .getByRole('main')
+      .getByLabel('Email', { exact: true })
+      .fill(process.env.LOCAL_ADMIN_EMAIL!);
+    await page
+      .getByRole('main')
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.LOCAL_ADMIN_PASSWORD!);
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
     await expect(page).toHaveURL(/\/en\/admin\/apps$/);
     let external = 0;
@@ -73,7 +79,7 @@ test('stored icons render offline, require draft authorization and disappear aft
       return route.abort();
     });
     await page.goto(`/en/admin/apps/${app.id}`);
-    const adminImage = page.locator(`img[src$="/api/admin/app-icons/${app.id}"]`);
+    const adminImage = page.getByRole('main').locator(`img[src$="/api/admin/app-icons/${app.id}"]`);
     await expect(adminImage).toBeVisible();
     await expect
       .poll(() => adminImage.evaluate((img) => (img as HTMLImageElement).naturalWidth))
@@ -99,14 +105,14 @@ test('stored icons render offline, require draft authorization and disappear aft
     ] as const) {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto(`/${locale}/apps/fictional-stored-icon-browser`);
-      const image = page.locator(`img[src$="/api/app-icons/${app.id}"]`);
+      const image = page.getByRole('main').locator(`img[src$="/api/app-icons/${app.id}"]`);
       await expect(image).toBeVisible();
       await expect
         .poll(() => image.evaluate((img) => (img as HTMLImageElement).naturalWidth))
         .toBe(48);
       expect(await image.evaluate((img) => img.getBoundingClientRect().width)).toBe(48);
       await expect(
-        page.locator('a[href="https://apps.apple.com/kr/app/id990008002"] img'),
+        page.getByRole('main').locator('a[href="https://apps.apple.com/kr/app/id990008002"] img'),
       ).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
@@ -137,7 +143,9 @@ test('stored icons render offline, require draft authorization and disappear aft
       resolve(process.env.APP_ICON_STORAGE_DIR || '.data/app-icons', asset.storage_path),
     );
     await page.reload();
-    await expect(page.locator(`img[src$="/api/admin/app-icons/${app.id}"]`)).toHaveCount(0);
+    await expect(
+      page.getByRole('main').locator(`img[src$="/api/admin/app-icons/${app.id}"]`),
+    ).toHaveCount(0);
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     await expect(page).toHaveURL(/\/en\/admin\/login$/);
     expect((await context.request.get(`/api/admin/app-icons/${app.id}`)).status()).toBe(404);

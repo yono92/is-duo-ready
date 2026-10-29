@@ -1,6 +1,6 @@
 import { publicSourceUrl } from '@/lib/admin/input';
 import { statuses } from '@/lib/directory/types';
-import { appleId, ImportError } from './apple.mjs';
+import { appleId, ImportError } from './apple.ts';
 
 export type Proposal = {
   source_url: string;

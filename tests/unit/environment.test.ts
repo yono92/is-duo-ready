@@ -12,7 +12,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
-import { validateEnvironment } from '../../scripts/lib/environment.mjs';
+import { validateEnvironment } from '../../scripts/lib/environment.ts';
 
 const publishable = 'sb_publishable_example_local_test_only';
 const jwt = (role: string) =>
@@ -247,7 +247,7 @@ describe('environment string contract', () => {
 
 it('loads local environment files in Next.js precedence while preserving process environment', () => {
   const cwd = mkdtempSync(join(tmpdir(), 'duo-ready-env-'));
-  const script = fileURLToPath(new URL('../../scripts/check-env.mjs', import.meta.url));
+  const script = fileURLToPath(new URL('../../scripts/check-env.ts', import.meta.url));
   const env = {
     ...Object.fromEntries(
       Object.entries(process.env).filter(
@@ -262,10 +262,14 @@ it('loads local environment files in Next.js precedence while preserving process
   try {
     writeFileSync(join(cwd, '.env'), 'DATABASE_URL=postgresql://wrong.example.com/duo_ready\n');
     writeFileSync(join(cwd, '.env.local'), `DATABASE_URL=${local.DATABASE_URL}\n`);
-    const success = spawnSync(process.execPath, [script], { cwd, env, encoding: 'utf8' });
+    const success = spawnSync(process.execPath, ['--import', import.meta.resolve('tsx'), script], {
+      cwd,
+      env,
+      encoding: 'utf8',
+    });
     expect(success.status, success.stderr).toBe(0);
     expect(success.stdout).toContain('PASS local: postgres-configured');
-    const failure = spawnSync(process.execPath, [script], {
+    const failure = spawnSync(process.execPath, ['--import', import.meta.resolve('tsx'), script], {
       cwd,
       env: {
         ...env,
@@ -276,11 +280,15 @@ it('loads local environment files in Next.js precedence while preserving process
     expect(failure.status).toBe(1);
     expect(failure.stderr).toContain('DATABASE_URL');
     expect(failure.stdout + failure.stderr).not.toContain('never_echo_this');
-    const invalidTarget = spawnSync(process.execPath, [script, '--target=unknown'], {
-      cwd,
-      env,
-      encoding: 'utf8',
-    });
+    const invalidTarget = spawnSync(
+      process.execPath,
+      ['--import', import.meta.resolve('tsx'), script, '--target=unknown'],
+      {
+        cwd,
+        env,
+        encoding: 'utf8',
+      },
+    );
     expect(invalidTarget.status).toBe(1);
   } finally {
     rmSync(cwd, { recursive: true, force: true });
@@ -289,16 +297,21 @@ it('loads local environment files in Next.js precedence while preserving process
 
 it('creates a private local PostgreSQL environment file once and never overwrites it', () => {
   const root = mkdtempSync(join(tmpdir(), 'duo-ready-db-env-'));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ type: 'module' }));
   const scripts = join(root, 'scripts');
   mkdirSync(join(scripts, 'lib'), { recursive: true });
-  const script = join(scripts, 'local-db.mjs');
-  copyFileSync(fileURLToPath(new URL('../../scripts/local-db.mjs', import.meta.url)), script);
+  const script = join(scripts, 'local-db.ts');
+  copyFileSync(fileURLToPath(new URL('../../scripts/local-db.ts', import.meta.url)), script);
   copyFileSync(
-    fileURLToPath(new URL('../../scripts/lib/environment.mjs', import.meta.url)),
-    join(scripts, 'lib', 'environment.mjs'),
+    fileURLToPath(new URL('../../scripts/lib/environment.ts', import.meta.url)),
+    join(scripts, 'lib', 'environment.ts'),
   );
   try {
-    const result = spawnSync(process.execPath, [script, 'env'], { cwd: root, encoding: 'utf8' });
+    const result = spawnSync(
+      process.execPath,
+      ['--import', import.meta.resolve('tsx'), script, 'env'],
+      { cwd: root, encoding: 'utf8' },
+    );
     expect(result.status, result.stderr).toBe(0);
     const envFile = join(root, '.env.local');
     const content = readFileSync(envFile, 'utf8');
@@ -309,7 +322,11 @@ it('creates a private local PostgreSQL environment file once and never overwrite
     expect(statSync(envFile).mode & 0o777).toBe(0o600);
     expect(result.stdout + result.stderr).not.toContain(local.DATABASE_URL);
 
-    const repeated = spawnSync(process.execPath, [script, 'env'], { cwd: root, encoding: 'utf8' });
+    const repeated = spawnSync(
+      process.execPath,
+      ['--import', import.meta.resolve('tsx'), script, 'env'],
+      { cwd: root, encoding: 'utf8' },
+    );
     expect(repeated.status).toBe(1);
     expect(repeated.stderr).toContain('already exists; no changes made');
     expect(readFileSync(envFile, 'utf8')).toBe(content);
@@ -320,7 +337,7 @@ it('creates a private local PostgreSQL environment file once and never overwrite
 
 it('hosted tools use a separate private file and never consume Next production env files', () => {
   const cwd = mkdtempSync(join(tmpdir(), 'duo-hosted-config-'));
-  const moduleUrl = new URL('../../scripts/lib/hosted.mjs', import.meta.url).href;
+  const moduleUrl = new URL('../../scripts/lib/hosted.ts', import.meta.url).href;
   const config = {
     ...hosted,
     NEXT_PUBLIC_SUPABASE_URL: 'https://productionproject.supabase.co',
@@ -333,13 +350,19 @@ it('hosted tools use a separate private file and never consume Next production e
   try {
     writeFileSync(join(cwd, '.env.production.local'), text, { mode: 0o600 });
     expect(
-      spawnSync(process.execPath, ['--input-type=module', '-e', code], { cwd, encoding: 'utf8' })
-        .status,
+      spawnSync(
+        process.execPath,
+        ['--import', import.meta.resolve('tsx'), '--input-type=module', '-e', code],
+        { cwd, encoding: 'utf8' },
+      ).status,
     ).toBe(1);
     writeFileSync(join(cwd, '.env.hosted.production.local'), text, { mode: 0o600 });
     expect(
-      spawnSync(process.execPath, ['--input-type=module', '-e', code], { cwd, encoding: 'utf8' })
-        .status,
+      spawnSync(
+        process.execPath,
+        ['--import', import.meta.resolve('tsx'), '--input-type=module', '-e', code],
+        { cwd, encoding: 'utf8' },
+      ).status,
     ).toBe(0);
   } finally {
     rmSync(cwd, { recursive: true, force: true });

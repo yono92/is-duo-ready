@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -13,14 +13,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "plugins": [{ "name": "next" }],
+    "paths": { "@/*": ["./src/*"] },
+    "allowImportingTsExtensions": true
   },
   "include": [
     "next-env.d.ts",
@@ -30,14 +25,8 @@
     ".next/dev/types/**/*.ts",
     ".next-test/types/**/*.ts",
     ".next-test/dev/types/**/*.ts",
-    ".next-test-3354/types/**/*.ts",
-    ".next-test-3354/dev/types/**/*.ts",
-    ".next-test-3355/types/**/*.ts",
-    ".next-test-3355/dev/types/**/*.ts",
-    ".next-test-3361/types/**/*.ts",
-    ".next-test-3361/dev/types/**/*.ts",
-    ".next-test-3360/types/**/*.ts",
-    ".next-test-3360/dev/types/**/*.ts"
+    ".next-test-*/types/**/*.ts",
+    ".next-test-*/dev/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

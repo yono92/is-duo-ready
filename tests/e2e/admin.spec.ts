@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import { connect } from '../integration/helpers.mjs';
+import { connect } from '../integration/helpers.ts';
 
 async function login(page: Page, locale = 'en') {
   await page.goto(`/${locale}/admin/login`);

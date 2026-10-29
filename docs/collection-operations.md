@@ -63,7 +63,7 @@ KR 앱 URL·10~4,000자 내용·HTTPS 근거 URL이 필요하다. 연락처는 �
 
 - `tests/unit/collection.test.ts`: URL/DNS/핀 고정/리디렉션/robots/본문 크기·시간/재시도/hosted 워커 차단.
 - `tests/unit/submission.test.ts`: 필드·KR URL·길이·honeypot·파일 입력·위조 상태 제외.
-- `tests/integration/operations.test.mjs`: 중복·기각·lease 복구·실패 보존·역할 격리·동시 제한·승인 원자성·durable worker.
+- `tests/integration/operations.test.ts`: 중복·기각·lease 복구·실패 보존·역할 격리·동시 제한·승인 원자성·durable worker.
 - `tests/e2e/operations.spec.ts`: 제보→수집→보류→편집→승인, 새 앱 연결, 익명/권한 회수 후 액션 재호출,
   ko/en·light/dark·360/768/1440·axe·키보드.
 - 실제 실행 결과는 [검증 기록](verification.md)에 기록한다. 테스트 가상 출처는 임시 DB에만 존재한다.

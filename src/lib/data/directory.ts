@@ -2,7 +2,7 @@ import 'server-only';
 import { fixturesAllowed } from './policy';
 import { cache } from 'react';
 import { database, databaseConfigured } from '@/lib/db/server';
-import { queryDirectory, queryApp, queryHistory } from './postgres-query.mjs';
+import { queryDirectory, queryApp, queryHistory } from './postgres-query.ts';
 import { selectApps } from '../directory/query';
 import type {
   DirectoryApp,

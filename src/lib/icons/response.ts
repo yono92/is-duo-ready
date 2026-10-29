@@ -1,6 +1,6 @@
 import 'server-only';
 import { database } from '@/lib/db/server';
-import { iconStorage } from './storage.mjs';
+import { iconStorage } from './storage.ts';
 
 export async function iconResponse(id: string, actor: string | null) {
   const headers = {

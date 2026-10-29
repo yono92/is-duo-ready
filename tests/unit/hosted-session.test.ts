@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { verifiedSessionId, liveHostedSession } from '../../src/lib/admin/hosted-session.mjs';
+import { verifiedSessionId, liveHostedSession } from '../../src/lib/admin/hosted-session.ts';
 
 test('verified token claims must match user and live session before administrator authorization', async () => {
   const id = '12345678-1234-1234-1234-123456789012';

@@ -51,7 +51,7 @@ DB 모드는 `DIRECTORY_DATA_SOURCE=postgres`이며 조회 오류를 fixture로 
 
 언어별 URL, 검색 맥락, KR 스토어 기준, 원문 fallback, 라이트/다크/시스템 테마,
 모바일 필터와 키보드 접근을 유지합니다. 데이터와 UI의 기준은 [PRD](docs/PRD.md),
-[DESIGN.md](DESIGN.md), [공통 원칙](.specify/memory/constitution.md)입니다.
+[DESIGN.md](DESIGN.md), [공통 원칙](docs/engineering-principles.md)입니다.
 
 ## 변경 수집과 제보
 
@@ -141,8 +141,10 @@ PostgreSQL 트랜잭션에서 `anon`/`authenticated` 역할과 RLS를 적용합�
 [001 명세](specs/001-design-app-directory/spec.md) · [002 명세](specs/002-admin-evidence/spec.md) ·
 [003 명세](specs/003-public-directory/spec.md) · [004 명세](specs/004-app-import/spec.md) ·
 [005 명세](specs/005-collection-review/spec.md) · [006 명세](specs/006-launch-readiness/spec.md).
-Spec Kit 1.0.13은 `.agents/skills/speckit-*/SKILL.md`를 사용합니다. 명세→설계→작업→구현→검증 순서를 따릅니다.
+제품 명세와 검증 기록은 저장소에 포함합니다. Spec Kit·로컬 에이전트 도구는 선택 사항이며 저장소와 실행 의존성에서 제외합니다.
 기술과 정확한 의존성 버전은 `package.json`과 `package-lock.json`에 고정했습니다.
+
+직접 작성한 앱·수집/이전 도구·테스트는 TypeScript로 관리하며 `npm run typecheck`로 함께 검사합니다. Node 명령은 고정 버전 `tsx`로 실행합니다. PostCSS 설정은 JSON입니다. DB의 SQL/PLpgSQL과 기존 마이그레이션 실행 방식은 [DB 구조 안내](docs/database-architecture.md)에 설명합니다.
 
 ## UI foundation: Astryx
 

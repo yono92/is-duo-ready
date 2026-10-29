@@ -19,7 +19,7 @@ Pre-design and post-design: I evidence is explicitly reviewed; II imports save p
 
 ## Project Structure
 Documentation: spec.md, plan.md, research.md, data-model.md, contracts/workflow.md, quickstart.md, tasks.md, checklists/requirements.md.
-Implementation: db/migrations/, scripts/migrate.mjs, scripts/lib/database.mjs, src/lib/db/, src/lib/admin/, src/lib/supabase/, src/app/[locale]/admin/, src/messages/, tests/integration/.
+Implementation: db/migrations/, scripts/migrate.ts, scripts/lib/database.ts, src/lib/db/, src/lib/admin/, src/lib/supabase/, src/app/[locale]/admin/, src/messages/, tests/integration/.
 
 ## Dependencies and delivery
 002 → 003 → 004; each feature records tests independently, integrated importer→review→public checks close the combined scope. No feature is marked complete based only on another feature's tests.

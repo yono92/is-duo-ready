@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { connectionOptions } from '../../src/lib/db/connection.mjs';
+import { connectionOptions } from '../../src/lib/db/connection.ts';
 
 describe('hosted PostgreSQL TLS', () => {
   it('keeps certificate and hostname verification with the official CA', () => {

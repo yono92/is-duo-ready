@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
-import { connect } from '../integration/helpers.mjs';
+import { connect } from '../integration/helpers.ts';
 
 async function login(page: Page, locale: 'ko' | 'en') {
   const t = (locale === 'ko' ? ko : en).Admin;

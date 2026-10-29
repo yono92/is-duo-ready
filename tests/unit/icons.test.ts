@@ -3,7 +3,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import sharp from 'sharp';
-import { downloadIcon, iconSource, inspectIcon, localIconStorage } from '@/lib/icons/storage.mjs';
+import { downloadIcon, iconSource, inspectIcon, localIconStorage } from '@/lib/icons/storage.ts';
 
 const source = 'https://is1-ssl.mzstatic.com/image/thumb/test/icon.png';
 const sample = () =>

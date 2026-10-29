@@ -18,3 +18,7 @@ playwright-report/
 # Local-only prototype imagery and working imports are not open-source assets.
 assets/development/
 docs/data/
+
+# Optional local AI/specification tooling is not part of the public product source.
+.specify/
+.agents/
