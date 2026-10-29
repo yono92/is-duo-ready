@@ -5,7 +5,7 @@ import { uuid } from '@/lib/admin/input';
 import { getImportRun, listImportRuns } from '@/lib/import/repository';
 import { ImportError } from '@/lib/import/apple.ts';
 import { ImportForm, ImportProgress } from '@/components/admin/import-form';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import type { Locale } from '@/lib/directory/types';
 
 export default async function ImportPage({
@@ -65,6 +65,7 @@ export default async function ImportPage({
                       timeZone: 'Asia/Seoul',
                     }).format(new Date(item.createdAt))}
                   </time>
+                  {' · '}
                   <span>{t('recentCount', { total: item.total, pending: item.pending })}</span>
                 </Link>
               </li>

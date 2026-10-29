@@ -1,3 +1,4 @@
+import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import type { Client } from 'pg';
 import AxeBuilder from '@axe-core/playwright';
@@ -10,13 +11,13 @@ async function login(page: Page, locale: 'ko' | 'en') {
   await page.goto(`/${locale}/admin/login`);
   await page
     .getByRole('main')
-    .getByLabel(t.email, { exact: true })
+    .getByLabel(fieldName(t.email), { exact: true })
     .fill(process.env.LOCAL_ADMIN_EMAIL!);
   await page
     .getByRole('main')
-    .getByLabel(t.password, { exact: true })
+    .getByLabel(fieldName(t.password), { exact: true })
     .fill(process.env.LOCAL_ADMIN_PASSWORD!);
-  await page.getByRole('main').getByLabel(t.password, { exact: true }).press('Enter');
+  await page.getByRole('main').getByLabel(fieldName(t.password), { exact: true }).press('Enter');
   await expect(page).toHaveURL(new RegExp(`/${locale}/admin/apps$`));
 }
 async function seed(id: string) {
@@ -82,21 +83,21 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
       page.on('pageerror', (error) => errors.push(error.message));
       await page.emulateMedia({ colorScheme: theme });
       await page.goto(`/${locale}/submit?app=${app.slug}`);
-      await expect(page.getByRole('main').getByLabel(s.storeUrl, { exact: true })).toHaveValue(
-        storeUrl,
-      );
-      await expect(page.getByRole('combobox', { name: s.kind, exact: true })).toHaveValue(
-        'correction',
-      );
+      await expect(
+        page.getByRole('main').getByLabel(fieldName(s.storeUrl), { exact: true }),
+      ).toHaveValue(storeUrl);
+      await expect(
+        page.getByRole('combobox', { name: fieldName(s.kind), exact: true }),
+      ).toContainText(s.correction);
       await widths(page);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page
         .getByRole('main')
-        .getByLabel(s.body, { exact: true })
+        .getByLabel(fieldName(s.body), { exact: true })
         .fill(`Fictional private report ${id} <script>window.bad=1</script>`);
       await page
         .getByRole('main')
-        .getByLabel(s.evidenceUrl, { exact: true })
+        .getByLabel(fieldName(s.evidenceUrl), { exact: true })
         .fill(`https://example.com/fictional-${id}`);
       await page.getByRole('button', { name: s.send, exact: true }).press('Enter');
       await expect(page.getByRole('heading', { name: s.received, exact: true })).toBeVisible();
@@ -108,14 +109,28 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
         await login(page, locale);
         await page.getByRole('link', { name: t.collections, exact: true }).click();
         await page.getByRole('main').getByText(t.addTarget, { exact: true }).first().click();
-        await page.getByRole('combobox', { name: t.app, exact: true }).selectOption(app.id);
-        await page.getByRole('main').getByLabel(t.sourceUrl, { exact: true }).fill(storeUrl);
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(t.app), exact: true }),
+          `Fictional operations ${id} (${id})`,
+        );
         await page
           .getByRole('main')
-          .getByLabel(t.approvalNote, { exact: true })
+          .getByLabel(fieldName(t.sourceUrl), { exact: true })
+          .fill(storeUrl);
+        await page
+          .getByRole('main')
+          .getByLabel(fieldName(t.approvalNote), { exact: true })
           .fill('Fictional test target; isolated API fixture only');
-        await page.getByRole('main').getByLabel(t.targetConfirm, { exact: true }).check();
-        await page.getByRole('button', { name: t.addTarget, exact: true }).click();
+        await page
+          .getByRole('main')
+          .getByLabel(fieldName(t.targetConfirm), { exact: true })
+          .check();
+        await page
+          .locator('form')
+          .filter({ has: page.getByRole('combobox', { name: fieldName(t.app) }) })
+          .getByRole('button', { name: t.addTarget, exact: true })
+          .click();
         const target = page.getByRole('listitem').filter({
           has: page.getByRole('link', { name: 'Fictional operations ' + id, exact: true }),
         });
@@ -155,7 +170,7 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
         await page
           .getByRole('main')
           .locator(`a[href="/${locale}/admin/reviews/${review.id}"]`)
-          .click();
+          .press('Enter');
         await expect(page.getByRole('heading', { name: t.published, exact: true })).toBeVisible();
         await expect(page.getByRole('heading', { name: t.candidate, exact: true })).toBeVisible();
         await widths(page);
@@ -166,50 +181,65 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
         });
         await page
           .getByRole('main')
-          .getByLabel(t.reason, { exact: true })
+          .getByLabel(fieldName(t.reason), { exact: true })
           .fill('Fictional private deferred reason');
         await page.getByRole('button', { name: t.saveDecision, exact: true }).click();
         await expect(
-          page.getByRole('main').getByText(t.states.deferred, { exact: false }).first(),
+          page
+            .getByRole('main')
+            .getByText('Fictional operations ' + id + ' · ' + t.states.deferred, { exact: true }),
         ).toBeVisible();
         expect(
           (await db.query('SELECT state FROM app_private.review_items WHERE id=$1', [review.id]))
             .rows[0].state,
         ).toBe('deferred');
         await page.getByRole('link', { name: t.editDraft, exact: true }).click();
-        await page
-          .getByRole('combobox', { name: a.fields.status, exact: true })
-          .selectOption('supported');
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(a.fields.status), exact: true }),
+          (locale === 'ko' ? ko : en).Status['supported'],
+        );
         await page
           .getByRole('main')
-          .getByLabel(a.fields.current_version, { exact: true })
+          .getByLabel(fieldName(a.fields.current_version), { exact: true })
           .fill('1.0');
         await page.getByRole('button', { name: a.addEvidence, exact: true }).click();
         await page
           .getByRole('main')
-          .getByLabel(a.fields.title, { exact: true })
+          .getByLabel(fieldName(a.fields.title), { exact: true })
           .fill('Fictional verified operations source');
         await page
           .getByRole('main')
-          .getByLabel(a.fields.url, { exact: true })
+          .getByLabel(fieldName(a.fields.url), { exact: true })
           .fill(`https://example.com/official-test-${id}`);
         await page
           .getByRole('main')
-          .getByLabel(a.fields.quote, { exact: true })
+          .getByLabel(fieldName(a.fields.quote), { exact: true })
           .fill('Fictional official evidence in temporary database only');
-        await page.getByRole('main').getByLabel(a.officialConfirmation, { exact: true }).check();
+        await page
+          .getByRole('main')
+          .getByLabel(fieldName(a.officialConfirmation), { exact: true })
+          .check();
         await page.getByRole('button', { name: a.saveDraft, exact: true }).click();
         await expect(page).toHaveURL(/saved=1/);
         await page.goto(`/${locale}/admin/reviews/${review.id}`);
-        await page
-          .getByRole('combobox', { name: t.decision, exact: true })
-          .selectOption('approved');
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(t.decision), exact: true }),
+          t.approve,
+        );
         await page
           .getByRole('main')
-          .getByLabel(t.reason, { exact: true })
+          .getByLabel(fieldName(t.reason), { exact: true })
           .fill('Fictional approved change');
-        await page.getByRole('main').getByLabel(t.approveConfirm, { exact: true }).focus();
-        await page.getByRole('main').getByLabel(t.approveConfirm, { exact: true }).press('Space');
+        await page
+          .getByRole('main')
+          .getByLabel(fieldName(t.approveConfirm), { exact: true })
+          .focus();
+        await page
+          .getByRole('main')
+          .getByLabel(fieldName(t.approveConfirm), { exact: true })
+          .press('Space');
         await page.getByRole('button', { name: t.saveDecision, exact: true }).press('Enter');
         await expect(
           page
@@ -240,7 +270,7 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
         await page
           .getByRole('main')
           .locator(`a[href="/${locale}/admin/reviews/${submission.id}"]`)
-          .click();
+          .press('Enter');
         await expect(
           page
             .getByRole('main')
@@ -248,12 +278,14 @@ for (const [li, locale] of (['ko', 'en'] as const).entries())
               exact: true,
             }),
         ).toBeVisible();
-        await page
-          .getByRole('combobox', { name: t.decision, exact: true })
-          .selectOption('rejected');
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(t.decision), exact: true }),
+          t.reject,
+        );
         await page
           .getByRole('main')
-          .getByLabel(t.reason, { exact: true })
+          .getByLabel(fieldName(t.reason), { exact: true })
           .fill('Fictional duplicate report');
         await page.getByRole('button', { name: t.saveDecision, exact: true }).click();
         await expect(
@@ -279,15 +311,15 @@ test('new submission links only after app creation, and denied actions cannot mu
   await page.goto('/en/submit');
   await page
     .getByRole('main')
-    .getByLabel(s.storeUrl, { exact: true })
+    .getByLabel(fieldName(s.storeUrl), { exact: true })
     .fill(`https://apps.apple.com/kr/app/id${id}`);
   await page
     .getByRole('main')
-    .getByLabel(s.body, { exact: true })
+    .getByLabel(fieldName(s.body), { exact: true })
     .fill(`Fictional new app report ${id}`);
   await page
     .getByRole('main')
-    .getByLabel(s.evidenceUrl, { exact: true })
+    .getByLabel(fieldName(s.evidenceUrl), { exact: true })
     .fill('https://example.com/new-app-test');
   await page.getByRole('button', { name: s.send, exact: true }).click();
   await expect(page.getByRole('heading', { name: s.received, exact: true })).toBeVisible();
@@ -310,12 +342,22 @@ test('new submission links only after app creation, and denied actions cannot mu
     const requestPromise = page.waitForRequest(
       (request) => request.method() === 'POST' && !!request.headers()['next-action'],
     );
+    const decisionResponse = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' && !!response.request().headers()['next-action'],
+    );
     await page
       .getByRole('main')
-      .getByLabel(t.reason, { exact: true })
+      .getByLabel(fieldName(t.reason), { exact: true })
       .fill('Fictional deferred report');
     await page.getByRole('button', { name: t.saveDecision, exact: true }).click();
     const request = await requestPromise;
+    await decisionResponse;
+    await expect(
+      page
+        .getByRole('main')
+        .getByText(`Fictional operations ${id} · ${t.states.deferred}`, { exact: true }),
+    ).toBeVisible();
     await expect(
       page.getByRole('main').getByText('Fictional deferred report', { exact: true }),
     ).toBeVisible();
@@ -372,3 +414,104 @@ test('new submission links only after app creation, and denied actions cannot mu
     await db.end();
   }
 });
+
+for (const [index, locale] of (['ko', 'en'] as const).entries()) {
+  test(`collection status refresh, recovery and revoked access ${locale}`, async ({
+    page,
+    browser,
+  }, info) => {
+    const t = (locale === 'ko' ? ko : en).Operations;
+    const id = `99000458${index}${info.repeatEachIndex}1`;
+    const app = await seed(id);
+    const db = await connect();
+    try {
+      await asActor(db, process.env.LOCAL_ADMIN_USER_ID!, (connection: Client) =>
+        connection.query(
+          `INSERT INTO app_private.collection_targets(app_id,kind,url,approved_host,approval_note)
+           VALUES($1,'app_store',$2,'apps.apple.com','Isolated query refresh test')`,
+          [app.id, `https://apps.apple.com/kr/app/id${id}`],
+        ),
+      );
+      await page.clock.install();
+      await login(page, locale);
+      await page.goto(`/${locale}/admin/collections`);
+      const target = page.getByRole('listitem').filter({
+        has: page.getByRole('link', { name: 'Fictional operations ' + id, exact: true }),
+      });
+      await expect(target).toBeVisible();
+      const refresh = page.getByRole('button', { name: t.refreshOverview, exact: true });
+      const apiResponse = page.waitForResponse('**/api/admin/collections');
+      await refresh.click();
+      const response = await apiResponse;
+      expect(response.status()).toBe(200);
+      expect(response.headers()['cache-control']).toContain('private');
+      expect(response.headers()['cache-control']).toContain('no-store');
+      await expect(refresh).toBeEnabled();
+
+      // A change by a worker appears through polling without reloading the page.
+      await db.query('UPDATE app_private.collection_targets SET failures=3 WHERE app_id=$1', [
+        app.id,
+      ]);
+      const poll = page.waitForResponse('**/api/admin/collections');
+      await page.clock.fastForward(15_000);
+      await poll;
+      await expect(target.getByText(t.longFailure, { exact: true })).toBeVisible();
+
+      // Server Action completion invalidates the Query result immediately.
+      await target.getByRole('button', { name: t.pause, exact: true }).click();
+      await expect(target.getByRole('button', { name: t.resume, exact: true })).toBeEnabled();
+      await target.getByRole('button', { name: t.resume, exact: true }).click();
+      await expect(target.getByRole('button', { name: t.pause, exact: true })).toBeEnabled();
+
+      await page.route('**/api/admin/collections', (route) =>
+        route.fulfill({ status: 503, json: { error: 'unavailable' } }),
+      );
+      const failed = page.waitForResponse('**/api/admin/collections');
+      await refresh.click();
+      await failed;
+      await page.clock.fastForward(2_000);
+      await expect(page.getByRole('main').getByRole('alert')).toContainText(
+        t.overviewRefreshFailed,
+      );
+      await expect(target).toBeVisible();
+      await page.unroute('**/api/admin/collections');
+      await refresh.click();
+      await expect(page.getByRole('main').getByRole('alert')).toHaveCount(0);
+
+      const anonymous = await browser.newContext();
+      try {
+        const denied = await anonymous.request.get(response.url());
+        expect(denied.status()).toBe(401);
+        expect(await denied.json()).toEqual({ error: 'authRequired' });
+      } finally {
+        await anonymous.close();
+      }
+
+      // Revoking permission after rendering must hide stale private results and stop polling.
+      await db.query('UPDATE app_private.admin_users SET enabled=false WHERE user_id=$1', [
+        process.env.LOCAL_ADMIN_USER_ID!,
+      ]);
+      try {
+        const denied = page.waitForResponse('**/api/admin/collections');
+        await refresh.click();
+        expect((await denied).status()).toBe(403);
+        await expect(page.getByRole('main').getByRole('alert')).toContainText(t.overviewAccessLost);
+        await expect(target).toHaveCount(0);
+        await expect(page.getByRole('button', { name: t.runDue, exact: true })).toHaveCount(0);
+        await expect(page.getByRole('link', { name: t.overviewSignIn, exact: true })).toBeVisible();
+        let laterRequests = 0;
+        page.on('request', (request) => {
+          if (new URL(request.url()).pathname === '/api/admin/collections') laterRequests++;
+        });
+        await page.clock.fastForward(60_000);
+        expect(laterRequests).toBe(0);
+      } finally {
+        await db.query('UPDATE app_private.admin_users SET enabled=true WHERE user_id=$1', [
+          process.env.LOCAL_ADMIN_USER_ID!,
+        ]);
+      }
+    } finally {
+      await db.end();
+    }
+  });
+}

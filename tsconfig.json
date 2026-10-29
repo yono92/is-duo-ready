@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
@@ -13,8 +17,16 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "paths": { "@/*": ["./src/*"] },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
     "allowImportingTsExtensions": true
   },
   "include": [
@@ -26,7 +38,31 @@
     ".next-test/types/**/*.ts",
     ".next-test/dev/types/**/*.ts",
     ".next-test-*/types/**/*.ts",
-    ".next-test-*/dev/types/**/*.ts"
+    ".next-test-*/dev/types/**/*.ts",
+    ".next-test-3355/types/**/*.ts",
+    ".next-test-3355/dev/types/**/*.ts",
+    ".next-test-3379/types/**/*.ts",
+    ".next-test-3379/dev/types/**/*.ts",
+    ".next-test-3364/types/**/*.ts",
+    ".next-test-3364/dev/types/**/*.ts",
+    ".next-test-3365/types/**/*.ts",
+    ".next-test-3365/dev/types/**/*.ts",
+    ".next-test-3363/types/**/*.ts",
+    ".next-test-3363/dev/types/**/*.ts",
+    ".next-test-3377/types/**/*.ts",
+    ".next-test-3377/dev/types/**/*.ts",
+    ".next-test-3387/types/**/*.ts",
+    ".next-test-3387/dev/types/**/*.ts",
+    ".next-test-3381/types/**/*.ts",
+    ".next-test-3381/dev/types/**/*.ts",
+    ".next-test-3391/types/**/*.ts",
+    ".next-test-3391/dev/types/**/*.ts",
+    ".next-test-3392/types/**/*.ts",
+    ".next-test-3392/dev/types/**/*.ts",
+    ".next-test-3395/types/**/*.ts",
+    ".next-test-3395/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

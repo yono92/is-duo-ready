@@ -1,29 +1,63 @@
 'use client';
 
-import { useId, type ComponentProps } from 'react';
-import { Field } from '@astryxdesign/core/Field';
-import { cn } from '@/lib/utils';
+import { type ComponentProps } from 'react';
+import { TextInput } from '@astryxdesign/core/TextInput';
+import { useFormValue } from './form-value';
 
-// Native controls preserve FormData, browser validation, file/date/url types,
-// and uncontrolled reset semantics used by the server-action forms.
+type Props = Omit<ComponentProps<'input'>, 'type' | 'value' | 'defaultValue' | 'size' | 'ref'> & {
+  label: string;
+  isLabelHidden?: boolean;
+  type?: 'text' | 'search' | 'url' | 'email' | 'password';
+  value?: string;
+  defaultValue?: string;
+  startIcon?: ComponentProps<typeof TextInput>['startIcon'];
+};
+
 export function Input({
   label,
-  isLabelHidden = false,
-  id,
+  isLabelHidden,
+  type = 'text',
+  name,
+  value,
+  defaultValue = '',
+  onChange,
+  disabled,
+  readOnly,
+  required,
   className,
+  autoFocus,
   ...props
-}: ComponentProps<'input'> & { label: string; isLabelHidden?: boolean }) {
-  const generatedId = useId();
-  const inputId = id ?? generatedId;
+}: Props) {
+  const {
+    value: fieldValue,
+    setValue,
+    ref,
+  } = useFormValue<string, HTMLInputElement>(value, defaultValue);
   return (
-    <Field
+    <TextInput
+      {...props}
+      ref={ref}
       label={label}
       isLabelHidden={isLabelHidden}
-      inputID={inputId}
-      isDisabled={props.disabled}
-      className="duo-field"
-    >
-      <input {...props} id={inputId} className={cn('duo-input', className)} />
-    </Field>
+      type={type === 'search' || type === 'url' ? 'text' : type}
+      role={type === 'search' ? 'searchbox' : undefined}
+      {...{
+        inputMode: type === 'url' ? ('url' as const) : props.inputMode,
+        pattern: props.pattern ?? (type === 'url' ? 'https?://.+' : undefined),
+        required,
+      }}
+      htmlName={name}
+      value={fieldValue}
+      onChange={(next, event) => {
+        setValue(next);
+        onChange?.(event);
+      }}
+      isDisabled={disabled}
+      isReadOnly={readOnly}
+      isRequired={required}
+      hasAutoFocus={autoFocus}
+      containerClassName={className}
+      size="lg"
+    />
   );
 }

@@ -1,7 +1,8 @@
+import { Card } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
 import { listAdminApps } from '@/lib/admin/repository';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import type { Locale } from '@/lib/directory/types';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -31,26 +32,25 @@ export default async function AdminApps({
       <p className="mb-4 text-sm text-muted-foreground">{t('listLimit')}</p>
       <ul className="space-y-3">
         {apps.map((app) => (
-          <li
-            key={app.id}
-            className="flex flex-wrap items-center gap-2 rounded-xl border bg-card p-2"
-          >
-            <Link
-              href={`/admin/apps/${app.id}`}
-              className="flex min-h-16 min-w-0 flex-1 items-center gap-3 p-2"
-            >
-              <AppIcon name="box" src={app.icon_url} />
-              <span className="min-w-0 flex-1 break-words font-medium">{app.name}</span>
-              <span className="text-sm text-muted-foreground">
-                {t(`publication.${app.publication}`)}
-              </span>
-            </Link>
-            {app.icon_url && (
-              <AppStoreBadge
-                url={`https://apps.apple.com/kr/app/id${app.app_store_id}`}
-                name={app.name}
-              />
-            )}
+          <li key={app.id}>
+            <Card padding={5} className="flex flex-wrap items-center gap-2 ">
+              <Link
+                href={`/admin/apps/${app.id}`}
+                className="flex min-h-16 min-w-0 flex-1 items-center gap-3 p-2"
+              >
+                <AppIcon name="box" src={app.icon_url} />
+                <span className="min-w-0 flex-1 break-words font-medium">{app.name}</span>
+                <span className="text-sm text-muted-foreground">
+                  {t(`publication.${app.publication}`)}
+                </span>
+              </Link>
+              {app.icon_url && (
+                <AppStoreBadge
+                  url={`https://apps.apple.com/kr/app/id${app.app_store_id}`}
+                  name={app.name}
+                />
+              )}
+            </Card>
           </li>
         ))}
       </ul>

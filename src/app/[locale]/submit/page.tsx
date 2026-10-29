@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { dataSource, getPublishedApp } from '@/lib/data/directory';
 import { SubmissionForm } from '@/components/operations/submission-form';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Submission');
   return { title: `${t('title')} · Is Duo Ready?`, robots: { index: false, follow: true } };

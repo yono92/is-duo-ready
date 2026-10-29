@@ -1,24 +1,33 @@
+import ko from '../../src/messages/ko.json' with { type: 'json' };
+import en from '../../src/messages/en.json' with { type: 'json' };
+import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 async function chooseLanguage(page: Page, current: 'ko' | 'en', next: 'ko' | 'en') {
   await page
-    .getByRole('button', { name: current === 'ko' ? '언어' : 'Language', exact: true })
+    .getByRole('button', {
+      name: current === 'ko' ? ko.Preferences.language : en.Preferences.language,
+      exact: true,
+    })
     .click();
   await page
-    .getByRole('menuitemradio', { name: next === 'ko' ? '한국어' : 'English', exact: true })
+    .getByRole('menuitemradio', {
+      name: next === 'ko' ? ko.Preferences.ko : en.Preferences.en,
+      exact: true,
+    })
     .click();
 }
 
 async function chooseTheme(page: Page, locale: 'ko' | 'en', theme: 'light' | 'dark') {
   const toggle = page.getByRole('switch', {
-    name: locale === 'ko' ? '다크 모드' : 'Dark mode',
+    name: locale === 'ko' ? ko.Preferences.darkMode : en.Preferences.darkMode,
     exact: true,
   });
   await expect(toggle).toBeEnabled();
-  const checked = String(theme === 'dark');
-  if ((await toggle.getAttribute('aria-checked')) !== checked) await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-checked', checked);
+  const checked = theme === 'dark';
+  await toggle.setChecked(checked);
+  await expect(toggle).toBeChecked({ checked });
 }
 
 test('root negotiation, saved preference and explicit locale priority', async ({ browser }) => {
@@ -43,24 +52,31 @@ test('root negotiation, saved preference and explicit locale priority', async ({
 
 test('search, history, filter, locale and detail preserve context', async ({ page }) => {
   await page.goto('/ko');
-  await page.getByRole('searchbox', { name: '앱 검색' }).fill('메모');
-  await page.getByRole('button', { name: '검색', exact: true }).click();
+  await page.getByRole('searchbox', { name: ko.Directory.search }).fill('메모');
+  await page.getByRole('button', { name: ko.Directory.searchButton, exact: true }).click();
   await expect(page).toHaveURL(/q=/);
   await expect(page.getByTestId('app-card')).toHaveCount(1);
   await expect(page.getByTestId('app-card')).toContainText('종이숲');
-  await page.getByRole('combobox', { name: '지원 상태', exact: true }).selectOption('supported');
+  await page.getByRole('main').getByRole('link', { name: ko.Home.browse, exact: true }).click();
+  await expect(page).toHaveURL(/q=.+#directory-heading$/);
+  await expect(page.getByRole('searchbox')).toHaveValue('메모');
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(ko.Directory.status), exact: true }),
+    ko.Status['supported'],
+  );
   await expect(page).toHaveURL(/status=supported/);
   await chooseLanguage(page, 'ko', 'en');
   await expect(page).toHaveURL(/\/en\?q=.*status=supported/);
-  await expect(page.getByText('South Korea App Store · KR')).toBeVisible();
+  await expect(page.getByText(en.Home.region)).toBeVisible();
   await page.getByTestId('app-card').click();
   await expect(page).toHaveURL(/\/en\/apps\/sample-01\?q=/);
-  await expect(page.getByText('No evidence has been collected.', { exact: false })).toBeVisible();
+  await expect(page.getByText(en.Detail.evidenceEmpty, { exact: true })).toBeVisible();
   await chooseLanguage(page, 'en', 'ko');
   await expect(page).toHaveURL(/\/ko\/apps\/sample-01\?q=.*status=supported/);
-  await page.getByRole('link', { name: '앱 목록으로' }).click();
+  await page.getByRole('link', { name: ko.Directory.back }).click();
   await expect(page.getByRole('searchbox')).toHaveValue('메모');
-  await page.getByRole('button', { name: '전체 초기화', exact: true }).click();
+  await page.getByRole('button', { name: ko.Directory.reset, exact: true }).click();
   await expect(page.getByTestId('app-card')).toHaveCount(24);
   await page.goBack();
   await expect(page.getByRole('searchbox')).toHaveValue('메모');
@@ -69,19 +85,27 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
 
 test('pagination, sorting, filters and query normalization', async ({ page }) => {
   await page.goto('/en');
-  await page.getByRole('button', { name: 'Next page' }).click();
+  await page.getByRole('button', { name: en.Directory.next }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByTestId('app-card')).toHaveCount(6);
-  await page.getByRole('combobox', { name: 'Sort by' }).selectOption('name');
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Directory.sort) }),
+    en.Directory.name,
+  );
   await expect(page).toHaveURL(/sort=name$/);
   await expect(page.getByTestId('app-card')).toHaveCount(24);
-  await page.getByRole('button', { name: 'Graphics & Design', exact: true }).click();
+  await page.getByRole('button', { name: en.Categories['graphics-design'], exact: true }).click();
   await expect(page).toHaveURL(/category=graphics-design/);
-  await page.getByRole('combobox', { name: 'Support status', exact: true }).selectOption('planned');
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Directory.status), exact: true }),
+    en.Status['planned'],
+  );
   await expect(page.getByTestId('app-card')).toHaveCount(1);
   await page.reload();
   await expect(
-    page.getByRole('button', { name: 'Graphics & Design', exact: true }),
+    page.getByRole('button', { name: en.Categories['graphics-design'], exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await page.goto('/en?page=9999');
   await expect(page).toHaveURL(/page=2/);
@@ -92,22 +116,20 @@ test('pagination, sorting, filters and query normalization', async ({ page }) =>
 
 test('empty state reset and scoped navigation work', async ({ page }) => {
   await page.goto('/en?q=does-not-exist');
-  await expect(page.getByRole('heading', { name: 'No apps found. Yet.' })).toBeVisible();
-  await page.getByRole('link', { name: 'Suggest an app', exact: true }).last().click();
-  await expect(page.getByRole('heading', { name: 'Suggest an app or correction' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: en.Directory.emptyTitle })).toBeVisible();
+  await page.getByRole('link', { name: en.Nav.submit, exact: true }).last().click();
+  await expect(page.getByRole('heading', { name: en.Submission.title })).toBeVisible();
   await expect(
-    page.getByText('Reports cannot be received right now. Please try again later.', {
+    page.getByText(en.Submission.errors.unavailable, {
       exact: true,
     }),
   ).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Send report', exact: true })).toBeDisabled();
-  await page.getByRole('link', { name: 'Updates', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Recent support changes' })).toBeVisible();
-  await expect(
-    page.getByText('Reviewed change history is not connected in this preview.', { exact: true }),
-  ).toBeVisible();
-  await page.getByRole('link', { name: 'Our methodology', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Evidence before a badge.' })).toBeVisible();
+  await expect(page.getByRole('button', { name: en.Submission.send, exact: true })).toBeDisabled();
+  await page.getByRole('link', { name: en.Nav.updates, exact: true }).click();
+  await expect(page.getByRole('heading', { name: en.Updates.title })).toBeVisible();
+  await expect(page.getByText(en.Updates.unavailable, { exact: true })).toBeVisible();
+  await page.getByRole('link', { name: en.Nav.methodology, exact: true }).click();
+  await expect(page.getByRole('heading', { name: en.Info.methodologyTitle })).toBeVisible();
 });
 
 test('missing and stale translations show original notice and preserve region', async ({
@@ -115,9 +137,9 @@ test('missing and stale translations show original notice and preserve region', 
 }) => {
   for (const slug of ['sample-02', 'sample-03']) {
     await page.goto(`/en/apps/${slug}`);
-    await expect(page.getByText('Shown in the original language')).toBeVisible();
+    await expect(page.getByText(en.Directory.original)).toBeVisible();
     await expect(page.locator('p[lang="ko"]')).toBeVisible();
-    await expect(page.getByText('South Korea App Store · KR')).toBeVisible();
+    await expect(page.getByText(en.Home.region)).toBeVisible();
   }
 });
 
@@ -131,31 +153,44 @@ test('theme follows OS by default and remembers an explicit toggle without hydra
   });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/en');
-  const toggle = page.getByRole('switch', { name: 'Dark mode', exact: true });
+  const toggle = page.getByRole('switch', { name: en.Preferences.darkMode, exact: true });
   await expect(page.locator('html')).toHaveClass(/dark/);
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  await expect(toggle).toBeChecked();
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).toHaveClass(/light/);
-  await expect(toggle).toHaveAttribute('aria-checked', 'false');
+  await expect(toggle).not.toBeChecked();
   await page.emulateMedia({ colorScheme: 'dark' });
   await expect(page.locator('html')).toHaveClass(/dark/);
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  await expect(toggle).toBeChecked();
   await toggle.click();
   await expect(page.locator('html')).toHaveClass(/light/);
   await page.reload();
-  await expect(toggle).toHaveAttribute('aria-checked', 'false');
+  await expect(toggle).not.toBeChecked();
   await expect(page.locator('html')).toHaveClass(/light/);
   await page.emulateMedia({ colorScheme: 'light' });
   await page.emulateMedia({ colorScheme: 'dark' });
   await expect(page.locator('html')).toHaveClass(/light/);
   await toggle.focus();
   await page.keyboard.press('Space');
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  await expect(toggle).toBeChecked();
   await expect(page.locator('html')).toHaveClass(/dark/);
   await page.reload();
-  await expect(toggle).toHaveAttribute('aria-checked', 'true');
+  await expect(toggle).toBeChecked();
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).toHaveClass(/dark/);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.reload();
+  const title = page.getByRole('heading', { level: 1 });
+  await expect(title).toBeVisible();
+  await expect(title).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'auto');
+  const browse = page.getByRole('main').getByRole('link', { name: en.Home.browse, exact: true });
+  await browse.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { name: en.Nav.explore, exact: true })).toBeInViewport();
+  const card = page.getByRole('main').getByTestId('app-card').first();
+  await card.hover();
+  await expect(card).toHaveCSS('transform', 'none');
   expect(errors).toEqual([]);
 });
 
@@ -166,27 +201,38 @@ test('mobile filters count, reset, keyboard focus and close', async ({ page }) =
   await trigger.click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
-  await dialog.getByRole('button', { name: 'Graphics & Design', exact: true }).click();
+  await dialog.getByRole('button', { name: en.Categories['graphics-design'], exact: true }).click();
   await expect(page).toHaveURL(/category=graphics-design/);
-  await dialog.getByRole('combobox', { name: 'Support status' }).selectOption('planned');
+  await selectOption(
+    page,
+    dialog.getByRole('combobox', { name: fieldName(en.Directory.status) }),
+    en.Status['planned'],
+  );
   await expect(dialog.getByText('Filters · 2', { exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(dialog).not.toBeVisible();
   await expect(trigger).toBeFocused();
   await trigger.click();
-  await dialog.getByRole('button', { name: 'Reset all' }).click();
+  await dialog.getByRole('button', { name: en.Directory.reset }).click();
   await expect(page).toHaveURL(/\/en$/);
-  await dialog.getByRole('button', { name: 'Show results' }).click();
+  await dialog.getByRole('button', { name: en.Directory.done }).click();
   await expect(page.getByTestId('app-card')).toHaveCount(24);
 });
 
 for (const locale of ['ko', 'en'] as const)
   for (const theme of ['light', 'dark'] as const) {
     test(`responsive and accessible ${locale}/${theme}`, async ({ page }) => {
+      test.setTimeout(60000);
       await page.goto(`/${locale}`);
       await chooseTheme(page, locale, theme);
       await expect(page.locator('html')).toHaveClass(new RegExp(theme));
       await expect(page.getByTestId('app-card')).toHaveCount(24);
+      // Loading changes the enabled state and colors of the local 3D controls.
+      const deviceModel = page.getByTestId('device-model');
+      if (await deviceModel.count())
+        await expect(deviceModel).toHaveAttribute('data-status', /^(ready|unavailable)$/, {
+          timeout: 30000,
+        });
       for (const width of [360, 768, 1440]) {
         await page.setViewportSize({ width, height: 1000 });
         expect(
@@ -227,9 +273,9 @@ test('mobile dialog accessibility', async ({ page }) => {
 
 test('unknown app, page and locale do not expose fixtures', async ({ page }) => {
   await page.goto('/en/apps/missing');
-  await expect(page.getByRole('heading', { name: 'This page isn’t here.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: en.NotFound.title })).toBeVisible();
   await page.goto('/ko/no-such-page');
-  await expect(page.getByRole('heading', { name: '이 페이지를 찾을 수 없어요.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: ko.NotFound.title })).toBeVisible();
   const response = await page.goto('/fr');
   expect(response?.status()).toBe(404);
   await expect(page.getByTestId('app-card')).toHaveCount(0);
@@ -246,22 +292,27 @@ test('metadata and sitemap never advertise fixture pages', async ({ page, reques
 
 test('language menu stays icon-only, supports keyboard and returns focus', async ({ page }) => {
   await page.goto('/en');
-  const trigger = page.getByRole('button', { name: 'Language', exact: true });
+  const trigger = page.getByRole('button', { name: en.Preferences.language, exact: true });
   await expect(trigger).toHaveText('');
-  await expect(page.getByText('한국어', { exact: true })).not.toBeVisible();
+  await expect(page.getByText(ko.Preferences.ko, { exact: true })).not.toBeVisible();
   await trigger.focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('menu')).toBeVisible();
-  await expect(page.getByRole('menuitemradio', { name: 'English', exact: true })).toHaveAttribute(
-    'aria-checked',
-    'true',
-  );
+  await expect(
+    page.getByRole('menuitemradio', { name: en.Preferences.en, exact: true }),
+  ).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('menu')).not.toBeVisible();
   await expect(trigger).toBeFocused();
   await trigger.press('ArrowDown');
+  await expect(page.getByRole('menu')).toBeVisible();
+  await expect(
+    page.getByRole('menuitemradio', { name: ko.Preferences.ko, exact: true }),
+  ).toBeFocused();
   await page.keyboard.press('Home');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/ko$/);
-  await expect(page.getByRole('switch', { name: '다크 모드', exact: true })).toHaveCount(1);
+  await expect(
+    page.getByRole('switch', { name: ko.Preferences.darkMode, exact: true }),
+  ).toHaveCount(1);
 });

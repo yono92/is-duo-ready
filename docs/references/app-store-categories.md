@@ -44,3 +44,7 @@ Apple은 기본 카테고리와 보조 카테고리를 구분하며 기본 카�
 - 과거 공유 URL의 `category=creativity`는 `graphics-design`으로 정규화한다.
   새로 생성하는 URL에는 `graphics-design`을 쓴다.
 - 카테고리 수정은 지원 상태·근거·확인일과 독립적이다. 빈 근거와 null 검토일을 유지한다.
+
+## Initial full-directory expansion (2026-10-29)
+
+The initial KR Lookup observations also include Reference 6006, Sports 6004, Utilities 6002, Games 6014, Food & Drink 6023, Shopping 6024, Finance 6015, Education 6017, Business 6000, Health & Fitness 6013, Weather 6001, News 6009 and Social Networking 6005. Preserve these observed IDs/names and map them to the corresponding locale labels; migration 006 expands the existing constraint without changing RLS. Source: stored KR Apple Lookup observations in `app_store_listings.observed_metadata`, fetched on 2026-10-29.

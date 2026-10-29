@@ -1,12 +1,16 @@
 'use client';
+import { Select } from '@/components/ui/form-controls';
+
 import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter, Link } from '@/i18n/navigation';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Link } from '@/components/ui/link';
+import { useRouter } from '@/i18n/navigation';
 import { categories, statuses, type DirectoryQuery } from '@/lib/directory/types';
 import { changeQuery, defaultQuery, queryString } from '@/lib/directory/query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SideNavItem, Pagination } from '@/components/ui/surfaces';
 import { Dialog, DialogHeader } from '@astryxdesign/core/Dialog';
 
 export function DirectoryControls({
@@ -44,51 +48,48 @@ export function DirectoryControls({
       <legend className="mb-3 text-xs font-medium text-muted-foreground">{t('categories')}</legend>
       {(['all', ...categories] as const).map((category) => {
         return (
-          <button
+          <SideNavItem
             key={category}
-            type="button"
+            label={category === 'all' ? t('all') : c(category)}
+            isSelected={query.category === category}
             aria-pressed={query.category === category}
+            isDisabled={pending}
             onClick={() => update({ category })}
-            className={`category-button ${query.category === category ? 'selected' : ''}`}
-          >
-            {category === 'all' ? t('all') : c(category)}
-          </button>
+          />
         );
       })}
     </fieldset>
   );
   const statusSelect = (
-    <label className="flex min-w-0 flex-col gap-2 text-sm">
-      <span className="sr-only">{t('status')}</span>
-      <select
-        aria-label={t('status')}
-        className="form-select"
+    <div className="flex min-w-0 flex-col gap-2 text-sm">
+      <Select
+        label={t('status')}
+        isLabelHidden
+        disabled={pending}
         value={query.status}
-        onChange={(event) => update({ status: event.target.value as DirectoryQuery['status'] })}
-      >
-        <option value="all">{t('allStatuses')}</option>
-        {statuses.map((status) => (
-          <option key={status} value={status}>
-            {s(status)}
-          </option>
-        ))}
-      </select>
-    </label>
+        onChange={(value) => update({ status: value as DirectoryQuery['status'] })}
+        options={[
+          { value: 'all', label: t('allStatuses') },
+          ...statuses.map((status) => ({ value: status, label: s(status) })),
+        ]}
+      />
+    </div>
   );
   const sortSelect = (
-    <label className="flex items-center gap-2">
-      <span className="sr-only">{t('sort')}</span>
-      <select
-        aria-label={t('sort')}
+    <div className="flex items-center gap-2">
+      <Select
+        label={t('sort')}
+        isLabelHidden
+        disabled={pending}
         value={query.sort}
-        onChange={(event) => update({ sort: event.target.value as DirectoryQuery['sort'] })}
-        className="sort-select"
-      >
-        <option value="recommended">{t('recommended')}</option>
-        <option value="updated">{t('updated')}</option>
-        <option value="name">{t('name')}</option>
-      </select>
-    </label>
+        onChange={(value) => update({ sort: value as DirectoryQuery['sort'] })}
+        options={[
+          { value: 'recommended', label: t('recommended') },
+          { value: 'updated', label: t('updated') },
+          { value: 'name', label: t('name') },
+        ]}
+      />
+    </div>
   );
   return (
     <div className="directory-layout" aria-busy={pending}>
@@ -110,11 +111,6 @@ export function DirectoryControls({
               className="flex min-w-0 flex-1 gap-2"
             >
               <div className="relative min-w-0 flex-1">
-                <Search
-                  size={18}
-                  className="pointer-events-none absolute z-10 top-3.5 left-3.5 text-muted-foreground"
-                  aria-hidden="true"
-                />
                 <Input
                   key={query.q}
                   name="q"
@@ -124,12 +120,10 @@ export function DirectoryControls({
                   label={t('search')}
                   isLabelHidden
                   placeholder={t('searchPlaceholder')}
-                  className="h-11 bg-card pl-11"
+                  startIcon={<Search size={18} aria-hidden="true" />}
                 />
               </div>
-              <Button type="submit" className="h-11">
-                {t('searchButton')}
-              </Button>
+              <Button type="submit">{t('searchButton')}</Button>
             </form>
             <div className="hidden md:block">{sortSelect}</div>
           </div>
@@ -138,7 +132,7 @@ export function DirectoryControls({
               <div className="md:hidden">
                 <Button
                   variant="outline"
-                  className="h-11"
+
                   onClick={() => setOpen(true)}
                   aria-haspopup="dialog"
                   aria-expanded={open}
@@ -150,12 +144,10 @@ export function DirectoryControls({
                   isOpen={open}
                   onOpenChange={setOpen}
                   width="min(90vw,360px)"
-                  maxHeight="100dvh"
-                  position={{ top: 0, end: 0 }}
-                  padding={0}
+                  maxHeight="90dvh"
+                  padding={4}
                   aria-label={t('filters')}
                   aria-describedby={descriptionId}
-                  className="directory-filter-dialog"
                 >
                   <div className="p-5 pb-0">
                     <DialogHeader
@@ -188,11 +180,11 @@ export function DirectoryControls({
                       disabled={pending || !modified}
                       variant="outline"
                       onClick={() => navigate(defaultQuery)}
-                      className="w-full h-11"
+                      className="w-full"
                     >
                       {t('reset')}
                     </Button>
-                    <Button className="h-11 w-full" onClick={() => setOpen(false)}>
+                    <Button className="w-full" onClick={() => setOpen(false)}>
                       {t('done')}
                     </Button>
                   </div>
@@ -236,32 +228,14 @@ export function DirectoryControls({
       <div className="directory-results min-w-0">
         <div className={pending ? 'opacity-60 transition-opacity' : ''}>{children}</div>
         {pages > 1 && (
-          <nav
-            aria-label={t('page', { page: query.page, pages })}
-            className="mt-8 flex items-center justify-center gap-5"
-          >
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={t('previous')}
-              disabled={pending || query.page === 1}
-              onClick={() => update({ page: query.page - 1 })}
-            >
-              <ChevronLeft />
-            </Button>
-            <span className="text-sm text-muted-foreground">
-              {t('page', { page: query.page, pages })}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              aria-label={t('next')}
-              disabled={pending || query.page === pages}
-              onClick={() => update({ page: query.page + 1 })}
-            >
-              <ChevronRight />
-            </Button>
-          </nav>
+          <Pagination
+            className="mt-8"
+            page={query.page}
+            totalPages={pages}
+            onChange={(page) => update({ page })}
+            isDisabled={pending}
+            label={t('page', { page: query.page, pages })}
+          />
         )}
       </div>
     </div>

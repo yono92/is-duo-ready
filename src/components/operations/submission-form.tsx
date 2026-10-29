@@ -1,4 +1,8 @@
 'use client';
+import { Card, Banner } from '@/components/ui/surfaces';
+
+import { Select, TextArea } from '@/components/ui/form-controls';
+
 import { useActionState } from 'react';
 import { useTranslations } from 'next-intl';
 import { submitAction } from '@/app/[locale]/submit/actions';
@@ -15,26 +19,26 @@ export function SubmissionForm({
   const [state, action, pending] = useActionState(submitAction, {});
   if (state.received)
     return (
-      <div role="status" className="mt-8 rounded-xl border bg-card p-6">
+      <Card padding={5} role="status" className="mt-8 ">
         <h2 className="text-xl font-semibold">{t('received')}</h2>
         <p className="mt-3 text-muted-foreground">{t('receivedBody')}</p>
-      </div>
+      </Card>
     );
   return (
     <form action={action} className="mt-8 space-y-5">
       <fieldset disabled={!enabled || pending} className="space-y-5">
         <legend className="sr-only">{t('title')}</legend>
-        <label className="block space-y-2">
-          <span>{t('kind')}</span>
-          <select
+        <div className="block space-y-2">
+          <Select
+            label={t('kind')}
             name="kind"
             defaultValue={storeUrl ? 'correction' : 'add'}
-            className="h-11 w-full rounded-lg border bg-background px-3"
-          >
-            <option value="add">{t('add')}</option>
-            <option value="correction">{t('correction')}</option>
-          </select>
-        </label>
+            options={[
+              { value: 'add', label: t('add') },
+              { value: 'correction', label: t('correction') },
+            ]}
+          />
+        </div>
         <div className="block space-y-2">
           <Input
             label={t('storeUrl')}
@@ -43,21 +47,20 @@ export function SubmissionForm({
             required
             maxLength={2000}
             defaultValue={storeUrl}
-            placeholder="https://apps.apple.com/kr/app/id…"
+            placeholder={t('storeUrlPlaceholder')}
           />
         </div>
-        <label className="block space-y-2">
-          <span>{t('body')}</span>
-          <textarea
+        <div className="block space-y-2">
+          <TextArea
+            label={t('body')}
             name="body"
             required
             minLength={10}
             maxLength={4000}
             rows={6}
             aria-describedby="submission-privacy"
-            className="w-full rounded-lg border bg-background p-3"
           />
-        </label>
+        </div>
         <div className="block space-y-2">
           <Input
             label={t('evidenceUrl')}
@@ -79,9 +82,7 @@ export function SubmissionForm({
       </p>
       {!enabled && <p role="status">{t('errors.unavailable')}</p>}
       {state.error && (
-        <p role="alert" className="text-sm text-destructive">
-          {t(`errors.${state.error}`)}
-        </p>
+        <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
       <Button type="submit" disabled={!enabled || pending}>
         {t(pending ? 'working' : 'send')}

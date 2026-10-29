@@ -36,7 +36,7 @@ export function appleId(raw: unknown) {
   return match[1];
 }
 
-const categoryIds: Record<string, string> = {
+export const categoryIds: Record<string, string> = {
   6007: 'productivity',
   6027: 'graphics-design',
   6011: 'music',
@@ -46,6 +46,19 @@ const categoryIds: Record<string, string> = {
   6008: 'photo-video',
   6016: 'entertainment',
   6012: 'lifestyle',
+  6006: 'reference',
+  6004: 'sports',
+  6002: 'utilities',
+  6014: 'games',
+  6023: 'food-drink',
+  6024: 'shopping',
+  6015: 'finance',
+  6017: 'education',
+  6000: 'business',
+  6013: 'health-fitness',
+  6001: 'weather',
+  6009: 'news',
+  6005: 'social-networking',
 };
 function field(value: unknown, max: number, required = false) {
   if (value == null || value === '') {

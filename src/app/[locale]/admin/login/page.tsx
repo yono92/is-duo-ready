@@ -1,3 +1,4 @@
+import { Card, Banner } from '@/components/ui/surfaces';
 import { getTranslations } from 'next-intl/server';
 import { localConfiguration } from '@/lib/admin/auth';
 import { LoginForm } from '@/components/admin/login-form';
@@ -18,22 +19,22 @@ export default async function LoginPage({
     : null;
   return (
     <main id="main" className="site-width py-12">
-      <section className="mx-auto max-w-md rounded-[18px] border bg-card p-6">
-        <h1 className="text-3xl font-semibold">{t('loginTitle')}</h1>
-        <p className="mt-4 text-sm text-muted-foreground">
-          {t(local ? 'localNotice' : 'loginDescription')}
-        </p>
-        {!enabled && (
-          <p className="mt-4 text-sm" role="status">
-            {t('errors.authUnavailable')}
+      <section>
+        <Card padding={5} className="mx-auto max-w-md ">
+          <h1 className="text-3xl font-semibold">{t('loginTitle')}</h1>
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t(local ? 'localNotice' : 'loginDescription')}
           </p>
-        )}
-        {visibleError && (
-          <p className="mt-4 text-sm" role="alert">
-            {t(`errors.${visibleError}`)}
-          </p>
-        )}
-        <LoginForm enabled={enabled} />
+          {!enabled && (
+            <p className="mt-4 text-sm" role="status">
+              {t('errors.authUnavailable')}
+            </p>
+          )}
+          {visibleError && (
+            <Banner role="alert" status="error" title={<>{t(`errors.${visibleError}`)}</>} />
+          )}
+          <LoginForm enabled={enabled} />
+        </Card>
       </section>
     </main>
   );

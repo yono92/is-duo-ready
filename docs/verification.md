@@ -1,6 +1,65 @@
 # 001 검증 결과
 
-## 2026-10-29 — Astryx 교체 완료 (T036–T038)
+## 2026-10-29 — Apple 시각 기준 복원 + Meta Astryx + 모션 (T045–T046)
+
+사용자가 재확인한 기준은 **Apple 참고 디자인 + 실제 Meta Astryx 컴포넌트**다. 이전 Neutral-only 지침을 철회하고 DESIGN.md/AGENTS.md/PRD/001 명세를 정렬했다. `apple-theme.css` 한 곳에서 Astryx 공개 토큰에 제품 색·시스템 글꼴·모서리를 연결하며 라이브러리 소스는 변경하지 않았다.
+
+- 데스크톱 한 줄 헤더, 얇은 반투명 고정 헤더, 제목/설명/탐색 동작의 위계, 흰 hero와 연회색 목록, 구분되는 앱 카드와 검토일을 적용했다.
+- hero 요소의 650–800ms 등장과 60ms 간격, 카드의 3px/250ms hover 반응을 추가했다. 새 모션 의존성이나 스크롤 이벤트 리스너는 없다. `prefers-reduced-motion`에서는 등장·이동·smooth scroll을 끈다.
+- 탐색 버튼은 실제 Astryx Button을 native anchor로 렌더해 검색·필터 쿼리를 유지한 채 같은 문서의 목록으로 이동한다. 일반 앱 링크는 기존 Next/next-intl 경로를 유지한다.
+- 기존 3D 기기 작업은 별도 작업으로 유지하며 이번 변경의 신규 기능으로 주장하지 않는다. 테스트 서버의 가상 카드만으로 카드 배치를 검증했으며 실제 DB에 앱/근거를 추가하지 않았다.
+
+| 검사 | 실제 결과 |
+| --- | --- |
+| `npm run lint` | 통과 |
+| `npm run typecheck` | 통과 |
+| `npm test` | 16개 파일 / 61개 통과 |
+| `npm run format:check` | 통과 |
+| `DUO_TEST_PORT=3363 npm run test:e2e -- --workers=1` | 19개 통과. 실행 도중 별도 카피 작업에서 영어 버튼이 변경되어 1개는 이전 이름 대기 실패; 최신 messages로 해당 테마/reduced-motion 검사를 재실행해 1개 통과. 합계 20개 시나리오 확인 |
+| `NODE_OPTIONS='--experimental-strip-types' DUO_TEST_PORT=3364 npm run test:admin -- admin.spec.ts` | 7개 통과. 로그인/권한/저장 및 ko/en × light/dark 폼 접근성 |
+| `npm run build` | 최종 앵커/레이아웃/카피 반영 후 통과. 기존 아이콘 동적 파일 추적 경고 4개 |
+| 시각 확인 | 실제 localhost:3000의 ko 라이트/다크와 390px 모바일, 테스트 서버의 ko 라이트/en 다크 1440px 화면 확인 |
+
+검증 중 발견 및 보완:
+- 다크 모드 info 배지가 밝은 파란 배경에 흰 글자를 상속하여 대비 2.67:1로 실패했다. 제품 동작 버튼의 흰 글자와 의미 배지의 어두운 글자 토큰을 분리했으며 ko/en dark axe를 다시 통과했다.
+- Next.js 16 설치 문서를 확인하고 `data-scroll-behavior="smooth"`를 지정해 경로 이동과 문서 내 스크롤 동작을 분리했다.
+- 최초 테스트에서 Next가 보관하는 이전 페이지 DOM이 앵커 선택자와 중복됐다. 실제 사용자 접근 가능한 heading/main을 검사하고 문서 내 링크는 라우터 전환 없이 이동하게 했다.
+- 별도 카피 작업의 최신 메시지와 헤더/푸터 문구 정리는 보존했다. 실행 중 변경된 영어 CTA 때문에 테스트 프로세스가 이전 `Browse the directory` 이름을 기다린 1건은 최신 메시지로 재실행해 통과했다.
+- 언어 전환 2개가 한 병렬 실행에서 5초 URL 대기 초과로 실패했다. 시간 제한과 기능 검사는 완화하지 않았고, 관련 4개(검색/앵커/언어/테마·reduced motion)는 1워커 재실행에서 통과했다. 전체 최종 실행 결과는 위 표에 기록한다.
+
+Chromium 자동 검증과 로컬 화면 확인이며 Safari/Firefox·실기기는 별도 미검증이다. 기존 React의 언어 전환 script 경고 및 Three.Clock 폐기 경고가 개발 로그에 남는다. 외부 배포는 하지 않았다.
+
+
+## 2026-10-29 — Astryx Neutral 전체 UI 전환 (T039–T041)
+
+사용자의 “입력필드까지 전부 Astryx 기반” 후속 지시를 반영했다. 공개/관리자 검색·로그인·앱 편집·번역·근거·제보·검토·수집·CSV 가져오기의 보이는 입력은 실제 TextInput/TextArea/Selector/CheckboxInput/DateInput/FileInput이다. 기존 Field 안의 raw input, native select/textarea/checkbox, 커스텀 테마 스위치와 컨트롤 CSS를 제거했다. 숨겨진 서버 액션 데이터와 봇 방지 input만 네이티브로 남긴다.
+
+TopNav/SideNavItem/Switch/Pagination, Card/ClickableCard/Collapsible, Banner/EmptyState/ProgressBar와 기존 Button/Badge/Dialog/DropdownMenu/Skeleton을 사용한다. Neutral의 색·모서리·상태를 기본으로 쓰고 Tailwind는 제품 배치에 사용한다. 내부 문구는 공식 ko-KR 카탈로그로 번역하며 라이트/다크/시스템 저장 동작을 유지한다.
+
+| 검사 | 관찰 결과 |
+| --- | --- |
+| `npm run lint` / `npm run format:check` | 통과 |
+| `npm run typecheck` | 통과 |
+| `npm test` | 15개 파일 / 53개 통과 |
+| `DUO_TEST_PORT=3353 npm run test:e2e` | 공개 탐색 15개 통과; ko/en·라이트/다크·360/768/1440px·axe·키보드·모달·URL 상태 |
+| 격리 DB 관리자 E2E | 분할 실행 합계 39개 통과: 기본 관리자 7개, 아이콘 1개, 중지/재개 1개, CSV/접근성 17개, 수집/검토/공개 데이터 13개. 마지막 13개는 1.2분, 실패 0개이며 병행 수집 상태 갱신 작업에서 추가한 2개도 포함 |
+| CSV/날짜 계약 | 파일 선택 버튼을 Enter로 열어 업로드, 12개 locale/theme/width 조합에서 가져오기→날짜 입력→저장된 ISO payload→승인→공개 확인 |
+| `npm run build` | 통과. 기존 아이콘 저장 파일의 동적 경로 추적 경고 4개 유지 |
+| `npm run test:production` | fixture 차단 / 로컬 QA 허용 / Vercel override 차단 3개 통과 |
+| 화면 검토 | `ko-light-desktop.png`, `ko-dark-mobile.png`, `admin-en-light.png`를 확인. 실제 3000 포트의 검색창과 선택창도 Astryx 적용 확인 |
+
+검증 과정에서 수정한 사항:
+- Astryx 라벨의 `∙ Required` / `∙ 필수`를 반영해 정확한 필드 이름을 찾는다. Selector는 실제 팝오버 옵션을 선택하고 FileInput은 파일 선택 버튼의 키보드 동작을 검증한다.
+- 메뉴의 요청 프레임 이후 초점을 기다려 Home/Enter 키를 보낸다. ClickableCard는 접근 가능한 내부 링크를 Enter로 활성화한다. 테스트가 컨트롤 값을 강제로 바꾸지 않는다.
+- Collapsible은 기본 열림이므로 기존 details 동작에 맞춰 `defaultIsOpen={false}`를 명시했다. 검토 완료 검사는 기본 선택 문구가 아닌 서버가 반환한 전체 상태 문구를 기다린다.
+- 제보 연결 후 권한 거부 검증도 서버의 보류 상태가 표시된 뒤 revision 기준값을 읽도록 수정했다. 입력 중인 사유 문구만 기다리면 저장 전에 기준값을 읽는 경쟁 조건이 있었다. 권한 거부 응답 및 revision 불변 검사는 유지했다.
+- 병행 파일 수정 중 Next 개발 서버의 HMR 초기화 오류가 발생한 실행은 실패로 처리했다. 오류 검사를 제거하지 않고 재실행했다.
+- Selector의 옵션 비활성 속성은 `disabled`로 적용하고 DateInput은 현재 `presentation` API를 사용한다. 폼 어댑터는 native required/pattern과 reset 이벤트를 유지한다.
+- 공유 워크스페이스에서 별도 TypeScript 전환이 함께 반영되어 기존 실행이 삭제된 `.mjs` preload를 참조했다. 새 테스트는 `NODE_OPTIONS='--experimental-strip-types' DUO_TEST_PORT=3355 npm run test:admin -- ...`으로 실행했다. 테스트별 임시 DB만 생성·정리하며 사용자 데이터는 초기화하지 않았다.
+
+Chromium 기준이며 Safari/Firefox 및 실기기는 미검증이다. 개발 모드의 언어 경로 전환에서 기존 React script 경고가 관찰된다. 병행 중인 기기 3D/수집 상태 갱신 작업은 별도 변경이며 이 UI 전환의 성과로 집계하지 않는다. 외부 배포는 하지 않았다.
+
+## 2026-10-29 — 이전 Astryx 부분 교체 (T036–T038, 아래 내용은 이력)
 
 사용자 승인으로 shadcn/ui/Radix를 Astryx로 교체했다. `@astryxdesign/core` / `theme-neutral` 0.7.4, `@stylexjs/stylex` 0.19.1을 고정했다. 기존 Apple 스타일, 언어/URL/테마 동작과 데이터 경계를 유지한다.
 
@@ -485,3 +544,281 @@ User explicitly requested a public GitHub repository. Original code uses MIT; th
 - Working tree lint/typecheck and 53 unit tests passed; isolated local DB integration 15/15 passed. A clean copy of the staged public source (excluding concurrent UI work) passed `npm ci`, lint/typecheck, 53 unit tests, default `npm run build` (Turbopack), production fixture/auth/image guards, production public/private DB checks, and public fixture E2E 15/15. Build retains four existing dynamic local-icon filesystem tracing warnings.
 - First administrator run timed out before server startup: inheriting the `tsx` loader globally stalled Next dev re-execution. The CLI keeps explicit `node --import tsx`; the test-only Next preload uses Node 22.14's `--experimental-strip-types`. That repaired startup. The subsequent full suite passed35/37; two tests matched hidden prior-route DOM. Scoped those selectors to the visible main landmark, then reran the entire icon/public-data group:7/7 passed (including both failed cases). Do not label the earlier full run a clean37/37.
 - Publication is limited to this refactor, tooling removal, associated test adjustments and documentation. Concurrent UI changes are preserved separately in the working tree. GitHub CI results, if still pending, are not inferred from local checks.
+
+## 001 — WebGL interactive device quality revision (2026-10-29, Asia/Seoul)
+
+사용자의 회전·접힘 요청 및 CSS 모형의 품질 개선 피드백에 따라 Three.js 0.186.1 + React Three Fiber 9.8.2 + Drei 10.7.9로 교체했다. 이전 CSS 패널과 벡터 풍경을 제거하고 베벨 처리된 입체 프레임, 금속/유리 재질, 연결된 화면, 힌지, 카메라 렌즈, 커버 화면과 자체 생성한 사막 WebP를 적용했다. UI는 기존 Astryx Slider/Button이다. 모형은 실측/공식 사양으로 주장하지 않는다.
+
+최종 실행 결과:
+
+- `npm run lint`: PASS.
+- `npm run typecheck`: PASS.
+- `npm test`: 16 files / 61 tests PASS (현재 공유 작업 트리 전체).
+- `DUO_TEST_PORT=3379 npm run test:e2e`: 19 tests PASS, 57.0s. 3D 전용 4개 및 기존 탐색/언어/테마/반응형/axe 회귀 포함.
+- `npm run build`: PASS. 기존 `src/lib/icons/storage.ts`의 동적 파일 접근 추적 경고 4개가 남는다.
+- `npm run test:production`: 3 scenarios PASS. Vercel에서 `device-model` 노출 차단을 추가 검사했다. 기존 이미지 라우트 404 및 fixture/관리자 경계도 통과했다.
+- `git diff --check`: PASS.
+
+포인터/키보드 회전, 0–180° 접힘, 초기화, 실제 캔버스의 펼침/접힘 픽셀 차이, 모바일 터치 회전 및 해제, 360/768/1440px 넘침 없음, ko/en × light/dark 접근성을 검증했다. WebGL 컨텍스트 손실을 실제로 발생시켜 기존 이미지 표시와 3D 제어 비활성화를 확인했다. `test-results/device-ko-webgl.png`, `device-ko-folded.png`, `device-ko-back.png`, `device-mobile-webgl.png`를 시각 확인했다. 실제 iPhone/Safari 기기 검증은 하지 않았으며 Chromium 데스크톱/모바일 에뮬레이션이다.
+
+첫 테스트에서 SSR style 문자열 비교와 JSON import 형식을 고쳤다. WebGL 전환 후 실제 픽셀 검사가 demand 렌더링 갱신 누락을 발견해 pose 변경 시 invalidate하도록 수정했다. 환경광을 조작마다 재계산하던 문제는 memo로 해결했다. 최종 테스트에서 관련 실패는 없다. Three.js의 `Clock` deprecated 경고는 현재 R3F 내부에서 발생하며 앱의 직접 사용은 없다. 강제 context-loss 테스트 종료에서는 `WEBGL_lose_context` 경고가 발생한다.
+
+성능/실패 경계: 동적 클라이언트 번들, DPR 최대 2, demand 렌더링, 정지 후 프레임 중단, reduced motion 즉시 반영, 로딩/실패 시 이미지 대체. 외부 모델/HDR CDN 요청이 없고 생성 텍스처는 저장소에서 제공한다. 기존 개발 자산 게이트를 유지했으며 배포·외부 프로젝트 생성·데이터 변경은 수행하지 않았다. 기존 병행 작업은 보존했다.
+
+
+## 2026-10-29 — 관리자 출처 수집 TanStack Query 도입
+
+범위: `@tanstack/react-query` 5.105.0 고정, 출처 수집 화면 인스턴스별 QueryClient,
+인증된 `GET /api/admin/collections`, 초기 서버 조회 및 활성 탭 15초 갱신, 액션 완료 후 캐시 무효화,
+수동 재시도·일시 장애 시 마지막 결과 유지·401/403 시 목록 숨김과 자동 조회 중단.
+공개 서버 조회, URL 필터, 단일 폼 상태는 기존 방식이다. Zustand는 공유 상태를 쓰는 실제 기능과
+함께 도입하도록 보류했다. 기준은 [상태 관리](state-management.md)에 기록했다.
+
+최종 실행 결과:
+
+| 명령 | 결과 |
+| --- | --- |
+| `npm run lint` | PASS |
+| `npm run typecheck` | PASS |
+| `npm test` | PASS — 16 files, 61 tests (신규 Query/API 단위 검증 8건 포함) |
+| `DUO_TEST_PORT=3364 npm run test:admin` | PASS — 39 tests, 임시 DB 생성·정리, 실제 앱 데이터 변경 없음 |
+| `DUO_TEST_PORT=3365 npm run test:e2e` | PASS — 최신 공유 작업 폴더 기준 19 tests |
+| `npm run build` | PASS — 새 관리자 API가 동적 라우트로 빌드됨 |
+| 변경한 코드·테스트 대상 `prettier --check` / `git diff --check` | PASS |
+
+새 관리자 브라우저 검증은 ko/en 각각에서 서버와 별개로 바뀐 수집 현황의 자동 반영,
+일시정지/재개 직후 조회 반영, 503 조회 장애 시 마지막 데이터 유지와 수동 복구,
+비회원 401, 렌더 이후 관리자 권한 회수 403, 비공개 목록·조작 숨김 및 이후 60초 동안
+주기 요청 없음까지 확인했다. 전체 관리자 회귀에는 기존 수집→검토→승인,
+로그아웃·권한 회수·액션 재호출 거부, 언어·테마·화면 폭·접근성 검증이 포함된다.
+
+중간 실패 및 보정:
+
+- SSR 조회 시각의 `Date.now()`가 React 클라이언트 순수성 규칙에 걸려 요청 시점 서버 값이라는
+  근거를 해당 줄에 명시했다. 테스트 seed의 반환 타입은 실제 id/slug 계약에 맞춰 사용했다.
+- 기존 검토 테스트가 선택창의 '보류' 값 또는 입력 문구를 저장 완료로 오인할 수 있었다.
+  최신 테스트는 결과 문구와 서버 액션 응답을 기다린 뒤 DB 상태를 검사한다.
+- 신규 테스트 ID가 기존 제보 ID와 겹친 문제를 수정하고, 실제 proxy가 덧붙이는 `max-age=0`을
+  허용하면서 private/no-store를 검증했다. 오류 안내 선택자는 Next route announcer를 제외하도록
+  main 영역으로 제한했다. 수정 후 신규 테스트 2건과 전체 관리자 39건이 통과했다.
+- 첫 공개 E2E는 15 통과/3 실패였다. 동시 진행 중인 기기 미리보기가 CSS에서 WebGL 구현으로
+  변경된 시점의 구 테스트와 메시지 누락이 관측됐다. 그 작업의 갱신된 파일로 다시 실행하여
+  19건 모두 통과했다. 이 작업에서 기기 미리보기 코드는 수정하지 않았다.
+
+기존 작업 폴더의 변경 사항을 유지했다. DB 스키마·실제 출처·공개 승인·외부 프로젝트·배포는
+이 작업에서 변경하지 않았다. Node type-stripping/색상 환경 및 Three.js Clock 관련 경고는
+검증 과정에 표시됐으며 최종 명령의 실패는 아니었다.
+
+## 2026-10-29 — 공식 듀오 배지 확인 앱 공개 기준
+
+- 사용자가 App Store 공식 듀오 지원 배지 확인 앱의 즉시 공개를 승인했다. PRD와 006 명세·작업 목록에 앱별 추가 승인·실기기 평가를 요구하지 않는 기준을 기록했다. 기존 공개 검증·출처 기록·이력 보존은 유지한다.
+- Apple Developer의 `https://developer.apple.com/news/?id=kkphp5qo`를 읽어 듀오 스크린샷 제출과 최적화 배지 표시의 관계를 확인했다. 특정 앱에 대한 배지 확인 근거로 사용하지 않았다.
+- KR VLLO (`952050883`)와 Timepage (`989178902`) 웹 페이지를 조회했다. VLLO는 실제 브라우저에서도 업데이트 설명의 듀오 UI 최적화 문구와 버전 15.1.0을 확인했지만 공식 듀오 배지 자체를 관찰하지 못했다. 웹 검색으로 읽은 버전과 실제 브라우저의 버전이 달라 검색 결과를 최신 관측으로 간주하지 않았다. 배지 미관측을 배지 부재·미지원으로 판정하지 않았다.
+- 터미널의 공식 페이지 요청은 DNS 해석 실패였고, 웹 도구와 브라우저로 읽기 전용 확인을 진행했다. 원본 HTML 수집에 성공했다고 기록하지 않는다.
+- 이번 작업에서 앱별 배지 확인 완료·DB 공개 처리·운영 배포는 0건이다. 전체 128개를 배지 조사 완료로 간주하지 않는다. 실제 배지 관측 자료 또는 확인 가능한 수집 경로 확보가 남아 있다.
+- 문서만 변경했다. 코드·스키마·DB는 수정하지 않았으며 lint/typecheck/unit/E2E/build는 이번 문서 변경에서 실행하지 않았다. 기존 작업의 검증 결과와 별도로 기록한다.
+
+## 001 — Fold screen blur transition (2026-10-29, Asia/Seoul)
+
+접기·펼치기·각도 변경 시 실제 힌지 속도에 따라 내부/커버 화면만 흐려지고 정지 후 선명해지는 전환을 추가했다. 기존 MeshBasicMaterial의 텍스처 샘플만 9-tap Gaussian 및 mip 사전 필터로 확장해 프레임/힌지/유리 반사는 선명하게 유지한다. shared uniform으로 파노라마 이음새와 sRGB 변환을 보존한다. 최초 표시·단순 회전·reduced motion에는 블러가 없고, 블러가 0에 도달하면 demand 렌더링도 정지한다. 새로운 패키지나 자산은 없다.
+
+- `npm run lint`, `npm run typecheck`: PASS. 초기 lint에서 프레임별 uniform 변경이 React memo 불변성 규칙과 충돌해 RefObject로 관리하도록 수정했다.
+- `npm test`: 16 files / 61 tests PASS.
+- `DUO_TEST_PORT=3379 npm run test:e2e`: 20 tests PASS, 40.9s.
+- 새 브라우저 검증은 실제 WebGL `uniform1f` 업로드를 관찰한다. 접기/펼치기 각각 blur > 4, 정지 후 정확히 0, 첫 표시·회전만 조작·reduced motion은 0을 확인했다. 셰이더/브라우저 오류는 없었다.
+- `npm run build`: PASS. 기존 icons/storage.ts의 파일 추적 경고 4개는 그대로다. R3F의 THREE.Clock deprecation 경고도 기존과 같다.
+- `git diff --check`: PASS.
+- `test-results/device-blur-peak.png`에서 흐려진 화면과 선명한 금속 테두리를 직접 확인했다. 캡처용 브라우저에서만 렌더 루프를 중지해 중간 프레임을 촬영했다. 최초 캡처 시도는 프레임 정지와 대기 코드의 충돌로 timeout이 발생했으며, 캡처 코드를 수정한 재실행은 성공했다. 제품 런타임에는 캡처용 제어 코드가 없다.
+
+원하는 모션을 참고한 콘셉트 효과이며 실제 제품 애니메이션 일치 검증은 아니다. 기존 로컬 자산 게이트·배포 범위는 유지했다.
+
+## 001 — 공개 문구 정리 (2026-10-29, Asia/Seoul)
+
+홈·지원 안내·푸터의 ko/en 문구를 수정했다. 반복 소개·서비스명·추상적인 슬로건을 제거하고,
+지원 안내에는 기존 네 상태의 정의를 의미 있는 dl/dt/dd 목록으로 제공한다. 공식 듀오 배지,
+정보 부족과 미지원 구분, 이전 근거 보존, 한국 스토어 기준은 유지한다. PRD·001 명세·계획과
+T047–T048을 함께 갱신했다. 기존 공유 작업 폴더의 변경은 보존했다.
+
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: PASS — 16 files / 61 tests.
+- `DUO_TEST_PORT=3387 npm run test:e2e`: PASS — 20 tests, 51.9s. 첫 시도는 sandbox의
+  loopback 포트 listen EPERM으로 서버 시작 전에 실패했으며, 실행 권한 확장 후 전체 통과했다.
+- `npm run build`: PASS. 기존 `src/lib/icons/storage.ts`의 동적 파일 추적 경고 4개가 남는다.
+- 수정한 코드·메시지·기존 테스트의 `prettier --check`, `git diff --check`: PASS.
+- 기존 E2E에서 ko/en·라이트/다크·360/768/1440px·키보드·axe·URL·언어 전환을 검증했다.
+  생성된 한국어 라이트/영어 다크 홈 캡처를 확인했다. 연결된 브라우저의 실제 로컬
+  `/ko/methodology`, `/en/methodology`에서도 내용·푸터·언어 전환·360px 줄바꿈을 확인했다.
+  두 모바일 페이지 모두 content width 345px / viewport 360px로 가로 넘침이 없었다.
+- Playwright CLI 보조 도구는 npm registry DNS 실패로 시작하지 못해 연결된 브라우저로 화면을
+  확인했다. 저장소에 설치된 Playwright를 사용하는 위 E2E 실행은 별도로 통과했다.
+- 브라우저/E2E에서 React의 클라이언트 script 태그 경고와 Three.js Clock deprecation 경고가
+  관측됐다. 이번 문구 수정에서 해당 스크립트·3D 구현을 변경하거나 경고를 해결하지 않았다.
+
+실제 앱의 지원 상태·확인일·DB·외부 프로젝트·운영 배포는 변경하지 않았다.
+
+## 2026-10-29 — Vercel 실제 앱 연결·배포
+
+사용자의 “버셀 연결까지해줘” 요청으로 기존 `is-duo-ready` 프로젝트에 실제 Next.js 앱을 배포했다.
+운영 주소는 https://is-duo-ready.vercel.app 이다. 초기 준비 페이지와 달리 실제 DB 기반 공개
+목록·다국어·관리자 인증 경계가 실행된다. 공개 승인 앱은 0개이며 콘텐츠 공개는 수행하지 않았다.
+
+- Vercel 연결 플러그인은 프로젝트 404/빈 목록을 반환했다. 기존 인증된 CLI 59.25.4에서 정확한
+  팀·프로젝트 ID를 확인하여 같은 프로젝트로 진행했다. 별도 프로젝트나 Preview DB는 만들지 않았다.
+- GitHub `yono92/is-duo-ready`, production branch `main` 연결을 API로 확인했다. Git 연결 명령은
+  이미 연결되었다고 응답했으며 이후 실제 프로젝트의 link를 확인했다. 이 배포는 Git push가 아니라
+  `075d931` 기반의 미커밋 작업을 포함한 고정 파일 스냅샷이다. 동시 진행 중인 다른 채팅의 후속
+  소스 변경을 자동으로 포함하지 않았다. 스냅샷 SHA-256은 docs/release.md에 있다.
+- 배포 파일 목록에서 `.env*`, `.data`, `.git`, 로컬 도구·개발 전용 이미지를 제외한 것을 확인했다.
+  첫 배포 `dpl_CCbg2kDGfoYdY1GXdbmuZmv6uHj5`는 제외된 tests를 참조하는
+  `scripts/verify-db-production.ts` 때문에 타입 검사에서 실패했다. `.vercelignore`에 해당 테스트
+  전용 스크립트를 추가하여 수정했다. 타입 검사 자체를 끄거나 오류를 무시하지 않았다.
+- 수정 배포 `dpl_ub94R3y1S5CHNp5eizDDzW3VZPgs`가 READY가 되었고 운영 기능을 확인했다.
+  검증 도중 프로젝트의 운영 도메인이 `duo-ready-three.vercel.app`에서
+  `is-duo-ready.vercel.app`으로 변경된 것을 관측했다. 기존 주소가 404가 되어 새 프로젝트 도메인을
+  다시 조회·확인했다. 이 작업에서 도메인을 삭제하거나 새로 등록하지 않았다.
+- `NEXT_PUBLIC_SITE_URL`을 새 HTTPS origin에 맞춰 Vercel Production과 기존 비공개 hosted 설정의
+  해당 필드만 갱신했다. 최종 배포 `dpl_Gi9VYsGCQsPjVJH59vByf7Zkiq4J`
+  (https://is-duo-ready-bcfvrjqv8-yonos-projects-8566d4cb.vercel.app)은 READY이며
+  새 canonical을 확인한 뒤 promote했다. 원격 빌드의 build output 완료 시각은 약 34초였고
+  캐시는 직전 성공 배포에서 재사용했다. Node 22 / Next.js 16.4.3 / Turbopack이다.
+
+검증:
+
+- `npm run lint`, `npm run typecheck`, `npm test`: PASS; 16개 파일, 61개 단위 테스트.
+- `npm run build`: PASS; 원격 Production 환경 계약 검사·빌드도 PASS.
+- `DUO_TEST_PORT=3377 npm run test:e2e`: 최종 20/20 PASS (54.7초).
+  최초 실행은 19/20으로 언어 메뉴 키보드 테스트가 실패했다. 동시 갱신된 테스트로 분리 실행하여
+  통과했으며 이후 전체 실행에서 로컬 3D 컨트롤의 로딩 전환과 겹친 영어 라이트 대비 실패가 나왔다.
+  접근성 검사 전에 `data-status`가 ready/unavailable인지 기다리도록 보완한 뒤 전체 통과했다.
+  접근성 규칙을 제외하거나 통과 기준을 낮추지 않았다.
+- `npm run test:production`: fixture 기본 차단, 명시적 로컬 QA 허용, Vercel override 차단 3/3 PASS.
+- 첫 성공 배포에서 HTTP ko/en 200 및 실제 렌더링 텍스트의 공개 앱 0개를 확인했다. 데이터 조회
+  오류를 빈 목록으로 오인하지 않도록 HTML script의 메시지 사전과 실제 표시 텍스트를 분리해 읽었다.
+- 비로그인 관리자 페이지는 스트리밍 로그인 redirect를 반환하고 비공개 편집 링크를 노출하지 않았다.
+  `/api/admin/collections`는 401/authRequired, 개발 기기 렌더 경로는 404였다.
+  robots는 전체 Disallow, sitemap은 비어 있으며 fixture 항목은 없었다.
+- 실제 브라우저에서 운영 도메인의 한국어 홈과 영어 전환, KR 스토어 유지, 공개 앱 0개를 확인했다.
+  인증 우회 없이 일반 HTTP 접속도 200이었다. 최종 배포에서 canonical이 새 운영 origin을 가리키고
+  fixture가 없는 것을 확인했다. Vercel 보호 배포의 CLI 확인은 공식 `vercel curl`을 사용했으며
+  생성된 보호 우회 자격값을 출력하거나 공개 자료에 넣지 않았다.
+- 직전 성공 배포의 오류 수준 로그 조회는 결과 없음이었다. 이는 장기 모니터링이나 장애 부재를
+  보장하지 않는다. 별도 알림·로그 drain을 구성하지 않았다.
+- 기존 Turbopack 동적 파일 추적 경고 4개와 로컬 브라우저의 Three.js Clock·React script 경고가
+  남아 있다. 빌드/테스트는 통과했으며 경고를 해결했다고 보고하지 않는다.
+
+남은 범위: 상시 운영 관리자 설정, 로그인 후 실제 hosted 브라우저 흐름, 앱별 공식 배지 관측과
+콘텐츠 공개, 운영 수집 스케줄러. DB·지원 상태·사람의 검토일은 변경하지 않았다. 검증된 스냅샷 이후의
+로컬 문구/3D 변경은 별도 배포가 필요하다. 미커밋 상태를 보존했으며 이번 작업은 Git commit/push를 하지 않았다.
+
+## 2026-10-29 — 기기 가장자리 직접 조작
+
+사용자 요청에 따라 별도 접기·펼치기 버튼과 각도 슬라이더를 제거하고, 3D 기기의 양쪽 가장자리를
+잡아 안쪽/바깥쪽으로 끌어 접힘을 조절하도록 변경했다. 초기화는 독립 버튼으로 유지한다.
+화면 내부 드래그는 회전하며 수직 회전 부호를 바로잡았다. 기존 접힘 속도 기반 화면 블러를 유지한다.
+
+- 가장자리 손잡이는 매 프레임 실제 기기 위치를 투영하여 따라간다. 완전히 접힌 상태에서도
+  다시 잡을 수 있도록 두 손잡이 간격을 확보한다. 뒷면에서도 화면상 바깥 방향을 기준으로 동작한다.
+- 키보드로 손잡이 각도를 조절하고 Home/End로 접기/펼치기가 가능하다. 화면 회전과 손잡이 조작은
+  서로 간섭하지 않으며, 초기화 시 진행 중인 포인터 조작도 취소한다. ko/en 접근성 이름을 제공한다.
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: PASS — 16 files / 61 tests.
+- `DUO_TEST_PORT=3381 npm run test:e2e`: 최종 PASS — 21 tests, 48.2s.
+  첫 실행에서 뷰포트 변경 직후 손잡이 위치 갱신 전 가로 넘침을 발견하여 stage의 overflow를
+  clip으로 제한했다. 다음 실행에서 리셋 직후 이동 중인 손잡이의 이전 좌표를 읽는 테스트 문제가
+  발생하여 Playwright의 hover 안정화 이후 좌표를 읽도록 수정했다. 최종 전체 실행이 통과했다.
+- E2E에서 양쪽 가장자리 드래그, 완전히 접힌 뒤 다시 펼치기, 뒷면 조작, 영역 밖 포인터 해제,
+  수직 회전 방향, ko/en·키보드·axe·반응형·WebGL 실패 대체 화면을 검증했다.
+  Chromium CDP 터치 입력으로 모바일 회전과 접힘도 확인했다. 실제 iOS 기기 검증은 수행하지 않았다.
+- 실제 GPU uniform으로 접힘 중 블러와 정지 후 0 복귀, 회전 단독 및 reduced motion에서 블러 0을
+  확인했다. 로컬 3000 브라우저의 펼침/접힘 캡처에서도 손잡이 위치와 초기화 배치를 확인했다.
+- `npm run build`: PASS. 기존 `src/lib/icons/storage.ts`의 동적 파일 추적 경고 4개와
+  브라우저의 Three.js Clock deprecation·React script 경고는 남아 있다.
+- 수정 파일의 Prettier 검사 및 `git diff --check`: PASS.
+
+이번 변경은 로컬 구현과 검증이다. 별도 배포·Git commit/push는 수행하지 않았다.
+
+## 2026-10-29 — 기기 손잡이 장식 제거
+
+사용자 요청으로 양옆 GripVertical 아이콘과 pill 배경을 제거했다. 기존 44×64px 투명 드래그 영역,
+가장자리 투영·포인터 캡처·키보드·초점 윤곽·초기화·블러는 유지한다. ko/en 안내도 가장자리를
+잡도록 수정했다. 연결된 로컬 3000 화면에서 장식 없이 기기만 표시되는 것을 확인했다.
+
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: PASS — 16 files / 61 tests.
+- `npm run build`: PASS. 기존 storage.ts 동적 파일 추적 경고 4개는 유지된다.
+- `DUO_TEST_PORT=3381 npm run test:e2e`: 첫 실행 16 PASS / 5 FAIL, 두 번째 19 PASS / 2 FAIL.
+  실행 중 다른 작업에서 메시지 사전과 테스트가 갱신되어 worker에 남은 이전 문구와 실제 화면이
+  불일치했다. 두 번째 실행의 실패는 영어 가장자리 이름 변경으로 인한 locator 불일치였다.
+- `DUO_TEST_PORT=3381 npm run test:e2e -- --last-failed`: 남은 2개 PASS (8.8s).
+  전체 실행에서 통과한 19개와 재실행한 2개를 합쳐 모든 시나리오를 확인했다. 단일 전체 실행의
+  21/21 통과로 기록하지 않는다. 조작·터치·블러·키보드·접근성 테스트 조건은 완화하지 않았다.
+- 수정한 컴포넌트·CSS·메시지의 Prettier 검사와 `git diff --check`: PASS.
+- 브라우저의 기존 Three.js Clock deprecation·React script 경고는 유지된다.
+
+별도 배포나 Git commit/push는 수행하지 않았다.
+
+## 001 — 전 화면 문구 검토 (2026-10-29, Asia/Seoul)
+
+공개·관리자 화면의 18개 namespace, ko/en 각 420개(총 840개) 메시지를 실제 사용 화면과
+처리 코드에 대조했다. 기존 문구 한국어 247개·영어 234개를 수정하고 언어별 미사용·중복 키
+15개를 삭제했다. 가져오기 완료 안내와 제보 주소 예시 키를 언어별 2개 추가하여 최종 407개씩이다.
+가상 앱 30개의 양 언어 설명 60개도 수정했다. 전체 범위·수정 수·유지 기준은
+[문구 검토 내역](copy-review.md)에 기록했다.
+
+기능 번호가 남은 미사용 Info 화면, 상세의 반복 소개, 수집 화면의 주간 운영 지시를 제거했다.
+가져오기 완료 후 시작하라는 안내를 수정하고, 수집 성공만으로 변경 발견을 단정하지 않게 했다.
+공통 페이지 오류와 목록 이용 불가를 구분하고 제보·입력·인증·수집 오류를 실제 조건에 맞췄다.
+직접 작성된 주소 예시를 messages로 옮겼으며, 공식 분류명·출처 인용·실제 지원 데이터는 보존했다.
+
+검증 결과:
+
+- `npm run lint`: PASS.
+- `npm run typecheck`: PASS. 마지막 날짜/건수 구분자 수정 후 재실행도 PASS.
+- `npm test`: PASS — 16 files / 61 tests.
+- `DUO_TEST_PORT=3391 npm run test:e2e`: PASS — 21 tests, 1.1분. 공유 작업 폴더의 최신 기기 테스트 포함.
+- `DUO_TEST_PORT=3392 npm run test:admin`: PASS — 39 tests, 3.3분. 임시 로컬 DB 생성·정리,
+  관리자 편집/공개/보관, 가져오기/재시도/중지, 수집/검토/제보, 접근성·양 언어·테마·화면 폭 검증.
+- 기존 가져오기 흐름 3곳에 완료 안내 표시·대기 안내 숨김 검증을 추가했다.
+- 시각 확인에서 가져오기 날짜와 건수가 붙어 보이는 부분을 발견해 구분자를 추가했다.
+  해당 모바일 가져오기 및 접근성 2건을 다시 실행하여 PASS(14.2초), 새 캡처에서 구분도 확인했다.
+- `npm run build`: FAIL — Turbopack CSS 처리 중 내부 포트 생성이 `Operation not permitted`로
+  막혔다. 권한 확장 후 동일 명령도 실패했다. 코드 컴파일 실패나 통과로 바꿔 기록하지 않는다.
+- 설치된 Next.js CLI 문서의 `--webpack` 옵션으로 `npm run build -- --webpack`: PASS.
+  마지막 표시 수정이 포함된 최종 소스에서도 재실행 PASS. 기본 빌드 실패와 별도 결과다.
+- 수정 파일 `prettier --check`, `git diff --check`: PASS. 두 메시지 사전 키 일치, 빈 문구 없음,
+  기존 ICU 변수 보존도 확인했다.
+
+관리자 앱 편집 및 360px 가져오기 캡처를 직접 검토했다. 실제 로컬 제보 화면도 ko/en에서
+언어 전환·라벨·문구를 확인했으며 360px에서 content width 345px로 가로 넘침이 없었다.
+제보 폼을 실제 데이터로 제출하지 않았다. 기존 E2E는 ko/en·라이트/다크·360/768/1440px,
+키보드·URL·번역 fallback·한국 스토어 기준 및 axe 검사를 포함한다.
+브라우저 로그에는 React 클라이언트 script 태그와 Three.js Clock 경고, 테스트 런타임의
+Node type stripping/색상 환경 경고가 남으며 이 작업에서 해당 구현을 변경하지 않았다.
+
+실제 앱 DB·출처·검토일·권한·공개 상태·외부 프로젝트·배포는 변경하지 않았다. 동시 진행 중인
+기기 조작 변경을 보존하고, 문구와 관련한 변경만 별도 검토했다.
+
+## 2026-10-29 — 커밋·푸시 전 통합 확인
+
+사용자가 현재 작업의 커밋·푸시를 요청했다. Astryx 화면·문구·3D 조작·관리자 조회 및 현재
+카테고리 확장 변경을 대상으로 자격증명 패턴과 Git 제외 경계를 확인했다. 로컬 환경 파일,
+DB·아이콘 데이터, 개발용 원본 PNG는 Git에서 제외한다. 독립 생성한 WebP 배경은 자산 기록에 따라 포함한다.
+
+- `npm run lint`, `npm run typecheck`, `npm test`: 최종 PASS — 16 files / 61 tests.
+- `npm run test:db`: PASS — 임시 로컬 DB에서 마이그레이션 006 포함 적용·재적용 및 15개 통합 검사.
+- `DUO_TEST_PORT=3381 npm run test:e2e`: 18 PASS / 3 FAIL. 반응형 검사 중 WebGL 지연 로드가
+  기존 5초 대기보다 오래 걸려 loading 상태에서 실패했다. 기기 조작 검사와 같은 30초 준비 대기,
+  60초 시나리오 제한으로 맞췄다. 접근성·레이아웃·기기 준비 조건은 유지한다.
+- `DUO_TEST_PORT=3381 npm run test:e2e -- --last-failed`: 남은 3개 PASS (10.2s).
+  앞선 18개와 재실행 3개를 합친 결과이며, 단일 전체 실행 21/21로 기록하지 않는다.
+- Git에서 제외된 선택적 로컬 PNG가 없는 새 체크아웃에서는 제품 게이트에 따라 3D가 렌더링되지
+  않으므로, 해당 로컬 기기 조작 테스트를 명시적으로 skip하도록 했다. 로컬 PNG가 있는 이번 실행은
+  여섯 기기 시나리오를 실제 실행해 통과했다. 운영 배포 차단 검사는 별도로 유지한다.
+- `npm run build`: 기본 및 권한 확장 재시도 모두 Turbopack 내부 포트 생성의 EPERM으로 실패.
+  `npm run build -- --webpack`: PASS. 기본 빌드 성공으로 보고하지 않는다.
+- `npm run test:production`: 최종 3개 시나리오 PASS. 최초 시작 실패 후 준비된 빌드로 다시 실행했고,
+  문구 검토 전 고정 문자열에 의존하던 두 기대값은 현재 메시지 키로 갱신했다. fixture 기본 차단,
+  로컬 QA 허용, Vercel override·3D·PNG 차단, 관리자·상세·사이트맵 경계는 유지한다.
+- 변경한 테스트·운영 검사 스크립트 Prettier, `git diff --check`: PASS.
+
+이 확인에서 운영 DB나 공개 상태를 변경하거나 별도 배포 명령을 실행하지 않았다.

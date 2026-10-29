@@ -1,5 +1,14 @@
 # Asset register
 
+## Interactive concept — 2026-10-29
+
+- `src/components/device-scene.tsx`: 저장소에서 작성한 Three.js 기하 모형. 베벨 프레임, 두 패널·힌지, 렌즈·버튼·커버 화면을 포함한다. 실측 치수나 공식 사양을 주장하지 않는다. 공식 로고·외부 모델 파일은 사용하지 않는다.
+- `public/device/duo-wallpaper.webp`: 내장 image_gen으로 생성한 독립적인 사막 풍경. 1440×1080 WebP, 약 200 KiB. 기존 렌더나 공식 사진에서 추출하지 않았다. 프롬프트는 일반적인 모래 언덕·산맥·푸른 하늘의 제품용 사진 질감 배경이며 브랜드 월페이퍼 재현을 제외했다. 예시 배경으로만 사용한다.
+- 생성 원본: `$CODEX_HOME/generated_images/01a18739-396c-7a40-aa85-15939a7018a8/exec-1d0a965d-508b-41bf-ae07-ce60d398c278.png`. 런타임은 저장소의 WebP만 참조한다. 원본은 보존했다.
+- Three.js, React Three Fiber, Drei는 MIT 라이선스이며 고정 버전은 package.json/lock에 있다. 조명 환경은 코드의 Lightformer와 구체로 직접 구성하여 외부 HDR/CDN에 의존하지 않는다.
+- `DevicePreview` ko/en 메시지에 접근 가능한 조작 이름·콘셉트 안내·대체 이미지 안내를 둔다. 기기는 장식 캔버스로 처리하고 조작은 DOM 컨트롤에서 제공한다.
+- 이전 CSS 모형과 SVG 풍경은 제거했다. 기존 PNG는 로딩/미지원/컨텍스트 손실 시 대체 이미지로 보존한다. 홈은 기존 `deviceAsset` 게이트를 유지하며 Vercel 또는 로컬 원본이 없는 환경에서는 표시하지 않는다. 기존 PNG의 공개 사용 권리는 계속 미승인 상태다.
+
 | Asset | Source | Rights / status | Dimensions | Alternative text |
 | --- | --- | --- | --- | --- |
 | /device/iphone-duo-render.png | Built-in image_gen, 2026-10-29, informed by official product photographs; prompt and reference URLs in docs/references/duo-render-prompt.md | Local visual prototype only; generated render, not official artwork. Public-use rights have NOT been cleared. AI generation is not a license to Apple's source artwork or product branding. | 1536 × 1024, PNG with alpha | Home.deviceAlt in ko/en dictionaries |

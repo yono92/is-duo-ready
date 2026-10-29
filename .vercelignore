@@ -7,6 +7,8 @@
 .next*
 assets/development
 tests
+# This test runner imports helpers from the excluded tests directory.
+scripts/verify-db-production.ts
 test-results
 playwright-report
 coverage

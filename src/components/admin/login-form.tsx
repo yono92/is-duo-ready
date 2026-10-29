@@ -1,4 +1,6 @@
 'use client';
+import { Banner } from '@/components/ui/surfaces';
+
 import { useActionState } from 'react';
 import { useTranslations } from 'next-intl';
 import { loginAction } from '@/app/[locale]/admin/actions';
@@ -31,9 +33,7 @@ export function LoginForm({ enabled }: { enabled: boolean }) {
         />
       </div>
       {state.error && (
-        <p role="alert" className="text-sm text-destructive">
-          {t(`errors.${state.error}`)}
-        </p>
+        <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
       <Button type="submit" disabled={!enabled || pending}>
         {t(pending ? 'working' : 'login')}

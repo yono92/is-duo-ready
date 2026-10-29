@@ -45,6 +45,6 @@ Deliver and verify US1 collection first, then transactional review, then intake.
 
 ## TanStack Query 도입 — 2026-10-29
 
-- [ ] T015 정확한 의존성 버전, 화면별 QueryClient, 인증된 수집 현황 GET 및 15초 갱신/오류 UI를 구현한다.
-- [ ] T016 수집 화면 액션 완료 후 캐시 무효화를 연결하고 API 권한·자동 갱신·일시 장애 복구·권한 회수 회귀 테스트를 추가한다.
-- [ ] T017 lint/typecheck/unit/fixture E2E/관리자 E2E/build를 실행하고 실제 결과와 상태 관리 기준을 기록한다.
+- [x] T015 정확한 의존성 버전, 화면별 QueryClient, 인증된 수집 현황 GET 및 15초 갱신/오류 UI를 구현한다.
+- [x] T016 수집 화면 액션 완료 후 캐시 무효화를 연결하고 API 권한·자동 갱신·일시 장애 복구·권한 회수 회귀 테스트를 추가한다.
+- [x] T017 lint/typecheck/unit/fixture E2E/관리자 E2E/build를 실행하고 실제 결과와 상태 관리 기준을 기록한다.

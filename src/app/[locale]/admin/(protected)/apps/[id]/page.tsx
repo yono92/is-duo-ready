@@ -1,3 +1,5 @@
+import { Link } from '@/components/ui/link';
+import { Card } from '@/components/ui/surfaces';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
@@ -45,9 +47,11 @@ export default async function EditApp({
       )}
       <p className="mt-3 text-sm text-muted-foreground">{t(`publication.${app.publication}`)}</p>
       {(query.saved || query.reviewed) && (
-        <p role="status" className="mt-5 rounded-xl bg-muted p-4">
-          {t(query.reviewed ? 'reviewed' : 'saved')}
-        </p>
+        <Card padding={5}>
+          <p role="status" className="mt-5 ">
+            {t(query.reviewed ? 'reviewed' : 'saved')}
+          </p>
+        </Card>
       )}
       <EditForm key={`${app.id}-${app.revision}`} initial={app} />
       {!!proposals.length && (
@@ -57,35 +61,37 @@ export default async function EditApp({
           </h2>
           <p className="text-sm text-muted-foreground">{ti('proposalHelp')}</p>
           {proposals.map(({ id, proposal }) => (
-            <article key={id} className="space-y-2 rounded-xl border p-4 text-sm">
-              {proposal.source_url && (
-                <a
-                  className="break-all text-primary"
-                  href={proposal.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {proposal.source_url}
-                </a>
-              )}
-              {proposal.proposed_status && (
-                <p>
-                  {ti('proposedStatus')}: {status(proposal.proposed_status)}
-                </p>
-              )}
-              {proposal.evidence_summary && (
-                <p className="whitespace-pre-wrap break-words">{proposal.evidence_summary}</p>
-              )}
-              {proposal.announced_at && (
-                <p>
-                  {t('fields.announced_at')}: {proposal.announced_at}
-                </p>
-              )}
-              {proposal.support_version && (
-                <p>
-                  {t('fields.support_version')}: {proposal.support_version}
-                </p>
-              )}
+            <article key={id}>
+              <Card padding={5} className="space-y-2 text-sm">
+                {proposal.source_url && (
+                  <Link
+                    className="break-all text-primary"
+                    href={proposal.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {proposal.source_url}
+                  </Link>
+                )}
+                {proposal.proposed_status && (
+                  <p>
+                    {ti('proposedStatus')}: {status(proposal.proposed_status)}
+                  </p>
+                )}
+                {proposal.evidence_summary && (
+                  <p className="whitespace-pre-wrap break-words">{proposal.evidence_summary}</p>
+                )}
+                {proposal.announced_at && (
+                  <p>
+                    {t('fields.announced_at')}: {proposal.announced_at}
+                  </p>
+                )}
+                {proposal.support_version && (
+                  <p>
+                    {t('fields.support_version')}: {proposal.support_version}
+                  </p>
+                )}
+              </Card>
             </article>
           ))}
         </section>

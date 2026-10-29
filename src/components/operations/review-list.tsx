@@ -1,8 +1,9 @@
+import { ClickableCard, TopNavItem } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
 import { listReviews } from '@/lib/operations/repository';
 import { queueFilter, queuePage, reviewStates } from '@/lib/operations/input';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import type { Locale } from '@/lib/directory/types';
 
 export async function ReviewList({
@@ -29,22 +30,23 @@ export async function ReviewList({
       </header>
       <nav aria-label={t('filterStates')} className="flex flex-wrap gap-3">
         {reviewStates.map((value) => (
-          <Link
+          <TopNavItem
             key={value}
             href={`${base}?state=${value}`}
+            label={t(`states.${value}`)}
+            isSelected={state === value}
             aria-current={state === value ? 'page' : undefined}
-            className={`rounded-full border px-4 py-3 text-sm ${state === value ? 'bg-primary text-primary-foreground' : ''}`}
-          >
-            {t(`states.${value}`)}
-          </Link>
+          />
         ))}
       </nav>
       <ul className="space-y-3">
         {data.items.map((item) => (
           <li key={item.id}>
-            <Link
+            <ClickableCard
+              padding={5}
+              label={item.name ?? t('unlinkedApp')}
               href={`/admin/reviews/${item.id}`}
-              className="block space-y-2 rounded-xl border bg-card p-5"
+              className="block space-y-2 "
             >
               <div className="flex flex-wrap justify-between gap-3">
                 <span className="font-semibold">{item.name ?? t('unlinkedApp')}</span>
@@ -57,7 +59,7 @@ export async function ReviewList({
                   item.candidate_payload.release_notes ??
                   item.candidate_payload.source_url}
               </p>
-            </Link>
+            </ClickableCard>
           </li>
         ))}
       </ul>

@@ -1,0 +1,39 @@
+/* Apple reference supplies the visual language; Astryx owns the components,
+   interaction states and accessibility. Keep product tokens in this one place. */
+[data-astryx-theme='neutral'] {
+  --font-family-body:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic',
+    system-ui, sans-serif;
+  --font-family-heading: var(--font-family-body);
+  --color-background-body: light-dark(#f5f5f7, #101012);
+  --color-background-surface: light-dark(#ffffff, #161618);
+  --color-background-card: light-dark(#ffffff, #1d1d1f);
+  --color-background-popover: light-dark(#ffffff, #252527);
+  --color-background-muted: light-dark(#f5f5f7, #252527);
+  --color-text-primary: light-dark(#1d1d1f, #f5f5f7);
+  --color-text-secondary: light-dark(#626267, #a8a8af);
+  --color-icon-primary: var(--color-text-primary);
+  --color-icon-secondary: var(--color-text-secondary);
+  --color-accent: #0066cc;
+  --color-on-accent: #ffffff;
+  --color-text-accent: light-dark(#0066cc, #62adff);
+  --color-icon-accent: var(--color-text-accent);
+  --color-accent-muted: light-dark(#eaf3ff, #182c43);
+  --color-border: light-dark(#dedee3, #3a3a3f);
+  --focus-outline-color: light-dark(#0071e3, #62adff);
+  --radius-element: 0.625rem;
+  --radius-container: 1.125rem;
+  --product-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Use the public radius token on Astryx buttons, preserving its pressed,
+   disabled, loading and keyboard-focus behavior. */
+.astryx-button {
+  --radius-element: 9999px;
+}
+
+/* Neutral's info badge uses a pale blue fill in dark mode, unlike the
+   product's blue action fill. Preserve its contrasting dark label. */
+.astryx-badge[data-variant='info'] {
+  --color-on-accent: light-dark(#ffffff, #111111);
+}

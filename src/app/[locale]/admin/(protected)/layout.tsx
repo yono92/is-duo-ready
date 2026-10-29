@@ -1,6 +1,6 @@
+import { Card, TopNavItem } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin, localConfiguration } from '@/lib/admin/auth';
-import { Link } from '@/i18n/navigation';
 import type { Locale } from '@/lib/directory/types';
 import { logoutAction } from '../actions';
 import { Button } from '@/components/ui/button';
@@ -14,12 +14,12 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
     <main id="main" className="site-width py-8">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b pb-5">
         <nav aria-label={t('navigation')} className="flex flex-wrap gap-5 text-sm">
-          <Link href="/admin">{t('overview')}</Link>
-          <Link href="/admin/apps">{t('apps')}</Link>
-          <Link href="/admin/apps/import">{t('importApps')}</Link>
-          <Link href="/admin/collections">{ops('collections')}</Link>
-          <Link href="/admin/reviews">{ops('reviews')}</Link>
-          <Link href="/admin/submissions">{ops('submissions')}</Link>
+          <TopNavItem href="/admin" label={t('overview')} />
+          <TopNavItem href="/admin/apps" label={t('apps')} />
+          <TopNavItem href="/admin/apps/import" label={t('importApps')} />
+          <TopNavItem href="/admin/collections" label={ops('collections')} />
+          <TopNavItem href="/admin/reviews" label={ops('reviews')} />
+          <TopNavItem href="/admin/submissions" label={ops('submissions')} />
         </nav>
         <form action={logoutAction}>
           <Button variant="outline" type="submit">
@@ -27,7 +27,11 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
           </Button>
         </form>
       </div>
-      {local && <p className="mb-6 rounded-xl bg-muted p-4 text-sm">{t('localNotice')}</p>}
+      {local && (
+        <Card padding={5}>
+          <p className="mb-6 text-sm">{t('localNotice')}</p>
+        </Card>
+      )}
       {children}
     </main>
   );

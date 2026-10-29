@@ -16,8 +16,9 @@ try {
     count(*) FILTER (WHERE publication='draft')::int AS drafts,
     count(*) FILTER (WHERE publication='published')::int AS published,
     count(*) FILTER (WHERE category IS NULL)::int AS missing_category,
-    count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM app_private.app_support s WHERE s.app_id=a.id AND s.reviewed_at IS NOT NULL))::int AS missing_human_review,
-    count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM app_private.app_evidence e WHERE e.app_id=a.id))::int AS missing_evidence,
+    count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM app_private.app_support s WHERE s.app_id=a.id AND s.reviewed_at IS NOT NULL))::int AS missing_publication_review,
+    count(*) FILTER (WHERE EXISTS (SELECT 1 FROM app_private.app_support s WHERE s.app_id=a.id AND s.status<>'unknown') AND NOT EXISTS (SELECT 1 FROM app_private.app_evidence ae JOIN app_private.evidence e ON e.id=ae.evidence_id JOIN app_private.sources s ON s.id=e.source_id WHERE ae.app_id=a.id AND s.official_confirmed AND e.country='KR'))::int AS missing_evidence,
+    count(*) FILTER (WHERE EXISTS (SELECT 1 FROM app_private.app_support s WHERE s.app_id=a.id AND s.status='unknown' AND length(btrim(s.investigation_reason))=0))::int AS missing_investigation_reason,
     count(*) FILTER (WHERE EXISTS (SELECT 1 FROM unnest(ARRAY['ko','en']) AS required(locale) WHERE NOT EXISTS (SELECT 1 FROM app_private.app_translations t WHERE t.app_id=a.id AND t.locale=required.locale AND t.state='current' AND length(btrim(t.summary))>0)))::int AS missing_current_translation,
     count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=a.id))::int AS missing_icon_metadata
     FROM app_private.apps a`);

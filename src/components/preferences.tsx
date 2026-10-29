@@ -3,13 +3,14 @@ import { useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { Globe2, Moon, Sun } from 'lucide-react';
+import { Globe2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from '@astryxdesign/core/DropdownMenu';
 import { usePathname, useRouter } from '@/i18n/navigation';
+import { Switch } from '@astryxdesign/core/Switch';
 import type { Locale } from '@/lib/directory/types';
 
 const subscribe = () => () => {};
@@ -44,7 +45,6 @@ export function Preferences() {
           icon: <Globe2 size={18} aria-hidden="true" />,
           isIconOnly: true,
           variant: 'ghost',
-          className: 'preference-trigger',
         }}
       >
         <DropdownMenuRadioGroup label={t('language')} value={locale} onChange={changeLocale}>
@@ -53,27 +53,17 @@ export function Preferences() {
               key={option}
               value={option}
               label={<span lang={option}>{t(option)}</span>}
-              className="min-h-11"
             />
           ))}
         </DropdownMenuRadioGroup>
       </DropdownMenu>
-      <button
-        type="button"
-        role="switch"
-        className="theme-switch"
-        aria-label={t('darkMode')}
-        aria-checked={isDark}
-        title={t(isDark ? 'switchToLight' : 'switchToDark')}
-        disabled={!mounted || !resolvedTheme}
-        onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      >
-        <span className="theme-switch-track" aria-hidden="true">
-          <span className="theme-switch-thumb">
-            {isDark ? <Moon size={14} /> : <Sun size={14} />}
-          </span>
-        </span>
-      </button>
+      <Switch
+        label={t('darkMode')}
+        isLabelHidden
+        value={isDark}
+        isDisabled={!mounted || !resolvedTheme}
+        onChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+      />
     </div>
   );
 }

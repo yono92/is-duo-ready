@@ -1,3 +1,6 @@
+import ko from '../../src/messages/ko.json' with { type: 'json' };
+import en from '../../src/messages/en.json' with { type: 'json' };
+import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { connect } from '../integration/helpers.ts';
@@ -6,14 +9,14 @@ async function login(page: Page, locale = 'en') {
   await page.goto(`/${locale}/admin/login`);
   await page
     .getByRole('main')
-    .getByLabel(locale === 'en' ? 'Email' : '이메일', { exact: true })
+    .getByLabel(fieldName(locale === 'en' ? en.Admin.email : ko.Admin.email), { exact: true })
     .fill(process.env.LOCAL_ADMIN_EMAIL!);
   await page
     .getByRole('main')
-    .getByLabel(locale === 'en' ? 'Password' : '비밀번호', { exact: true })
+    .getByLabel(fieldName(locale === 'en' ? en.Admin.password : ko.Admin.password), { exact: true })
     .fill(process.env.LOCAL_ADMIN_PASSWORD!);
   await page
-    .getByRole('button', { name: locale === 'en' ? 'Sign in' : '로그인', exact: true })
+    .getByRole('button', { name: locale === 'en' ? en.Admin.login : ko.Admin.login, exact: true })
     .click();
   await expect(page).toHaveURL(new RegExp(`/${locale}/admin/apps$`));
 }
@@ -27,7 +30,7 @@ test('anonymous admin access is denied and logout revokes the local session', as
   await login(page);
   const cookie = (await context.cookies()).find((item) => item.name === 'duo-local-admin');
   expect(cookie?.httpOnly).toBe(true);
-  await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+  await page.getByRole('button', { name: en.Admin.logout, exact: true }).click();
   await expect(page).toHaveURL(/\/en\/admin\/login$/);
   await context.addCookies([cookie!]);
   await page.goto('/en/admin/apps');
@@ -40,56 +43,77 @@ test('administrator saves a draft, explicitly reviews it and archives it', async
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await login(page);
-  await page.getByRole('link', { name: 'Add an app', exact: true }).click();
+  await page.getByRole('link', { name: en.Admin.newApp, exact: true }).click();
   await page
     .getByRole('main')
-    .getByLabel('Original app name', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.name), { exact: true })
     .fill('Fictional browser review app');
-  await page.getByRole('main').getByLabel('Developer', { exact: true }).fill('Test only developer');
   await page
     .getByRole('main')
-    .getByLabel('App Store ID', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.developer), { exact: true })
+    .fill('Test only developer');
+  await page
+    .getByRole('main')
+    .getByLabel(fieldName(en.Admin.fields.app_store_id), { exact: true })
     .fill(`9900000077${testInfo.repeatEachIndex.toString().padStart(2, '0')}`);
   await page
     .getByRole('main')
-    .getByLabel('Page address', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.slug), { exact: true })
     .fill(`fictional-browser-review-${testInfo.repeatEachIndex}`);
-  await page.getByRole('combobox', { name: 'Category', exact: true }).selectOption('productivity');
-  await page.getByRole('combobox', { name: 'Original language', exact: true }).selectOption('en');
-  const english = page.getByRole('heading', { name: 'English', exact: true }).locator('..');
-  await english.getByLabel('Display name', { exact: true }).fill('Fictional browser review app');
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Admin.fields.category), exact: true }),
+    en.Categories.productivity,
+  );
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Admin.fields.original_locale), exact: true }),
+    en.Admin.languages.en,
+  );
+  const english = page
+    .getByRole('heading', { name: en.Admin.languages.en, exact: true })
+    .locator('..');
   await english
-    .getByLabel('Support summary', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.translatedName), { exact: true })
+    .fill('Fictional browser review app');
+  await english
+    .getByLabel(fieldName(en.Admin.fields.summary), { exact: true })
     .fill('Fictional browser test. No real support claim.');
   await page
     .getByRole('main')
-    .getByLabel('Investigation reason for “Needs verification”', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.investigation_reason), { exact: true })
     .fill('Fictional test investigation only.');
-  await page.getByRole('button', { name: 'Save draft changes', exact: true }).click();
+  await page.getByRole('button', { name: en.Admin.saveDraft, exact: true }).click();
   await expect(page).toHaveURL(/\/admin\/apps\/[a-f0-9-]+\?saved=1/);
-  await expect(page.getByRole('status').filter({ hasText: 'Draft saved' })).toContainText(
-    'Draft saved',
+  await expect(page.getByRole('status').filter({ hasText: en.Admin.saved })).toContainText(
+    en.Admin.saved,
   );
   await page
     .getByRole('main')
-    .getByLabel('Public change reason', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.changeReason), { exact: true })
     .fill('Fictional initial review.');
-  await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
-  await page.getByRole('button', { name: 'Apply reviewed change', exact: true }).click();
-  await expect(page).toHaveURL(/reviewed=1/);
-  await expect(
-    page.getByRole('status').filter({ hasText: 'reviewed change was applied' }),
-  ).toContainText('reviewed change was applied');
   await page
-    .getByRole('combobox', { name: 'Publication action', exact: true })
-    .selectOption('archive');
+    .getByRole('checkbox', { name: fieldName(en.Admin.reviewConfirmation), exact: true })
+    .check();
+  await page.getByRole('button', { name: en.Admin.applyReview, exact: true }).click();
+  await expect(page).toHaveURL(/reviewed=1/);
+  await expect(page.getByRole('status').filter({ hasText: en.Admin.reviewed })).toContainText(
+    en.Admin.reviewed,
+  );
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Admin.fields.action), exact: true }),
+    en.Admin.archive,
+  );
   await page
     .getByRole('main')
-    .getByLabel('Public change reason', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.changeReason), { exact: true })
     .fill('Fictional archival test.');
-  await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
-  await page.getByRole('button', { name: 'Apply reviewed change', exact: true }).click();
-  await expect(page.getByText('Archived', { exact: true })).toBeVisible();
+  await page
+    .getByRole('checkbox', { name: fieldName(en.Admin.reviewConfirmation), exact: true })
+    .check();
+  await page.getByRole('button', { name: en.Admin.applyReview, exact: true }).click();
+  await expect(page.getByText(en.Admin.publication.archived, { exact: true })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -101,20 +125,26 @@ test('revoked administrators and anonymous replay cannot invoke an existing save
   await page.goto('/en/admin/apps/new');
   await page
     .getByRole('main')
-    .getByLabel('Original app name', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.name), { exact: true })
     .fill('Fictional authorization test');
-  await page.getByRole('main').getByLabel('Developer', { exact: true }).fill('Test only');
-  const id = `990002${info.repeatEachIndex}700`;
-  const deniedId = `990002${info.repeatEachIndex}701`;
-  await page.getByRole('main').getByLabel('App Store ID', { exact: true }).fill(id);
   await page
     .getByRole('main')
-    .getByLabel('Page address', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.developer), { exact: true })
+    .fill('Test only');
+  const id = `990002${info.repeatEachIndex}700`;
+  const deniedId = `990002${info.repeatEachIndex}701`;
+  await page
+    .getByRole('main')
+    .getByLabel(fieldName(en.Admin.fields.app_store_id), { exact: true })
+    .fill(id);
+  await page
+    .getByRole('main')
+    .getByLabel(fieldName(en.Admin.fields.slug), { exact: true })
     .fill(`fictional-authorization-${info.repeatEachIndex}`);
   const requestPromise = page.waitForRequest(
     (request) => request.method() === 'POST' && Boolean(request.headers()['next-action']),
   );
-  await page.getByRole('button', { name: 'Save draft changes', exact: true }).click();
+  await page.getByRole('button', { name: en.Admin.saveDraft, exact: true }).click();
   const request = await requestPromise;
   await expect(page).toHaveURL(/saved=1/);
   const headers = await request.allHeaders();

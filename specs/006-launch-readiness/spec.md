@@ -76,3 +76,11 @@
 
 ## Final scope correction
 사용자는 2026-10-29 별도 Preview DB/배포를 원하지 않는다고 정정했다. 이전 Preview/Production 3단계 계획은 폐기한다. 기존 ref YOUR_PROJECT_REF를 운영으로 재사용하므로 새 DB·유료 플랜은 필요 없다. 실제 앱 Production 배포와 콘텐츠 공개는 정적 준비 페이지 등록 승인과 구별한다.
+
+## 공식 배지 공개 승인 — 2026-10-29 후속 결정
+
+사용자는 App Store의 공식 `Made for iPhone Duo` 배지가 확인된 앱부터 바로 공개하도록 승인했다. 앱별 배지 관측과 KR 배포 확인, 필수 콘텐츠, 출처 충돌 확인을 마치면 추가 공개 승인이나 실기기 평가 없이 기존 공개 흐름으로 처리한다. 근거에는 실제 배지 문구·출처·관측 시각과 이번 사용자 승인 경위를 구분해 남긴다. 기존 22개 릴리스 노트 후보를 배지 확인 대상으로 간주하거나 관측을 사람의 개별 검토로 기록하지 않는다. 배지 확인과 콘텐츠 발행 완료는 실제 앱 배포 완료와 별도로 검증한다. 세부 기준은 docs/PRD.md의 공식 듀오 배지 공개 절을 따른다.
+
+## Initial directory publication — latest owner decision, 2026-10-29
+
+Publish the original 128-app batch: 22 with stored explicit official support wording; 106 as internal `unknown`, displayed as “미지원 · 근거 미확인” / “Unsupported · unverified”. This supersedes the badge-only gate for this batch. Preserve source observations, distinguish update/publication dates from device tests, fill 65 categories from stored Apple primary genre IDs, and record the owner-authorized CLI batch provenance. Use the existing authenticated/RLS publish transaction; no persistent admin account or automatic collector publishing.

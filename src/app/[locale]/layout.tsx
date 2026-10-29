@@ -3,7 +3,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
 import { indexingAllowed } from '@/lib/data/seo';
@@ -38,7 +38,12 @@ export default async function LocaleLayout({
   const t = await getTranslations('Home');
   const n = await getTranslations('Nav');
   return (
-    <html lang={locale} data-astryx-theme="neutral" suppressHydrationWarning>
+    <html
+      lang={locale}
+      data-astryx-theme="neutral"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body>
         <NextIntlClientProvider>
           <Providers>
@@ -46,16 +51,10 @@ export default async function LocaleLayout({
             {children}
             <footer className="site-footer">
               <div className="site-width flex flex-wrap justify-between gap-5 text-xs leading-relaxed text-muted-foreground">
-                <div>
-                  <p className="mb-2 font-semibold text-foreground">Is Duo Ready?</p>
-                  <p>{t('footer')}</p>
-                </div>
-                <div className="space-y-2">
-                  <Link href="/methodology" className="underline underline-offset-4">
-                    {n('methodology')}
-                  </Link>
-                  <p>{t('footerNote')}</p>
-                </div>
+                <p>{t('footer')}</p>
+                <Link href="/methodology" className="underline underline-offset-4">
+                  {n('methodology')}
+                </Link>
               </div>
             </footer>
           </Providers>

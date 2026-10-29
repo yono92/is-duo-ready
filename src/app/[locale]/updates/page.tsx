@@ -1,9 +1,10 @@
+import { Card } from '@/components/ui/surfaces';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { dataSource, getPublicHistory } from '@/lib/data/directory';
 import { HistoryList } from '@/components/directory/history-list';
-import { Link } from '@/i18n/navigation';
+import { RoutePagination } from '@/components/ui/route-pagination';
 import { parseQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
 export async function generateMetadata({
@@ -30,7 +31,6 @@ export default async function Updates({
 }) {
   const { locale } = await params;
   const t = await getTranslations('Updates');
-  const d = await getTranslations('Directory');
   const query = parseQuery(await searchParams);
   const history = await getPublicHistory(query.page);
   if (history.page !== query.page) redirect(`/${locale}/updates?page=${history.page}`);
@@ -43,29 +43,17 @@ export default async function Updates({
         {history.items.length ? (
           <HistoryList items={history.items} locale={locale} showNames />
         ) : (
-          <p className="rounded-xl border bg-card p-5">{t(real ? 'empty' : 'unavailable')}</p>
+          <Card padding={5}>
+            <p className=" ">{t(real ? 'empty' : 'unavailable')}</p>
+          </Card>
         )}
         {history.pages > 1 && (
-          <nav
-            aria-label={t('pagination')}
-            className="mt-6 flex items-center justify-between gap-4"
-          >
-            {history.page > 1 ? (
-              <Link className="text-primary" href={`/updates?page=${history.page - 1}`}>
-                {d('previous')}
-              </Link>
-            ) : (
-              <span />
-            )}
-            <p className="text-sm">{d('page', { page: history.page, pages: history.pages })}</p>
-            {history.page < history.pages ? (
-              <Link className="text-primary" href={`/updates?page=${history.page + 1}`}>
-                {d('next')}
-              </Link>
-            ) : (
-              <span />
-            )}
-          </nav>
+          <RoutePagination
+            path="/updates"
+            page={history.page}
+            pages={history.pages}
+            label={t('pagination')}
+          />
         )}
       </section>
     </main>

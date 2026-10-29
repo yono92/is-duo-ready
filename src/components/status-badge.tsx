@@ -15,7 +15,16 @@ export function StatusBadge({
   const Icon = icons[status];
   return (
     <Badge
-      className={`status-badge status-${status}`}
+      variant={
+        (
+          {
+            supported: 'success',
+            planned: 'info',
+            unknown: 'warning',
+            unsupported: 'neutral',
+          } as const
+        )[status]
+      }
       icon={<Icon size={13} aria-hidden="true" />}
       label={
         <>

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ArrowLeft } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
-const sections = ['updates', 'submit', 'methodology'] as const;
+import { Link } from '@/components/ui/link';
+import { statuses } from '@/lib/directory/types';
 export async function generateMetadata({
   params,
 }: {
@@ -12,9 +12,7 @@ export async function generateMetadata({
   const { locale, section } = await params;
   const t = await getTranslations({ locale, namespace: 'Nav' });
   return {
-    title: sections.includes(section as never)
-      ? `${t(section as (typeof sections)[number])} · Is Duo Ready?`
-      : 'Is Duo Ready?',
+    title: section === 'methodology' ? `${t('methodology')} · Is Duo Ready?` : 'Is Duo Ready?',
     alternates: {
       canonical: `/${locale}/${section}`,
       languages: { ko: `/ko/${section}`, en: `/en/${section}` },
@@ -23,10 +21,10 @@ export async function generateMetadata({
 }
 export default async function InfoPage({ params }: { params: Promise<{ section: string }> }) {
   const { section } = await params;
-  if (!sections.includes(section as never)) notFound();
+  if (section !== 'methodology') notFound();
   const t = await getTranslations('Info');
   const d = await getTranslations('Directory');
-  const key = section as (typeof sections)[number];
+  const s = await getTranslations('Status');
   return (
     <main id="main" className="site-width py-10">
       <Link
@@ -37,23 +35,26 @@ export default async function InfoPage({ params }: { params: Promise<{ section: 
         {d('back')}
       </Link>
       <article className="mx-auto my-14 max-w-2xl">
-        <p className="eyebrow">Is Duo Ready?</p>
-        <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight">
-          {t(`${key}Title`)}
+        <h1 className="text-4xl leading-tight font-semibold tracking-tight">
+          {t('methodologyTitle')}
         </h1>
-        <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{t(`${key}Body`)}</p>
-        {key === 'methodology' ? (
-          ['evidence', 'review', 'independent'].map((part) => (
-            <section key={part} className="mt-9 border-t pt-7">
-              <h2 className="text-xl font-semibold">{t(part)}</h2>
-              <p className="mt-3 leading-relaxed text-muted-foreground">{t(`${part}Body`)}</p>
-            </section>
-          ))
-        ) : (
-          <p className="mt-8 inline-block rounded-full bg-muted px-4 py-2 text-sm text-muted-foreground">
-            {t('coming')}
-          </p>
-        )}
+        <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{t('methodologyBody')}</p>
+        <dl className="mt-9 divide-y border-y">
+          {statuses.map((status) => (
+            <div key={status} className="py-5 sm:grid sm:grid-cols-[10rem_1fr] sm:gap-5">
+              <dt className="font-semibold">{s(status)}</dt>
+              <dd className="mt-2 leading-relaxed text-muted-foreground sm:mt-0">
+                {t(`statusDescriptions.${status}`)}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        {['evidence', 'review', 'region'].map((part) => (
+          <section key={part} className="mt-9">
+            <h2 className="text-xl font-semibold">{t(part)}</h2>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{t(`${part}Body`)}</p>
+          </section>
+        ))}
       </article>
     </main>
   );

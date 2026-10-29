@@ -69,6 +69,8 @@ npm run collect -- --watch    # 로컬 반복 실행; Ctrl-C로 종료
 일반 웹 출처는 공식 호스트 확인·공인 IP 연결 고정·robots 정책·시간/크기 제한을 적용합니다.
 [운영 안내](docs/collection-operations.md)에 재시도·중단 복구·검토·제보 제한과 006 스케줄러 연결 경계를 정리했습니다.
 
+관리자 출처 수집 현황은 TanStack Query로 활성 탭에서 15초마다 갱신하며, 수집·등록·일시정지 후 바로 다시 조회합니다. 조회는 수집을 실행하지 않습니다. 공개 서버 조회·URL 필터·폼 상태의 역할과 향후 Zustand 도입 기준은 [상태 관리 기준](docs/state-management.md)에 정리했습니다.
+
 ## CSV 형식과 실제 API 검증
 
 필수 열: `app_store_url`. 선택 열: `source_url`, `proposed_status`, `evidence_summary`,
@@ -134,7 +136,7 @@ PostgreSQL 트랜잭션에서 `anon`/`authenticated` 역할과 RLS를 적용합�
 - **콘텐츠**: 후보 약 200개와 실제 앱 약 100개의 근거 조사·검토. 가져오기 도구 완성과 별도입니다.
 - **자산**: 기기 렌더의 공개 사용 권리는 미해결입니다. 앱 아이콘의 판촉 표시 조건과 출처는 [자산 기록](docs/assets.md)에 정리했습니다.
 
-006에서 기존 Supabase와 Vercel 프로젝트를 `is-duo-ready` 운영용으로 정리했습니다. 별도 Preview 환경은 사용하지 않습니다. 실제 배포·검증 상태는 [출시 기록](docs/release.md)을 확인하세요. 공개 색인은 `PUBLIC_INDEXING=true`,
+006에서 기존 Supabase와 Vercel 프로젝트를 `is-duo-ready` 운영용으로 정리했습니다. 실제 앱은 [운영 사이트](https://is-duo-ready.vercel.app/ko)에 배포했으며, 공개 승인된 앱은 아직 0개입니다. 별도 Preview 환경은 사용하지 않습니다. 배포 소스·검증·남은 관리자/콘텐츠 작업은 [출시 기록](docs/release.md)을 확인하세요. 공개 색인은 `PUBLIC_INDEXING=true`,
 `NODE_ENV=production`, `VERCEL_ENV=production`, `DIRECTORY_DATA_SOURCE=postgres`, 공개 HTTPS origin이 모두 필요합니다.
 개발·Preview에서는 noindex이고 fixture 앱은 사이트맵에서 제외합니다.
 

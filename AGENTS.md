@@ -1,7 +1,7 @@
 # Is Duo Ready? — repository instructions
 
 - Product source of truth: docs/PRD.md. Service name: Is Duo Ready?; package/project id: duo-ready.
-- UI work must follow DESIGN.md: Apple-inspired visual tokens with Notion-style directory structure.
+- UI work must follow DESIGN.md: Apple-inspired visual design, actual Meta Astryx components, and the existing directory structure. Neutral is the base theme, not the product's visual direction.
 - Read docs/engineering-principles.md and active specs/001-design-app-directory before changes.
 - Optional local Spec Kit/agent tooling is excluded from Git; product specifications remain in specs/.
 - Stack: Next.js App Router, strict TypeScript, Astryx, Tailwind 4, Supabase; future target Vercel.

@@ -1,7 +1,8 @@
+import { Card } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
 import { database } from '@/lib/db/server';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import type { Locale } from '@/lib/directory/types';
 export default async function AdminHome() {
   const actor = await requireAdmin((await getLocale()) as Locale);
@@ -21,12 +22,12 @@ export default async function AdminHome() {
       <p className="mt-3 text-muted-foreground">{t('overviewDescription')}</p>
       <dl className="my-8 grid gap-5 sm:grid-cols-3">
         {['draft', 'published', 'archived'].map((state) => (
-          <div key={state} className="rounded-[18px] border bg-card p-5">
+          <Card padding={5} key={state} className=" ">
             <dt>{t(`publication.${state}`)}</dt>
             <dd className="mt-3 text-3xl">
               {counts.find((row) => row.publication === state)?.count ?? '0'}
             </dd>
-          </div>
+          </Card>
         ))}
       </dl>
       <Link className="text-primary" href="/admin/apps">

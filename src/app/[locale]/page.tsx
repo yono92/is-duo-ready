@@ -1,8 +1,10 @@
-import Image from 'next/image';
+import { Card, EmptyState } from '@/components/ui/surfaces';
+import { DevicePreview } from '@/components/device-preview';
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, SearchX } from 'lucide-react';
-import { Link, redirect } from '@/i18n/navigation';
+import { ArrowRight, Globe2, SearchX } from 'lucide-react';
+import { Link } from '@/components/ui/link';
+import { redirect } from '@/i18n/navigation';
 import { getDirectoryPage } from '@/lib/data/directory';
 import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
@@ -45,24 +47,17 @@ export default async function Home({
           <div className="hero-copy">
             <h1 className="hero-title">{t('title')}</h1>
             <p className="hero-description">{t('description')}</p>
-            <Link href="/methodology" className="hero-link">
-              {t('methodology')}
-              <ArrowRight size={16} />
-            </Link>
+            <div className="hero-actions">
+              <ButtonLink href="#directory-heading">{t('browse')}</ButtonLink>
+              <Link href="/methodology" className="hero-link">
+                <span className="inline-flex items-center gap-2">
+                  {t('methodology')}
+                  <ArrowRight size={16} />
+                </span>
+              </Link>
+            </div>
           </div>
-          {deviceAsset && (
-            <figure className="hero-device">
-              <Image
-                src={deviceAsset.src}
-                alt={t('deviceAlt')}
-                width={deviceAsset.width}
-                height={deviceAsset.height}
-                sizes="(max-width: 767px) 150px, 300px"
-                priority
-              />
-              <figcaption className="device-caption">{t('deviceCaption')}</figcaption>
-            </figure>
-          )}
+          {deviceAsset && <DevicePreview />}
         </div>
       </section>
       <section aria-labelledby="directory-heading" className="directory-section">
@@ -72,8 +67,12 @@ export default async function Home({
               <h2 id="directory-heading" className="directory-title">
                 {n('explore')}
               </h2>
+              <p className="directory-description">{t('directoryDescription')}</p>
             </div>
-            <p className="text-xs text-muted-foreground">{t('region')}</p>
+            <p className="directory-region">
+              <Globe2 size={14} aria-hidden="true" />
+              {t('region')}
+            </p>
           </div>
           {data.kind === 'available' && result ? (
             <>
@@ -97,28 +96,36 @@ export default async function Home({
                       ))}
                     </div>
                   ) : (
-                    <div className="empty-panel">
-                      <SearchX size={32} className="mx-auto mb-4 text-muted-foreground" />
-                      <h3 className="text-lg font-semibold">{d('emptyTitle')}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        {d(data.fictional ? 'emptyDescription' : 'realEmptyDescription')}
-                      </p>
-                      <div className="mt-6 flex flex-wrap justify-center gap-3">
-                        <ButtonLink variant="outline" href="/">
-                          {d('reset')}
-                        </ButtonLink>
-                        <ButtonLink href="/submit">{n('submit')}</ButtonLink>
-                      </div>
-                    </div>
+                    <Card padding={5}>
+                      <EmptyState
+                        title={d('emptyTitle')}
+                        description={d(
+                          data.fictional ? 'emptyDescription' : 'realEmptyDescription',
+                        )}
+                        headingLevel={3}
+                        icon={<SearchX size={32} />}
+                        actions={
+                          <>
+                            <ButtonLink variant="outline" href="/">
+                              {d('reset')}
+                            </ButtonLink>
+                            <ButtonLink href="/submit">{n('submit')}</ButtonLink>
+                          </>
+                        }
+                      />
+                    </Card>
                   )}
                 </DirectoryControls>
               </div>
             </>
           ) : (
-            <div className="empty-panel">
-              <h3 className="text-lg font-semibold">{d('unavailableTitle')}</h3>
-              <p className="mt-3 text-muted-foreground">{d('unavailableDescription')}</p>
-            </div>
+            <Card padding={5}>
+              <EmptyState
+                title={d('unavailableTitle')}
+                description={d('unavailableDescription')}
+                headingLevel={3}
+              />
+            </Card>
           )}
         </div>
       </section>

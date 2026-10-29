@@ -1,8 +1,9 @@
+import { Card } from '@/components/ui/surfaces';
 import type { Metadata } from 'next';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { ArrowLeft } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
+import { Link } from '@/components/ui/link';
 import { getPublishedApp, getPublicHistory } from '@/lib/data/directory';
 import { appContent } from '@/lib/directory/content';
 import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
@@ -66,8 +67,7 @@ export default async function AppDetail({
       </Link>
       {app.fictional && <FixtureNotice />}
       <article className="mx-auto mt-12 max-w-3xl">
-        <p className="eyebrow">{t(app.fictional ? 'eyebrow' : 'realEyebrow')}</p>
-        <div className="mt-5 flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <AppIcon name={app.icon} src={!app.fictional ? app.iconUrl : null} />
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">{app.names[locale]}</h1>
@@ -77,43 +77,43 @@ export default async function AppDetail({
         <div className="mt-6">
           <StatusBadge status={app.status} fictional={app.fictional} />
         </div>
-        {app.fictional ? (
-          <>
-            <h2 className="mt-10 text-lg font-semibold">{t('title')}</h2>
-            <p className="mt-3 leading-relaxed text-muted-foreground">{t('description')}</p>
-          </>
-        ) : app.iconUrl ? (
-          <div className="-ml-2.5 mt-4">
-            <AppStoreBadge url={app.storeUrl} name={app.names[locale]} />
-          </div>
-        ) : (
-          <a
-            className="mt-6 inline-flex min-h-11 items-center text-primary underline underline-offset-4"
-            href={app.storeUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {t('openStore')}
-          </a>
-        )}
-        <dl className="my-8 grid gap-6 rounded-xl border bg-card p-6 sm:grid-cols-2">
-          {[
-            [t('region'), h('region')],
-            [
-              t('version'),
-              !app.fictional ? (app.supportVersion ?? t('versionUndisclosed')) : t('notAvailable'),
-            ],
-            ...(!app.fictional
-              ? [[t('currentVersion'), app.currentVersion ?? t('versionUndisclosed')]]
-              : []),
-            [t('review'), app.reviewedAt ? date(app.reviewedAt) : t('notReviewed')],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <dt className="text-sm text-muted-foreground">{label}</dt>
-              <dd className="mt-2 text-sm font-medium">{value}</dd>
+        {!app.fictional &&
+          (app.iconUrl ? (
+            <div className="-ml-2.5 mt-4">
+              <AppStoreBadge url={app.storeUrl} name={app.names[locale]} />
             </div>
+          ) : (
+            <Link
+              className="mt-6 inline-flex min-h-11 items-center text-primary underline underline-offset-4"
+              href={app.storeUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {t('openStore')}
+            </Link>
           ))}
-        </dl>
+        <Card padding={5}>
+          <dl className="my-8 grid gap-6 sm:grid-cols-2">
+            {[
+              [t('region'), h('region')],
+              [
+                t('version'),
+                !app.fictional
+                  ? (app.supportVersion ?? t('versionUndisclosed'))
+                  : t('notAvailable'),
+              ],
+              ...(!app.fictional
+                ? [[t('currentVersion'), app.currentVersion ?? t('versionUndisclosed')]]
+                : []),
+              [t('review'), app.reviewedAt ? date(app.reviewedAt) : t('notReviewed')],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <dt className="text-sm text-muted-foreground">{label}</dt>
+                <dd className="mt-2 text-sm font-medium">{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
         <h2 className="text-lg font-semibold">{t('summary')}</h2>
         <p
           lang={content.original ? app.originalLocale : locale}
@@ -137,12 +137,12 @@ export default async function AppDetail({
               {app.features.map((feature) => (
                 <li key={feature.key}>
                   <p>{feature.description}</p>
-                  <a
+                  <Link
                     href={`#evidence-${feature.evidenceId}`}
                     className="text-sm text-primary underline underline-offset-4"
                   >
                     {t('featureEvidence')}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -157,26 +157,24 @@ export default async function AppDetail({
           ) : (
             <ul className="mt-5 space-y-5">
               {app.evidence.map((source) => (
-                <li
-                  key={source.id}
-                  id={`evidence-${source.id}`}
-                  className="rounded-xl border bg-card p-5"
-                >
-                  <a
-                    className="font-medium text-primary underline underline-offset-4"
-                    href={source.url}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {source.title}
-                  </a>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {source.announcedAt ? date(source.announcedAt) : t('dateUndisclosed')}
-                  </p>
-                  <blockquote className="mt-4 whitespace-pre-wrap border-l-2 pl-4 text-sm leading-relaxed">
-                    {source.quote}
-                  </blockquote>
-                  <p className="mt-3 text-xs text-muted-foreground">{t('originalQuote')}</p>
+                <li key={source.id} id={`evidence-${source.id}`}>
+                  <Card padding={5} className=" ">
+                    <Link
+                      className="font-medium text-primary underline underline-offset-4"
+                      href={source.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {source.title}
+                    </Link>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {source.announcedAt ? date(source.announcedAt) : t('dateUndisclosed')}
+                    </p>
+                    <blockquote className="mt-4 whitespace-pre-wrap border-l-2 pl-4 text-sm leading-relaxed">
+                      {source.quote}
+                    </blockquote>
+                    <p className="mt-3 text-xs text-muted-foreground">{t('originalQuote')}</p>
+                  </Card>
                 </li>
               ))}
             </ul>

@@ -1,3 +1,4 @@
+import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
@@ -7,11 +8,13 @@ import { connect } from '../integration/helpers.ts';
 async function login(page: Page, locale: 'ko' | 'en') {
   const t = (locale === 'ko' ? ko : en).Admin;
   await page.goto(`/${locale}/admin/login`);
-  await page.getByLabel(t.email, { exact: true }).fill(process.env.LOCAL_ADMIN_EMAIL!);
-  await page.getByLabel(t.email, { exact: true }).press('Tab');
-  await expect(page.getByLabel(t.password, { exact: true })).toBeFocused();
-  await page.getByLabel(t.password, { exact: true }).fill(process.env.LOCAL_ADMIN_PASSWORD!);
-  await page.getByLabel(t.password, { exact: true }).press('Enter');
+  await page.getByLabel(fieldName(t.email), { exact: true }).fill(process.env.LOCAL_ADMIN_EMAIL!);
+  await page.getByLabel(fieldName(t.email), { exact: true }).press('Tab');
+  await expect(page.getByLabel(fieldName(t.password), { exact: true })).toBeFocused();
+  await page
+    .getByLabel(fieldName(t.password), { exact: true })
+    .fill(process.env.LOCAL_ADMIN_PASSWORD!);
+  await page.getByLabel(fieldName(t.password), { exact: true }).press('Enter');
   await expect(page).toHaveURL(new RegExp(`/${locale}/admin/apps$`));
   await page.getByRole('link', { name: t.importApps, exact: true }).click();
 }
@@ -34,8 +37,16 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
         page.on('pageerror', (error) => errors.push(error.message));
         await login(page, locale);
         for (const result of [t.states.created, t.states.duplicate]) {
-          await page.getByRole('combobox', { name: t.mode, exact: true }).selectOption('csv');
-          await page.getByLabel(t.file, { exact: true }).setInputFiles({
+          await selectOption(
+            page,
+            page.getByRole('combobox', { name: fieldName(t.mode), exact: true }),
+            t.csv,
+          );
+          const chooser = page.waitForEvent('filechooser');
+          await page.getByRole('button', { name: t.file, exact: true }).press('Enter');
+          await (
+            await chooser
+          ).setFiles({
             name: 'fictional.csv',
             mimeType: 'text/csv',
             buffer: Buffer.from(csv),
@@ -47,45 +58,66 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
           await expect(page.getByTestId('import-row').first()).toContainText(result, {
             timeout: 20000,
           });
+          await expect(page.getByText(t.completedHelp, { exact: true })).toBeVisible();
+          await expect(page.getByText(t.resumeHelp, { exact: true })).not.toBeVisible();
           if (result === t.states.created) await page.goto(`/${locale}/admin/apps/import`);
         }
         await page.getByRole('link', { name: t.edit, exact: true }).click();
         await expect(page.getByRole('heading', { name: t.proposals, exact: true })).toBeVisible();
         await expect(
-          page.getByRole('combobox', { name: a.fields.status, exact: true }),
-        ).toHaveValue('unknown');
+          page.getByRole('combobox', { name: fieldName(a.fields.status), exact: true }),
+        ).toContainText(messages.Status.unknown);
         await expect(page.getByText(a.publication.draft, { exact: true })).toBeVisible();
-        await page
-          .getByRole('combobox', { name: a.fields.original_locale, exact: true })
-          .selectOption(locale);
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(a.fields.original_locale), exact: true }),
+          (locale === 'ko' ? ko : en).Admin.languages[locale],
+        );
         const translation = page
           .getByRole('heading', { name: a.languages[locale], exact: true })
           .locator('..');
         await translation
-          .getByLabel(a.fields.translatedName, { exact: true })
+          .getByLabel(fieldName(a.fields.translatedName), { exact: true })
           .fill(`Fictional import ${id}`);
         await translation
-          .getByLabel(a.fields.summary, { exact: true })
+          .getByLabel(fieldName(a.fields.summary), { exact: true })
           .fill('Fictional test support summary');
-        await page
-          .getByRole('combobox', { name: a.fields.status, exact: true })
-          .selectOption('supported');
-        await page.getByLabel(a.fields.support_version, { exact: true }).fill('1.0');
+        await selectOption(
+          page,
+          page.getByRole('combobox', { name: fieldName(a.fields.status), exact: true }),
+          (locale === 'ko' ? ko : en).Status['supported'],
+        );
+        await page.getByLabel(fieldName(a.fields.support_version), { exact: true }).fill('1.0');
         await page.getByRole('button', { name: a.addEvidence, exact: true }).click();
-        await page.getByLabel(a.fields.title, { exact: true }).fill('Fictional verified source');
-        await page.getByLabel(a.fields.url, { exact: true }).fill(source);
         await page
-          .getByLabel(a.fields.quote, { exact: true })
+          .getByLabel(fieldName(a.fields.title), { exact: true })
+          .fill('Fictional verified source');
+        await page.getByLabel(fieldName(a.fields.url), { exact: true }).fill(source);
+        const announcedDate = page.getByRole('combobox', {
+          name: fieldName(a.fields.announced_at),
+        });
+        await announcedDate.fill('2026-10-20');
+        await announcedDate.press('Tab');
+        await expect(announcedDate).not.toHaveAttribute('aria-invalid', 'true');
+        await page
+          .getByLabel(fieldName(a.fields.quote), { exact: true })
           .fill('Fictional evidence for isolated browser testing only');
-        await page.getByRole('checkbox', { name: a.officialConfirmation, exact: true }).check();
+        await page
+          .getByRole('checkbox', { name: fieldName(a.officialConfirmation), exact: true })
+          .check();
         await page.getByRole('button', { name: a.saveDraft, exact: true }).click();
         await expect(page).toHaveURL(/saved=1/);
+        // DateInput commits an ISO date into the draft payload; verify persistence.
+        const savedPayload = JSON.parse(await page.locator('input[name="payload"]').inputValue());
+        expect(savedPayload.evidence[0].announced_at).toBe('2026-10-20');
         await page
-          .getByLabel(a.fields.changeReason, { exact: true })
+          .getByLabel(fieldName(a.fields.changeReason), { exact: true })
           .fill('Fictional imported app review');
-        await page.getByRole('checkbox', { name: a.reviewConfirmation, exact: true }).focus();
         await page
-          .getByRole('checkbox', { name: a.reviewConfirmation, exact: true })
+          .getByRole('checkbox', { name: fieldName(a.reviewConfirmation), exact: true })
+          .focus();
+        await page
+          .getByRole('checkbox', { name: fieldName(a.reviewConfirmation), exact: true })
           .press('Space');
         await page.getByRole('button', { name: a.applyReview, exact: true }).press('Enter');
         await expect(page).toHaveURL(/reviewed=1/);
@@ -130,7 +162,7 @@ test('failed external lookup is recorded, resumable and retryable without repeat
   const id = `9900049${info.repeatEachIndex}99`;
   await login(page, 'en');
   await page
-    .getByLabel(en.Import.urlInput, { exact: true })
+    .getByLabel(fieldName(en.Import.urlInput), { exact: true })
     .fill(`https://apps.apple.com/kr/app/id${id}`);
   await page.getByRole('button', { name: en.Import.preview, exact: true }).click();
   await page.getByRole('button', { name: en.Import.start, exact: true }).click();
@@ -143,6 +175,8 @@ test('failed external lookup is recorded, resumable and retryable without repeat
   await expect(page.getByTestId('import-row')).toContainText(en.Import.states.created, {
     timeout: 15000,
   });
+  await expect(page.getByText(en.Import.completedHelp, { exact: true })).toBeVisible();
+  await expect(page.getByText(en.Import.resumeHelp, { exact: true })).not.toBeVisible();
   const db = await connect();
   try {
     expect(

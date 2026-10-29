@@ -1,3 +1,6 @@
+import ko from '../../src/messages/ko.json' with { type: 'json' };
+import en from '../../src/messages/en.json' with { type: 'json' };
+import { selectOption, fieldName } from './select-option';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import type { Client } from 'pg';
@@ -68,7 +71,7 @@ for (const [index, locale] of ['ko', 'en'].entries())
       await page.goto(`/${locale}?q=${encodeURIComponent(`공개검증${suffix}`)}`);
       await expect(page.getByTestId('app-card')).toHaveCount(1);
       await expect(
-        page.getByText(locale === 'ko' ? '로컬 미리보기' : 'Local preview', { exact: true }),
+        page.getByText(locale === 'ko' ? ko.Home.fixture : en.Home.fixture, { exact: true }),
       ).toHaveCount(0);
       await page.getByTestId('app-card').click();
       await expect(page).toHaveURL(new RegExp(`/apps/${app.slug}\\?q=`));
@@ -82,7 +85,7 @@ for (const [index, locale] of ['ko', 'en'].entries())
       expect(await page.evaluate(() => Object.hasOwn(window, 'fakeEvidence'))).toBe(false);
       await expect(page.getByText('PRIVATE E2E NOTE')).toHaveCount(0);
       if (locale === 'ko')
-        await expect(page.getByText('원문으로 표시', { exact: true })).toBeVisible();
+        await expect(page.getByText(ko.Directory.original, { exact: true })).toBeVisible();
       for (const width of [360, 768, 1440]) {
         await page.setViewportSize({ width, height: 1000 });
         await expect
@@ -115,10 +118,8 @@ test('DB query failure renders an error instead of an empty result or fictional 
   try {
     await client.query('REVOKE SELECT ON public.directory_entries FROM anon');
     await page.goto('/en?q=database-outage-test');
-    await expect(
-      page.getByRole('heading', { name: 'We couldn’t load the directory.' }),
-    ).toBeVisible();
-    await expect(page.getByText('No apps found. Yet.', { exact: true })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: en.Directory.errorTitle })).toBeVisible();
+    await expect(page.getByText(en.Directory.emptyTitle, { exact: true })).toHaveCount(0);
     await expect(page.getByTestId('app-card')).toHaveCount(0);
   } finally {
     await client.query('GRANT SELECT ON public.directory_entries TO anon');
@@ -139,28 +140,35 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
   await page.goto('/en/admin/login');
   await page
     .getByRole('main')
-    .getByLabel('Email', { exact: true })
+    .getByLabel(fieldName(en.Admin.email), { exact: true })
     .fill(process.env.LOCAL_ADMIN_EMAIL!);
   await page
     .getByRole('main')
-    .getByLabel('Password', { exact: true })
+    .getByLabel(fieldName(en.Admin.password), { exact: true })
     .fill(process.env.LOCAL_ADMIN_PASSWORD!);
-  await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+  await page.getByRole('button', { name: en.Admin.login, exact: true }).click();
   await expect(page).toHaveURL(/\/admin\/apps$/);
   await page.goto(`/en/admin/apps/${app.id}`);
   const renamed = `${app.slug}-renamed`;
-  await page.getByRole('main').getByLabel('Page address', { exact: true }).fill(renamed);
   await page
-    .getByRole('combobox', { name: 'Proposed support status', exact: true })
-    .selectOption('planned');
-  await page.getByRole('button', { name: 'Save draft changes', exact: true }).click();
+    .getByRole('main')
+    .getByLabel(fieldName(en.Admin.fields.slug), { exact: true })
+    .fill(renamed);
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Admin.fields.status), exact: true }),
+    en.Status['planned'],
+  );
+  await page.getByRole('button', { name: en.Admin.saveDraft, exact: true }).click();
   await expect(page).toHaveURL(/saved=1/);
   await page
     .getByRole('main')
-    .getByLabel('Public change reason', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.changeReason), { exact: true })
     .fill('Fictional cache and alias review');
-  await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
-  await page.getByRole('button', { name: 'Apply reviewed change', exact: true }).click();
+  await page
+    .getByRole('checkbox', { name: fieldName(en.Admin.reviewConfirmation), exact: true })
+    .check();
+  await page.getByRole('button', { name: en.Admin.applyReview, exact: true }).click();
   await expect(page).toHaveURL(/reviewed=1/);
   for (const locale of ['ko', 'en']) {
     await visitor.goto(`/${locale}/apps/${app.slug}?q=Fictional`);
@@ -175,23 +183,27 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
     await visitor.goto(`/${locale}?q=${encodeURIComponent(`공개검증8${info.repeatEachIndex}201`)}`);
     await expect(visitor.getByRole('main').getByTestId('app-card')).toHaveCount(1);
     await expect(visitor.getByRole('main').getByTestId('app-card')).toContainText(
-      locale === 'ko' ? '지원 예정' : 'Support planned',
+      locale === 'ko' ? ko.Status.planned : en.Status.planned,
     );
     await visitor.goto(`/${locale}/updates`);
     await expect(
       visitor.getByRole('main').getByText('Fictional cache and alias review', { exact: true }),
     ).toBeVisible();
   }
-  await page
-    .getByRole('combobox', { name: 'Publication action', exact: true })
-    .selectOption('archive');
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Admin.fields.action), exact: true }),
+    en.Admin.archive,
+  );
   await page
     .getByRole('main')
-    .getByLabel('Public change reason', { exact: true })
+    .getByLabel(fieldName(en.Admin.fields.changeReason), { exact: true })
     .fill('Fictional cache archival');
-  await page.getByRole('checkbox', { name: /I have reviewed the saved information/ }).check();
-  await page.getByRole('button', { name: 'Apply reviewed change', exact: true }).click();
-  await expect(page.getByText('Archived', { exact: true })).toBeVisible();
+  await page
+    .getByRole('checkbox', { name: fieldName(en.Admin.reviewConfirmation), exact: true })
+    .check();
+  await page.getByRole('button', { name: en.Admin.applyReview, exact: true }).click();
+  await expect(page.getByText(en.Admin.publication.archived, { exact: true })).toBeVisible();
   for (const locale of ['ko', 'en']) {
     for (const slug of [app.slug, renamed]) {
       await visitor.goto(`/${locale}/apps/${slug}`);

@@ -1,88 +1,90 @@
-# Tasks: 001 디자인 기반·테마·다국어·앱 탐색
+<!-- Sync impact: scaffold -> 1.0.0; seven product principles added; delivery/governance defined; no deferred placeholders. -->
+# Is Duo Ready? Constitution
 
-## Phase 1: Setup
-- [x] T001 Initialize Next.js, pinned dependencies and scripts in package.json, tsconfig.json, next.config.ts.
-- [x] T002 Record project instructions and Spec Kit workflow in AGENTS.md and README.md.
+## Core Principles
 
-## Phase 2: Foundation
-- [x] T003 Define model and URL parser in src/lib/directory/{types,query}.ts; q max 100 chars, page positive integer ≤10000, page size 24.
-- [x] T004 Add 30 fictional apps and publication/environment gates in src/lib/data/; KR literal, nullable UTC review timestamps, empty evidence.
-- [x] T005 Add tokens, shadcn primitives and recorded placeholder in src/app/globals.css, src/components/ui/, public/device-placeholder.svg, docs/assets.md.
+### I. 근거 기반 판정
+공식 지원·예정·미지원은 공식 출처가 뒷받침해야 한다. 정보 부재는 미지원이 아니다.
+확인 필요는 조사 사유와 검토일을 필요로 한다. 미조사 앱은 초안이다.
+지원 버전과 현재 버전, 수집 성공 시각과 사람의 검토 시각을 구분한다.
 
-## Phase 3: US1 — Directory
-Independent test: multilingual aliases + compound filters + pagination + history match URL.
-- [x] T006 [US1] Implement SSR listing and linked cards in src/app/[locale]/page.tsx, src/components/directory/.
-- [x] T007 [US1] Implement URL-driven search, categories, statuses, sorting, pagination and reset in src/components/directory/controls.tsx.
-- [x] T008 [US1] Implement fixture detail and scoped information routes in src/app/[locale]/apps/[slug]/page.tsx and src/app/[locale]/[section]/page.tsx.
-- [x] T009 [US1] Test query normalization, filters, order and draft exclusion in tests/unit/directory.test.ts.
+### II. 수집과 승인 분리
+자동 수집은 변경 후보만 만든다. 관리자 검토 없이 공개 지원 상태를 변경하지 않는다.
+승인은 상태·근거·이력을 하나의 트랜잭션으로 반영한다.
 
-## Phase 4: US2 — Localization
-Independent test: direct locale, root negotiation, locale switch retains query/slug and KR.
-- [x] T010 [US2] Configure next-intl routing/request/navigation and proxy in src/i18n/, src/proxy.ts.
-- [x] T011 [US2] Add complete ICU dictionaries and translated layout/metadata in src/messages/, src/app/[locale]/layout.tsx.
-- [x] T012 [US2] Implement locale switching and original-content fallback in src/components/preferences.tsx, src/lib/directory/content.ts.
-- [x] T013 [US2] Test dictionary parity and missing/stale content fallback in tests/unit/i18n.test.ts.
+### III. 공개와 비공개 분리
+published 데이터만 공개한다. 초안·제보·내부 메모·관리자 정보는 비공개다.
+노출 테이블은 RLS를 적용하고 로그인 여부와 관리자 권한을 구분한다.
+비밀 키는 서버에만 두며 실제 비밀 값을 저장소에 넣지 않는다.
 
-## Phase 5: US3 — Theme and mobile
-Independent test: initial system default follows OS; manual light/dark choice persists and ignores OS; Sheet focus and reset work.
-- [x] T014 [US3] Add ThemeProvider and persistent accessible theme selector in src/components/providers.tsx and src/components/preferences.tsx.
-- [x] T015 [US3] Add responsive Sheet, active count and keyboard controls in src/components/directory/controls.tsx.
-- [x] T016 [US3] Verify responsive layouts, theme and accessibility in tests/e2e/directory.spec.ts.
+### IV. 언어·테마·화면 크기 동등성
+한국어·영어, 라이트·다크·시스템, 모바일·태블릿·데스크톱을 동일한 완료 기준으로 검증한다.
+언어는 URL과 메시지 사전으로 관리한다. 표시 언어와 스토어 국가는 별개이며 초기 국가는 KR이다.
+키보드 접근, 명시적 라벨, 보이는 초점, 일반 본문 4.5:1 대비를 유지한다.
 
-## Phase 6: US4 — Trust and boundaries
-Independent test: fixture unmistakable locally and absent in deployment; no invented evidence or asset permissions.
-- [x] T017 [US4] Add unavailable/error/404 states, fixture notices and noindex sitemap/robots in src/app/.
-- [x] T018 [US4] Add server-only Supabase configuration boundary and names-only env example in src/lib/supabase/server.ts, .env.example.
-- [x] T019 [US4] Test production fixture blocking and evidence invariants in tests/unit/policy.test.ts.
+### V. 실패와 이력 보존
+외부 연동 실패·새 버전·릴리스 노트 누락만으로 기존 지원 상태나 근거를 지우지 않는다.
+조회 오류와 실제 빈 결과를 구분한다. 정정은 새 이력으로 남긴다.
 
-## Phase 7: Polish and verification
-- [x] T020 Run lint, typecheck, unit/E2E/a11y, build; record actual results in docs/verification.md.
-- [x] T021 Document run commands, external setup, final asset and deferred features in README.md.
+### VI. 재현 가능한 변경
+PRD → 명세 → 설계 → 작업 목록 → 구현 → 검증 순서를 따른다.
+DB 변경은 재현 가능한 마이그레이션으로 관리한다. 의존성은 잠금 파일에 고정한다.
+기능 완료 보고는 실행 명령, 실제 검증 결과, 남은 외부 설정을 포함한다.
 
-## Phase 8: User-selected Apple design reference
-- [x] T022 Record source/license and project adaptations in DESIGN.md, docs/references/, docs/PRD.md and specs/001-design-app-directory/{spec,plan,research}.md; link from README.md.
-- [x] T023 [US3] Apply the initial Apple-inspired neutral/blue tokens, compact hero, directory controls and two-line card summaries in src/app/globals.css and src/components/; add Globe preferences and original matching logo/favicon in public/brand/duo-mark.svg and src/app/icon.svg. Later layout and theme-control changes are tracked in T026–T027.
-- [x] T024 [US3] Verify the initial Globe menu keyboard/locale behavior, theme persistence/OS response, logo/favicon delivery, both languages/themes, 360/768/1440px layouts, above-fold directory access and existing tests; record actual results in docs/verification.md. T027 verifies the later layout and single-switch revision.
+### VII. Fixture와 자산 정직성
+개발 fixture는 가상임을 화면·타입·파일에서 명시하며 운영에서 노출하지 않는다.
+실제 앱에 가짜 지원 근거·확인일·스크린샷을 만들지 않는다.
+기기 자산에는 출처·권리·대체 텍스트·크기를 기록한다. 권리 미확인 공식 이미지는 사용하지 않는다.
 
-## Phase 9: User-requested 3D-style device visual
-- [x] T025 [US3] Connect the newly generated reference-informed AI device render in public/device/iphone-duo-render.png and src/lib/device-asset.ts; record metadata/source/generation details in docs/assets.md, provide localized AI-render/example-screen caption and alt text in src/messages/, and verify both themes and responsive layout before recording results in docs/verification.md. Completed for local preview; public-use rights are not cleared.
+## Product and Technical Boundaries
 
-## Phase 10: Directory layout revision after user review
-- [x] T026 [US3] Set common width to 1120px, balance the desktop 42px hero copy/device at 1.15:0.85, center the mobile 28–30px heading/150px device, align search/sort and cards beside the 168px category/status sidebar, and use 20px card padding/gaps with 14px varied explicitly fictional summaries. Replace theme controls with a single accessible light/dark switch: initial OS default, persistent manual choice, no OS following after manual selection and no explicit system UI. Preserve palette, Globe locale menu and mobile Sheet.
-- [x] T027 [US3] Inspect actual desktop/mobile light/dark screens and above-fold access, verify single-switch semantics/keyboard behavior, initial OS following and manual persistence/OS independence, run required regression checks, update design/spec records, and explain the working local URL and remaining data/asset setup.
-- [x] T028 [US1] Replace the custom four-category set with the nine official Apple category names in docs/references/app-store-categories.md; update types, localized messages and explicit fictional fixture categories. Normalize legacy creativity URLs to graphics-design, document that slugs are internal and the list is a subset, and verify category filtering, locale independence and URL compatibility without changing evidence or review timestamps.
+서비스명은 Is Duo Ready?, 프로젝트 식별자는 duo-ready다. 기준 문서는 docs/PRD.md다.
+Next.js App Router, TypeScript, Astryx, Tailwind CSS, Supabase를 사용하며 Vercel을 배포 대상으로 둔다.
+001은 로컬 UI와 탐색 기반이다. DB·인증·수집·운영 배포는 후속 명세에서 다룬다.
+외부 프로젝트 생성 및 운영 배포는 이번 작업에 포함하지 않는다.
 
-## Phase 11: US5 — Local tooling for PRD 002/006 preparation
-Historical implementation: this Supabase/native setup was verified at the time. Phase 12 supersedes its local runtime and current setup instructions while preserving this completion record.
-Independent test: start the local stack, generate safe ignored environment values, distinguish config validation from connectivity, reject invalid deployment settings, and preserve fixture behavior. No external projects or deployment.
-- [x] T029 [US5] Pin Supabase CLI 2.122.0 in package.json/package-lock.json and Node 22.14.0 in .nvmrc; add supabase/config.toml, review supabase/supabase.lock, and provide db:start/db:stop/db:status scripts. Start and inspect duo-ready's current repository/branch stack with Postgres 17, ports 55321–55324 and experimental native runtime after the Docker disk failure. Preserve existing volumes, disable unused services/signup/table auto-exposure, add no application tables or seeds, and document experimental/runtime limits.
-- [x] T030 [US5] Implement db:env safe .env.local generation (0600; refuse existing files), target-aware env:check and local-only read-only db:check in scripts/; update .env.example and ignore rules. Write only required public local values and never log private keys or credentials.
-- [x] T031 [US5] Add vercel.json to run env:check before build; reject invalid Preview/Production settings, including missing production project reference or mismatched environment project, while preserving the runtime fixture gate. Verify valid/invalid cases locally without linking or deploying.
-- [x] T032 [US5] Apply the requested localized public copy in src/messages/{ko,en}.json, finalize docs/environments.md and README.md with verified commands and external setup boundaries, run local smoke plus required regression checks, and record actual outcomes in docs/verification.md before marking this slice complete.
+## Development Workflow and Quality Gates
 
-## Phase 12: US5 — Standalone local PostgreSQL
-Independent test: run only PostgreSQL through Compose, preserve its volume across stop/start, connect with a server-only loopback DATABASE_URL and a real read-only SELECT, retain hosted environment guards, and verify scoped image cleanup. No 002 application schema or external deployment.
-- [x] T033 [US5] Add compose.yaml with a pinned PostgreSQL 17 image, local duo_ready database, 127.0.0.1:55322 and a dedicated persistent volume; replace db:start/db:stop/db:status in package.json and scripts/. Remove the Supabase CLI devDependency and local supabase/config.toml/supabase.lock while retaining the hosted Supabase client boundary.
-- [x] T034 [US5] Change scripts/, .env.example and environment tests to generate a protected server-only DATABASE_URL, preserve existing user settings, validate optional local PostgreSQL configuration, and run a real read-only SELECT via db:check. Preserve Preview/Production Supabase project separation and the Vercel build/runtime fixture guards.
-- [x] T035 [US5] Verify PostgreSQL start/stop/restart and data retention, safe environment migration and SQL smoke; inspect usage and remove only this work's downloaded Supabase Docker images without touching unrelated resources or data volumes. Finalize docs/environments.md and README.md, run required checks, and append actual results to docs/verification.md before completion.
+기능별 specs/ 아래에 독립 검증 가능한 사용자 시나리오, 설계, 작업 목록을 작성한다.
+필수 게이트는 타입 검사, 린트, URL/검색/fixture 노출 정책 단위 검증, 핵심 브라우저 흐름,
+반응형·접근성 확인, production build다. 검증 실패를 숨기거나 통과로 기록하지 않는다.
 
-## Dependencies and execution strategy
-T001–T005 foundation → US1 + US2 → US3 → US4 → verification. US1 is minimum directory slice;
-all four stories are required for 001 delivery. UI tests begin after locale layout exists.
-Independent work examples: US1 query tests vs cards, US2 dictionary parity vs metadata,
-US3 responsive checks vs theme test cases, US4 asset audit vs policy tests. No shared-file parallel edits.
-35 tasks: original setup 2, foundation 3, US1 4, US2 4, US3 3, US4 3, polish 2; visual refinement 3; device visual 1; layout/theme/category follow-up 3; local tooling/copy follow-up 4; standalone PostgreSQL transition 3.
-Visual refinement dependencies: T022 documentation → T023 styles → T024 verification.
-Device visual follow-up: T025 asset/source/localization → responsive/theme verification completed locally; public-use rights review remains a launch prerequisite.
-Latest revision: T026 layout/theme and T028 category changes → T027 combined regression and visual verification. T026–T028 completed locally: lint, typecheck, 11 unit tests, formatting and 15 E2E tests passed; after final Korean keep-all styling, 4 responsive checks and production build passed. Final records are in docs/verification.md; public-use asset rights remain unresolved.
+## Governance
 
-Local tooling dependencies: T029 CLI/config → T030 environment and connectivity → T031 build guard → T032 documented verification. Documentation drafting can run alongside implementation; final commands and completion require observed results. T029–T032 are locally verified: native startup/restart, protected environment generation, Auth/REST smoke, invalid hosted configuration rejection, 18 unit tests, 15 E2E tests, build and three production fixture scenarios passed. This prepares PRD 002/006 without implementing their product features; see docs/verification.md.
+사용자의 명시적 지시와 PRD가 제품 범위를 결정한다. 원칙 변경은 근거와 영향을 기록하고
+호환성을 깨면 major, 새 원칙은 minor, 설명 보완은 patch로 버전을 올린다.
+모든 기능 설계는 구현 전과 후에 본 원칙의 준수 여부를 기록한다.
 
-Current transition: T033 Compose/runtime replacement → T034 environment and SQL checks → T035 scoped cleanup and verification. T033–T035 are locally verified: scoped image cleanup, healthy PostgreSQL, protected environment migration, SQL smoke and actual row persistence across stop/start passed; lint/typecheck/format, 20 unit tests, 15 E2E tests, build and three production fixture checks passed. Earlier Supabase results remain historical; current results are in docs/verification.md.
+**Version**: 1.0.2 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-10-29
 
-## Phase 13: User-approved Astryx migration
-- [x] T036 Replace shadcn/Radix UI primitives and language menu with Astryx 0.7.4, preserve native form submission, URL state, locale and keyboard interaction; remove unused dependencies/config.
-- [x] T037 Integrate built Astryx theme/CSS with Tailwind 4 and existing persisted theme choice; preserve Apple-inspired tokens, system typography, responsive directory and accessible mobile filters. Align PRD/design/constitution/plan.
-- [x] T038 Verify lint, typecheck, unit tests, browser flows/accessibility/screenshots, production build and fixture gate; record actual outcomes in docs/verification.md.
+Amendment 1.0.1 (2026-10-29): 사용자 승인에 따라 UI 기반을 shadcn/ui에서 Astryx로 교체한다. 제품·접근성·데이터 원칙은 유지한다.
 
-T036–T038 complete: 52 unit tests, 15 directory E2E tests and 30 admin/import/operations E2E tests passed across scoped runs. Lint, typecheck, formatting, build and three production fixture scenarios passed. See docs/verification.md for initial failures, fixes, remaining build/dev warnings and browser coverage.
+Amendment 1.0.2 (2026-10-29): 사용자 후속 지시에 따라 부분 교체에서 전체 공개·관리자 UI의 Astryx Neutral 및 실제 입력 컴포넌트 적용으로 범위를 명확히 한다. 데이터·접근성 원칙은 유지한다.
+
+## Phase 14: 전체 Astryx 컴포넌트 / Neutral 전환
+- [x] T039 실제 TextInput/TextArea/Selector/CheckboxInput/DateInput/FileInput으로 공개·관리자 폼을 교체하고 FormData·필수 검증·초기화 계약을 유지한다.
+- [x] T040 탐색·Switch·카드·접기·알림·진행·빈 결과를 Astryx로 교체하고 기존 색상·컨트롤 CSS 강제 오버라이드를 제거한다. DESIGN/PRD/명세를 최신 사용자 지시에 맞춘다.
+- [x] T041 실제 옵션 선택·날짜·파일 저장, ko/en·테마·반응형·접근성, lint/typecheck/unit/E2E/build를 검증하고 docs/verification.md에 실제 결과를 기록한다.
+
+## Phase 15: 인터랙티브 기기 콘셉트
+- [x] T042 홈 기기 영역에 Three.js/R3F/Drei 기반 두 패널의 3D 회전·접힘, Astryx 제어, ko/en·키보드·터치 지원을 구현하고 자산 및 디자인 기준을 기록한다.
+- [x] T043 회전·접힘·초기화와 반응형·접근성을 브라우저에서 검증하고 lint/typecheck/unit/E2E/build 결과를 기록한다.
+
+## Phase 16: 접힘 화면 전환
+- [x] T044 접힘 속도에 반응하는 화면 전용 블러와 선명도 복귀를 구현하고 실제 GPU uniform·reduced motion·회전만 조작·필수 검증을 확인한다.
+
+## Phase 17: Apple 디자인 + Meta 컴포넌트 기준 복원
+- [x] T045 Apple 참고 시각 토큰, 헤더·hero·앱 카드 위계 및 절제된 모션을 구현하고 DESIGN/AGENTS/PRD의 역할 구분을 바로잡는다.
+- [x] T046 ko/en·라이트/다크·반응형·키보드·reduced motion 및 필수 검증을 실행하고 docs/verification.md에 기록한다.
+
+## Phase 18: 공개 문구 정리
+- [x] T047 홈·지원 안내·푸터의 ko/en 문구를 간결하게 수정하고 중복 소개·슬로건을 제거한다. 실제 상태명과 정의, 공식 배지 근거, 한국 스토어 기준을 유지한다.
+- [x] T048 변경된 탐색 라벨을 기존 E2E에 반영하고 lint/typecheck/unit/E2E/build 및 양 언어 화면 확인 결과를 docs/verification.md에 기록한다.
+
+## Phase 19: 기기 직접 조작
+- [x] T049 실제 가장자리 드래그로 접힘/펼침을 변경하고 단독 초기화·수직 회전 방향·키보드·모바일 조작 및 필수 검증을 완료한다.
+- [x] T050 가장자리 손잡이 장식을 제거하고 투명 드래그 영역·키보드 초점·기존 조작을 유지하며 검증한다.
+
+## Phase 20: 전 화면 문구 검토
+- [x] T051 ko/en 전체 메시지·직접 작성 문구·가상 앱 설명을 검토하고 번역투·추상적 비유·중복 소개·죽은 개발 안내를 정리한다. 실제 상태에 맞는 가져오기·수집·오류 안내와 기존 정책을 보존한다.
+- [x] T052 기존 공개·관리자 E2E 기대 문구를 갱신하고 lint/typecheck/unit/공개 E2E/관리자 E2E/build와 화면 검토 결과를 docs/verification.md에 기록한다. 기본 Turbopack 빌드는 환경 포트 오류로 실패했으며 공식 Webpack 빌드로 검증했다.

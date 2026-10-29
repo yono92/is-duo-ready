@@ -12,6 +12,19 @@ export const categories = [
   'photo-video',
   'entertainment',
   'lifestyle',
+  'reference',
+  'sports',
+  'utilities',
+  'games',
+  'food-drink',
+  'shopping',
+  'finance',
+  'education',
+  'business',
+  'health-fitness',
+  'weather',
+  'news',
+  'social-networking',
 ] as const;
 export type Category = (typeof categories)[number];
 export const statuses = ['supported', 'planned', 'unknown', 'unsupported'] as const;

@@ -1,9 +1,8 @@
 'use client';
 
-import { Children, type ComponentProps } from 'react';
+import { Children, isValidElement, type ComponentProps } from 'react';
 import { Button as AstryxButton } from '@astryxdesign/core/Button';
 import { Link } from '@/i18n/navigation';
-import { cn } from '@/lib/utils';
 
 type Variant = 'default' | 'outline' | 'secondary' | 'ghost' | 'destructive';
 type ButtonProps = ComponentProps<'button'> & {
@@ -27,6 +26,7 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
+  const icon = Children.toArray(children).find(isValidElement);
   const label =
     props['aria-label'] ??
     Children.toArray(children)
@@ -36,12 +36,13 @@ export function Button({
     <AstryxButton
       {...props}
       label={label}
+      icon={icon}
       variant={variants[variant]}
       isDisabled={disabled}
-      className={cn('duo-button', size === 'icon' && 'duo-icon-button', className)}
-    >
-      {children}
-    </AstryxButton>
+      isIconOnly={size === 'icon'}
+      size="lg"
+      className={className}
+    />
   );
 }
 
@@ -56,11 +57,11 @@ export function ButtonLink({
 }) {
   return (
     <AstryxButton
-      as={Link}
+      as={href.startsWith('#') ? 'a' : Link}
       href={href}
       label={children}
       variant={variants[variant]}
-      className="duo-button"
+      size="lg"
     />
   );
 }

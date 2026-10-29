@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 import assert from 'node:assert/strict';
+import en from '../src/messages/en.json' with { type: 'json' };
 
 const scenarios = [
   { name: 'production default blocks fixtures', port: 3311, variables: {}, visible: false },
@@ -59,19 +60,23 @@ for (const scenario of scenarios) {
     assert.equal(html.includes('Paper Grove'), scenario.visible);
     if (scenario.variables.VERCEL) {
       assert.ok(
+        !html.includes('data-testid="device-model"'),
+        'Interactive concept appears on hosted page',
+      );
+      assert.ok(
         !html.includes('/device/iphone-duo-render.png'),
         'Prototype render appears on hosted page',
       );
       assert.equal((await fetch(`${base}/device/iphone-duo-render.png`)).status, 404);
     }
     if (!scenario.visible) {
-      assert.ok(html.includes('The directory is being prepared.'));
+      assert.ok(html.includes(en.Directory.unavailableTitle));
       const detail = await (await fetch(`${base}/en/apps/sample-01`)).text();
       assert.ok(!detail.includes('Paper Grove'), 'Fixture detail leaked');
     }
     const login = await (await fetch(`${base}/en/admin/login`)).text();
     assert.ok(
-      login.includes('Administrator authentication is not configured.'),
+      login.includes(en.Admin.errors.authUnavailable),
       'Production local authentication unexpectedly enabled',
     );
     const privatePage = await fetch(`${base}/en/admin/apps`, {

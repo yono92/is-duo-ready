@@ -1,3 +1,5 @@
+import en from '../../src/messages/en.json' with { type: 'json' };
+import { fieldName } from './select-option';
 import { test, expect } from '@playwright/test';
 import sharp from 'sharp';
 import type { Client } from 'pg';
@@ -65,13 +67,13 @@ test('stored icons render offline, require draft authorization and disappear aft
     await page.goto('/en/admin/login');
     await page
       .getByRole('main')
-      .getByLabel('Email', { exact: true })
+      .getByLabel(fieldName(en.Admin.email), { exact: true })
       .fill(process.env.LOCAL_ADMIN_EMAIL!);
     await page
       .getByRole('main')
-      .getByLabel('Password', { exact: true })
+      .getByLabel(fieldName(en.Admin.password), { exact: true })
       .fill(process.env.LOCAL_ADMIN_PASSWORD!);
-    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await page.getByRole('button', { name: en.Admin.login, exact: true }).click();
     await expect(page).toHaveURL(/\/en\/admin\/apps$/);
     let external = 0;
     await context.route('https://**/*', (route) => {
@@ -146,7 +148,7 @@ test('stored icons render offline, require draft authorization and disappear aft
     await expect(
       page.getByRole('main').locator(`img[src$="/api/admin/app-icons/${app.id}"]`),
     ).toHaveCount(0);
-    await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+    await page.getByRole('button', { name: en.Admin.logout, exact: true }).click();
     await expect(page).toHaveURL(/\/en\/admin\/login$/);
     expect((await context.request.get(`/api/admin/app-icons/${app.id}`)).status()).toBe(404);
   } finally {

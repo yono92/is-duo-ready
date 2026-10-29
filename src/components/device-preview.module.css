@@ -1,0 +1,75 @@
+.preview {
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+  justify-self: center;
+}
+.stage {
+  position: relative;
+  height: 300px;
+  overflow: clip;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  border-radius: var(--radius-md);
+}
+.stage[data-dragging='true'] {
+  cursor: grabbing;
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+.canvas canvas {
+  pointer-events: none;
+}
+.fallback {
+  object-fit: contain;
+}
+.shadow {
+  position: absolute;
+  bottom: 16px;
+  left: 20%;
+  width: 60%;
+  height: 16px;
+  background: radial-gradient(ellipse, #0002, transparent 70%);
+  filter: blur(6px);
+  pointer-events: none;
+}
+.caption {
+  display: grid;
+  gap: 3px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  word-break: keep-all;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 10px;
+}
+@media (max-width: 767px) {
+  .stage {
+    height: 260px;
+  }
+}
+
+.edgeHandle {
+  position: absolute;
+  z-index: 1;
+  width: 44px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  cursor: ew-resize;
+  touch-action: none;
+  border-radius: var(--radius-md);
+}
+.stage[data-dragging='true'] .edgeHandle {
+  cursor: grabbing;
+}
+.preview[data-ready='false'] .edgeHandle {
+  visibility: hidden;
+}

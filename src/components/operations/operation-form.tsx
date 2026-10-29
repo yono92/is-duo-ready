@@ -1,7 +1,9 @@
 'use client';
+import { Banner } from '@/components/ui/surfaces';
+
 import { useActionState } from 'react';
 import { useTranslations } from 'next-intl';
-import { operationAction } from '@/app/[locale]/admin/operations-actions';
+import { operationAction, type OperationState } from '@/app/[locale]/admin/operations-actions';
 import { Button } from '@/components/ui/button';
 
 export function OperationForm({
@@ -9,14 +11,26 @@ export function OperationForm({
   label,
   children,
   disabled = false,
+  onComplete,
 }: {
   fields: Record<string, string | number>;
   label: string;
   children?: React.ReactNode;
   disabled?: boolean;
+  onComplete?: () => Promise<void>;
 }) {
   const t = useTranslations('Operations');
-  const [state, action, pending] = useActionState(operationAction, {});
+  const [state, action, pending] = useActionState(
+    onComplete
+      ? async (previous: OperationState, data: FormData) => {
+          const result = await operationAction(previous, data);
+          // A failed collection can still change its run/failure records.
+          await onComplete();
+          return result;
+        }
+      : operationAction,
+    {},
+  );
   return (
     <form action={action} className="space-y-4">
       {Object.entries(fields).map(([name, value]) => (
@@ -24,9 +38,7 @@ export function OperationForm({
       ))}
       {children}
       {state.error && (
-        <p role="alert" className="text-sm text-destructive">
-          {t(`errors.${state.error}`)}
-        </p>
+        <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
       {state.success && (
         <p role="status" className="text-sm">

@@ -15,7 +15,11 @@ As of2026-10-29, five schema migrations are applied to the maintainer's hosted p
 
 Actual provider checks passed for verified TLS, login/getUser/refresh/logout, revoked-session denial, ordinary/admin/revoked/anonymous RLS and private Storage. Disposable test identities were removed. No permanent hosted administrator has been provisioned.
 
-A static preparation page was registered to handle Vercel's first-deployment behavior. **The actual application is not yet deployed to Production.** Application deployment, deployed browser verification, administrator setup and content review remain separate gates. Source-code publication is not a service launch.
+A static preparation page was initially registered to handle Vercel's first-deployment behavior. On 2026-10-29 the user requested Vercel connection and the actual Next.js application was deployed to Production at [is-duo-ready.vercel.app](https://is-duo-ready.vercel.app/ko). Public ko/en pages, database-backed empty results, language switching, unauthenticated administrator denial, prototype-image denial and noindex were verified. Permanent administrator setup, authenticated deployed-browser flows and content publication remain open; the public directory still has zero published apps.
+
+The project is connected to `yono92/is-duo-ready` with production branch `main`. This release uploads a fixed snapshot of the working tree based on `075d931`, including uncommitted work; it is not a deployment of that commit alone. Snapshot SHA-256: `8603e913ddbe25727b8ecef5ef3b4b086217c51d7520617ce5f4e3d2c6b9f277`. Later edits in other active chats are not automatically part of this snapshot. Commit and push the reviewed source before relying on Git-driven deployments to reproduce it. Preview has no production credentials.
+
+The deployment upload excludes local environment files, data, optional agent tooling and development artwork. It also excludes `scripts/verify-db-production.ts`, whose test helpers are intentionally excluded. Local type checking still includes that script. `NEXT_PUBLIC_SITE_URL` is the production origin above; `PUBLIC_INDEXING=false` remains enabled until content is ready. See docs/verification.md for deployment IDs and checks.
 
 ## Configure and inspect
 
