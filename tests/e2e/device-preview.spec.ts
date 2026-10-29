@@ -1,14 +1,7 @@
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
-
-test.skip(
-  !existsSync(join(process.cwd(), 'assets', 'development', 'iphone-duo-render.png')),
-  'The interactive prototype requires the optional local-only device asset.',
-);
 
 async function dragEdge(page: Page, handle: Locator, distance: number) {
   await expect(handle).toBeVisible();
@@ -201,7 +194,13 @@ test('touch supports vertical rotation and edge folding without viewport overflo
   await context.close();
 });
 
-test('a lost WebGL context restores the image and disables 3D controls', async ({ page }) => {
+test('a lost WebGL context restores the public schematic and disables 3D controls', async ({
+  page,
+}) => {
+  const prototypeRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('iphone-duo-render.png')) prototypeRequests.push(request.url());
+  });
   await page.goto('/en');
   const model = page.getByTestId('device-model');
   await expect(model).toHaveAttribute('data-status', 'ready', { timeout: 30000 });
@@ -210,7 +209,13 @@ test('a lost WebGL context restores the image and disables 3D controls', async (
     gl?.getExtension('WEBGL_lose_context')?.loseContext();
   });
   await expect(model).toHaveAttribute('data-status', 'unavailable');
-  await expect(page.getByAltText(en.DevicePreview.fallbackAlt)).toBeVisible();
+  const fallback = page.getByAltText(en.DevicePreview.fallbackAlt);
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveAttribute('src', '/device-placeholder.svg');
+  await expect
+    .poll(() => fallback.evaluate((image: HTMLImageElement) => image.naturalWidth))
+    .toBeGreaterThan(0);
+  expect(prototypeRequests).toEqual([]);
   const handles = page.locator('figure [role="slider"]');
   await expect(handles).toHaveCount(2);
   for (const handle of await handles.all())

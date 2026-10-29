@@ -140,11 +140,11 @@ export function DevicePreview() {
       >
         {status !== 'ready' && (
           <Image
-            src="/device/iphone-duo-render.png"
+            src="/device-placeholder.svg"
             alt={t('fallbackAlt')}
             fill
             sizes="(max-width: 767px) 324px, 420px"
-            priority
+            preload
             className={styles.fallback}
           />
         )}

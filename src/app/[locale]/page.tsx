@@ -8,7 +8,6 @@ import { redirect } from '@/i18n/navigation';
 import { getDirectoryPage } from '@/lib/data/directory';
 import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
-import { deviceAsset } from '@/lib/device-asset';
 import { FixtureNotice } from '@/components/fixture-notice';
 import { DirectoryControls } from '@/components/directory/controls';
 import { AppCard } from '@/components/directory/app-card';
@@ -60,7 +59,7 @@ export default async function Home({
               </Link>
             </div>
           </div>
-          {deviceAsset && <DevicePreview />}
+          <DevicePreview />
         </div>
       </section>
       <section aria-labelledby="directory-heading" className="directory-section">

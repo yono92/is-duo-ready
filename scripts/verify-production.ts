@@ -60,9 +60,16 @@ for (const scenario of scenarios) {
     assert.equal(html.includes('Paper Grove'), scenario.visible);
     if (scenario.variables.VERCEL) {
       assert.ok(
-        !html.includes('data-testid="device-model"'),
-        'Interactive concept appears on hosted page',
+        html.includes('data-testid="device-model"'),
+        'Interactive concept is missing on hosted page',
       );
+      assert.ok(html.includes('/device-placeholder.svg'), 'Public schematic fallback is missing');
+      const fallback = await fetch(`${base}/device-placeholder.svg`);
+      assert.equal(fallback.status, 200);
+      assert.ok(fallback.headers.get('content-type')?.includes('image/svg+xml'));
+      const wallpaper = await fetch(`${base}/device/duo-wallpaper.webp`);
+      assert.equal(wallpaper.status, 200);
+      assert.ok(wallpaper.headers.get('content-type')?.includes('image/webp'));
       assert.ok(
         !html.includes('/device/iphone-duo-render.png'),
         'Prototype render appears on hosted page',

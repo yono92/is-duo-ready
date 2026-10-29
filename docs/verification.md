@@ -874,3 +874,49 @@ Latest owner instruction supersedes the badge-only initial gate: publish the 22 
 운영 환경 변수·DB·검색 소유권 계정·배포는 변경하지 않았다. 따라서 실제 공유 URL은 아직 이전 배포이며
 이번 변경은 재배포해야 반영된다. PUBLIC_INDEXING=false도 유지되므로 검색 공개는 별도 설정이다.
 관리 방법과 배포 후 확인 항목은 docs/seo.md에 기록했다. 작업 시작 전에 존재하던 문서 변경은 보존했다.
+
+## 2026-10-30 — 자체 제작 3D 운영 공개
+
+사용자 후속 지시에 따라 홈의 `deviceAsset` 게이트를 제거했다. 직접 작성한 Three.js 모형과 자체 생성
+WebP 배경을 로컬 PNG 유무와 독립적으로 표시한다. 로딩·WebGL 실패·컨텍스트 손실에는 자체 SVG
+도식을 사용한다. 권리 미확인 PNG는 런타임에서 참조하지 않으며 기존 Vercel 404 및 배포 제외를
+유지한다. 설치된 Next.js 문서의 Image preload/SVG 및 client-only lazy loading을 확인했다.
+
+- 저장소 `npm run lint`, `npm run typecheck`: PASS. 단위 검사 첫 실행은 동시 진행 중인 별도 인기 앱
+  작업의 ko/en 키 불일치로 1 FAIL/80 PASS였다. 해당 작업에서 양 언어 키가 완성된 후 `npm test`
+  재실행은 17 files/81 tests PASS였다. 이번 3D 작업에서는 메시지 파일을 변경하지 않았다.
+- 배포 고정 소스(HEAD `9e39214` + 이번 수정, 선택적 PNG 및 별도 작업 제외)의 lint/typecheck/unit:
+  PASS, 16 files/78 tests. 소스는 `/private/tmp/duoready-3d-release-20261030`에 준비했다.
+- `DUO_TEST_PORT=3386 npm run test:e2e`: 28/28 PASS (1.1m). 양 언어 회전·가장자리 접힘·초기화,
+  터치, 테마/반응형/axe, 화면 블러/reduced motion 및 컨텍스트 손실 후 SVG 정상 로딩·PNG 요청 없음
+  검증을 포함한다. 선택적 PNG에 의존하던 skip을 제거했다.
+- `npm run build`: 기존 Turbopack 내부 포트 생성 EPERM으로 FAIL. 고정 소스의
+  `npm run build -- --webpack`: PASS. 원격 기본 빌드 결과는 아래 운영 결과에 별도 기록한다.
+- 고정 소스의 `npm run test:production`: 3 scenarios PASS. Vercel에서도 3D SSR·SVG/WebP 200,
+  PNG 404, fixture/관리자/상세/사이트맵 차단 경계를 확인했다.
+- 기존 Three.js Clock deprecation 및 React 클라이언트 script 경고가 브라우저 로그에 남아 있다.
+- 실제 로그: `/tmp/duoready-3d-{unit,snapshot-unit,e2e,build,webpack-build,production,deploy}.log`.
+
+Vercel 기존 팀/프로젝트 `yonos-projects-8566d4cb/is-duo-ready`와 연결 ID를 확인했다. 배포 입력은
+237개이며 환경 파일·개발 PNG·테스트·별도 인기 앱 수집 작업을 제외한다. 파일 경로/크기/SHA manifest의
+SHA-256은 `dba59929a4a5abb40380b8084840f465d0ea9790f343ca96db7b80fb815397ed`다.
+운영 빌드는 `--prod --skip-domain`으로 준비했으며 신규 프로젝트·DB 변경은 없다.
+
+운영 결과: `dpl_DGNx1wrhHQ9agbhNdrsJ7TRoFP1E`가 READY가 됐다. Vercel의 기본 Turbopack 빌드는
+PASS이며, `vercel curl`로 ko/en 200 및 3D SSR, SVG 200/image/svg+xml, WebP 200/image/webp,
+기존 PNG 404를 확인한 뒤 같은 빌드를 기존 `https://is-duo-ready.vercel.app`에 promote했다.
+고유 배포 URL은 `https://is-duo-ready-5ujco1xz6-yonos-projects-8566d4cb.vercel.app`이다.
+고유 URL은 Vercel 인증으로 보호되어 있어 인증 CLI로 응답을 확인하고 실제 브라우저 조작은 공개
+운영 도메인에서 수행했다. Deployment Protection 설정은 변경하지 않았다.
+
+공개 ko/en 브라우저에서 실제 WebGL canvas와 `data-status=ready`를 확인했다. 한국어 화면에서
+방향키 회전(yaw -16 → -1), 가장자리 Home 접힘(angle 0), 초기화 및 영어 가장자리 End 펼침(angle 180),
+초기화를 직접 확인했다. 앱 목록 128개와 기존 운영 내용이 표시됐다. 해당 서비스 origin의 브라우저
+오류는 관측하지 않았으며, 앞서 방문한 Vercel 로그인 페이지의 FedCM 오류만 탭 로그에 남아 있었다.
+컨텍스트 손실 및 SVG fallback은 앞서 로컬 E2E에서 실제 WebGL 컨텍스트를 잃게 하여 검증했다.
+첫 배포 때 Git commit/push를 하지 않았다. 사용자 후속 지시로 이번 3D 변경만 커밋·푸시하여
+main과 동기화한다. 배포는 위 고정 소스이며 저장소의 동시 진행 작업은 보존했다.
+
+최종 inspect: production / READY, 원격 build 41s. 해당 배포의 `vercel logs --level error --since 10m
+--limit 20 --json`은 정상 종료했고 반환된 오류 행은 0개였다. 로그 범위 밖의 전체 운영 무오류를
+보증하는 결과는 아니다. `git diff --check`도 통과했다.

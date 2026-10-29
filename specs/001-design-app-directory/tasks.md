@@ -88,3 +88,7 @@ Amendment 1.0.2 (2026-10-29): 사용자 후속 지시에 따라 부분 교체에
 ## Phase 20: 전 화면 문구 검토
 - [x] T051 ko/en 전체 메시지·직접 작성 문구·가상 앱 설명을 검토하고 번역투·추상적 비유·중복 소개·죽은 개발 안내를 정리한다. 실제 상태에 맞는 가져오기·수집·오류 안내와 기존 정책을 보존한다.
 - [x] T052 기존 공개·관리자 E2E 기대 문구를 갱신하고 lint/typecheck/unit/공개 E2E/관리자 E2E/build와 화면 검토 결과를 docs/verification.md에 기록한다. 기본 Turbopack 빌드는 환경 포트 오류로 실패했으며 공식 Webpack 빌드로 검증했다.
+
+## Phase 21: 자체 제작 3D 운영 공개 — 2026-10-30
+- [x] T053 홈 3D의 로컬 PNG·Vercel 게이트 의존을 제거하고 공개 가능한 자체 SVG fallback과 기존 PNG 차단을 유지한다. PNG 유무와 무관하게 3D E2E를 실행한다.
+- [x] T054 lint/typecheck/unit/E2E/build/production 경계 검증 후 기존 Vercel 프로젝트에 반영하고 공개 ko/en·3D 조작·fallback·PNG 404 결과를 기록한다. 로컬 기본 빌드는 기존 EPERM으로 실패, Webpack 및 Vercel 기본 Turbopack 빌드는 통과했다.

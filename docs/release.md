@@ -61,3 +61,20 @@ The latest owner instruction authorized publishing all 128 existing KR apps. Pro
 Vercel production deployment: `dpl_3tofw434PXJHr5pQxXc8aFMMqafQ`, promoted to [is-duo-ready.vercel.app](https://is-duo-ready.vercel.app/ko). Uploaded 231 files from a fixed working-tree snapshot with SHA-256 `b0fc24cd34b4e762f31cf251a8cccbfa7848c4fb46bfcfc0f74819c1a3b1898b`. Remote default Turbopack build passed. Secrets, local observations, test files and development-only artwork were excluded.
 
 Production `release:check`: published128, drafts0, all missing-content counters0, icons128, corrupt/missing files0, ready=true. Browser verified total128 and the unverified filter106. Public HTTP checks passed for supported22, unverified106, English128, Social Networking5, supported/unverified details and a real image/jpeg icon. Anonymous admin collection API remains401; development artwork remains404. Existing noindex policy and permanent-admin setup are separate from this content release.
+
+## Original 3D concept release — 2026-10-30
+
+At the user's request, the original Three.js concept now appears on production independently of the
+optional development PNG. Loading and WebGL failure use the repository's original SVG schematic.
+The unapproved PNG remains excluded and its hosted route returns 404.
+
+Production deployment `dpl_DGNx1wrhHQ9agbhNdrsJ7TRoFP1E` was built with production settings,
+checked through authenticated HTTP requests, then promoted to
+[is-duo-ready.vercel.app](https://is-duo-ready.vercel.app/ko). Both public locales render a working
+WebGL canvas; rotation, edge folding/unfolding and reset were checked in the deployed browser.
+The fixed source is HEAD `9e39214` plus the 3D gate/fallback change and its documentation; concurrent
+popular-app work is excluded. The 237-entry upload manifest SHA-256 is
+`dba59929a4a5abb40380b8084840f465d0ea9790f343ca96db7b80fb815397ed`.
+This release did not change the database or environment configuration. The initial direct deployment
+preceded the Git commit; the user's follow-up requests syncing this 3D change to main through a commit
+and push. See docs/verification.md for actual validation results and build limitations.

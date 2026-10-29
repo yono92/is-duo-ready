@@ -7,19 +7,18 @@
 - 생성 원본: `$CODEX_HOME/generated_images/01a18739-396c-7a40-aa85-15939a7018a8/exec-1d0a965d-508b-41bf-ae07-ce60d398c278.png`. 런타임은 저장소의 WebP만 참조한다. 원본은 보존했다.
 - Three.js, React Three Fiber, Drei는 MIT 라이선스이며 고정 버전은 package.json/lock에 있다. 조명 환경은 코드의 Lightformer와 구체로 직접 구성하여 외부 HDR/CDN에 의존하지 않는다.
 - `DevicePreview` ko/en 메시지에 접근 가능한 조작 이름·콘셉트 안내·대체 이미지 안내를 둔다. 기기는 장식 캔버스로 처리하고 조작은 DOM 컨트롤에서 제공한다.
-- 이전 CSS 모형과 SVG 풍경은 제거했다. 기존 PNG는 로딩/미지원/컨텍스트 손실 시 대체 이미지로 보존한다. 홈은 기존 `deviceAsset` 게이트를 유지하며 Vercel 또는 로컬 원본이 없는 환경에서는 표시하지 않는다. 기존 PNG의 공개 사용 권리는 계속 미승인 상태다.
+- 이전 CSS 모형과 SVG 풍경은 제거했다. 기존 PNG는 개발 참고 파일로만 보존한다. 2026-10-30 사용자 후속 지시에 따라 홈의 자체 제작 3D는 Vercel 및 로컬 원본 PNG가 없는 환경에도 표시한다. 로딩/미지원/컨텍스트 손실 대체 이미지는 저장소에서 직접 작성한 `/device-placeholder.svg`로 변경했다. 기존 PNG는 런타임에서 참조하지 않으며 공개 사용 권리는 계속 미승인 상태다.
 
 | Asset | Source | Rights / status | Dimensions | Alternative text |
 | --- | --- | --- | --- | --- |
 | /device/iphone-duo-render.png | Built-in image_gen, 2026-10-29, informed by official product photographs; prompt and reference URLs in docs/references/duo-render-prompt.md | Local visual prototype only; generated render, not official artwork. Public-use rights have NOT been cleared. AI generation is not a license to Apple's source artwork or product branding. | 1536 × 1024, PNG with alpha | Home.deviceAlt in ko/en dictionaries |
-| /device-placeholder.svg | Original SVG authored in this repository, 2026-10-29 | Development schematic placeholder; no Apple artwork, logo, product photograph or real app screenshot. Final asset requires review before launch. | 640 × 400 | Home.deviceAlt in ko/en dictionaries |
+| /device-placeholder.svg | Original SVG authored in this repository, 2026-10-29 | Original schematic fallback for loading/WebGL failure, including production from 2026-10-30; no Apple artwork, logo, product photograph or real app screenshot. | 640 × 400 | Home.deviceAlt in ko/en dictionaries |
 | App icon tiles | lucide-react, ISC licensed package | Generic symbolic icons for fictional apps, not app trademarks | 48 × 48 tile | Decorative, adjacent app name provides meaning |
 
-Replace the path and dimensions in src/lib/device-asset.ts, then update this register with source URL,
+When replacing device artwork, update this register with source URL,
 license/permission and localized alt text. Keep the generated-image and screen-example caption.
 The active render approximates the product appearance; it is not a dimensional CAD model, an official
-product photograph, or evidence that any app supports the device. The earlier schematic is retained
-as an unused fallback asset. Reference photographs remain outside the repository and are not served.
+product photograph, or evidence that any app supports the device. The original schematic is served as the loading/WebGL-failure fallback. Reference photographs remain outside the repository and are not served.
 
 ## Public-use review — 2026-10-29
 
