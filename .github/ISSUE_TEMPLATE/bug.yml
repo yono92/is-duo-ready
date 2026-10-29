@@ -1,0 +1,20 @@
+name: Bug report / 버그 제보
+description: Describe a reproducible issue without secrets or personal data.
+title: '[Bug] '
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps / 재현 방법
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior / 예상·실제 동작
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment / 브라우저·OS·버전

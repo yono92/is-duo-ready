@@ -1,0 +1,66 @@
+import type { Metadata } from 'next';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import { routing } from '@/i18n/routing';
+import { Link } from '@/i18n/navigation';
+import { Providers } from '@/components/providers';
+import { Header } from '@/components/header';
+import { indexingAllowed } from '@/lib/data/seo';
+import '../globals.css';
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = hasLocale(routing.locales, locale) ? locale : 'en';
+  const t = await getTranslations({ locale: validLocale, namespace: 'Metadata' });
+  return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    title: t('title'),
+    description: t(
+      process.env.DIRECTORY_DATA_SOURCE === 'postgres' ? 'publicDescription' : 'description',
+    ),
+    robots: { index: indexingAllowed(process.env), follow: indexingAllowed(process.env) },
+  };
+}
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  setRequestLocale(locale);
+  const t = await getTranslations('Home');
+  const n = await getTranslations('Nav');
+  return (
+    <html lang={locale} data-astryx-theme="neutral" suppressHydrationWarning>
+      <body>
+        <NextIntlClientProvider>
+          <Providers>
+            <Header />
+            {children}
+            <footer className="site-footer">
+              <div className="site-width flex flex-wrap justify-between gap-5 text-xs leading-relaxed text-muted-foreground">
+                <div>
+                  <p className="mb-2 font-semibold text-foreground">Is Duo Ready?</p>
+                  <p>{t('footer')}</p>
+                </div>
+                <div className="space-y-2">
+                  <Link href="/methodology" className="underline underline-offset-4">
+                    {n('methodology')}
+                  </Link>
+                  <p>{t('footerNote')}</p>
+                </div>
+              </div>
+            </footer>
+          </Providers>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

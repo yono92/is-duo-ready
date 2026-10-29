@@ -1,0 +1,15 @@
+.git
+.agents
+.specify
+.codex
+.env*
+.data
+.next*
+assets/development
+tests
+test-results
+playwright-report
+coverage
+docs/data
+*.log
+*.tsbuildinfo

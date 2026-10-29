@@ -1,0 +1,20 @@
+node_modules/
+.next/
+.next-test/
+.next-test-*/
+out/
+coverage/
+test-results/
+playwright-report/
+.env*
+!.env.example
+*.log
+*.tsbuildinfo
+.DS_Store
+.vercel/
+.codex/
+.data/
+.vercel
+# Local-only prototype imagery and working imports are not open-source assets.
+assets/development/
+docs/data/

@@ -1,0 +1,81 @@
+{
+  "name": "duo-ready",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:production": "node scripts/verify-production.mjs",
+    "db:start": "docker compose up -d --wait",
+    "db:stop": "docker compose stop",
+    "db:status": "node scripts/local-db.mjs status",
+    "db:env": "node scripts/local-db.mjs env",
+    "db:check": "node scripts/check-db.mjs",
+    "env:check": "node scripts/check-env.mjs",
+    "format:check": "prettier --check src tests scripts *.ts *.mjs *.json",
+    "db:migrate": "node scripts/migrate.mjs",
+    "test:db": "node scripts/test-db.mjs",
+    "test:admin": "node scripts/test-db.mjs --e2e",
+    "admin:local": "node scripts/local-admin.mjs",
+    "test:apple": "node scripts/probe-app-store.mjs",
+    "test:production:db": "node scripts/test-db.mjs --production",
+    "collect": "node scripts/collect.mjs",
+    "icons:sync": "node scripts/sync-icons.mjs",
+    "release:export": "node scripts/export-content.mjs",
+    "release:setup": "node scripts/hosted.mjs",
+    "release:transfer-data": "node scripts/transfer-data.mjs",
+    "release:transfer-icons": "node scripts/transfer-icons.mjs",
+    "release:check": "node scripts/release-check.mjs"
+  },
+  "dependencies": {
+    "@astryxdesign/core": "0.7.4",
+    "@astryxdesign/theme-neutral": "0.7.4",
+    "@stylexjs/stylex": "0.19.1",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
+    "clsx": "2.1.1",
+    "lucide-react": "1.63.0",
+    "next": "16.4.3",
+    "next-intl": "4.14.9",
+    "next-themes": "0.4.6",
+    "pg": "8.23.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1",
+    "sharp": "0.35.5",
+    "tailwind-merge": "3.7.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@next/env": "16.4.3",
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.6.6",
+    "@types/pg": "8.23.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vitest": "5.0.5"
+  },
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yono92/is-duo-ready.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yono92/is-duo-ready/issues"
+  }
+}

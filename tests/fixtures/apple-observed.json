@@ -1,0 +1,207 @@
+{
+  "startedAt": "2026-10-29T05:29:22.856Z",
+  "completedAt": "2026-10-29T05:29:50.178Z",
+  "purpose": "Observed store metadata only; no support assessment or human review.",
+  "observations": [
+    {
+      "id": "361309726",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=361309726&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:22.858Z"],
+      "metadata": {
+        "app_store_id": "361309726",
+        "name": "Pages: 문서 생성하기",
+        "developer": "Apple",
+        "category": "productivity",
+        "primary_genre_id": "6007",
+        "primary_genre_name": "Productivity",
+        "store_url": "https://apps.apple.com/kr/app/id361309726",
+        "current_version": "15.4.2",
+        "fetched_at": "2026-10-29T05:29:23.211Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 34,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "361304891",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=361304891&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:25.859Z"],
+      "metadata": {
+        "app_store_id": "361304891",
+        "name": "Numbers: 스프레드시트 만들기",
+        "developer": "Apple",
+        "category": "productivity",
+        "primary_genre_id": "6007",
+        "primary_genre_name": "Productivity",
+        "store_url": "https://apps.apple.com/kr/app/id361304891",
+        "current_version": "15.4.2",
+        "fetched_at": "2026-10-29T05:29:26.113Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 34,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "361285480",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=361285480&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:28.860Z"],
+      "metadata": {
+        "app_store_id": "361285480",
+        "name": "Keynote: 프레젠테이션 디자인하기",
+        "developer": "Apple",
+        "category": "productivity",
+        "primary_genre_id": "6007",
+        "primary_genre_name": "Productivity",
+        "store_url": "https://apps.apple.com/kr/app/id361285480",
+        "current_version": "15.4.2",
+        "fetched_at": "2026-10-29T05:29:29.434Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 34,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "408709785",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=408709785&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:31.860Z"],
+      "metadata": {
+        "app_store_id": "408709785",
+        "name": "GarageBand",
+        "developer": "Apple",
+        "category": "music",
+        "primary_genre_id": "6011",
+        "primary_genre_name": "Music",
+        "store_url": "https://apps.apple.com/kr/app/id408709785",
+        "current_version": "2.3.20",
+        "fetched_at": "2026-10-29T05:29:32.149Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 49,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "377298193",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=377298193&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:34.864Z"],
+      "metadata": {
+        "app_store_id": "377298193",
+        "name": "iMovie",
+        "developer": "Apple",
+        "category": "photo-video",
+        "primary_genre_id": "6008",
+        "primary_genre_name": "Photo & Video",
+        "store_url": "https://apps.apple.com/kr/app/id377298193",
+        "current_version": "3.0.6",
+        "fetched_at": "2026-10-29T05:29:35.176Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 33,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "1232780281",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=1232780281&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:37.866Z"],
+      "metadata": {
+        "app_store_id": "1232780281",
+        "name": "Notion: 메모, 작업, AI",
+        "developer": "Notion Labs, Incorporated",
+        "category": "productivity",
+        "primary_genre_id": "6007",
+        "primary_genre_name": "Productivity",
+        "store_url": "https://apps.apple.com/kr/app/id1232780281",
+        "current_version": "1.7.350",
+        "fetched_at": "2026-10-29T05:29:38.101Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 13,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "324684580",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=324684580&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:40.868Z"],
+      "metadata": {
+        "app_store_id": "324684580",
+        "name": "Spotify (스포티파이) : 뮤직 & 팟캐스트 앱",
+        "developer": "Spotify",
+        "category": "music",
+        "primary_genre_id": "6011",
+        "primary_genre_name": "Music",
+        "store_url": "https://apps.apple.com/kr/app/id324684580",
+        "current_version": "9.1.94",
+        "fetched_at": "2026-10-29T05:29:41.221Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 65,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "311867728",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=311867728&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:43.869Z"],
+      "metadata": {
+        "app_store_id": "311867728",
+        "name": "네이버지도 - 장소의 발견과 예약, 내비게이션",
+        "developer": "NAVER Corp.",
+        "category": "navigation",
+        "primary_genre_id": "6010",
+        "primary_genre_name": "Navigation",
+        "store_url": "https://apps.apple.com/kr/app/id311867728",
+        "current_version": "6.11.0",
+        "fetched_at": "2026-10-29T05:29:44.148Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 176,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "362057947",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=362057947&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:46.869Z"],
+      "metadata": {
+        "app_store_id": "362057947",
+        "name": "카카오톡 KakaoTalk",
+        "developer": "Kakao Corp.",
+        "category": null,
+        "primary_genre_id": "6005",
+        "primary_genre_name": "Social Networking",
+        "store_url": "https://apps.apple.com/kr/app/id362057947",
+        "current_version": "26.9.1",
+        "fetched_at": "2026-10-29T05:29:47.113Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 425,
+      "iconUrlPresent": true
+    },
+    {
+      "id": "544007664",
+      "country": "KR",
+      "source": "https://itunes.apple.com/lookup?id=544007664&country=kr&entity=software",
+      "attemptedAt": ["2026-10-29T05:29:49.871Z"],
+      "metadata": {
+        "app_store_id": "544007664",
+        "name": "YouTube",
+        "developer": "Google",
+        "category": "photo-video",
+        "primary_genre_id": "6008",
+        "primary_genre_name": "Photo & Video",
+        "store_url": "https://apps.apple.com/kr/app/id544007664",
+        "current_version": "21.43.5",
+        "fetched_at": "2026-10-29T05:29:50.178Z"
+      },
+      "releaseNotesPresent": true,
+      "releaseNotesCharacters": 31,
+      "iconUrlPresent": true
+    }
+  ]
+}

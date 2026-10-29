@@ -1,0 +1,3 @@
+# Data model
+
+Read app_private only through an authorized administrative boundary. Public queries read public.directory_entries and public.support_history under RLS. DirectoryApp becomes a discriminated union: fictional=true retains null review/empty evidence; fictional=false has genuine reviewed timestamps, nullable versions, explicit official evidence and public history. Publication and locale never imply store country changes. Slug lookup resolves old slugs only for published apps. Query normalization remains q max 100, page positive <=10000, page size 24, supported-first and deterministic slug tie-breaker.

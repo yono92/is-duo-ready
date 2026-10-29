@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.next-test/
+.next-test-*/
+package-lock.json
+.agents/
+.specify/
+test-results/
+playwright-report/
+
+next-env.d.ts
