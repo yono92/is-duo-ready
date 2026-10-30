@@ -189,7 +189,12 @@ test('administrator saves a draft, explicitly reviews it and archives it', async
     .getByRole('main')
     .getByLabel(fieldName(en.Admin.fields.investigation_reason), { exact: true })
     .fill('Fictional test investigation only.');
-  await page.getByRole('button', { name: en.Admin.saveDraft, exact: true }).click();
+  // Saving creates a new route; wait for its navigation, including cold compilation,
+  // before asserting the result with the shorter web assertion budget.
+  await Promise.all([
+    page.waitForURL(/\/admin\/apps\/[a-f0-9-]+\?saved=1/),
+    page.getByRole('button', { name: en.Admin.saveDraft, exact: true }).click(),
+  ]);
   await expect(page).toHaveURL(/\/admin\/apps\/[a-f0-9-]+\?saved=1/);
   await expect(page.getByRole('status').filter({ hasText: en.Admin.saved })).toContainText(
     en.Admin.saved,
