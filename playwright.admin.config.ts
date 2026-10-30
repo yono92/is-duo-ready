@@ -15,7 +15,9 @@ export default defineConfig({
     'icons.spec.ts',
   ],
   workers: 1,
-  fullyParallel: false,
+  // Split individual tests across isolated CI runners; each runner still uses
+  // one worker because tests can change database permissions.
+  fullyParallel: true,
   retries: 0,
   timeout: 60000,
   reporter: [['list']],

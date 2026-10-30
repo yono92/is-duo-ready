@@ -129,7 +129,10 @@ test('stored icons render offline, require draft authorization and disappear aft
           .evaluate((img) => (img as HTMLImageElement).naturalWidth),
       )
       .toBe(48);
-    await page.getByTestId('app-card').click();
+    const card = page.getByTestId('app-card');
+    // The image can finish loading before the card's delegated surface handler hydrates.
+    await expect(card).toHaveAttribute('data-pressable-container', 'true');
+    await card.getByRole('heading', { name: 'Fictional icon browser', exact: true }).click();
     await expect(page).toHaveURL(/apps\/fictional-stored-icon-browser/);
     await asActor(db, actor, (db: Client) =>
       db.query('SELECT app_private.archive_app($1,$2,$3)', [

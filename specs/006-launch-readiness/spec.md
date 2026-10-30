@@ -91,3 +91,11 @@ Publish the original 128-app batch: 22 with stored explicit official support wor
 - 카카오·Slack·Twitter 등 비-JavaScript 수집기의 최초 HTML head에 메타데이터를 제공한다. 이미지 렌더는 외부 요청·DB 없이 동작한다.
 - 검색 색인은 기존 PUBLIC_INDEXING opt-in을 유지한다. 실제 운영 사이트의 소셜 수집은 별도 허용하며 로컬·fixture·Preview는 계속 robots 차단한다. 관리자·API 비공개 경계, 공개 앱 전용 사이트맵, 실제 검토일을 보존한다.
 - 양 언어 raw HTML·PNG 치수·메타데이터 fallback·색인 경계와 필수 저장소 검증을 실행하고 실제 배포 여부를 별도로 기록한다.
+
+## CI failure and duration — 2026-10-30
+
+사용자 요청에 따라 GitHub Actions의 반복 실패와 실행 시간을 함께 개선한다. 정적 검사,
+공개 브라우저, 격리 DB 관리자 브라우저, 빌드·운영 경계 검사를 독립 실행하며 기존 필수
+`verify`는 모든 결과의 성공을 요구한다. 관리자 shard는 서로 다른 runner/임시 DB를 쓰고
+내부 DB 변경은 단일 worker로 유지한다. 실패 trace를 보관하고 검사 생략·자동 재시도나
+timeout 확대로 실패를 숨기지 않는다. 로컬 검증과 실제 원격 재실행 결과를 구별한다.

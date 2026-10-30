@@ -52,3 +52,9 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 - [x] T022 한국어/영어 1200×630 자체 브랜드 공유 이미지를 구현하고 로컬 글꼴 출처를 기록한다.
 - [x] T023 검색 색인 opt-in을 보존하며 실제 운영 소셜 봇 접근·사이트맵 언어 대체 URL·초기 HTML head 메타데이터를 정리한다.
 - [x] T024 단위/raw HTML/PNG 검증과 저장소 필수 검사를 수행하고 SEO 관리 문서·검증 기록을 남긴다.
+
+## CI failure and duration — 2026-10-30
+
+- [x] T029 GitHub Actions 실패 단계·시간을 조사하고 정적/공개/관리자 shard/운영 검증을 분리한다. 기존 verify 필수 검사 이름과 모든 게이트를 유지하며 실패 trace를 업로드한다.
+- [x] T030 아이콘 카드 활성화 및 가져오기 이동/접근성 대기를 보완하고 관리자 42개·공개 32개·대상 5개 재실행·실제 shard 3+2개, lint/types/unit89/DB16/Webpack·운영 경계를 검증했다. 기본 Turbopack의 기존 EPERM 및 원격 미실행을 docs/verification.md에 구분했다.
+- [ ] T031 필요한 기존 로컬 수정과 CI 변경의 원격 반영 후 GitHub CI 전체 통과 및 실제 소요 시간을 확인한다. 이번 조사에서는 commit/push·원격 재실행을 하지 않았다.

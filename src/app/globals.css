@@ -515,7 +515,9 @@
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  html {
+  /* Animate in-page navigation only. Animated control scrolling can move an
+     Astryx popover's anchor while the user is choosing an option. */
+  html:has(a[href^='#']:focus) {
     scroll-behavior: smooth;
   }
   .hero-copy > * {

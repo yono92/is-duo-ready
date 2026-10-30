@@ -17,6 +17,11 @@ async function login(page: Page, locale: 'ko' | 'en') {
   await page.getByLabel(fieldName(t.password), { exact: true }).press('Enter');
   await expect(page).toHaveURL(new RegExp(`/${locale}/admin/apps$`));
   await page.getByRole('link', { name: t.importApps, exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/${locale}/admin/apps/import$`));
+  await expect(
+    page.getByRole('heading', { name: (locale === 'ko' ? ko : en).Import.title, exact: true }),
+  ).toBeVisible();
+  await expect(page).toHaveTitle(/\S/);
 }
 
 for (const [index, locale] of (['ko', 'en'] as const).entries()) {

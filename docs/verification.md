@@ -1004,3 +1004,74 @@ redirect and byte-identical content (59 bytes). The locale proxy excludes this p
 Only ads.txt and its documentation are selected for this commit; concurrent
 application/data work is excluded. Production HTTP verification follows deployment.
 Logs: `/tmp/duoready-adstxt-{e2e,e2e-retry,build,webpack}.log`.
+
+## CI failure investigation and parallel verification — 2026-10-30
+
+The latest eight GitHub Actions runs were failures. The inspected initial run
+40855538941 and recent runs 40977211376, 40978497291 and 40982113358 all passed
+lint/types/unit/DB setup/DB tests, then failed `npm run test:admin`. Public E2E,
+build and production checks were skipped because they followed that step.
+Latest run: https://github.com/yono92/is-duo-ready/actions/runs/40982113358
+(09:49:42–09:59:17 KST, 9m35s total; admin step 7m53s, 37 passed / 2 failed).
+The preceding run took 7m15s, with 5m44s in the admin step.
+
+Observed failures and scope:
+- Latest/recent icon test: clicking the card surface left the browser on the
+  listing instead of its detail URL. The test now waits for Astryx's effect-set
+  `data-pressable-container` marker and clicks the visible app heading. Image
+  loading alone does not establish delegated handler readiness. The remote log
+  establishes lost navigation, not a proven hydration-only cause.
+- Latest import test: the selected option moved, another panel intercepted the
+  pointer, and the option disappeared until the 60s test timeout. The existing
+  uncommitted globals.css change limits smooth scrolling to hash navigation;
+  it predates this investigation and is part of the tested local source, but
+  is absent from the failing remote HEAD. This investigation adds no new CSS
+  workaround and does not mark the separate T064/T067 investigations complete.
+- Previous import accessibility failure: axe reported a missing document title.
+  The login helper returned immediately after clicking the import link. It now
+  asserts the destination URL, import heading and non-empty title before using
+  or scanning the destination. The axe rule remains enabled.
+- Initial run also failed mobile detail overflow assertions. Those are historical
+  failures, distinct from the latest two; current local public-data checks pass.
+
+Workflow changes preserve every existing gate and the `verify` check name:
+static checks, fixture browsers, two admin shards, and build/DB/production checks
+run independently. Each admin runner provisions its own temporary database;
+`workers: 1` preserves serial permission mutations. `fullyParallel: true` allows
+individual tests to shard evenly (21 + 21 in the current 42-test suite, rather
+than 29 + 13 by file). Matrix fail-fast is disabled. Failure traces/screenshots
+are uploaded for seven days with a commit-pinned official action. Retry counts
+remain zero and test timeouts are unchanged. The final verify job requires all
+job results to equal success.
+
+Validation on the current checkout (which already contains unrelated pending
+product changes):
+- `npm run lint`: PASS.
+- `npm run typecheck`: PASS, including a final run after test/config changes.
+- `npm test`: 89 PASS across 18 files.
+- `npm run test:db`: 16 PASS in a temporary DB.
+- Baseline targeted icon/import-accessibility reproduction: 5 PASS (15.4s)
+  before this investigation's test changes. Local success alone does not prove
+  the remote icon failure's exact cause.
+- `DUO_TEST_PORT=3421 npm run test:admin`: 42 PASS (3.0m).
+- `DUO_TEST_PORT=3423 npm run test:admin -- --grep 'stored icons|import accessibility'`:
+  5 PASS (20.9s), using the new fullyParallel setting with one worker.
+- The same targeted subset run with the actual `--shard=1/2` and `--shard=2/2`
+  arguments at port 3424: 3 PASS (13.3s) + 2 PASS (6.9s), each invocation
+  provisions and drops a different temporary DB.
+- `DUO_TEST_PORT=3422 npm run test:e2e`: 32 PASS (59.5s).
+- `npm run build`: FAIL, both ordinary and permission-expanded attempts hit the
+  existing Turbopack CSS process/port-binding EPERM. Remote failed runs never
+  reached build; this local restriction is not their observed failure cause.
+- `npm run build -- --webpack`: PASS.
+- `npm run test:production`: all 3 fixture/auth/asset boundary scenarios PASS
+  against the Webpack output.
+- `npm run test:production:db`: PASS, both locales and published-only/private
+  boundaries, against the Webpack output and a temporary DB.
+- Official actionlint 1.7.12 (download checksum verified): PASS for ci.yml;
+  Ruby YAML parse and targeted git diff whitespace checks also PASS.
+
+No remote commit/push, CI rerun or deployment was performed. Remote success and
+wall-clock improvement remain unmeasured; the tested local source includes
+pre-existing uncommitted fixes and must not be equated with GitHub HEAD.
+Logs: `/tmp/duoready-ci-{admin,admin-repeat,e2e,db,lint,typecheck-final,unit,build,build-elevated,webpack,production,production-db}.log`.
