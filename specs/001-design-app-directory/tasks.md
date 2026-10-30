@@ -92,3 +92,9 @@ Amendment 1.0.2 (2026-10-29): 사용자 후속 지시에 따라 부분 교체에
 ## Phase 21: 자체 제작 3D 운영 공개 — 2026-10-30
 - [x] T053 홈 3D의 로컬 PNG·Vercel 게이트 의존을 제거하고 공개 가능한 자체 SVG fallback과 기존 PNG 차단을 유지한다. PNG 유무와 무관하게 3D E2E를 실행한다.
 - [x] T054 lint/typecheck/unit/E2E/build/production 경계 검증 후 기존 Vercel 프로젝트에 반영하고 공개 ko/en·3D 조작·fallback·PNG 404 결과를 기록한다. 로컬 기본 빌드는 기존 EPERM으로 실패, Webpack 및 Vercel 기본 Turbopack 빌드는 통과했다.
+
+## Phase 22: 홈 광고 공간 — 2026-10-30
+- [x] T055 7개 이상 목록의 6번째 카드 뒤에 전체 열 광고 공간·ko/en 라벨·테마 대응을 추가한다.
+- [x] T056 lint/typecheck/unit/E2E/build 결과와 실제 애드센스 연결 후속 절차를 기록한다.
+
+- [x] T057 사용자 제공 AdSense 인증 메타 태그를 공통 레이아웃에 추가하고 ko/en head 및 필수 검증을 확인한다.

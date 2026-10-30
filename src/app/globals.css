@@ -275,6 +275,22 @@
   overflow-wrap: anywhere;
   transition: transform 250ms var(--product-ease);
 }
+.directory-ad-space {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin-block: 16px;
+  padding-block: 16px;
+  border-block: 1px solid var(--border);
+}
+.directory-ad-label {
+  margin: 0 0 12px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  text-align: center;
+}
+.directory-ad-content {
+  min-height: 250px;
+}
 .app-card-title {
   font-size: 18px;
   font-weight: 600;

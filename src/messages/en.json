@@ -25,6 +25,7 @@
     "browse": "View app list"
   },
   "Directory": {
+    "advertisement": "Advertisement",
     "search": "Search apps",
     "searchPlaceholder": "Search app names",
     "searchButton": "Search",

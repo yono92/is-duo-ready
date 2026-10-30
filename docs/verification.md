@@ -920,3 +920,44 @@ main과 동기화한다. 배포는 위 고정 소스이며 저장소의 동시 �
 최종 inspect: production / READY, 원격 build 41s. 해당 배포의 `vercel logs --level error --since 10m
 --limit 20 --json`은 정상 종료했고 반환된 오류 행은 0개였다. 로그 범위 밖의 전체 운영 무오류를
 보증하는 결과는 아니다. `git diff --check`도 통과했다.
+
+## 홈 광고 공간 확보 — 2026-10-30
+
+현재 페이지에 7개 이상의 앱이 있을 때 6번째 카드 다음에 광고 공간 하나를 서버에서
+렌더링한다. 전체 카드 열을 차지하며 콘텐츠 최소 높이는 250px이고 ko/en 라벨·테마
+토큰을 적용했다. 6개 이하·빈 결과·오류에는 공간이 없다. 기존 작업 폴더 변경은 보존했다.
+실제 광고 스크립트·광고 ID·외부 광고 요청·배포는 추가하지 않았다.
+
+- `npm run lint`: PASS.
+- `npm run typecheck`: PASS.
+- `npm test`: 17개 파일, 81개 PASS.
+- `npm run test:e2e`: 최초 샌드박스 실행은 127.0.0.1:3351 바인딩 EPERM으로 중단.
+  권한을 허용한 재실행에서 Chromium 28개 PASS (50.1초). 기존 ko/en·테마·반응형·
+  키보드·접근성·탐색 회귀 검사이며 광고 송출 테스트는 아니다.
+- 로컬 IAB 한국어 다크 화면에서 6번째 카드(종이숲)와 7번째 카드(주간조각) 사이의
+  광고 라벨, 전체 열 폭, 상하 구분선 및 예약 공간을 직접 확인했다.
+- `npm run build`: FAIL. Turbopack CSS 처리 중 포트 바인딩 Operation not permitted.
+- 설치된 Next CLI 문서의 대안 `npm run build -- --webpack`: PASS, 컴파일·타입·페이지 생성 완료.
+- 변경 소스 Prettier 검사와 `git diff --check`: PASS. JSX 포맷 수정은 의미 변경 없음.
+
+로그: `/tmp/duoready-ad-{e2e,build,webpack-build}.log`. 애드센스 계정 연결·심사·
+광고 단위 생성·ads.txt·개인정보 고지 및 CMP 후속 절차는 `docs/adsense.md`에 기록했다.
+실제 광고 크기·미송출·동의 전후·운영 광고 요청은 계정 연결 후 별도 검증이 필요하다.
+
+## AdSense account verification meta — 2026-10-30
+
+Added the user-provided `ca-pub-8224851078290204` to the shared layout Metadata
+`other` field. Read-only HTTP checks of local `/ko` and `/en` confirmed exactly
+one correct `google-adsense-account` tag inside each initial HTML head. Local
+HTTP access required sandbox escalation. No advertising script was added.
+
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: 17 files, 85 tests PASS (shared workspace).
+- `npm run test:e2e`: Chromium 28 PASS (55.6s).
+- `npm run build`: FAIL, existing Turbopack CSS port-binding EPERM.
+- `npm run build -- --webpack`: PASS.
+- Layout Prettier and `git diff --check`: PASS.
+
+Logs: `/tmp/duoready-adsense-meta-{e2e,build,webpack}.log`.
+Local code only. Production deployment, AdSense verification, review request,
+and approval have not been performed.

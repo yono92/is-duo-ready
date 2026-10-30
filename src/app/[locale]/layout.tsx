@@ -18,6 +18,9 @@ export async function generateMetadata({
   return {
     ...pageMetadata(validLocale, 'home'),
     verification: siteVerification(),
+    other: {
+      'google-adsense-account': 'ca-pub-8224851078290204',
+    },
   };
 }
 export default async function LocaleLayout({

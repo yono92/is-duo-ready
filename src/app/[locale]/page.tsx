@@ -1,6 +1,7 @@
 import { Card, EmptyState } from '@/components/ui/surfaces';
 import { DevicePreview } from '@/components/device-preview';
 import type { Metadata } from 'next';
+import { Fragment } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ArrowRight, Globe2, SearchX } from 'lucide-react';
 import { Link } from '@/components/ui/link';
@@ -88,13 +89,16 @@ export default async function Home({
                 >
                   {result.apps.length ? (
                     <div className="app-grid">
-                      {result.apps.map((app) => (
-                        <AppCard
-                          key={app.slug}
-                          app={app}
-                          locale={locale}
-                          query={queryString(query)}
-                        />
+                      {result.apps.map((app, index) => (
+                        <Fragment key={app.slug}>
+                          <AppCard app={app} locale={locale} query={queryString(query)} />
+                          {index === 5 && result.apps.length > 6 && (
+                            <aside className="directory-ad-space" aria-label={d('advertisement')}>
+                              <p className="directory-ad-label">{d('advertisement')}</p>
+                              <div className="directory-ad-content" />
+                            </aside>
+                          )}
+                        </Fragment>
                       ))}
                     </div>
                   ) : (
