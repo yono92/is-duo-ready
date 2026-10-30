@@ -33,8 +33,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  const t = await getTranslations('Home');
-  const n = await getTranslations('Nav');
+  const f = await getTranslations('Footer');
   return (
     <html
       lang={locale}
@@ -49,10 +48,21 @@ export default async function LocaleLayout({
             {children}
             <footer className="site-footer">
               <div className="site-width flex flex-wrap justify-between gap-5 text-xs leading-relaxed text-muted-foreground">
-                <p>{t('footer')}</p>
-                <Link href="/methodology" className="underline underline-offset-4">
-                  {n('methodology')}
-                </Link>
+                <div className="space-y-2">
+                  <p>{f('copyright')}</p>
+                  <p>{f('description')}</p>
+                </div>
+                <nav
+                  aria-label={f('navigation')}
+                  className="flex flex-wrap items-start gap-x-5 gap-y-2"
+                >
+                  <Link href="/methodology" className="underline underline-offset-4">
+                    {f('methodology')}
+                  </Link>
+                  <Link href="/submit" className="underline underline-offset-4">
+                    {f('submit')}
+                  </Link>
+                </nav>
               </div>
             </footer>
           </Providers>

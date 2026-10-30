@@ -21,8 +21,14 @@
     "region": "South Korea App Store",
     "fixture": "Sample data",
     "fixtureDescription": "These fictional apps are for previewing the site. Their support status is an example.",
-    "footer": "Not affiliated with Apple or app developers.",
     "browse": "View app list"
+  },
+  "Footer": {
+    "copyright": "© 2026 Is Duo Ready?",
+    "description": "An independent service, not affiliated with Apple or app developers.",
+    "navigation": "Footer navigation",
+    "methodology": "Support information",
+    "submit": "Submit information"
   },
   "Directory": {
     "advertisement": "Advertisement",

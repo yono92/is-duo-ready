@@ -961,3 +961,26 @@ HTTP access required sandbox escalation. No advertising script was added.
 Logs: `/tmp/duoready-adsense-meta-{e2e,build,webpack}.log`.
 Local code only. Production deployment, AdSense verification, review request,
 and approval have not been performed.
+
+## Common footer information — 2026-10-30
+
+Added localized copyright, independent-service disclosure, support information
+and information-submission links using the existing Astryx locale Link. Kept all
+footer copy in ko/en messages and updated the existing navigation E2E locator.
+
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: 17 files, 86 tests PASS in the shared workspace.
+- `npm run test:e2e`: initial sandbox server bind failed (EPERM); permission-enabled
+  retry passed all 28 Chromium tests (52.3s), including navigation, accessibility,
+  themes and responsive checks.
+- `npm run build`: FAIL, existing Turbopack CSS port-binding EPERM, also on retry.
+- `npm run build -- --webpack`: PASS.
+- Built-site IAB check: ko/en footer text and both localized link destinations
+  verified; 360px viewport had no horizontal overflow. Korean mobile dark footer
+  was visually inspected. Standalone Playwright CLI could not launch because its
+  expected system Chrome was absent; bundled Chromium E2E and IAB checks succeeded.
+- `git diff --check`: PASS.
+
+Logs: `/tmp/duoready-footer-{lint,types,unit,e2e-retry,build,build-retry,webpack}.log`.
+The footer commit uses the GitHub noreply identity already present in repository
+history. Unrelated in-progress changes are excluded from this commit.

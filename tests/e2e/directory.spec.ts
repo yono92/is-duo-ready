@@ -128,7 +128,10 @@ test('empty state reset and scoped navigation work', async ({ page }) => {
   await page.getByRole('link', { name: en.Nav.updates, exact: true }).click();
   await expect(page.getByRole('heading', { name: en.Updates.title })).toBeVisible();
   await expect(page.getByText(en.Updates.unavailable, { exact: true })).toBeVisible();
-  await page.getByRole('link', { name: en.Nav.methodology, exact: true }).click();
+  await page
+    .getByRole('contentinfo')
+    .getByRole('link', { name: en.Footer.methodology, exact: true })
+    .click();
   await expect(page.getByRole('heading', { name: en.Info.methodologyTitle })).toBeVisible();
 });
 

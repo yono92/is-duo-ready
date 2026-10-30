@@ -157,3 +157,7 @@ WebGL 애니메이션의 실제 패널 바깥쪽 좌표를 DOM 핸들로 투영�
 Home의 서버 렌더링 카드 반복을 keyed Fragment로 유지하고 6번째 카드 뒤에 조건부 aside를 삽입한다. globals.css의 grid-column: 1 / -1, 테마 토큰과 min-height로 공간을 예약한다. 별도 클라이언트 상태·외부 의존성 없이 메시지에 광고 라벨을 추가한다. 기존 lint/typecheck/unit/E2E/build로 회귀를 확인한다.
 
 AdSense 인증 메타 태그는 설치된 Next.js Metadata API의 `other` 필드로 공통 generateMetadata에 선언한다. 기존 htmlLimitedBots 설정으로 초기 head 출력이 유지되는지 HTTP 응답에서 확인한다.
+
+### 공통 푸터 정보 — 2026-10-30
+
+공통 locale layout의 푸터를 저작권·독립 서비스 설명과 이름 있는 탐색 영역으로 구성한다. Footer 메시지 namespace와 기존 Astryx locale Link를 사용한다. 기존 탐색 E2E의 링크 이름을 갱신하고 필수 검사 및 ko/en 푸터 렌더링을 확인한다.
