@@ -14,3 +14,4 @@
 - [x] T005 lint/typecheck·단위 89개·격리 DB 16개·Chromium E2E 30개, 실제 익명 SQL과 운영 25규칙 점검을 완료했다. 오류 0·의료 분류 경고 5, 공개 집계 995/74/0/921/0과 빌드의 환경 제약·미배포 상태를 docs/data-quality.md와 docs/verification.md에 기록했다.
 
 - [x] T012 최신 소스 배포 요청에 따라 Git/운영 소스 불일치 원인을 확인하고 최신 공개·관리자 UI와 집계·가져오기 변경을 재검증했다. 단위 89개·DB 16개·공개 32개·관리자 42개와 Webpack 빌드·두 운영 경계 검사 통과, 기본 Turbopack의 로컬 EPERM을 별도 기록했다.
+- [x] T013 사용자 요청으로 집계를 Apple 스타일의 Astryx 패널·12px 막대·점 범례·상단 툴팁으로 정돈했다. 두 언어·테마·반응형·비율·키보드·SSR을 포함한 공개 Chromium 32개와 단위 89개·Webpack 빌드·운영 경계 검사 통과. 최종 Git/운영 증빙은 apple-chart-release-result.json에 기록한다.

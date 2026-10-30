@@ -1747,3 +1747,45 @@ Rollout uses the existing yonos-projects-8566d4cb/is-duo-ready project, Git main
 Node 22. Deployment and CI results must be checked separately from local validation.
 The final commit/deployment IDs, public browser/HTTP checks and CI results are retained
 in the ignored .data/release/latest-source-release-result.json release record.
+
+## Apple-style support overview and save-navigation synchronization — 2026-10-30
+
+The latest-source commit 0bc7ce5 was pushed and its Git production deployment
+dpl_E6PVr5k3sU5zyHT7R1BFFSL4KoEj became READY on the existing public domain.
+Public checks confirmed 995 published apps, 74 supported / 7.4%, 921 unverified / 92.6%,
+Recharts, both locales, desktop/mobile layouts, keyboard tooltip and zero observed
+browser/runtime errors during the bounded check. The working tree was clean.
+
+That commit's CI run 41015505051 passed public browsers, types/unit and build/DB
+boundaries but failed one of 42 admin browser tests. The retained trace shows the save
+POST returned HTTP 200 and a valid x-action-redirect after 4828.769ms; the following
+5s URL assertion expired before the new route committed. The save test now registers
+page.waitForURL together with the submit click, then retains the original URL/status
+and publication/archive assertions. No timeout/retry setting or product save behavior
+was changed. The corrected complete scenario passed five consecutive local repetitions
+on an isolated database (22.0s). Remote verification remains separate.
+
+The user's follow-up requested a more Apple-like chart. The overview now uses an actual
+Astryx Card with a 48px/40px support count, secondary percentage, right-aligned published
+total, 12px rounded Recharts track and compact dot/count legends. Unknown dots and
+segments use the same existing theme token. The actual Astryx tooltip appears above
+the track; keyboard focus remains visible. SSR counts, zero-segment handling, true
+proportions, both locales/themes, source labels and fixture boundaries are preserved.
+No new imagery, database changes or dependency changes were introduced.
+
+Checks:
+- lint PASS (same single warning in ignored .data research code), typecheck PASS.
+- 18 unit files / 89 tests PASS.
+- DUO_TEST_PORT=3466 npm run test:e2e -- --workers=1: 32 Chromium tests PASS (1.9m).
+- Corrected admin save/review/archive scenario repeated five times: 5 PASS.
+- npm run build -- --webpack PASS; all three npm run test:production scenarios PASS.
+- Default local Turbopack was not repeated after the already established process/port
+  EPERM; the remote default build is checked independently.
+- Prettier for edited code and git diff --check PASS.
+- Actual local screenshots: Korean light desktop and English dark 360px. No horizontal
+  overflow; all four fixture segments are 12px high. Fixture/sample wording remains
+  explicit; these example counts are not production support claims.
+
+The final Git commit, Vercel deployment, CI and public browser verification are stored
+in ignored .data/release/apple-chart-release-result.json. Safari/Firefox and physical
+devices are outside this Chromium check.

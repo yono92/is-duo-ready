@@ -31,7 +31,7 @@ export default function DistributionChart({ stats }: { stats: DirectoryStats }) 
       layout="vertical"
       stackOffset="expand"
       margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-      barSize={14}
+      barSize={12}
       barCategoryGap={0}
       barGap={0}
       accessibilityLayer
@@ -51,10 +51,10 @@ export default function DistributionChart({ stats }: { stats: DirectoryStats }) 
             <Rectangle
               {...props}
               radius={[
-                index === 0 ? 4 : 0,
-                index === visibleStatuses.length - 1 ? 4 : 0,
-                index === visibleStatuses.length - 1 ? 4 : 0,
-                index === 0 ? 4 : 0,
+                index === 0 ? 6 : 0,
+                index === visibleStatuses.length - 1 ? 6 : 0,
+                index === visibleStatuses.length - 1 ? 6 : 0,
+                index === 0 ? 6 : 0,
               ]}
               role="img"
               data-status={status}
@@ -68,6 +68,8 @@ export default function DistributionChart({ stats }: { stats: DirectoryStats }) 
         cursor={false}
         isAnimationActive={false}
         allowEscapeViewBox={{ x: false, y: true }}
+        reverseDirection={{ y: true }}
+        offset={16}
         content={({ active, payload }) => {
           const status = statuses.find((value) => value === payload?.[0]?.dataKey);
           if (!active || !status) return null;

@@ -234,26 +234,38 @@
 }
 .directory-overview {
   margin-top: 28px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.directory-overview-panel {
+  padding: 28px 32px;
+  border-radius: 24px;
+}
+.directory-overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
 }
 .directory-overview-caption {
+  max-width: 200px;
   color: var(--muted-foreground);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: end;
 }
 .directory-overview-headline {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 12px;
-  margin-top: 14px;
+  margin-top: 8px;
 }
 .directory-overview-label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 .directory-overview-count {
-  font-size: 40px;
+  font-size: 48px;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.04em;
@@ -261,18 +273,19 @@
 }
 .directory-overview-share {
   color: var(--muted-foreground);
-  font-size: 15px;
+  font-size: 20px;
   font-variant-numeric: tabular-nums;
 }
 .directory-overview-legend {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 28px;
-  margin-top: 12px;
+  gap: 16px 28px;
+  margin-top: 6px;
 }
 .directory-overview-legend-item {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 8px;
   min-width: 0;
 }
@@ -282,39 +295,63 @@
   gap: 8px;
   min-width: 0;
   color: var(--muted-foreground);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
 }
+.directory-overview-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
 .directory-overview-legend-count {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .directory-overview-note {
-  margin-top: 18px;
+  margin-top: 20px;
   color: var(--muted-foreground);
   font-size: 11px;
   line-height: 1.5;
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .directory-overview-legend {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 32px;
   }
 }
+@media (max-width: 767px) {
+  .directory-overview-panel {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+  .directory-overview-header {
+    gap: 16px;
+  }
+  .directory-overview-caption {
+    max-width: 140px;
+  }
+  .directory-overview-count {
+    font-size: 40px;
+  }
+  .directory-overview-share {
+    font-size: 17px;
+  }
+}
 .support-distribution {
   position: relative;
-  height: 32px;
-  margin-top: 18px;
+  height: 40px;
+  margin-top: 12px;
 }
 .support-distribution::before {
   content: '';
   position: absolute;
   inset-inline: 0;
   top: 50%;
-  height: 14px;
+  height: 12px;
   transform: translateY(-50%);
-  border-radius: 4px;
+  border-radius: 6px;
   background: var(--directory-chart-unknown);
   pointer-events: none;
 }
@@ -326,8 +363,13 @@
   display: block;
   border-radius: 6px;
 }
+.support-distribution [role='application']:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
 .directory-chart-tooltip {
-  min-width: 160px;
+  min-width: 152px;
   border: 1px solid var(--border);
   border-radius: 12px;
 }
