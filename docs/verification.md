@@ -1166,3 +1166,27 @@ locale/detail/history scenario with device readiness repeated3 times:3 PASS
 (34.5s). React skill checklist reviewed event-only browser access, lifecycle
 cleanup (custom root removed), native keyboard behavior and URL preservation.
 Remote verification of this smaller fix remains pending at this commit.
+
+## CI remaining scenario budgets and shard balance — 2026-10-30
+
+Run 41001179921 for 82eb2e8 passed both admin shards (39 tests), static
+checks and build/DB/production boundaries. Public browsers passed26/28. The
+remaining failures hit the overall30s test budget: root negotiation during an
+unnecessary model wait on a later URL-only document, and the multi-document
+search/history scenario near its final reset assertion.
+
+Root negotiation now waits for the device only before the first interactive
+menu; later cookie/explicit-locale URL assertions do not wait for unrelated
+GPU work. The language-selection helper performs only that action. The
+search/history scenario explicitly waits for the new homepage device before
+clicking its card and has a60s total budget because locale changes now load
+several full documents (matching existing long browser cases). Individual
+navigation/assertion limits and retry counts are unchanged. These are scoped
+scenario changes, not a global timeout increase.
+
+Both cases repeated3 times each locally:6 PASS (50.2s), with lint/types PASS.
+The workflow now runs public browsers as two14-test shards and admin browsers
+as three13-test shards on the committed source. Every runner still has one
+browser worker; the databases remain independent. All gates and the verify
+aggregator remain required. Official checksum-verified actionlint1.7.12 PASS.
+Remote completion and elapsed time for this commit remain pending.

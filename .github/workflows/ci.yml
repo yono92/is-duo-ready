@@ -33,11 +33,15 @@ jobs:
       matrix:
         include:
           - suite: fixtures
-            shard: 1/1
-          - suite: admin
             shard: 1/2
-          - suite: admin
+          - suite: fixtures
             shard: 2/2
+          - suite: admin
+            shard: 1/3
+          - suite: admin
+            shard: 2/3
+          - suite: admin
+            shard: 3/3
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
@@ -53,7 +57,7 @@ jobs:
       - if: matrix.suite == 'admin'
         run: npm run test:admin -- --shard=${{ matrix.shard }}
       - if: matrix.suite == 'fixtures'
-        run: npm run test:e2e
+        run: npm run test:e2e -- --shard=${{ matrix.shard }}
       - name: Upload browser failure evidence
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

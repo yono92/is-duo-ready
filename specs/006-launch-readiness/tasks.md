@@ -64,3 +64,5 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 - [x] T033 한 프레임 지연만으로 원격 CI가 해결되지 않음을 기록하고, Canvas의 자동 context/Activity bridge를 App Router에서 분리한 client-only React root로 격리했다. props 갱신·취소·unmount 정리와 lint/types/unit89/공개32/격리 관리자10개를 검증했다. 원격 최종 통과는 T031에서 계속 추적한다.
 
 - [x] T034 원격에서 입증되지 않은 3D root 변경을 원복했다. 숨겨진 Activity를 제외한 실제 기기 준비 대기, 옵션을 열기 전 즉시 중앙 스크롤, locale 문서 교체와 URL·쿠키·키보드 보존을 구현·검증했다. 공개32/관리자42/locale9회/history3회 통과와 앞선 실패를 기록했다. 원격 전체 통과는 T031에서 추적한다.
+
+- [x] T035 82eb2e8 원격 관리자39개 전체 통과 및 공개26/28을 확인했다. URL-only 문서의 불필요한 3D 대기를 제거하고 여러 문서를 여는 history 시나리오만 60초로 명시했다(개별 assertion·전역 제한·재시도 유지). 두 사례 6회 반복·lint/types·actionlint를 통과하고 공개2/관리자3 shard로 실행 시간을 균등화했다. 최종 원격 결과는 T031에서 추적한다.

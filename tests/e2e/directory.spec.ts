@@ -18,8 +18,6 @@ async function chooseLanguage(page: Page, current: 'ko' | 'en', next: 'ko' | 'en
       exact: true,
     })
     .click();
-  if (await page.locator('[data-testid="device-model"]:visible').count())
-    await waitForDevice(page);
 }
 
 async function chooseTheme(page: Page, locale: 'ko' | 'en', theme: 'light' | 'dark') {
@@ -43,21 +41,20 @@ test('root negotiation, saved preference and explicit locale priority', async ({
   await chooseLanguage(page, 'ko', 'en');
   await expect(page).toHaveURL(/\/en$/);
   await page.goto('/');
-  await waitForDevice(page);
   await expect(page).toHaveURL(/\/en$/);
   await page.goto('/ko');
-  await waitForDevice(page);
   await expect(page).toHaveURL(/\/ko$/);
   await context.close();
   const unsupported = await browser.newContext({ locale: 'fr-FR' });
   const other = await unsupported.newPage();
   await other.goto('/');
-  await waitForDevice(other);
   await expect(other).toHaveURL(/\/en$/);
   await unsupported.close();
 });
 
 test('search, history, filter, locale and detail preserve context', async ({ page }) => {
+  // This scenario now boots several complete documents when switching locale.
+  test.setTimeout(60000);
   await page.goto('/ko');
   await waitForDevice(page);
   await page.getByRole('searchbox', { name: ko.Directory.search }).fill('메모');
@@ -76,6 +73,7 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
   await expect(page).toHaveURL(/status=supported/);
   await chooseLanguage(page, 'ko', 'en');
   await expect(page).toHaveURL(/\/en\?q=.*status=supported/);
+  await waitForDevice(page);
   await expect(page.getByText(en.Home.region)).toBeVisible();
   await page.getByTestId('app-card').click();
   await expect(page).toHaveURL(/\/en\/apps\/sample-01\?q=/);
