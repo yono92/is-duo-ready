@@ -1,3 +1,4 @@
+import { waitForDevice } from './wait-for-device';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
 import { selectOption, fieldName } from './select-option';
@@ -17,6 +18,8 @@ async function chooseLanguage(page: Page, current: 'ko' | 'en', next: 'ko' | 'en
       exact: true,
     })
     .click();
+  if (await page.locator('[data-testid="device-model"]:visible').count())
+    await waitForDevice(page);
 }
 
 async function chooseTheme(page: Page, locale: 'ko' | 'en', theme: 'light' | 'dark') {
@@ -34,24 +37,29 @@ test('root negotiation, saved preference and explicit locale priority', async ({
   const context = await browser.newContext({ locale: 'ko-KR' });
   const page = await context.newPage();
   await page.goto('/');
+  await waitForDevice(page);
   await expect(page).toHaveURL(/\/ko$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'ko');
   await chooseLanguage(page, 'ko', 'en');
   await expect(page).toHaveURL(/\/en$/);
   await page.goto('/');
+  await waitForDevice(page);
   await expect(page).toHaveURL(/\/en$/);
   await page.goto('/ko');
+  await waitForDevice(page);
   await expect(page).toHaveURL(/\/ko$/);
   await context.close();
   const unsupported = await browser.newContext({ locale: 'fr-FR' });
   const other = await unsupported.newPage();
   await other.goto('/');
+  await waitForDevice(other);
   await expect(other).toHaveURL(/\/en$/);
   await unsupported.close();
 });
 
 test('search, history, filter, locale and detail preserve context', async ({ page }) => {
   await page.goto('/ko');
+  await waitForDevice(page);
   await page.getByRole('searchbox', { name: ko.Directory.search }).fill('메모');
   await page.getByRole('button', { name: ko.Directory.searchButton, exact: true }).click();
   await expect(page).toHaveURL(/q=/);
@@ -75,6 +83,7 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
   await chooseLanguage(page, 'en', 'ko');
   await expect(page).toHaveURL(/\/ko\/apps\/sample-01\?q=.*status=supported/);
   await page.getByRole('link', { name: ko.Directory.back }).click();
+  await waitForDevice(page);
   await expect(page.getByRole('searchbox')).toHaveValue('메모');
   await page.getByRole('button', { name: ko.Directory.reset, exact: true }).click();
   await expect(page.getByTestId('app-card')).toHaveCount(24);
@@ -85,6 +94,7 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
 
 test('pagination, sorting, filters and query normalization', async ({ page }) => {
   await page.goto('/en');
+  await waitForDevice(page);
   await page.getByRole('button', { name: en.Directory.next }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByTestId('app-card')).toHaveCount(6);
@@ -108,14 +118,17 @@ test('pagination, sorting, filters and query normalization', async ({ page }) =>
     page.getByRole('button', { name: en.Categories['graphics-design'], exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await page.goto('/en?page=9999');
+  await waitForDevice(page);
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByTestId('app-card')).toHaveCount(6);
   await page.goto('/en?page=-2&status=bogus');
+  await waitForDevice(page);
   await expect(page.getByTestId('app-card')).toHaveCount(24);
 });
 
 test('empty state reset and scoped navigation work', async ({ page }) => {
   await page.goto('/en?q=does-not-exist');
+  await waitForDevice(page);
   await expect(page.getByRole('heading', { name: en.Directory.emptyTitle })).toBeVisible();
   await page.getByRole('link', { name: en.Nav.submit, exact: true }).last().click();
   await expect(page.getByRole('heading', { name: en.Submission.title })).toBeVisible();
@@ -156,6 +169,7 @@ test('theme follows OS by default and remembers an explicit toggle without hydra
   });
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/en');
+  await waitForDevice(page);
   const toggle = page.getByRole('switch', { name: en.Preferences.darkMode, exact: true });
   await expect(page.locator('html')).toHaveClass(/dark/);
   await expect(toggle).toBeChecked();
@@ -200,6 +214,7 @@ test('theme follows OS by default and remembers an explicit toggle without hydra
 test('mobile filters count, reset, keyboard focus and close', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/en');
+  await waitForDevice(page);
   const trigger = page.getByRole('button', { name: /^Filters/ });
   await trigger.click();
   const dialog = page.getByRole('dialog');
@@ -227,6 +242,7 @@ for (const locale of ['ko', 'en'] as const)
     test(`responsive and accessible ${locale}/${theme}`, async ({ page }) => {
       test.setTimeout(60000);
       await page.goto(`/${locale}`);
+      await waitForDevice(page);
       await chooseTheme(page, locale, theme);
       await expect(page.locator('html')).toHaveClass(new RegExp(theme));
       await expect(page.getByTestId('app-card')).toHaveCount(24);
@@ -262,6 +278,7 @@ for (const locale of ['ko', 'en'] as const)
 test('mobile dialog accessibility', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/en');
+  await waitForDevice(page);
   await page.getByRole('button', { name: /^Filters/ }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.getByRole('dialog').evaluate(async (dialog) => {
@@ -286,6 +303,7 @@ test('unknown app, page and locale do not expose fixtures', async ({ page }) => 
 
 test('metadata and sitemap never advertise fixture pages', async ({ page, request }) => {
   await page.goto('/en?q=paper');
+  await waitForDevice(page);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/en$/);
   await expect(page.locator('link[hreflang="ko"]')).toHaveAttribute('href', /\/ko$/);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
@@ -295,6 +313,7 @@ test('metadata and sitemap never advertise fixture pages', async ({ page, reques
 
 test('language menu stays icon-only, supports keyboard and returns focus', async ({ page }) => {
   await page.goto('/en');
+  await waitForDevice(page);
   const trigger = page.getByRole('button', { name: en.Preferences.language, exact: true });
   await expect(trigger).toHaveText('');
   await expect(page.getByText(ko.Preferences.ko, { exact: true })).not.toBeVisible();

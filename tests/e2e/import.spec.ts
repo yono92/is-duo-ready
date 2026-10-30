@@ -1,3 +1,4 @@
+import { waitForDevice } from './wait-for-device';
 import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
@@ -127,6 +128,7 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
         await page.getByRole('button', { name: a.applyReview, exact: true }).press('Enter');
         await expect(page).toHaveURL(/reviewed=1/);
         await page.goto(`/${locale}?q=${id}`);
+        await waitForDevice(page);
         await expect(page.getByTestId('app-card')).toHaveCount(1);
         await page.getByTestId('app-card').click();
         await expect(

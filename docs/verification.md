@@ -1133,3 +1133,36 @@ including six live WebGL manipulation/blur/context-loss cases; the exact
 remote-source admin icon/import/public-data subset10 PASS (53.8s). The remote
 run for this follow-up is pending at this commit. Earlier failed rollout
 results remain above.
+
+## CI readiness and document-locale follow-up — 2026-10-30
+
+Run 40999855601 for 6ec9f2b still failed: fixture26/28 (both remaining cases
+involved locale switching), admin2/2 passed19/19, admin1/2 passed18/20
+(icon navigation plus an option click timeout). Renderer isolation was not a
+demonstrated remote fix and is fully reverted to the original device-scene.tsx.
+
+The earlier ready-state experiment's two local failures were strict-selector
+violations: a hidden Next Activity tree retained a second device-model node.
+They were not ready-state timeouts. The new test helper scopes the model to
+CSS-visible nodes, waits for exactly one, then for the existing ready or
+unavailable state with the same 30s budget used by device tests. Home controls
+are exercised after that prerequisite, including fresh home documents after
+locale/detail round trips. Navigation assertions and global test timeouts
+remain unchanged.
+
+Selector tests instantly center the trigger before opening its popover, then
+click the visible option and assert its actual selection. No forced clicks
+or direct form-value mutation are used. This prevents Playwright's option
+scrolling from moving the anchor and closing the popover mid-click.
+
+Locale switching now uses next-intl getPathname plus location.replace to load
+the complete translated document. URL path/query, locale-cookie negotiation,
+KR region, themes and keyboard menu behavior remain covered. This deliberately
+replaces the cross-locale client transition; other navigation is unchanged.
+
+Local results: locale/root/history/menu scenarios repeated3 times each:9 PASS
+(38.1s); public32 PASS (2.1m); full isolated admin42 PASS (4.0m); an additional
+locale/detail/history scenario with device readiness repeated3 times:3 PASS
+(34.5s). React skill checklist reviewed event-only browser access, lifecycle
+cleanup (custom root removed), native keyboard behavior and URL preservation.
+Remote verification of this smaller fix remains pending at this commit.

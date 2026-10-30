@@ -1,3 +1,4 @@
+import { waitForDevice } from './wait-for-device';
 import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
 import { selectOption, fieldName } from './select-option';
@@ -69,6 +70,7 @@ for (const [index, locale] of ['ko', 'en'].entries())
       page.on('pageerror', (error) => errors.push(error.message));
       await page.emulateMedia({ colorScheme: theme as 'light' | 'dark' });
       await page.goto(`/${locale}?q=${encodeURIComponent(`공개검증${suffix}`)}`);
+      await waitForDevice(page);
       await expect(page.getByTestId('app-card')).toHaveCount(1);
       await expect(
         page.getByText(locale === 'ko' ? ko.Home.fixture : en.Home.fixture, { exact: true }),
@@ -181,6 +183,7 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
       new RegExp(`/${locale}/apps/${renamed}$`),
     );
     await visitor.goto(`/${locale}?q=${encodeURIComponent(`공개검증8${info.repeatEachIndex}201`)}`);
+    await waitForDevice(visitor);
     await expect(visitor.getByRole('main').getByTestId('app-card')).toHaveCount(1);
     await expect(visitor.getByRole('main').getByTestId('app-card')).toContainText(
       locale === 'ko' ? ko.Status.planned : en.Status.planned,
@@ -212,6 +215,7 @@ test('review changes refresh both locales, old slugs redirect, and archiving hid
       );
     }
     await visitor.goto(`/${locale}?q=${encodeURIComponent(`공개검증8${info.repeatEachIndex}201`)}`);
+    await waitForDevice(visitor);
     await expect(visitor.getByRole('main').getByTestId('app-card')).toHaveCount(0);
     await visitor.goto(`/${locale}/updates`);
     await expect(

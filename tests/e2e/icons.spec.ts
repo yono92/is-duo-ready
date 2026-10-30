@@ -1,3 +1,4 @@
+import { waitForDevice } from './wait-for-device';
 import en from '../../src/messages/en.json' with { type: 'json' };
 import { fieldName } from './select-option';
 import { test, expect } from '@playwright/test';
@@ -122,6 +123,7 @@ test('stored icons render offline, require draft authorization and disappear aft
     }
     expect(external).toBe(0);
     await page.goto('/en?q=Fictional%20icon%20browser');
+    await waitForDevice(page);
     await expect
       .poll(() =>
         page

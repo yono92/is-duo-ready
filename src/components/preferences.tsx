@@ -9,7 +9,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from '@astryxdesign/core/DropdownMenu';
-import { usePathname, useRouter } from '@/i18n/navigation';
+import { getPathname, usePathname } from '@/i18n/navigation';
 import { Switch } from '@astryxdesign/core/Switch';
 import type { Locale } from '@/lib/directory/types';
 
@@ -22,16 +22,18 @@ export function Preferences() {
   const locale = useLocale();
   const pathname = usePathname();
   const params = useSearchParams();
-  const router = useRouter();
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(subscribe, clientSnapshot, serverSnapshot);
   const isDark = mounted && resolvedTheme === 'dark';
 
   function changeLocale(nextLocale: string) {
-    router.replace(`${pathname}${params.size ? `?${params}` : ''}`, {
-      locale: nextLocale as Locale,
-      scroll: false,
-    });
+    // A locale change replaces the document language and all localized content.
+    window.location.replace(
+      getPathname({
+        href: `${pathname}${params.size ? `?${params}` : ''}`,
+        locale: nextLocale as Locale,
+      }),
+    );
   }
 
   return (

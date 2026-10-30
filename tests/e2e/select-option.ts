@@ -2,6 +2,9 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 // Exercise Astryx's accessible popover rather than mutating form values.
 export async function selectOption(page: Page, field: Locator, label: string) {
+  await field.evaluate((element) =>
+    element.scrollIntoView({ block: 'center', behavior: 'instant' }),
+  );
   await field.click();
   const option = page.getByRole('option', { name: label, exact: true });
   await expect(option).toBeVisible();
