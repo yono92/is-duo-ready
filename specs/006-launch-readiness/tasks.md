@@ -60,3 +60,5 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 - [ ] T031 필요한 기존 로컬 수정과 CI 변경의 원격 반영 후 GitHub CI 전체 통과 및 실제 소요 시간을 확인한다. 이번 조사에서는 commit/push·원격 재실행을 하지 않았다.
 
 - [x] T032 CI 반영 후 trace로 남은 탐색 실패를 분리하고, Canvas를 첫 DOM commit 이후 프레임에 마운트한다. 임시 3D 제거/준비 상태 대기/번들러 비교와 Turbopack 탐색 10회·격리 관리자 10개 검증을 기록했다. 실제 원격 최종 통과는 T031에서 추적한다.
+
+- [x] T033 한 프레임 지연만으로 원격 CI가 해결되지 않음을 기록하고, Canvas의 자동 context/Activity bridge를 App Router에서 분리한 client-only React root로 격리했다. props 갱신·취소·unmount 정리와 lint/types/unit89/공개32/격리 관리자10개를 검증했다. 원격 최종 통과는 T031에서 계속 추적한다.

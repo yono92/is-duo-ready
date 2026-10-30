@@ -1110,3 +1110,26 @@ parallel. Both dev test configs retain their original Turbopack command.
 Local lint/types/unit89 PASS after the fix. The second remote run is pending
 at this commit; final CI results will be recorded separately. No manual
 deployment or database content mutation was performed.
+
+## CI renderer isolation follow-up — 2026-10-30
+
+Run 40998808484 for 276ced4 still failed (admin shards: 19/20 and 18/19;
+fixture browsers: 23/28). Static checks and default Turbopack build/DB/production
+boundaries passed. A one-frame mount delay is therefore insufficient on the
+Linux runner despite the earlier local repetitions; it is not a resolved CI.
+
+Installed R3F 9.8.2 Canvas automatically bridges ancestor React contexts and
+Activity visibility via its-fine 2.1.1. The device scene needs only explicit
+view/angle/callback/ref props. Its Canvas now lives in a separately managed,
+client-only React DOM root, so the bridge cannot inherit App Router contexts
+or join a page's transition. Props are updated from effects; frame creation
+is cancelled on cleanup and the root is unmounted in a microtask to avoid
+unmounting a second root synchronously during another React commit. The
+existing Canvas resize/DPR handling, error boundary and all scene content are
+retained. No test assertions, retry counts or timeouts changed in this follow-up.
+
+Local validation: lint/types PASS; unit89 PASS; CI-mode public32 PASS (1.4m),
+including six live WebGL manipulation/blur/context-loss cases; the exact
+remote-source admin icon/import/public-data subset10 PASS (53.8s). The remote
+run for this follow-up is pending at this commit. Earlier failed rollout
+results remain above.

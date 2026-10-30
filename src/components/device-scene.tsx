@@ -7,10 +7,10 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
   type RefObject,
   type ReactNode,
 } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
 import { DeviceScreenMaterial } from './device-screen-material';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment } from '@react-three/drei/core/Environment';
@@ -396,15 +396,35 @@ const StudioEnvironment = memo(function StudioEnvironment() {
   );
 });
 
+// The scene needs only these explicit props, not App Router/Activity contexts.
+// A separate DOM root prevents the renderer's context bridge from joining a
+// page navigation transition while Canvas is mounting or suspending.
 export default function DeviceScene(props: DeviceSceneProps) {
-  const [mounted, setMounted] = useState(false);
+  const container = useRef<HTMLDivElement>(null);
+  const renderer = useRef<Root | null>(null);
+  const latestProps = useRef(props);
   useEffect(() => {
-    // Canvas creates a second React root. Start it after the page commits so
-    // its initial suspension cannot interfere with App Router initialization.
-    const frame = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(frame);
+    latestProps.current = props;
+    renderer.current?.render(<SceneContent {...props} />);
+  }, [props]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (!container.current) return;
+      renderer.current = createRoot(container.current);
+      renderer.current.render(<SceneContent {...latestProps.current} />);
+    });
+    return () => {
+      cancelAnimationFrame(frame);
+      const root = renderer.current;
+      renderer.current = null;
+      // Avoid synchronously unmounting another root during a React commit.
+      if (root) queueMicrotask(() => root.unmount());
+    };
   }, []);
-  if (!mounted) return null;
+  return <div ref={container} style={{ width: '100%', height: '100%' }} />;
+}
+
+function SceneContent(props: DeviceSceneProps) {
   return (
     <RenderBoundary onUnavailable={props.onUnavailable}>
       <Canvas
