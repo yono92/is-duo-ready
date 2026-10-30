@@ -1075,3 +1075,38 @@ No remote commit/push, CI rerun or deployment was performed. Remote success and
 wall-clock improvement remain unmeasured; the tested local source includes
 pre-existing uncommitted fixes and must not be equated with GitHub HEAD.
 Logs: `/tmp/duoready-ci-{admin,admin-repeat,e2e,db,lint,typecheck-final,unit,build,build-elevated,webpack,production,production-db}.log`.
+
+## CI rollout and renderer mount timing — 2026-10-30
+
+Commit 394ad19 was pushed to main. Run 40995536652 finished in 5m09s
+(12:06:59–12:12:08 KST), with lint/types/unit and build/DB/production boundaries
+passing, but all three browser jobs failing. This is not a green CI result.
+The previous latest failing run took 9m35s; different failure locations mean
+the shorter elapsed time alone does not establish completed verification.
+
+The uploaded traces show navigation requests returning HTTP 200 in about
+0.2s while the old screen/URL remained. Waiting for the card's hydration marker
+was insufficient. A local copy of exactly 394ad19 passed the original 28 public
+tests once, showing the timing sensitivity. Waiting for the device's ready
+state did not fix the issue (30 passed/2 failed on the broader working tree);
+Webpack dev also retained a pagination failure and logged App Router dispatch
+before initialization plus an update-before-mount warning. These experiments
+were reverted; no rules were disabled, assertions relaxed or retries added.
+
+A diagnostic copy with only the 3D scene removed passed the two navigation
+cases. Deferring Canvas creation to a cancellable animation frame scheduled
+from DeviceScene's mount effect retained 3D and passed both cases. The original
+Turbopack dev server then passed those cases five times each: 10 PASS (54.2s).
+On the exact remote source plus that fix, the isolated icon/public-data/import
+subset passed 10 tests (1.5m, Webpack dev comparison). This supports a renderer
+mount timing issue; it does not establish a general Next.js or GPU defect.
+
+The committed fix starts Canvas after the page commit. Existing 3D ready,
+interaction, fallback and production gates remain in place. Fixture CI uses
+one browser worker to avoid competing software WebGL renderers on the runner;
+admin runners already used one worker, and independent CI jobs still run in
+parallel. Both dev test configs retain their original Turbopack command.
+
+Local lint/types/unit89 PASS after the fix. The second remote run is pending
+at this commit; final CI results will be recorded separately. No manual
+deployment or database content mutation was performed.

@@ -58,3 +58,5 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 - [x] T029 GitHub Actions 실패 단계·시간을 조사하고 정적/공개/관리자 shard/운영 검증을 분리한다. 기존 verify 필수 검사 이름과 모든 게이트를 유지하며 실패 trace를 업로드한다.
 - [x] T030 아이콘 카드 활성화 및 가져오기 이동/접근성 대기를 보완하고 관리자 42개·공개 32개·대상 5개 재실행·실제 shard 3+2개, lint/types/unit89/DB16/Webpack·운영 경계를 검증했다. 기본 Turbopack의 기존 EPERM 및 원격 미실행을 docs/verification.md에 구분했다.
 - [ ] T031 필요한 기존 로컬 수정과 CI 변경의 원격 반영 후 GitHub CI 전체 통과 및 실제 소요 시간을 확인한다. 이번 조사에서는 commit/push·원격 재실행을 하지 않았다.
+
+- [x] T032 CI 반영 후 trace로 남은 탐색 실패를 분리하고, Canvas를 첫 DOM commit 이후 프레임에 마운트한다. 임시 3D 제거/준비 상태 대기/번들러 비교와 Turbopack 탐색 10회·격리 관리자 10개 검증을 기록했다. 실제 원격 최종 통과는 T031에서 추적한다.

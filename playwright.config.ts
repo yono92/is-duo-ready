@@ -12,7 +12,7 @@ export default defineConfig({
     '**/icons.spec.ts',
   ],
   fullyParallel: true,
-  workers: 2,
+  workers: process.env.CI ? 1 : 2,
   retries: 0,
   reporter: [['list']],
   outputDir: `test-results/fixtures-${port}`,

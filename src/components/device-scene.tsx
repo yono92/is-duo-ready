@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type RefObject,
   type ReactNode,
 } from 'react';
@@ -396,6 +397,14 @@ const StudioEnvironment = memo(function StudioEnvironment() {
 });
 
 export default function DeviceScene(props: DeviceSceneProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    // Canvas creates a second React root. Start it after the page commits so
+    // its initial suspension cannot interfere with App Router initialization.
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  if (!mounted) return null;
   return (
     <RenderBoundary onUnavailable={props.onUnavailable}>
       <Canvas
