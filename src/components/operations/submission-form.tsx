@@ -1,5 +1,5 @@
 'use client';
-import { Card, Banner } from '@/components/ui/surfaces';
+import { Banner } from '@/components/ui/surfaces';
 
 import { Select, TextArea } from '@/components/ui/form-controls';
 
@@ -19,10 +19,13 @@ export function SubmissionForm({
   const [state, action, pending] = useActionState(submitAction, {});
   if (state.received)
     return (
-      <Card padding={5} role="status" className="mt-8 ">
-        <h2 className="text-xl font-semibold">{t('received')}</h2>
-        <p className="mt-3 text-muted-foreground">{t('receivedBody')}</p>
-      </Card>
+      <Banner
+        role="status"
+        status="success"
+        className="mt-8"
+        title={<h2 className="text-xl font-semibold">{t('received')}</h2>}
+        description={t('receivedBody')}
+      />
     );
   return (
     <form action={action} className="mt-8 space-y-5">
@@ -80,12 +83,12 @@ export function SubmissionForm({
       <p id="submission-privacy" className="text-sm text-muted-foreground">
         {t('privacy')}
       </p>
-      {!enabled && <p role="status">{t('errors.unavailable')}</p>}
+      {!enabled && <Banner role="status" status="warning" title={t('errors.unavailable')} />}
       {state.error && (
         <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
-      <Button type="submit" disabled={!enabled || pending}>
-        {t(pending ? 'working' : 'send')}
+      <Button type="submit" disabled={!enabled} isLoading={pending}>
+        {t('send')}
       </Button>
     </form>
   );

@@ -31,6 +31,20 @@ async function chooseTheme(page: Page, locale: 'ko' | 'en', theme: 'light' | 'da
   await expect(toggle).toBeChecked({ checked });
 }
 
+test('Astryx skip link is the first keyboard stop and reaches main content', async ({ page }) => {
+  await page.goto('/en');
+  await waitForDevice(page);
+  const skip = page.getByRole('link', { name: en.Nav.skip, exact: true });
+  await page.keyboard.press('Tab');
+  await expect(skip).toBeFocused();
+  await expect(skip).toHaveClass(/astryx-link/);
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/en#main$/);
+  await expect(page.getByRole('main')).toBeInViewport();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: en.Home.browse, exact: true })).toBeFocused();
+});
+
 test('root negotiation, saved preference and explicit locale priority', async ({ browser }) => {
   const context = await browser.newContext({ locale: 'ko-KR' });
   const page = await context.newPage();

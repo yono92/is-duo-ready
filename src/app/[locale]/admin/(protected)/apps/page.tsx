@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/surfaces';
+import { Card, EmptyState } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
 import { listAdminApps } from '@/lib/admin/repository';
@@ -54,7 +54,7 @@ export default async function AdminApps({
           </li>
         ))}
       </ul>
-      {!apps.length && <p>{t('empty')}</p>}
+      {!apps.length && <EmptyState title={t('empty')} headingLevel={2} />}
     </section>
   );
 }

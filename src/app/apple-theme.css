@@ -20,6 +20,11 @@
   --color-icon-accent: var(--color-text-accent);
   --color-accent-muted: light-dark(#eaf3ff, #182c43);
   --color-border: light-dark(#dedee3, #3a3a3f);
+  --directory-chart-unknown: color-mix(
+    in srgb,
+    var(--color-data-neutral) 30%,
+    var(--color-background-body)
+  );
   --focus-outline-color: light-dark(#0071e3, #62adff);
   --radius-element: 0.625rem;
   --radius-container: 1.125rem;

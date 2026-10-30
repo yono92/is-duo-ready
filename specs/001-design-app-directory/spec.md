@@ -184,3 +184,15 @@ UI library is Astryx instead of shadcn/ui. Existing user scenarios remain accept
 ### 공통 푸터 정보 — 2026-10-30
 
 저작권 표기(`© 2026 Is Duo Ready?`), 독립 서비스 안내, 지원 안내·정보 제보 링크를 ko/en으로 제공한다. 기존 테마·모바일 줄바꿈·키보드 접근과 locale 경로를 유지한다. 미작성 정책의 빈 링크는 추가하지 않는다.
+
+### Astryx 미적용 부분 전체 교체 — 2026-10-30
+
+전수검사 A01–A07의 누락을 실제 Astryx로 보완한다. 빈 목록은 EmptyState, 성공·사용 불가·
+장기 실패 알림은 Banner, 검토/제보 페이지 이동은 hasMore 기반 Pagination, 브랜드·공식 배지·
+스킵 링크는 Link를 사용한다. 공통 Button은 isLoading과 실제 disabled를 구분해 진행 중 초점을
+유지하고 중복 활성화를 막는다. 가져오기 중지는 계속 조작할 수 있어야 한다.
+관리자 TopNav는 중첩 경로에서 정확히 한 섹션을 선택하며 import가 apps보다 우선한다.
+오류 문구는 유효한 Astryx 의미색을 사용한다. 해시 링크는 본문 이후의 Tab 순서를 유지하고,
+폼 초점 이동은 부드러운 스크롤 때문에 선택 팝오버의 앵커가 이동하지 않아야 한다.
+데이터/인증/공개 정책·마이그레이션은 변경하지 않는다. 언어 메뉴 A08은 이미 실제 Astryx이며
+미적용 교체와 별도로 원인 미확정 이력을 보존한다.

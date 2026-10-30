@@ -69,6 +69,20 @@
     "realResults": "{count, plural, one {# app} other {# apps}}",
     "realEmptyDescription": "Change your search or filters. If an app is missing, you can suggest adding it."
   },
+  "DirectoryStats": {
+    "shareOfTotal": "Share of all published apps",
+    "distributionTitle": "App distribution by support status",
+    "title": "Published app support overview",
+    "sampleTitle": "Sample app support overview",
+    "total": "Korean App Store · {count, number} {count, plural, one {app} other {apps}}",
+    "sampleTotal": "Korean App Store · {count, number} sample {count, plural, one {app} other {apps}}",
+    "supported": "Official support",
+    "planned": "Planned",
+    "unknown": "Unverified",
+    "unsupported": "Confirmed unsupported",
+    "scope": "All published apps · Independent of search and filters.",
+    "sampleScope": "Counts for fictional sample apps. These are not actual app support statistics."
+  },
   "Categories": {
     "productivity": "Productivity",
     "graphics-design": "Graphics & Design",
@@ -490,5 +504,11 @@
   "InitialPublication": {
     "summary": "Listed as unsupported because Duo support evidence has not yet been confirmed. This is not an official non-support statement or a device test result.",
     "reason": "Initial directory release: explicit official wording indicates support; other entries remain unverified."
+  },
+  "PopularImport": {
+    "supportSummary": "The Korean App Store release notes explicitly describe iPhone Duo support or screen adaptations. See the official evidence for details.",
+    "summary": "Official evidence explicitly confirming Duo support has not yet been verified. This is not an official non-support statement or a device test result.",
+    "investigation": "The latest Korean App Store release notes were checked, but no explicit official evidence sufficient to confirm Duo support was established. Product page badges and earlier developer announcements still need verification.",
+    "reason": "Prioritized apps from the Korean App Store charts; support status reflects verified official evidence."
   }
 }

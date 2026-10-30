@@ -26,9 +26,12 @@ export default async function LoginPage({
             {t(local ? 'localNotice' : 'loginDescription')}
           </p>
           {!enabled && (
-            <p className="mt-4 text-sm" role="status">
-              {t('errors.authUnavailable')}
-            </p>
+            <Banner
+              className="mt-4"
+              role="status"
+              status="warning"
+              title={t('errors.authUnavailable')}
+            />
           )}
           {visibleError && (
             <Banner role="alert" status="error" title={<>{t(`errors.${visibleError}`)}</>} />

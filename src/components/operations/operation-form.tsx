@@ -41,12 +41,10 @@ export function OperationForm({
         <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
       {state.success && (
-        <p role="status" className="text-sm">
-          {t(`results.${state.success}`)}
-        </p>
+        <Banner role="status" status="success" title={t(`results.${state.success}`)} />
       )}
-      <Button type="submit" disabled={disabled || pending}>
-        {pending ? t('working') : label}
+      <Button type="submit" disabled={disabled} isLoading={pending}>
+        {label}
       </Button>
     </form>
   );

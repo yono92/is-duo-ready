@@ -1,4 +1,4 @@
-import { Card } from '@/components/ui/surfaces';
+import { Card, EmptyState } from '@/components/ui/surfaces';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -38,7 +38,7 @@ export default async function Updates({
           <HistoryList items={history.items} locale={locale} showNames />
         ) : (
           <Card padding={5}>
-            <p className=" ">{t(real ? 'empty' : 'unavailable')}</p>
+            <EmptyState title={t(real ? 'empty' : 'unavailable')} headingLevel={2} />
           </Card>
         )}
         {history.pages > 1 && (

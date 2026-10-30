@@ -60,6 +60,11 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
           await page.getByRole('button', { name: t.preview, exact: true }).click();
           await expect(page.getByTestId('import-row')).toHaveCount(2);
           await expect(page.getByTestId('import-row').nth(1)).toContainText(t.errors.invalidUrl);
+          const errorRow = page.getByTestId('import-row').nth(1);
+          const errorText = errorRow.getByText(t.errors.invalidUrl, { exact: true });
+          expect(await errorText.evaluate((element) => getComputedStyle(element).color)).not.toBe(
+            await errorRow.evaluate((element) => getComputedStyle(element).color),
+          );
           await page.getByRole('button', { name: t.start, exact: true }).click();
           await expect(page.getByTestId('import-row').first()).toContainText(result, {
             timeout: 20000,

@@ -11,6 +11,7 @@ import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
 import { FixtureNotice } from '@/components/fixture-notice';
 import { DirectoryControls } from '@/components/directory/controls';
+import { DirectoryOverview } from '@/components/directory/stats';
 import { AppCard } from '@/components/directory/app-card';
 import { ButtonLink } from '@/components/ui/button';
 import { pageMetadata, websiteStructuredData } from '@/lib/data/seo';
@@ -80,6 +81,7 @@ export default async function Home({
           {data.kind === 'available' && result ? (
             <>
               {data.fictional && <FixtureNotice />}
+              <DirectoryOverview stats={result.stats} fictional={data.fictional} />
               <div className="mt-5">
                 <DirectoryControls
                   query={query}

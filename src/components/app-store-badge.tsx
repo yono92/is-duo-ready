@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
+import { Link } from '@/components/ui/link';
 
 export async function AppStoreBadge({ url, name }: { url: string; name: string }) {
   const t = await getTranslations('AppAssets');
   return (
-    <a
+    <Link
       href={url}
       target="_blank"
       rel="noopener noreferrer"
@@ -12,6 +13,6 @@ export async function AppStoreBadge({ url, name }: { url: string; name: string }
       className="inline-flex min-h-11 shrink-0 items-center p-2.5"
     >
       <Image src="/badges/app-store.svg" alt={t('badgeAlt')} width={120} height={40} unoptimized />
-    </a>
+    </Link>
   );
 }

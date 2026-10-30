@@ -161,3 +161,16 @@ AdSense 인증 메타 태그는 설치된 Next.js Metadata API의 `other` 필드
 ### 공통 푸터 정보 — 2026-10-30
 
 공통 locale layout의 푸터를 저작권·독립 서비스 설명과 이름 있는 탐색 영역으로 구성한다. Footer 메시지 namespace와 기존 Astryx locale Link를 사용한다. 기존 탐색 E2E의 링크 이름을 갱신하고 필수 검사 및 ko/en 푸터 렌더링을 확인한다.
+
+### Astryx 미적용 부분 전체 교체 — 2026-10-30
+
+공통 어댑터와 소비 화면만 수정한다. Button의 isLoading 전달로 native disabled와 busy를 분리한다.
+RoutePagination에 선택적인 hasMore와 쿼리 보존을 추가해 검토 큐의 기존 hasNext를 연결한다.
+설치된 Pagination 0.7.4는 totalPages 없이 hasMore를 지원하므로 DB 조회나 총수 추정이 필요 없다.
+클라이언트 AdminNavigation은 locale 제외 pathname의 가장 구체적인 경로를 선택하고 TopNav 안에서
+항목을 줄바꿈한다. Link는 해시에서 Astryx의 as='a' 렌더러를 쓰고 일반 내부 경로는 locale 라우터를
+유지한다. 부드러운 스크롤은 해시 탐색 링크에 초점이 있을 때만 적용하여 폼·필터 조작 중
+팝오버 앵커가 애니메이션으로 이동하지 않도록 한다.
+기존 문구로 EmptyState/Banner를 구성하고 일반 의미 구조·숨겨진 데이터·전용 3D 조작은 보존한다.
+busy 중 초점/중복 요청, 360px 중첩 관리자 메뉴, 31개 항목의 양 검토 큐 hasMore/state 보존,
+스킵 링크의 첫 Tab/본문 이후 Tab, 오류 색상을 기존 격리 브라우저 검증에 포함한다.

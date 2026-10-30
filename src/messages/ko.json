@@ -69,6 +69,20 @@
     "realResults": "앱 {count}개",
     "realEmptyDescription": "검색어나 필터를 바꿔보세요. 찾는 앱이 없다면 추가를 요청할 수 있습니다."
   },
+  "DirectoryStats": {
+    "shareOfTotal": "전체 공개 앱 대비",
+    "distributionTitle": "지원 상태별 앱 비율",
+    "title": "공개 앱 지원 현황",
+    "sampleTitle": "예시 앱 지원 현황",
+    "total": "한국 App Store · 앱 {count, number}개",
+    "sampleTotal": "한국 App Store · 예시 앱 {count, number}개",
+    "supported": "공식 지원",
+    "planned": "지원 예정",
+    "unknown": "근거 미확인",
+    "unsupported": "미지원 확인",
+    "scope": "공개 앱 전체 기준 · 검색·필터 결과와는 별도입니다.",
+    "sampleScope": "가상 예시 앱 전체의 집계입니다. 실제 앱 지원 현황이 아닙니다."
+  },
   "Categories": {
     "productivity": "생산성",
     "graphics-design": "그래픽 및 디자인",
@@ -490,5 +504,11 @@
   "InitialPublication": {
     "summary": "듀오 지원 근거가 아직 확인되지 않아 미지원으로 표시합니다. 공식 미지원 발표나 실기기 테스트 결과를 뜻하지 않습니다.",
     "reason": "초기 목록 공개: 공식 지원 문구가 있으면 지원, 나머지는 지원 근거 미확인으로 표시합니다."
+  },
+  "PopularImport": {
+    "supportSummary": "한국 App Store 업데이트 내역에서 iPhone Duo 대응을 명시했습니다. 자세한 내용은 공식 근거에서 확인할 수 있습니다.",
+    "summary": "듀오 지원을 명시한 공식 근거가 아직 확인되지 않았습니다. 공식 미지원 발표나 실기기 테스트 결과를 뜻하지 않습니다.",
+    "investigation": "한국 App Store의 최신 업데이트 내역을 확인했으나 듀오 지원 판정에 사용할 명시적인 공식 근거를 확보하지 못했습니다. 제품 페이지 배지와 개발사 과거 공지는 추가 확인이 필요합니다.",
+    "reason": "한국 App Store 인기 차트 앱 우선 등록: 확인한 공식 근거에 따라 지원 상태를 표시합니다."
   }
 }

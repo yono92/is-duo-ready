@@ -358,8 +358,8 @@ export function EditForm({ initial }: { initial: AdminDraft }) {
       {state.error && (
         <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
-      <Button type="submit" disabled={pending}>
-        {t(pending ? 'working' : 'saveDraft')}
+      <Button type="submit" isLoading={pending}>
+        {t('saveDraft')}
       </Button>
     </form>
   );
@@ -400,8 +400,8 @@ export function ReviewForm({ app }: { app: AdminDraft & { id: string; revision: 
         {state.error && (
           <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
         )}
-        <Button type="submit" disabled={pending}>
-          {t(pending ? 'working' : 'applyReview')}
+        <Button type="submit" isLoading={pending}>
+          {t('applyReview')}
         </Button>
       </form>
     </Card>

@@ -921,6 +921,47 @@ main과 동기화한다. 배포는 위 고정 소스이며 저장소의 동시 �
 --limit 20 --json`은 정상 종료했고 반환된 오류 행은 0개였다. 로그 범위 밖의 전체 운영 무오류를
 보증하는 결과는 아니다. `git diff --check`도 통과했다.
 
+## 인기 차트 앱 우선 DB 등록 — 2026-10-30
+
+사용자 정정에 따라 정렬 UI보다 실제 인기 앱 수록을 우선했다. `collect-popular-apps.ts`는
+공식 KR 무료·유료 차트 각 100개와 KR Lookup을 수집·재개하고 CSV를 만든다. 이 명령의
+DB 쓰기는 0건이다. `import-popular-apps.ts`는 명시적 대상·프로젝트·완료 자료·검토한
+원문 발췌를 검증하고 기존 역할/RLS/가져오기·편집·공개 함수를 재사용한다. 기존 앱은
+갱신하지 않고 발견 기록만 추가하며, 분류 없는 앱은 원본 장르를 가진 초안으로 남긴다.
+임시 CLI 실행 신원은 실제 사람의 검토자로 표현하지 않고 같은 트랜잭션에서 제거한다.
+
+실제 결과: Lookup 200/200 성공, 차트 기존 13개·누락 187개. dry-run은 rollback했고,
+apply는 신규 supported 9개·unknown 178개를 저장했다. 전체 DB 315개, 공개 310개
+(supported 31·unknown 279), 의료 초안 5개, 저장 아이콘 315개다. 차트 앱과 지원 상태는
+200/200 DB에 있으며 공개 차트 앱은 195개다. 기존 공개 128개의 스냅샷 해시가 같았다.
+동일 자료로 apply를 다시 실행해 신규 생성 0개와 콘텐츠 16개 테이블 해시 변경 0개를
+확인했다. 익명 역할에서 의료 초안 아이콘 조회는 0개였다. 상세 출처·검토 범위·초안 목록은
+`docs/popular-data.md`, 실제 메타데이터/발췌는 Git 제외 `docs/data/popular-app-import-2026-10-30*`에 있다.
+
+실제 운영 HTTP 검사: 한국어 네이버플러스 검색 200/앱 카드, Chromagraph Camera 상세
+200/지원 원문/관찰 버전 1.1.3, 해당 아이콘 200/image/jpeg/56,267 bytes, 영어 Google Gemini
+검색 200/미확인 설명을 확인했다. 최신 릴리스 노트 검토는 전체 배지·과거 개발사 공지·실기기
+조사를 완료했다는 뜻이 아니다. 기존 판정·검토일과 근거를 수집 시각으로 바꾸지 않았다.
+
+회귀 검사:
+
+- `npm run lint`: 통과. 마지막 배치 변경 후 대상 ESLint/`tsc --noEmit`과 diff 공백 검사도 통과.
+- `npm run typecheck`: 통과.
+- `npm test`: 17개 파일, 81개 테스트 통과. 새 차트 테스트 3개는 국가/종류 혼합,
+  중복·불일치 ID·잘못된 시각 거부와 순위/지원 상태 분리를 검증한다. 누락했던 영어 메시지
+  키를 보완한 후 전체 i18n 검사도 통과했다.
+- `npm run test:e2e`: Chromium 28개 통과(55.8초). 공개 fixture 탐색·ko/en·테마·접근성·SEO
+  회귀이며 운영 DB 관리자 브라우저 전체 흐름을 새로 검증한 것으로 보고하지 않는다.
+- `npm run build`: 기본 Turbopack은 CSS 처리 중 포트 바인딩 `Operation not permitted`로
+  실패했고 제한 밖 재시도도 같았다. 설치된 Next 문서의 `--webpack` 옵션으로 실행한
+  `npm run build -- --webpack`은 컴파일·타입 검사·페이지 생성까지 통과했다.
+- 추가 `npm run test:production` 시도는 서버 exit 1로 중단돼 이 배치의 통과 항목으로
+  집계하지 않았다. 서버 stderr가 숨겨진 도구여서 이 실행의 구체적인 원인은 확정하지 않았다.
+
+공유 작업 폴더의 별도 기기 이미지·3D 공개·배포/commit 작업은 이 배치의 변경이나 성과로
+집계하지 않았다. 이번에는 DB 콘텐츠와 수집/반영 도구만 변경했으며 새 스키마·외부 프로젝트·
+앱 배포·상시 수집 스케줄러는 추가하지 않았다.
+
 ## 홈 광고 공간 확보 — 2026-10-30
 
 현재 페이지에 7개 이상의 앱이 있을 때 6번째 카드 다음에 광고 공간 하나를 서버에서
@@ -962,6 +1003,104 @@ Logs: `/tmp/duoready-adsense-meta-{e2e,build,webpack}.log`.
 Local code only. Production deployment, AdSense verification, review request,
 and approval have not been performed.
 
+## Git sensitive-information audit — 2026-10-30
+
+Snapshot: `HEAD` / local `origin/main` = `6edbe29`. The shared workspace gained a
+commit during inspection, so the checks were repeated against this snapshot.
+Scope: 282 tracked files, 5 untracked non-ignored files, the index, all 7 local
+commits, and all 1,114 stored Git blobs, including Codex checkpoint objects and
+unreachable objects. An additional 171 local ignored files were pattern-scanned;
+dependency, build, browser-report and agent-tooling caches were excluded from
+that additional working-directory scan. Remote-only refs, GitHub logs/artifacts,
+and account security settings were not audited.
+
+- Gitleaks 8.30.1, downloaded from its official release with SHA-256 checksum
+  verification: `git . --log-opts='--all --reflog' --redact` PASS, 0 findings.
+- Gitleaks directory scan of a temporary working-file / Git-object snapshot:
+  PASS, 0 findings. Scans ran locally; repository content and secrets were not
+  uploaded to an external scanner.
+- Additional byte-level patterns and exact comparison against local environment
+  secrets: no Production DB password, Supabase secret key or generated local
+  admin password found in tracked/untracked upload candidates, index or stored
+  Git blobs. Credential-shaped test strings and local PostgreSQL defaults were
+  reviewed as fixtures/defaults, not Production credentials.
+- `.env.local` and `.env.hosted.production.local` are untracked, ignored and
+  mode `0600`. `.env.example` has empty credential fields. No tracked file is
+  currently covered by an ignore rule.
+- **Privacy finding:** personal Gmail author/committer metadata exists in
+  `cc53d31`, `9e39214`, `31f0eed` and `6edbe29`, all contained in local
+  `origin/main`. The effective Git email is also personal. Use a verified GitHub
+  noreply address for future commits; changing configuration alone does not
+  remove existing metadata. No history rewrite or Git configuration change was
+  performed.
+- Three `docs/data/initial-app-*` files remain in a local `refs/codex` checkpoint,
+  not in the seven branch commits. They contained no detected credentials and
+  are not part of an ordinary branch push; a mirror push would include custom
+  refs. Current working copies are ignored.
+- Prevention gaps: repository CI has no dedicated secret scan, and standalone
+  private-key/credential/DB-dump filenames outside the ignored directories are
+  not covered by `.gitignore`. These are future commit risks, not discovered
+  leaks. GitHub push-protection status was not checked.
+
+Only this audit record was added by the audit. Application lint/typecheck/unit/
+E2E/build were not rerun because no application code changed. This is a bounded
+secret/privacy audit, not a guarantee that arbitrary unknown secrets cannot be
+present. Redacted scan reports: `/tmp/duoready-gitleaks-history.json`,
+`/tmp/duoready-gitleaks-snapshot.json`, `/tmp/duoready-secret-audit.json`.
+
+## 전체 앱 1,000개 확장 — 2026-10-30 후속 요청
+
+사용자는 기존 315개를 전체 약 1,000개까지만 확장하도록 요청했다. 기존 ID를 스냅샷으로
+보존하고 공식 KR 카테고리 RSS 44곳(22개 분류·무료/유료)에서 고유 후보 4,282개를
+수집했다. 기존 앱 제외 후보 4,056개 중 같은 차트 순위를 번갈아 택해 신규 685개를 선정했다.
+선정 출처 순위의 최댓값은 21위다. 실제 KR 일괄 Lookup 685/685 성공·실패 0개였다.
+수집은 DB 쓰기 0건이며 완료 자료 재실행에서 manifest 전체 해시·원래 관측/완료 시각이
+같았다. 첫 수집 구간은 2026-10-29T23:56:45.314Z–2026-10-30T00:01:23.860Z (UTC)다.
+
+일괄 조회는 기존 제한된 전송 경로를 재사용하고 요청당 20개 이하로 고정했다. 응답 순서와
+독립적으로 ID를 연결하고 누락/다른 국가/중복/예상 외 ID를 검증한다. 기존 단일 앱 조회의
+시간·본문·호출 간격·재시도 계약은 유지한다. 앱별 수집 시각은 해당 응답 성공 시각이며
+사람이나 실기기 검토 날짜로 바꾸지 않았다.
+
+공식 릴리스 노트의 긍정 후보를 직접 읽고 43개에 지원·화면 대응 근거를 준비했다. iPad의
+Duo 준비, 이름 없는 foldable iPhone 표현, 단독 버그 수정 2건은 unknown으로 유지했다.
+'아이폰 Duo' 혼합 표기도 확인했다. 상세 자료는 Git 제외
+`docs/data/popular-apps-1000-2026-10-30{,.reviews,.review-notes}.json`에 있다.
+
+최종 dry-run은 신규 685개(지원 43·미확인 642), 총 1,000개, 신규 분류 보류 0개,
+기존 공개 스냅샷 보존을 검증하고 rollback했다. 앞선 dry-run 뒤 혼합 표기 근거 1건을
+보완했으므로 최종 자료로 다시 dry-run한 뒤 apply했다. 315개 콘텐츠 백업을 남겼고
+기존 함수/역할/RLS를 사용했다. CLI UUID는 일회 실행 식별자이며 지속 관리자를 만들지
+않는다. 실제 반영은 총 1,000개·공개 995개(supported 74·unknown 921), 기존 의료
+초안 5개, 앱별 아이콘 1,000건이다. DB 전체 unknown은 초안을 포함해 926개다.
+
+반영 후 백업의 기존 315개 관련 콘텐츠 **모든 행**이 보존됨을 해시로 비교했다. 동일 자료로
+apply를 다시 실행해 기존 685개·신규 0개·총 1,000개, 콘텐츠 16개 테이블 해시 변경 0개를
+확인했다. 익명 역할에서 공개 아이콘 995개와 초안 아이콘 조회 0개를 검증했다. 상한 함수는
+정확한 최초 적용·재실행을 허용하고 DB 증가나 부족/초과 선정으로 합계가 1,000과 달라지면
+쓰기 전에 중단한다.
+
+실제 운영 HTTP: 카카오버스 한국어 검색 200/앱 카드, Shazam 상세 200/공식 지원 원문,
+저장 아이콘 200/image/jpeg/34,266 bytes, NFC Tools 영어 상세 200/접힘·펼침·Split View
+설명을 확인했다. 모든 앱의 실기기 지원이나 배지를 확인했다는 뜻은 아니다.
+
+회귀 검사:
+
+- `npm run lint`, `npm run typecheck`: 통과. 최종 대상 ESLint/`tsc --noEmit`과 공백·포맷 검사도 통과.
+- `npm test`: 17개 파일·86개 통과. 추가 검증은 일괄 ID 매칭·KR 실패·중복/초과/예상 외 응답,
+  공식 카테고리 출처·앱 URL, 균등 순위·중복 제외, 1,000개 상한·DB 변경·재실행이다.
+- `npm run test:db`: 격리 임시 DB 통합 15개 통과. 일반 앱 DB를 reset하지 않았다.
+- `npm run test:e2e`: 첫 실행은 3351 포트 `listen EPERM`으로 서버 시작 전 실패.
+  제한 밖 `DUO_TEST_PORT=3389 npm run test:e2e`는 Chromium 28개 통과(52.4초).
+  Next가 추가한 중복 tsconfig 경로 두 줄은 정리했다.
+- `npm run build`: 기본 Turbopack CSS 처리의 포트 바인딩 `Operation not permitted`로 실패.
+  설치된 Next CLI 문서의 옵션으로 실행한 `npm run build -- --webpack`은 최종 변경 후에도
+  컴파일·타입·정적 페이지 생성까지 통과했다. 기본 빌드를 통과로 기록하지 않는다.
+
+로컬 앱 콘텐츠, 운영 스키마·비밀 설정·기존 지원 판정은 변경하지 않았다. 새 프로젝트·
+앱 배포·상시 스케줄러는 만들지 않았고, 공유 작업 폴더의 별도 광고 레이아웃/감사/배포
+작업은 이 데이터 확장의 성과로 집계하지 않았다.
+
 ## Common footer information — 2026-10-30
 
 Added localized copyright, independent-service disclosure, support information
@@ -985,6 +1124,201 @@ Logs: `/tmp/duoready-footer-{lint,types,unit,e2e-retry,build,build-retry,webpack
 The footer commit uses the GitHub noreply identity already present in repository
 history. Unrelated in-progress changes are excluded from this commit.
 
+## 007 데이터 정합성·공개 집계 — 2026-10-30
+
+우선순위를 앱 수 확대에서 DB 정합성과 근거 품질로 전환했다. 공개 모집단은 KR/published
+앱 ID별 1행이며 내부 초안/보관은 제외한다. WorksOnDuo는 상태별 수 표시 방식만 참고했다.
+다른 서비스의 미국 스토어/화면 적응 분류를 우리 지원 판정 근거로 복사하지 않았다.
+
+반복 검사 `npm run data:check`와 `scripts/lib/content-quality.ts`의 25개 SQL 규칙을 추가했다.
+CLI는 REPEATABLE READ READ ONLY에서 읽고 기록을 `.data/quality/`의 0600 파일로 남긴다.
+공개된 판정·근거·원문·이력을 검사하며 정상 편집 초안의 차이는 경고로 구분한다. 공개
+스냅샷의 evidence ID로 남은 역사적 자료는 비공개 편집의 연결 변경만으로 무효화하지 않는다.
+실제 소스 재확인·실기기 검증·물리 아이콘 바이트 재검사를 수행한 것으로 표현하지 않는다.
+
+최종 감사 시각 2026-10-30T00:34:01.674Z (UTC): 내부 등록 1,000, 공개 995, 의료 초안 5,
+공식 지원 74, 내부 근거 미확인 926. 검사 오류 0건, 경고는 미분류 의료 초안 5건뿐이다.
+원본은 `.data/quality/audit-1793320442034.json`, 규칙 코드 SHA-256은
+`57800c29f7e977ae3003c598cd0f5a8834ccd6a3869776a6894daca4012a0bea`다.
+오류 0건이 미확인 926개 앱의 지원 여부를 검증했다는 뜻은 아니다.
+
+홈에 실제 Astryx Card·의미 있는 dl/dt/dd·국제화 숫자로 전역 집계 5개를 추가했다.
+공개 총수/지원/예정/미확인/미지원 확인을 구별하고 모집단 설명을 표시한다. fixture는
+가상 집계라고 표시하며 DB 오류에서 가상 값이나 0으로 대체하지 않는다.
+`queryDirectory`의 기존 별도 SELECT를 하나의 SQL로 합쳐 집계·검색 수·페이지 보정·정렬된
+목록이 같은 문장 스냅샷을 사용한다. 모든 상태의 합계가 총수와 다르거나 음수·누락·잘못된
+수이면 오류로 거부한다. 공개 집계 SQL은 비공개 앱 테이블을 읽거나 RLS를 우회하지 않는다.
+
+운영 DB 익명 역할에서 새 SQL을 읽기 전용 대조했다. 전역 집계는 공개 995/지원 74/예정 0/
+미확인 921/미지원 확인 0이었다. 전체는 24개씩 42페이지, 빈 검색 결과는 0개, 지원 필터는
+74개/4페이지이며 과도한 페이지 요청도 마지막 2개로 보정했다. 전역 집계는 필터와
+무관하게 같았고 초안 5개는 제외됐다. `.data/quality/public-stats-verification.json`에 기록했다.
+
+검증 결과:
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18개 파일·89개 통과. 합계/빈 모집단/필터 독립/잘못된 수 거부를 추가 검증했다.
+- `npm run test:db`: 격리 임시 DB 16개 통과. 공개 자료에 고의로 잘못된 상태/근거를 넣어
+  검사하는 테스트와 정상 초안·역사적 근거 보존, 기존 검색/빈 결과/페이지 검증을 포함한다.
+  테스트 자료는 일반 앱 DB에 넣지 않았다.
+- `DUO_TEST_PORT=3388 npm run test:e2e`: Chromium 30개 통과(51.7초). ko/en 집계 값과
+  검색 0개에서도 전역 수 유지, 360px 넘침 없음, 기존 테마·접근성·키보드 회귀를 확인했다.
+- `npm run build`: 기본 Turbopack은 CSS 처리 중 포트 바인딩 `Operation not permitted`로 실패.
+  `npm run build -- --webpack`은 컴파일·타입·페이지 생성까지 통과했다.
+- 포맷/공백 검사 통과. 테스트가 추가한 중복 tsconfig 경로는 제거했다. React 검토에서
+  추가 DB 요청·클라이언트 상태 없이 서버 집계를 사용하고 독립 locale 요청을 병렬화했다.
+
+이번 작업은 로컬 구현·읽기 전용 운영 점검이다. 운영 DB 행/판정/스키마는 변경하지 않았고
+집계 UI는 아직 배포하지 않았다. 공유 폴더의 별도 footer/광고/개인정보 감사 작업은 이
+정합성 작업의 성과로 집계하지 않는다. 정의·남은 근거 보강 과제는 `docs/data-quality.md`에 있다.
+
+### 007 집계 시각 수정 — 2026-10-30
+
+사용자 첨부 화면에 맞춰 숫자 Card를 제거하고 스토어·총수, 가로 비율 막대,
+아이콘·라벨·수의 가로 범례로 변경했다. 정적 그래프는 HTML/CSS와 Astryx 의미색을
+사용한다. 상태별 실제 개수로 폭을 계산하고 0개 상태는 범례에만 표시한다.
+막대는 장식으로 숨기고 전체 값은 텍스트와 dl/dt/dd로 제공한다. 빈 모집단은 빈 트랙이다.
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18개 파일·89개 통과.
+- `DUO_TEST_PORT=3388 npm run test:e2e`: Chromium 30개 통과(1.3분).
+  ko/en 총수·범례·실제 막대 비율·빈 검색의 전역 집계 유지·360px 넘침과 기존 접근성을 검증했다.
+- `npm run build`: 기존 Turbopack CSS 포트 바인딩 EPERM으로 실패.
+  Webpack 첫 시도는 공유 폴더의 빌드 잠금으로 중단됐으며 잠금 해제 후
+  `npm run build -- --webpack` 재시도는 컴파일·타입·페이지 생성 모두 통과했다.
+- 3390 로컬 미리보기는 기존 1,000개 스냅샷의 임시 PostgreSQL 복사본을 읽기 전용으로
+  제공한다. IAB 다크 화면에서 공개 995·지원 74·예정 0·미지원 확인 0·미확인 921을 확인했다.
+  양수 상태 두 구간만 있고 실제 너비 비율도 74/995와 921/995에 일치했다.
+- 화면 이미지: `/tmp/duoready-status-bar.jpg`. 테스트가 추가한 3388 tsconfig 경로만 제거했다.
+  운영 DB 변경·배포는 수행하지 않았다.
+
+### 007 실제 Astryx VegaChart 적용 — 2026-10-30
+
+사용자 승인으로 CSS 막대를 실제 `@astryxdesign/vega`의 VegaChart로 교체했다.
+`@astryxdesign/vega@0.7.5-canary.70ea859`, `vega@6.2.0`, `vega-lite@6.4.3`을
+잠금 파일과 정확한 버전으로 고정했다. core/theme-neutral 0.7.4와 React 19.3.1은 유지했다.
+차트만 별도 클라이언트 번들에서 SVG로 렌더하며, 집계·범례는 서버 HTML에 남긴다.
+Astryx 데이터 시각화 색상, 20px 가로 100% 누적 막대, 국제화 설명/툴팁, 차트 오류 안내를
+추가했다. 입력은 검토한 고정 spec와 공개 집계이며 외부 spec나 원격 데이터 로드를 받지 않는다.
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18개 파일·89개 통과.
+- 최종 `DUO_TEST_PORT=3388 npm run test:e2e`: 31개 통과(57.8초).
+  실제 SVG 4구간·개수 비율·차트 색상·모바일 너비·검색 독립성·JS 비활성 상태의 서버 집계와
+  기존 두 언어/테마/접근성 흐름을 확인했다. 초기 개발 검사에서 description 채널 타입 오류를
+  발견해 계산 필드로 수정한 뒤 최종 검사를 실행했다.
+- `npm run build`: 기존 Turbopack CSS 프로세스/포트 EPERM으로 실패.
+- `npm run build -- --webpack`: 타입·페이지 생성 통과. Vega의 사용하지 않는 wordcloud
+  의존 경로에서 선택적 Node `canvas` 모듈을 찾지 못하는 경고가 있다. SVG 브라우저 렌더는
+  정상이며 경고를 없애기 위한 네이티브 Canvas 의존성은 추가하지 않았다.
+- IAB production build 확인: 공개 995, 지원 74(7.4%), 미확인 921(92.6%). 양수 2구간만
+  렌더됐고 SVG 실제 너비도 74/995와 921/995였다. 색상은 green rgb(11,153,31), neutral
+  rgb(140,147,155)로 적용됐다. `/tmp/duoready-astryx-vega.jpg`에 화면을 저장했다.
+- 3390 미리보기는 검증한 실제 데이터 스냅샷의 읽기 전용 임시 로컬 DB를 사용한다.
+  운영 DB 변경/배포 없음. 이번 테스트가 추가한 3388 tsconfig 경로만 제거했다.
+
+진행 중 사용자가 일반 차트 대안도 질문했다. 공식 문서와 npm 배포 조건을 비교해
+Recharts/Nivo/ECharts/Chart.js를 안내하고, 이 서비스에는 Recharts를 추천했다.
+전환에 대한 새 선택을 받기 전에는 기존 승인 범위의 Astryx 구현을 유지했다.
+
+### 007 Recharts 전환 — 2026-10-30
+
+사용자가 Recharts 전환을 선택했다. `recharts@3.10.1`과 React 버전에 맞춘
+`react-is@19.3.1`을 정확히 고정하고 `@astryxdesign/vega`, `vega`, `vega-lite`를
+의존성과 잠금 파일에서 제거했다. 일반 UI와 툴팁 표면은 Astryx를 유지한다.
+DESIGN.md·PRD·007 명세/계획에 사용자가 선택한 차트 예외를 기록했다.
+
+`BarChart`의 vertical layout/expand stack으로 가로 100% 누적 막대를 렌더한다.
+0개 상태는 막대에서 제외하고 전체 범례에는 남긴다. 별도 클라이언트 번들로 로드하며,
+국제화 개수·비율 툴팁과 Recharts 키보드 접근성, 구간별 이름/이미지 역할을 제공한다.
+서버 HTML의 전체 개수·범례는 JS 없이 읽을 수 있다. 차트용 Astryx 데이터 색상을 유지한다.
+
+- `npm run lint`, `npm run typecheck`: 통과. `npm test`: 18개 파일·89개 통과.
+- 최초 Recharts 집중 3개와 전체 Chromium 31개는 통과했다. 실제 브라우저에서 숨김 영역의
+  SVG 포커스를 발견해 접근성 기능을 켰고, 다음 검사에서 구간 path의 aria-label에 필요한
+  role 누락 4개 시나리오를 발견해 `role="img"`로 수정했다.
+- 최종 `DUO_TEST_PORT=3388 npm run test:e2e`: 병행 작업의 새 본문 바로가기 검사가 포함돼
+  32개가 실행됐다. 차트·모바일·툴팁·키보드·ko/en·양 테마·axe를 포함한 31개 통과,
+  본문 바로가기 후 다음 Tab 초점 테스트 1개가 실패했다(1.2분). 코드 변경 없이 해당 1개를
+  단독 재실행하여 통과했다(3.1초). 전체를 한 번에 32개 통과했다고 기록하지 않는다.
+- `npm run build`: 기존 Turbopack의 device-preview CSS 프로세스/포트 EPERM으로 실패.
+  최종 `npm run build -- --webpack`은 경고 없이 컴파일·타입·페이지 생성 통과했다.
+  중간 재빌드 1회는 공유 폴더 빌드 잠금으로 중단돼 잠금 해제 후 재시도했다.
+  Vega의 선택적 Node canvas 경고는 제거됐다.
+- IAB 최종 production build: 995개 중 지원 74(7.4%)·미확인 921(92.6%), 0개 상태는
+  구간 없이 범례에만 표시됐다. 각 실제 너비는 83.2965/1036.7035px(합계 1120px)로 일치했다.
+  키보드 ArrowRight로 공식 지원 74 · 7.4% 툴팁과 접근 가능한 구간 이름을 확인했다.
+  화면은 `/tmp/duoready-recharts.jpg`에 저장했고 3390 로컬 미리보기를 갱신했다.
+- React 검토: 추가 DB 요청 없이 검증한 전역 숫자만 직렬화하고 차트만 지연 로드한다.
+  서버 범례·실제 Astryx Card·메시지 사전·모션 없는 렌더링·국가 KR을 유지한다.
+  포맷/공백 검사 통과. 테스트가 추가한 3388 tsconfig 경로만 제거하고 병행 작업의 경로와
+  본문 바로가기·관리자·색상 토큰 수정은 보존했다. 운영 DB 변경과 배포는 수행하지 않았다.
+
+### 007 Recharts 시각 완성도 — 2026-10-30
+
+사용자가 Recharts를 유지하며 디자인 디테일을 개선하도록 요청했다. 공개 총수 캡션과
+공식 지원 수 40px·전체 대비 비율을 나눠 읽히게 하고, 표시 막대는 14px·차트 영역은
+32px로 조정했다. 실제 구간 비율은 유지한다. 미확인 구간은 apple-theme.css의
+neutral/바탕색 혼합 토큰으로 낮은 강조를 주고, 범례는 4열/2열에서 아이콘·라벨·개수를
+가까이 정렬한다. Astryx 툴팁은 상태·큰 개수·보조 비율로 구분하고 끝 구간 모서리만 둥글린다.
+새 설명은 메시지 사전에 두고 기존 fixture·검색 독립·SSR·키보드·SVG 역할을 보존했다.
+
+- `npm run lint`, `npm run typecheck`: 통과. `npm test`: 18개 파일·89개 통과.
+- 최초 집중 3개 통과. 전체 `DUO_TEST_PORT=3388 npm run test:e2e`: 32개 통과(1.4분).
+- 실제 화면에서 범례 숫자와 라벨의 간격을 추가로 좁힌 뒤, 집계/SSR 및 ko/en·light/dark
+  반응형/axe 시나리오 7개를 재실행해 모두 통과했다(20.1초). 불필요한 전체 재실행은 하지 않았다.
+- `npm run build`: 기존 Turbopack device-preview CSS 프로세스/포트 EPERM으로 실패.
+  마지막 간격 수정을 포함한 `npm run build -- --webpack`은 경고 없이 컴파일·타입·페이지 생성 통과.
+- 영어 라이트 fixture의 데스크톱 화면을 눈으로 확인했다. IAB 실제 데이터 복사본의 한국어
+  다크 화면에서 995개·지원 74(7.4%)·미확인 921(92.6%)와 얇아진 막대·가까운 범례를 확인했다.
+  SVG 높이 14px, 실제 너비 83.2965/1036.7035px로 비율 불변을 확인했다.
+  `/tmp/duoready-recharts-polished.jpg`에 결과를 저장하고 3390 로컬 화면을 갱신했다.
+- 포맷·공백 검사 통과. 이번 테스트의 3388 tsconfig 경로만 제거하고 병행 작업의 경로는 유지했다.
+  읽기 전용 임시 로컬 DB 복사본을 사용하며 운영 DB 변경·배포는 수행하지 않았다.
+
+### 007 공개 집계·Recharts 운영 배포 — 2026-10-30
+
+사용자의 “이대로 배포” 지시에 따라 기존 `yonos-projects-8566d4cb/is-duo-ready`의 운영
+배포를 수행했다. Vercel 연결 플러그인은 올바른 기존 프로젝트 ID에도 404를 반환해,
+기존 인증 CLI 59.25.4로 팀·프로젝트 ID·Node 22·production 대상을 재확인했다.
+
+공유 폴더의 후속 변경이 섞이지 않게 HEAD `15cb021` 위에 검토한 공개 UI·집계 SQL·메시지·
+의존성 및 공개 공통 컴포넌트를 복사한 소스를 고정했다. 병행 중 관리자/operations 변경은
+제외했다. 고정 소스 경로는 `/private/tmp/duoready-directory-release-ba288wj6`, 실제 업로드는
+`/private/tmp/duoready-directory-upload-jez0ct48`이다. CLI dry-run과 파일 해시를 대조해
+248개 파일에 환경 파일·비공개 데이터·개발 PNG·로컬 도구/브라우저 자료가 없음을 확인했다.
+PNG 차단용 route.ts는 이미지가 아니라 404 경계 코드로 유지했다. 업로드 manifest SHA-256:
+`aa50c35e2cedaf894bcb19d2212cf7f7c039175949f3abf569ce304c2a26b25a`.
+
+- 고정 소스 `npm run lint`, `npm run typecheck`: PASS. `npm test`: 17개 파일·81개 PASS.
+  공유 폴더의 89개와 달리 미배포 수집/가져오기 변경 테스트는 포함하지 않았다.
+- 처음 E2E는 임시 폴더 밖 node_modules 심볼릭 링크를 Turbopack이 거부해 시작하지 못했다.
+  해당 테스트 프로세스만 중지하고 같은 의존성을 임시 폴더 안에 물리 복사한 뒤 재실행했다.
+  `DUO_TEST_PORT=3420 npm run test:e2e`: 32개 PASS(53.3초).
+- 고정 소스 `npm run build -- --webpack` PASS. `npm run test:production` 3개 PASS:
+  기본 fixture 차단·명시적 로컬 QA 허용·Vercel override/관리자/개발 이미지 차단.
+- `vercel deploy --prod --skip-domain`으로 만든 production 배포가 READY가 됐다.
+  고유 URL은 `https://is-duo-ready-b4xwj8y2c-yonos-projects-8566d4cb.vercel.app`이다.
+  원격 env:check와 Next 16.4.3 기본 Turbopack 빌드는 PASS(컴파일 9.6초·전체 약 1분).
+  기존 아이콘 저장소 동적 파일 접근 추적 경고 4개는 남아 있으며 오류로 기록하지 않는다.
+- Deployment Protection을 유지하고 `vercel curl`로 ko/en·빈 검색·지원 필터 200을 확인했다.
+  모두 전역 995/74/0/0/921을 유지하며 전체/지원 첫 페이지는 24개, 빈 검색은 0개였다.
+  실제 `/api/admin/collections` 401, 개발 PNG 404, SVG·WebP·실제 앱 아이콘·ads.txt 200.
+  첫 점검의 잘못된 `/api/admin/collect` 경로 404는 검증 경로를 수정하고 재확인했다.
+- 같은 READY 배포 `dpl_AXnktebDxPzs4Pi1n1vxefHvyGKz`를 promote했고 운영 별칭이
+  해당 ID를 가리키는 것을 다시 inspect했다. 이전 배포는 `dpl_BWrqsgqapobUvwfwX9XYNg4CGQCW`다.
+- 실제 공개 ko/en 브라우저에서 995개·74(7.4%)·921(92.6%)와 Recharts 렌더를 확인했다.
+  두 양수 구간은 83.2965/1036.7035px·높이 14px로 실제 비율에 일치했다. 한국어 차트의
+  ArrowRight 키보드 툴팁 74/7.4%와 영어 accessible name도 확인했다. 운영 화면을
+  `/tmp/duoready-production-directory.jpg`에 저장했다.
+- 최종 확인 시각 `2026-10-30T01:57:54Z`: 해당 배포의 최근 10분 error 로그(최대 100건)
+  0건, 새 공개 페이지 브라우저 error 로그 0건을 관측했다. 장기 무오류나 상시 모니터링을
+  의미하지 않는다. DB/스키마/Storage·환경 값·배포 보호는 변경하지 않았다.
+
+이번 배포는 위 고정 파일의 스냅샷이다. Git 커밋·푸시는 수행하지 않았으며 기준 HEAD만의
+배포로 표현하지 않는다. 재현·검증·복구 기록은 `.data/release/directory-ui-*.json`에 보존했다.
+로컬 기본 Turbopack EPERM 제한은 이전 기록과 같고, 원격 기본 빌드 성공과 구분한다.
+
 ## AdSense ads.txt — 2026-10-30
 
 Added `public/ads.txt` with the user's publisher ID:
@@ -1004,6 +1338,121 @@ redirect and byte-identical content (59 bytes). The locale proxy excludes this p
 Only ads.txt and its documentation are selected for this commit; concurrent
 application/data work is excluded. Production HTTP verification follows deployment.
 Logs: `/tmp/duoready-adstxt-{e2e,e2e-retry,build,webpack}.log`.
+
+## Astryx 전수검사 — 2026-10-30
+
+검사 보고서: [astryx-audit.md](astryx-audit.md). 최초 TSX 54개와 검사 중 병행 추가된
+Vega 통계 파일 1개를 확인했다. 제품 수정·배포는 수행하지 않았다. 오류 토큰·Button
+로딩 전달·관리자 현재 위치·EmptyState/Banner/Pagination/Link 누락 7개를 기록하고,
+언어 메뉴 키보드 실패는 앱/라이브러리/테스트 경합의 원인 미확정으로 따로 남겼다.
+001 T062–T064는 미완료다. 이전 전체 전환 완료 기록을 현재의 완전 적용 판정으로 삼지 않는다.
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18개 파일·89개 통과.
+- `DUO_TEST_PORT=3381 npm run test:e2e`: 29 통과·1 실패. Escape 뒤 ArrowDown으로
+  언어 메뉴를 다시 열 때 첫 항목 초점 검사 실패 (`directory.spec.ts:314`).
+- `DUO_TEST_PORT=3383 npm run test:e2e -- --grep 'language menu' --repeat-each=3 --workers=1`:
+  2 통과·1 실패. 이번 실패는 Home/Enter 후 `/en`에 남아 URL 검사 실패 (`:317`).
+  전체 실행의 1회까지 합하면 4회 중 2회 실패다. 통과로 보고하지 않는다.
+- `DUO_TEST_PORT=3382 npm run test:admin`: 격리 임시 DB에서 39개 통과(3.5분), 종료 0.
+  실제 날짜·파일·선택·체크·폼 저장/검토/공개와 ko/en·테마 접근성 흐름을 포함한다.
+- 공개 E2E/관리자 DB의 첫 샌드박스 실행은 EPERM으로 시작하지 못했고 필요한 실행
+  권한으로 재시도해 위 결과를 얻었다. 자동 승인 거절은 없었다.
+- `npm run build`: 기본 Turbopack CSS의 포트 바인딩 EPERM으로 실패. 권한 재시도도 동일.
+- `npm run build -- --webpack`: 컴파일·타입·정적 페이지 생성 통과.
+- 별도 Chromium DOM 검사에서 없는 `--color-text-error`가 빈 값이고
+  `text-destructive`가 본문색 `rgb(29,29,31)`로 떨어지는 것을 확인했다.
+- 병행 추가된 실제 `@astryxdesign/vega`의 SVG 및 네 데이터 토큰 색상 해석도 확인했다.
+  전체 테스트·빌드는 각각 실행 시점 코드 기준이며, 병행 Vega 변경 전체의 회귀 통과를
+  대신하지 않는다. Safari/Firefox 또는 운영 배포를 검증했다고 주장하지 않는다.
+- 실패 trace는 `test-results/fixtures-3381/`와 `test-results/fixtures-3383/`에 보존했다.
+
+검사 보고서에 55개 파일별 위젯 경로와 정상 HTML/3D/이미지 예외를 함께 기록했다.
+
+## Astryx 미적용 부분 전체 교체 — 2026-10-30
+
+후속 사용자 요청에 따라 A01–A07을 수정했다. 공통 Button의 isLoading과 실제 disabled를 분리하고,
+관리자 TopNav의 중첩 경로 선택, EmptyState 5개 분기, 알림 7곳·로컬 안내의 Banner,
+검토/제보 hasMore Pagination, 브랜드·공식 배지·스킵 Link를 실제 Astryx로 연결했다.
+오류 토큰은 존재하는 `--color-error`를 사용한다. FormData·기존 문구·공식 이미지·URL state와
+가져오기 중지 동작은 보존했다. DB 쿼리/스키마·인증·배포는 변경하지 않았다.
+
+초기 A06 설명의 누락을 정정한다. 설치된 Pagination 0.7.4는 totalPages 없이 hasMore를 지원한다.
+RoutePagination이 기존 hasNext를 그대로 전달하고 URLSearchParams로 state 쿼리를 보존한다.
+서버는 계속 기존의 31행 조회로 30개 표시·hasNext를 판정하며 가짜 전체 페이지 수를 만들지 않는다.
+
+중간 검사에서 발견하고 수정한 회귀:
+
+- Astryx Link를 locale Link로만 렌더링하면 스킵 후 다음 Tab이 본문으로 이어지지 않았다.
+  해시는 Astryx의 `as='a'` 렌더러를 사용해 native fragment 이동을 보존했다. 새 회귀 검사에서
+  첫 Tab·Enter 해시 이동·본문 표시·다음 Tab의 본문 링크 초점을 모두 확인했다.
+- 첫 관리자 전체 E2E는 37 통과·2 실패였다. 768px 한국어 가져오기에서 선택 팝오버가
+  스크롤 중 닫혔다. trace에서 애니메이션 중 이동하는 앵커를 확인하고 폼 focus-within 중의
+  스크롤을 즉시 처리하자 두 실패 흐름이 통과했다.
+- 이어 공개 전체 실행은 31 통과·1 실패로 정렬 선택 중 timeout이 났다. 폼 밖 필터에도 같은
+  자동 스크롤 경로가 있어 최종적으로 smooth scroll을 해시 링크 탐색에만 적용했다.
+  공개 선택·페이지 이동·모바일 필터·스킵 재검사 3개가 통과했고 이후 전체 검사도 통과했다.
+  임의 대기·강제 클릭·테스트 삭제로 숨기지 않았다.
+
+최종 검증:
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18개 파일·89개 통과.
+- `DUO_TEST_PORT=3404 npm run test:e2e -- --workers=1`: **32개 통과(1.5분)**.
+  ko/en·양 테마·360/768/1440px·접근성·모바일 Dialog·URL 상태·스킵·기기 조작을 포함한다.
+- `DUO_TEST_PORT=3402 npm run test:admin`: **42개 통과(3.3분)**, 격리 임시 DB 정리까지 종료 0.
+  새 busy 초점/중복 요청 검사, 중첩 메뉴/360px 줄바꿈, 두 큐의 31개 항목 페이지 이동,
+  기존 날짜·파일·체크·저장·검토·공개·알림 및 양 테마 오류 색상 검증을 포함한다.
+- 별도 신규 관리자 회귀 3개, 768px 실패 흐름 2개 및 스킵 재검사도 통과했다.
+- 언어 메뉴 기존 검사를 단일 worker로 반복 5회 실행해 모두 통과했다. 전체 공개 검사에서도
+  통과했으나 원인을 수정한 것이 아니므로 A08/T064를 해결했다고 선언하지 않는다.
+- `npm run build`: 기존 Turbopack CSS 포트 바인딩 EPERM으로 실패.
+- `npm run build -- --webpack`: 최종 코드의 컴파일·타입·정적 페이지 생성 통과.
+- 수정 파일 포맷·`git diff --check` 통과. React 검토에서 서버/클라이언트 경계,
+  locale 메시지, 조건 없는 hook, pending 중 초점/중지 및 모바일 overflow를 확인했다.
+
+최종 AST 재검사 대상은 TSX 57개다. native a/button/select/textarea/dialog/details/progress는 없고,
+직접 작성된 input은 hidden payload/id/revision/operation 4곳과 숨겨진 honeypot 1곳만 남았다.
+DESIGN.md의 전용 3D 조작과 병행 사용자 선택 Recharts 차트 예외는 보존한다.
+단일 worker 전체 공개 실행은 동시 검증 시의 GPU/브라우저 자원 경합을 줄이기 위한 선택이며,
+케이스·기대값·접근성 검사를 줄이지 않았다. 이번 실행 환경은 Chromium이며 운영 배포는 하지 않았다.
+
+로그: `/tmp/duo-astryx-{complete-e2e,final-admin,final-unit,complete-webpack,final-build}.log`.
+초기 회귀 trace는 `test-results/admin-3389/`, `test-results/fixtures-3394/`,
+`test-results/fixtures-3401/`에 보존했다. 테스트가 추가한 전용 포트의 tsconfig 경로만 정리한다.
+
+## Astryx 교체 후 재전수검사 — 2026-10-30
+
+보고서: [astryx-reaudit.md](astryx-reaudit.md). TSX 57개를 AST로 재확인하고 래퍼·provider·
+소비 화면·CSS/설치된 패키지 API를 대조했다. 추가 미교체 위젯은 발견하지 못했다.
+native interactive JSX는 기존 hidden 서버 데이터 input 4곳과 숨겨진 honeypot 1곳만 남았다.
+61개 자체 TSX/CSS의 변수 참조 중 미정의 값은 fallback이 있는 `--font-size-body-md`뿐이었다.
+
+새 R01: TextArea 래퍼는 native textarea props를 받지만 Astryx maxLength를 소비자 검증 없이
+전달한다. 해당 API는 grapheme counter/초과 표시이며 native maxlength를 설정하지 않는다.
+실제 래퍼 SSR 마크업을 독립 Chromium 문서에 올려 4000자 + 키보드 1자를 입력하니
+4001자·DOM maxLength=-1·form.checkValidity=true였다. native 대조군은 4000자에서 멈췄다.
+React hydration 후 counter를 재현한 실험으로 확대하지 않는다. client 구현의 ARIA 표시와
+native 제출 검증을 별도 대조했고 서버에는 UTF-16/UTF-8 길이 제한이 유지됨을 확인했다.
+새 R01은 8개 TextArea 호출의 입력·안내·서버 길이 단위 계약 문제이며 제한 우회 보안 문제로 세지 않았다.
+
+- `npm run lint`, `npm run typecheck`: 통과.
+- `npm test`: 18파일·89개 통과.
+- `DUO_TEST_PORT=3411 npm run test:e2e -- --workers=1`: **32개 통과(2.2분)**.
+- `DUO_TEST_PORT=3412 npm run test:admin`: **41 통과·1 실패(4.2분)**. en/light/768 가져오기에서
+  입력 방식 Selector를 열고 표시된 CSV option을 클릭하는 단계가 60초 timeout에 도달했다.
+- `DUO_TEST_PORT=3414 npm run test:admin -- --grep 'import CSV.*en light 768' --repeat-each=3`:
+  **3개 통과**. 원인은 미확정이며 전체 관리자 E2E 통과로 바꿔 보고하지 않는다.
+- `DUO_TEST_PORT=3415 npm run test:e2e -- --grep 'language menu' --repeat-each=10 --workers=1`:
+  **10개 통과**. 과거 A08의 원인을 수정한 것은 아니므로 T064를 완료하지 않았다.
+- `npm run build`: 기존 Turbopack CSS 포트 바인딩 EPERM 실패.
+- `npm run build -- --webpack`: 컴파일·타입·정적 페이지 생성 통과.
+- `git diff --check`: 통과. 보고서·작업 목록 외 제품 구현 변경이나 배포는 수행하지 않았다.
+
+확정 R01과 원인 미확정 R02는 각각 T066/T067로 미완료 등록했다. 검사 단계 T065만 완료했다.
+파일별 위젯·source hash 목록과 독립 probe·브라우저 기록은 `test-results/astryx-reaudit/`에 보존했다.
+실패 trace는 `test-results/admin-3412/`에 보존했다. 검증은 Chromium/격리 로컬 DB 기준이다.
+로그: `/tmp/duo-astryx-reaudit-{unit,public,admin,import-repeat,language,build,webpack}.log`.
 
 ## CI failure investigation and parallel verification — 2026-10-30
 
@@ -1167,6 +1616,56 @@ locale/detail/history scenario with device readiness repeated3 times:3 PASS
 cleanup (custom root removed), native keyboard behavior and URL preservation.
 Remote verification of this smaller fix remains pending at this commit.
 
+## Full official-wording rescan — 2026-10-30
+
+Owner requested another whole-directory source check. Used the Supabase connector to read a
+fixed baseline of 1,000 existing App Store identities, private support/evidence and public
+snapshots. No database write, administrator approval, migration, publication or deployment
+was performed. End-of-run connector SELECT confirmed registered1,000/draft5/public995,
+supported74/planned0/unknown921/unsupported0.
+
+- Latest KR Lookup: 1,000/1,000 successful. Captured release notes, descriptions, actual
+  version and per-response observation times via the existing bounded/validated batch API
+  (maximum20/request,3-second spacing and existing retries). A sandbox DNS failure initially
+  recorded40 network failures; the authorized network retry replaced those failed rows.
+  Final failure count0; failed fetches were never interpreted as lack of support.
+- Public KR product pages: 1,000/1,000 successful, final failures0. Requested two at a time
+  with750ms between pairs,20-second timeouts,4MiB limits and bounded retries. Validated KR
+  product identity before extracting its description and embedded version history. Scanned
+  19,692 version records, up to25/app. Completion2026-10-30T04:17:04.385Z.
+- Excluded customer reviews, recommended apps and general compatible-device lists as
+  support proof. Supplemented with three actual KR Apple Duo editorial collections and
+  selected current-feature passages in the KR Apple announcement dated2026-10-22. Its
+  forward-looking Outlook wording became a planned candidate, not current support.
+- Directly reviewed device-relevant candidate wording and documented generic foldable,
+  preparation, bug-only and unrelated-name cases. Additional support-evidence candidates90,
+  planned candidate1, unresolved keyword-review candidates0. All90 are existing published
+  unknown apps. This is AI-assisted source review, not administrator publication approval.
+  Existing supported74 exact evidence excerpts were all reobserved in current source text
+  or embedded history. No support cancellation or invented first-support/test/review date.
+- Preserved material qualifications: Wide Web outer-display-only; VoidLink explicitly
+  simulator-tested by its developer; The Outsiders current support versus future enhancements.
+  Missing text is not evidence of unsupported behavior. Developer sites, every historical
+  version, visual badge observation and physical devices were not comprehensively checked.
+- Completed-manifest resume verified with global fetch disabled: both commands succeeded,
+  source SHA-256 values and original observation/completion times unchanged. Independent
+  report assertions checked1,000 unique baseline IDs,1,000 successes per source,90 published
+  unknown candidates with source records,74 reobserved original claims and no pending review.
+
+Versioned read-only CLIs: scripts/rescan-app-evidence.ts and scripts/rescan-app-pages.ts.
+Source manifests, private baseline, per-app reviewed originals/reasons, supplemental source
+hashes and final verification are ignored0600 files. Durable source links and scope are in
+docs/evidence-review-2026-10-30.md. The temporary report generator initially had a template
+quoting error; corrected it and rejected missing evidence URLs before producing the report.
+
+Checks: npm run lint PASS; npm run typecheck PASS; npm test18files/89tests PASS;
+DUO_TEST_PORT=3447 npm run test:e2e32Chromium tests PASS(1.2m). First E2E server start hit
+local sandbox listen EPERM; retry with authorized local execution passed. Default npm run
+build failed on the existing Turbopack CSS process/port EPERM even on retry; isolated
+DUO_TEST_RUN=1 DUO_TEST_PORT=3448 npm run build -- --webpack PASS. Only test-generated
+3447/3448 tsconfig include entries were removed afterward; concurrent pre-existing entries
+were preserved. Formatting of both new scripts and final diff whitespace checks passed.
+
 ## CI remaining scenario budgets and shard balance — 2026-10-30
 
 Run 41001179921 for 82eb2e8 passed both admin shards (39 tests), static
@@ -1190,3 +1689,61 @@ as three13-test shards on the committed source. Every runner still has one
 browser worker; the databases remain independent. All gates and the verify
 aggregator remain required. Official checksum-verified actionlint1.7.12 PASS.
 Remote completion and elapsed time for this commit remain pending.
+
+## CI rollout completed — 2026-10-30
+
+Main commit: 16aaacd0b787e50ae3adbe17e52550d92cf33a73.
+Run: https://github.com/yono92/is-duo-ready/actions/runs/41002311291
+Final status: completed / success, including verify.
+KST:13:20:07–13:24:47, total4m40s (all8 jobs successful). The initially
+inspected failing run took9m35s; this successful complete run took295s less
+(about51% shorter). This is a measured single-run comparison, not a latency SLA.
+
+Exact committed-source results:
+- Lint and typecheck PASS; unit78 PASS across16 files.
+- Fixture browsers:14 +14 =28 PASS.
+- Isolated admin browsers:13 +13 +13 =39 PASS.
+- Isolated DB integration:15 PASS.
+- Default Turbopack production build PASS.
+- All3 fixture/auth/asset production guard scenarios PASS.
+- Production DB public/private, both locales, history/sitemap/admin robots PASS.
+- Final verify aggregator PASS.
+
+All product/workflow/test fixes are pushed to main. Final completion evidence
+is recorded here in the working documentation; no extra documentation-only
+CI rerun was triggered. Existing unrelated local product changes were not
+included in these CI commits. The temporary renderer refactors remain fully
+reverted.
+
+## Latest source release validation and Git synchronization — 2026-10-30
+
+The owner requested replacing the current production version with the latest local source.
+Inspection confirmed production dpl_A1sJRTbHmEVR4QSLvC4tUs7p6pz3 came from main
+16aaacd0b787e50ae3adbe17e52550d92cf33a73 at 13:20 KST. That commit lacked the
+uncommitted Recharts overview previously deployed as a working-source snapshot.
+The latest release therefore includes the existing public overview, single-statement
+published statistics, Astryx public/admin changes, import/data-quality tooling and
+associated tests/specifications in Git so subsequent main deployments retain them.
+No production data, evidence decisions, schema, environment values or protection changes
+are part of this release. Ignored credentials/data/development artwork and generated
+Next type paths are excluded from the source commit.
+
+Verification of the unchanged working source:
+- npm run lint: PASS, zero errors; one warning in ignored local .data research code.
+- npm run typecheck: PASS.
+- npm test: 18 files / 89 tests PASS.
+- DUO_TEST_PORT=3461 npm run test:e2e -- --workers=1: 32 Chromium tests PASS (2.0m).
+- npm run test:db: 16 isolated database integration tests PASS.
+- DUO_TEST_PORT=3462 npm run test:admin: 42 Chromium tests PASS (4.1m).
+- npm run build: failed on existing local Turbopack CSS process/port EPERM.
+- npm run build -- --webpack: PASS; production route generation completed.
+- npm run test:production: all three fixture/auth/artwork guard scenarios PASS.
+- npm run test:production:db: published/private, both locales, sitemap/detail/history
+  and administrator crawler boundaries PASS using a disposable local database.
+- Changed-source hashes were unchanged throughout verification. Credential-pattern
+  scan of changed files found no matches; this is a bounded check, not a security audit.
+
+Rollout uses the existing yonos-projects-8566d4cb/is-duo-ready project, Git main and
+Node 22. Deployment and CI results must be checked separately from local validation.
+The final commit/deployment IDs, public browser/HTTP checks and CI results are retained
+in the ignored .data/release/latest-source-release-result.json release record.

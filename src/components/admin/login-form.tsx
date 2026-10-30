@@ -35,8 +35,8 @@ export function LoginForm({ enabled }: { enabled: boolean }) {
       {state.error && (
         <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
-      <Button type="submit" disabled={!enabled || pending}>
-        {t(pending ? 'working' : 'login')}
+      <Button type="submit" disabled={!enabled} isLoading={pending}>
+        {t('login')}
       </Button>
     </form>
   );

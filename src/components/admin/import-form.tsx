@@ -69,8 +69,8 @@ export function ImportForm() {
       {state.error && (
         <Banner role="alert" status="error" title={<>{t(`errors.${state.error}`)}</>} />
       )}
-      <Button type="submit" disabled={pending}>
-        {t(pending ? 'working' : 'preview')}
+      <Button type="submit" isLoading={pending}>
+        {t('preview')}
       </Button>
     </form>
   );
@@ -125,7 +125,7 @@ export function ImportProgress({ initial }: { initial: ImportRun }) {
       </div>
       <div className="flex flex-wrap gap-3">
         {remaining > 0 && (
-          <Button disabled={pending} onClick={() => proceed()}>
+          <Button isLoading={pending} onClick={() => proceed()}>
             {t('start')}
           </Button>
         )}
@@ -140,7 +140,7 @@ export function ImportProgress({ initial }: { initial: ImportRun }) {
           </Button>
         )}
         {retryable && (
-          <Button variant="outline" disabled={pending} onClick={() => proceed(true)}>
+          <Button variant="outline" isLoading={pending} onClick={() => proceed(true)}>
             {t('retry')}
           </Button>
         )}

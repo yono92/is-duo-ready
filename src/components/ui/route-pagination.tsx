@@ -6,11 +6,13 @@ import { useTransition } from 'react';
 export function RoutePagination({
   page,
   pages,
+  hasMore,
   path,
   label,
 }: {
   page: number;
-  pages: number;
+  pages?: number;
+  hasMore?: boolean;
   path: string;
   label: string;
 }) {
@@ -20,10 +22,17 @@ export function RoutePagination({
     <Pagination
       page={page}
       totalPages={pages}
+      hasMore={hasMore}
+      variant={pages === undefined ? 'none' : 'pages'}
       label={label}
       isDisabled={pending}
       className="mt-6"
-      onChange={(next) => startTransition(() => router.push(`${path}?page=${next}`))}
+      onChange={(next) => {
+        const [pathname, search] = path.split('?');
+        const params = new URLSearchParams(search);
+        params.set('page', String(next));
+        startTransition(() => router.push(`${pathname}?${params}`));
+      }}
     />
   );
 }

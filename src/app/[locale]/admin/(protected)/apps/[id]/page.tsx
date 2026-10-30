@@ -1,5 +1,5 @@
 import { Link } from '@/components/ui/link';
-import { Card } from '@/components/ui/surfaces';
+import { Card, Banner } from '@/components/ui/surfaces';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
@@ -47,11 +47,12 @@ export default async function EditApp({
       )}
       <p className="mt-3 text-sm text-muted-foreground">{t(`publication.${app.publication}`)}</p>
       {(query.saved || query.reviewed) && (
-        <Card padding={5}>
-          <p role="status" className="mt-5 ">
-            {t(query.reviewed ? 'reviewed' : 'saved')}
-          </p>
-        </Card>
+        <Banner
+          role="status"
+          status="success"
+          className="mt-5"
+          title={t(query.reviewed ? 'reviewed' : 'saved')}
+        />
       )}
       <EditForm key={`${app.id}-${app.revision}`} initial={app} />
       {!!proposals.length && (

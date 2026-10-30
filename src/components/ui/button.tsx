@@ -8,6 +8,7 @@ type Variant = 'default' | 'outline' | 'secondary' | 'ghost' | 'destructive';
 type ButtonProps = ComponentProps<'button'> & {
   variant?: Variant;
   size?: 'default' | 'icon';
+  isLoading?: boolean;
 };
 
 const variants = {
@@ -23,6 +24,7 @@ export function Button({
   variant = 'default',
   size = 'default',
   disabled,
+  isLoading,
   className,
   ...props
 }: ButtonProps) {
@@ -39,6 +41,7 @@ export function Button({
       icon={icon}
       variant={variants[variant]}
       isDisabled={disabled}
+      isLoading={isLoading}
       isIconOnly={size === 'icon'}
       size="lg"
       className={className}

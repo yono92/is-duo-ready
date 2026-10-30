@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Collapsible, Card, Banner } from '@/components/ui/surfaces';
+import { Collapsible, Card, Banner, EmptyState } from '@/components/ui/surfaces';
 import { Select, Checkbox } from '@/components/ui/form-controls';
 import { OperationForm } from '@/components/operations/operation-form';
 import { Input } from '@/components/ui/input';
@@ -58,8 +58,8 @@ export function CollectionDashboard({
         <p className="mt-3 max-w-3xl text-muted-foreground">{t('collectionHelp')}</p>
       </header>
       <div className="flex flex-wrap items-center gap-3">
-        <Button variant="outline" disabled={isFetching} onClick={() => void refetch()}>
-          {t(isFetching ? 'refreshingOverview' : 'refreshOverview')}
+        <Button variant="outline" isLoading={isFetching} onClick={() => void refetch()}>
+          {t('refreshOverview')}
         </Button>
         <p className="text-sm text-muted-foreground">{t('overviewRefreshHelp')}</p>
       </div>
@@ -147,17 +147,18 @@ export function CollectionDashboard({
                 </div>
               </dl>
               {target.failures >= 3 && (
-                <p role="status" className="font-medium">
-                  {t('longFailure')}
-                </p>
+                <Banner role="status" status="warning" title={t('longFailure')} />
               )}
               {target.last_error && (
-                <p className="text-sm text-destructive">
-                  {t('collectionError')}{' '}
-                  {t.has(`errors.${target.last_error}`)
-                    ? t(`errors.${target.last_error}`)
-                    : t('errors.upstream')}
-                </p>
+                <Banner
+                  status="error"
+                  title={t('collectionError')}
+                  description={
+                    t.has(`errors.${target.last_error}`)
+                      ? t(`errors.${target.last_error}`)
+                      : t('errors.upstream')
+                  }
+                />
               )}
               <div className="flex flex-wrap gap-4">
                 <OperationForm
@@ -180,7 +181,7 @@ export function CollectionDashboard({
           </li>
         ))}
       </ul>
-      {!data.targets.length && <p>{t('emptyTargets')}</p>}
+      {!data.targets.length && <EmptyState title={t('emptyTargets')} headingLevel={2} />}
       <section>
         <h2 className="mb-4 text-xl font-semibold">{t('recentRuns')}</h2>
         <ul className="space-y-3">
@@ -200,7 +201,7 @@ export function CollectionDashboard({
             </li>
           ))}
         </ul>
-        {!data.runs.length && <p>{t('emptyRuns')}</p>}
+        {!data.runs.length && <EmptyState title={t('emptyRuns')} />}
       </section>
     </section>
   );

@@ -145,8 +145,7 @@ async function boundedJson(response: Response): Promise<unknown> {
   }
 }
 
-export async function lookupApple(id: string, options: AppleLookupOptions = {}) {
-  if (!/^[1-9][0-9]{0,19}$/.test(id)) throw new ImportError('invalidUrl');
+async function requestApple(ids: string[], options: AppleLookupOptions = {}) {
   const {
     fetcher = fetch,
     beforeAttempt = defaultSpacing,
@@ -161,7 +160,7 @@ export async function lookupApple(id: string, options: AppleLookupOptions = {}) 
     let retryAfter = 0;
     try {
       const response = await fetcher(
-        `https://itunes.apple.com/lookup?id=${id}&country=kr&entity=software`,
+        `https://itunes.apple.com/lookup?id=${ids.join(',')}&country=kr&entity=software`,
         {
           redirect: 'error',
           signal: controller.signal,
@@ -180,8 +179,7 @@ export async function lookupApple(id: string, options: AppleLookupOptions = {}) 
           response.status === 429 ? 'rateLimited' : response.status >= 500 ? 'upstream' : 'http',
         );
       }
-      const item = normalizeApple(await boundedJson(response), id);
-      return { ...item, fetched_at: new Date(now()).toISOString() };
+      return { data: await boundedJson(response), fetched_at: new Date(now()).toISOString() };
     } catch (error) {
       const safe = controller.signal.aborted
         ? new ImportError('timeout')
@@ -197,4 +195,50 @@ export async function lookupApple(id: string, options: AppleLookupOptions = {}) 
     }
   }
   throw new ImportError('network');
+}
+
+export async function lookupApple(id: string, options: AppleLookupOptions = {}) {
+  if (!/^[1-9][0-9]{0,19}$/.test(id)) throw new ImportError('invalidUrl');
+  const result = await requestApple([id], options);
+  return { ...normalizeApple(result.data, id), fetched_at: result.fetched_at };
+}
+
+export async function lookupAppleBatch(ids: string[], options: AppleLookupOptions = {}) {
+  if (
+    !ids.length ||
+    ids.length > 20 ||
+    new Set(ids).size !== ids.length ||
+    ids.some((id) => !/^[1-9][0-9]{0,19}$/.test(id))
+  )
+    throw new ImportError('invalidUrl');
+  const { data, fetched_at } = await requestApple(ids, options);
+  const body = data as { resultCount?: unknown; results?: unknown[] } | null;
+  if (
+    !Array.isArray(body?.results) ||
+    body.resultCount !== body.results.length ||
+    body.results.length > ids.length
+  )
+    throw new ImportError('malformed');
+  const results = new Map<string, unknown>();
+  for (const value of body.results) {
+    const item = value as Record<string, unknown> | null;
+    const id = String(item?.trackId);
+    if (!ids.includes(id) || results.has(id)) throw new ImportError('malformed');
+    results.set(id, value);
+  }
+  return ids.map((appStoreId) => {
+    const value = results.get(appStoreId);
+    if (!value) return { appStoreId, error: 'notFound' };
+    try {
+      return {
+        appStoreId,
+        metadata: {
+          ...normalizeApple({ resultCount: 1, results: [value] }, appStoreId),
+          fetched_at,
+        },
+      };
+    } catch (error) {
+      return { appStoreId, error: error instanceof ImportError ? error.code : 'malformed' };
+    }
+  });
 }

@@ -4,6 +4,7 @@ import { selectOption, fieldName } from './select-option';
 import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { connect } from '../integration/helpers.ts';
+import { randomUUID } from 'node:crypto';
 
 async function login(page: Page, locale = 'en') {
   await page.goto(`/${locale}/admin/login`);
@@ -35,6 +36,111 @@ test('anonymous admin access is denied and logout revokes the local session', as
   await context.addCookies([cookie!]);
   await page.goto('/en/admin/apps');
   await expect(page).toHaveURL(/error=authRequired/);
+});
+
+test('Astryx busy submit keeps focus and blocks a second activation', async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let submissions = 0;
+  await page.route('**/en/admin/login', async (route) => {
+    if (route.request().method() === 'POST') {
+      submissions++;
+      await held;
+    }
+    await route.continue();
+  });
+  try {
+    await page.goto('/en/admin/login');
+    await page
+      .getByLabel(fieldName(en.Admin.email), { exact: true })
+      .fill(process.env.LOCAL_ADMIN_EMAIL!);
+    await page
+      .getByLabel(fieldName(en.Admin.password), { exact: true })
+      .fill(process.env.LOCAL_ADMIN_PASSWORD!);
+    const submit = page.getByRole('button', { name: en.Admin.login, exact: true });
+    await submit.click();
+    await expect(submit).toHaveAttribute('aria-busy', 'true');
+    await expect(submit).toHaveAttribute('aria-disabled', 'true');
+    await expect(submit).not.toHaveAttribute('disabled');
+    await expect(submit).toBeFocused();
+    await submit.press('Enter');
+    await expect.poll(() => submissions).toBe(1);
+  } finally {
+    release();
+  }
+  await expect(page).toHaveURL(/\/en\/admin\/apps$/);
+});
+
+test('Astryx admin navigation selects nested sections and wraps on mobile', async ({ page }) => {
+  await login(page);
+  const navigation = page.getByRole('navigation', { name: en.Admin.navigation, exact: true });
+  for (const [path, label] of [
+    ['/admin/apps/new', en.Admin.apps],
+    ['/admin/apps/import', en.Admin.importApps],
+    ['/admin/reviews', en.Operations.reviews],
+    ['/admin/submissions', en.Operations.submissions],
+    ['/admin', en.Admin.overview],
+  ]) {
+    await page.goto(`/en${path}`);
+    await expect(navigation.getByRole('link', { name: label, exact: true })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    await expect(navigation.locator('[aria-current="page"]')).toHaveCount(1);
+    await page.setViewportSize({ width: 360, height: 900 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+  await page.goto('/en/admin/apps?q=astryx-no-matching-app');
+  await expect(page.getByRole('heading', { name: en.Admin.empty, exact: true })).toBeVisible();
+});
+
+test('Astryx unknown-total pagination preserves review state in both queues', async ({ page }) => {
+  // connect() refuses any database other than the isolated duo_test_* database.
+  const db = await connect();
+  const marker = `Astryx pagination ${randomUUID()} `;
+  let ids: string[] = [];
+  try {
+    const inserted = await db.query<{ submission_id: string }>(
+      `WITH submissions AS (
+        INSERT INTO app_private.submissions(kind,app_store_id,store_url,body,evidence_url,fingerprint)
+        SELECT 'add',(9000000+n)::text,'https://apps.apple.com/kr/app/id'||(9000000+n),
+          $1||n,'https://example.invalid/evidence',repeat(md5($1||n),2)
+        FROM generate_series(1,31) n RETURNING id,body
+      ) INSERT INTO app_private.review_items(submission_id,candidate_payload,state)
+        SELECT id,jsonb_build_object('text',body),'rejected' FROM submissions RETURNING submission_id`,
+      [marker],
+    );
+    ids = inserted.rows.map((row) => row.submission_id);
+    await login(page);
+    for (const section of ['reviews', 'submissions']) {
+      await page.goto(`/en/admin/${section}?state=rejected`);
+      const pagination = page.getByRole('navigation', {
+        name: en.Operations.pagination,
+        exact: true,
+      });
+      await expect(pagination).toHaveClass(/astryx-pagination/);
+      await expect(
+        pagination.getByRole('button', { name: en.Directory.previous, exact: true }),
+      ).toBeDisabled();
+      await pagination.getByRole('button', { name: en.Directory.next, exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`/admin/${section}\\?state=rejected&page=2$`));
+      await expect(
+        pagination.getByRole('button', { name: en.Directory.next, exact: true }),
+      ).toBeDisabled();
+      await pagination.getByRole('button', { name: en.Directory.previous, exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`/admin/${section}\\?state=rejected&page=1$`));
+    }
+  } finally {
+    await db.query('DELETE FROM app_private.review_items WHERE submission_id=ANY($1::uuid[])', [
+      ids,
+    ]);
+    await db.query('DELETE FROM app_private.submissions WHERE id=ANY($1::uuid[])', [ids]);
+    await db.end();
+  }
 });
 
 test('administrator saves a draft, explicitly reviews it and archives it', async ({

@@ -78,3 +78,73 @@ popular-app work is excluded. The 237-entry upload manifest SHA-256 is
 This release did not change the database or environment configuration. The initial direct deployment
 preceded the Git commit; the user's follow-up requests syncing this 3D change to main through a commit
 and push. See docs/verification.md for actual validation results and build limitations.
+
+## Popular-app content expansion — 2026-10-30
+
+Owner requested database coverage of popular apps before ranking UI. Official KR free/paid charts
+provided 200 apps; only 13 were already registered. An explicit dry-run/apply added 187 apps,
+including 9 with reviewed official release-note support evidence and 178 marked unknown. The
+existing 128 public snapshots were preserved. The database now holds 315 apps and 315 icons:
+310 published (31 supported, 279 unknown) and 5 Medical-genre drafts awaiting a proper category.
+All 200 chart apps have DB support records; 195 are public. An identical second apply created no
+apps and changed none of the 16 content-table hashes. Public ko/en search, new supported detail,
+icon response and draft-icon isolation were verified. This was a content operation on the existing
+hosted project; local content, schema, deployments and scheduler configuration were not changed
+by this batch. Backups/manifests remain private. See [operations and results](popular-data.md).
+
+## Follow-up: catalogue capped at 1,000 — 2026-10-30
+
+The owner requested approximately 1,000 apps total. The existing 315 were retained and 685 new
+KR apps selected from 44 official free/paid genre RSS feeds across 22 categories. Selection
+alternated equal chart ranks; selected entries ranked within the top 21 of their source chart.
+Batched Lookup verified all 685 KR records. Explicit source review established support/screen
+adaptation evidence for 43 new apps; 642 remain unknown.
+
+Production now holds exactly **1,000 apps**, with **995 published** (74 supported, 921 unknown),
+5 unchanged Medical drafts and 1,000 app icon records. All pre-existing content rows from the
+315-app backup were preserved. An identical second apply created no apps and changed none of
+the 16 content-table hashes; the total remained 1,000. Public Korean search, Shazam evidence/icon,
+English NFC Tools detail and draft icon isolation passed. Apply rejects changed database contents
+when the combined count would differ from 1,000. Manifests, reviewed quotes and backups remain
+private. This batch made no schema changes, new project, scheduler activation or app deployment.
+See [detailed operations](popular-data.md).
+
+## Published support overview and Recharts release — 2026-10-30
+
+The owner explicitly authorized deploying the reviewed local UI. Production deployment
+`dpl_AXnktebDxPzs4Pi1n1vxefHvyGKz` is READY and promoted to
+[is-duo-ready.vercel.app](https://is-duo-ready.vercel.app/ko). It uses the existing team/project,
+Next.js 16.4.3, production environment and unchanged deployment protection.
+
+The immutable upload contains 248 files, based on `15cb021a48d63ba762bb284f102ff863ee5dfa47`
+plus the current public UI, global published-count query, translations and required dependencies.
+Manifest SHA-256: `aa50c35e2cedaf894bcb19d2212cf7f7c039175949f3abf569ce304c2a26b25a`.
+Concurrent private administrator/operations edits, environment files, local data, tests and
+development artwork are excluded. This is a working-source snapshot, not that base commit alone;
+no commit or push was performed. Private source/deployment manifests remain in `.data/release/`.
+
+The isolated source passed lint, typecheck, 81 unit tests, 32 Chromium E2E tests and all three
+production fixture/auth/artwork boundary scenarios. The remote production env check and default
+Turbopack build passed. Existing icon-storage filesystem tracing warnings remain nonfatal.
+Authenticated checks of the staged production URL passed before promotion. Public ko/en browser
+checks then verified 995 published apps, 74 officially supported (7.4%), 921 unverified (92.6%),
+14px Recharts segments and the keyboard tooltip. Error-log scan of this deployment's preceding
+10 minutes and browser inspection observed zero errors at verification time; no ongoing monitor
+was enabled. Database rows, schema, storage and environment settings were not changed.
+
+Previous production deployment `dpl_BWrqsgqapobUvwfwX9XYNg4CGQCW` is retained as the recorded
+application rollback target. See [verification](verification.md) for actual checks and limitations.
+
+## Latest source and Git consistency — 2026-10-30
+
+A subsequent main deployment replaced the manually uploaded Recharts working-source
+snapshot because those product changes had not been committed. The owner requested
+the latest local version. Release input now includes the public statistics/Recharts UI
+and current Astryx public/admin updates with their specifications and tests in main,
+so future Git deployments use the same product source. Local validation passed lint,
+types, 89 unit tests, 16 DB integration tests, 32 public and 42 admin Chromium tests,
+Webpack build and both production boundary suites. Local default Turbopack remains
+blocked by process/port EPERM; the Vercel build is checked independently.
+No database content, schema, environment or protection change is included.
+See docs/verification.md and the private latest-source-release-result.json release
+record for validation scope and final rollout evidence.

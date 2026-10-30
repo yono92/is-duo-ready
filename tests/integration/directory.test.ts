@@ -79,6 +79,14 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       assert.equal(result.apps.length, 24);
       assert.equal(result.pages, 2);
       assert.equal(result.apps[0].names.en, 'Public query 00');
+      assert.equal(
+        result.stats.total,
+        result.stats.supported +
+          result.stats.planned +
+          result.stats.unknown +
+          result.stats.unsupported,
+      );
+      assert.ok(result.stats.total >= result.total);
       const recommended = await queryDirectory(db, { ...query, sort: 'recommended' }, 'en');
       assert.equal(recommended.apps[0].status, 'supported');
       assert.equal(recommended.apps[1].status, 'planned');
@@ -97,7 +105,10 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       const last = await queryDirectory(db, { ...query, page: 999 }, 'ko');
       assert.equal(last.page, 2);
       assert.equal(last.apps.length, 6);
-      assert.equal((await queryDirectory(db, { ...query, category: 'books' }, 'en')).total, 0);
+      const empty = await queryDirectory(db, { ...query, category: 'books' }, 'en');
+      assert.equal(empty.total, 0);
+      assert.deepEqual(empty.apps, []);
+      assert.deepEqual(empty.stats, result.stats);
       assert.equal(
         (await queryDirectory(db, { ...query, q: '%', status: 'supported' }, 'en')).total,
         0,

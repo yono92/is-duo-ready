@@ -32,6 +32,12 @@ T011 requires a permanent Production administrator; T012 is complete under the l
 finish local work without relabeling blocked external tasks. Research was delegated per speckit-plan;
 shared code edits and browser suites remain sequential. Tests for new contracts precede implementation.
 
+## CI failure and duration — 2026-10-30
+
+- [x] T029 GitHub Actions 실패 단계·시간을 조사하고 정적/공개/관리자 shard/운영 검증을 분리한다. 기존 verify 필수 검사 이름과 모든 게이트를 유지하며 실패 trace를 업로드한다.
+- [x] T030 아이콘 카드 활성화 및 가져오기 이동/접근성 대기를 보완하고 관리자 42개·공개 32개·대상 5개 재실행·실제 shard 3+2개, lint/types/unit89/DB16/Webpack·운영 경계를 검증했다. 기본 Turbopack의 기존 EPERM 및 원격 미실행을 docs/verification.md에 구분했다.
+- [x] T031 main의 16aaacd와 원격 CI 41002311291 전체 성공을 확인했다. 13:20:07–13:24:47 KST, 4분40초; 정적/단위78/공개28/관리자39/DB15/기본 빌드/운영 경계/verify 모두 통과했다. 처음 확인한 실패 실행 9분35초 대비 약51% 단축을 docs/verification.md에 기록했다.
+
 Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Vercel Production. Preview environment variables removed. Existing project IDs/data retained; names changed to is-duo-ready. The actual application is deployed; T011 remains incomplete for permanent admin/authenticated browser checks; T012 content publication is now complete. The later T019 run passed default Turbopack builds locally and on Vercel; earlier T013 build restrictions remain historical evidence.
 
 ## Post-publication source maintenance — user request 2026-10-29
@@ -53,11 +59,13 @@ Final architecture: local PostgreSQL/files + one hosted Supabase DB/Storage + Ve
 - [x] T023 검색 색인 opt-in을 보존하며 실제 운영 소셜 봇 접근·사이트맵 언어 대체 URL·초기 HTML head 메타데이터를 정리한다.
 - [x] T024 단위/raw HTML/PNG 검증과 저장소 필수 검사를 수행하고 SEO 관리 문서·검증 기록을 남긴다.
 
-## CI failure and duration — 2026-10-30
+## 인기 차트 앱 우선 등록 — 사용자 요청 2026-10-30
 
-- [x] T029 GitHub Actions 실패 단계·시간을 조사하고 정적/공개/관리자 shard/운영 검증을 분리한다. 기존 verify 필수 검사 이름과 모든 게이트를 유지하며 실패 trace를 업로드한다.
-- [x] T030 아이콘 카드 활성화 및 가져오기 이동/접근성 대기를 보완하고 관리자 42개·공개 32개·대상 5개 재실행·실제 shard 3+2개, lint/types/unit89/DB16/Webpack·운영 경계를 검증했다. 기본 Turbopack의 기존 EPERM 및 원격 미실행을 docs/verification.md에 구분했다.
-- [ ] T031 필요한 기존 로컬 수정과 CI 변경의 원격 반영 후 GitHub CI 전체 통과 및 실제 소요 시간을 확인한다. 이번 조사에서는 commit/push·원격 재실행을 하지 않았다.
+- [x] T025 공식 KR 무료·유료 차트 수집·재개·CSV와 국가/차트/ID 검증을 구현하고, 기존 판정을 보존하는 명시적 콘텐츠 반영·dry-run/apply 도구와 메시지를 준비한다.
+- [x] T026 실제 차트 앱 200개의 KR 메타데이터·최신 공식 릴리스 노트를 확인하고 기존 운영 DB에 지원 상태·발견 근거·아이콘과 함께 등록한다. 신규 187개(지원 9·미확인 178), 전체 DB 315개·공개 310개·의료 초안 5개를 확인했다. 기존 공개 128개 보존·동일 자료 재반영의 콘텐츠 테이블 변경 0개·익명 조회와 필수 회귀 검증 결과는 docs/popular-data.md와 docs/verification.md에 기록했다.
+
+- [x] T027 전체 DB 1,000개 상한, 카테고리별 공식 차트·균등 순위 후보 선정, 기존 ID 제외와 20개 단위 KR Lookup 검증·재개를 구현한다. 기존 단일 앱 Lookup 동작과 국가·ID 경계를 회귀 검증한다.
+- [x] T028 신규 685개(지원 43·미확인 642)를 검토하고 dry-run/apply로 전체 DB 1,000개·공개 995개·기존 의료 초안 5개를 확인했다. 기존 315개 전체 콘텐츠 행 보존, 재실행의 콘텐츠 16개 테이블 변경 0개, 아이콘 1,000건·익명 조회·86개 단위/15개 DB/28개 E2E·빌드 제약을 docs/popular-data.md와 docs/verification.md에 기록했다.
 
 - [x] T032 CI 반영 후 trace로 남은 탐색 실패를 분리하고, Canvas를 첫 DOM commit 이후 프레임에 마운트한다. 임시 3D 제거/준비 상태 대기/번들러 비교와 Turbopack 탐색 10회·격리 관리자 10개 검증을 기록했다. 실제 원격 최종 통과는 T031에서 추적한다.
 

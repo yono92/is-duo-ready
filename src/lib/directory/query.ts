@@ -1,4 +1,5 @@
 import { categories, statuses, type DirectoryApp, type DirectoryQuery, type Locale } from './types';
+import { directoryStats } from './stats';
 export const PAGE_SIZE = 24;
 export const defaultQuery: DirectoryQuery = {
   q: '',
@@ -70,5 +71,6 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
     total: matched.length,
     page,
     pages,
+    stats: directoryStats(apps),
   };
 }

@@ -67,7 +67,14 @@ export type RealDirectoryApp = DirectoryBase & {
 };
 export type DirectoryApp =
   (DirectoryBase & { fictional: true; evidence: readonly [] }) | RealDirectoryApp;
-export type DirectoryResult = { apps: DirectoryApp[]; total: number; page: number; pages: number };
+export type DirectoryStats = { total: number } & Record<SupportStatus, number>;
+export type DirectoryResult = {
+  apps: DirectoryApp[];
+  total: number;
+  page: number;
+  pages: number;
+  stats: DirectoryStats;
+};
 export type PublicHistory = {
   id: string;
   slug: string;

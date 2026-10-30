@@ -1,9 +1,9 @@
-import { ClickableCard, TopNavItem } from '@/components/ui/surfaces';
+import { ClickableCard, TopNavItem, EmptyState } from '@/components/ui/surfaces';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
 import { listReviews } from '@/lib/operations/repository';
 import { queueFilter, queuePage, reviewStates } from '@/lib/operations/input';
-import { Link } from '@/components/ui/link';
+import { RoutePagination } from '@/components/ui/route-pagination';
 import type { Locale } from '@/lib/directory/types';
 
 export async function ReviewList({
@@ -63,19 +63,15 @@ export async function ReviewList({
           </li>
         ))}
       </ul>
-      {!data.items.length && <p>{t('emptyQueue')}</p>}
-      <nav aria-label={t('pagination')} className="flex gap-5">
-        {page > 1 && (
-          <Link className="min-h-11 text-primary" href={`${base}?state=${state}&page=${page - 1}`}>
-            {t('previous')}
-          </Link>
-        )}
-        {data.hasNext && (
-          <Link className="min-h-11 text-primary" href={`${base}?state=${state}&page=${page + 1}`}>
-            {t('next')}
-          </Link>
-        )}
-      </nav>
+      {!data.items.length && <EmptyState title={t('emptyQueue')} headingLevel={2} />}
+      {(page > 1 || data.hasNext) && (
+        <RoutePagination
+          page={page}
+          hasMore={data.hasNext}
+          path={`${base}?state=${state}`}
+          label={t('pagination')}
+        />
+      )}
     </section>
   );
 }

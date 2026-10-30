@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 import { parseImport } from '@/lib/import/input';
-import { appleId, lookupApple, normalizeApple } from '@/lib/import/apple.ts';
+import { appleId, lookupApple, lookupAppleBatch, normalizeApple } from '@/lib/import/apple.ts';
 
 const url = 'https://apps.apple.com/kr/app/test/id123456';
 const response = {
@@ -15,6 +15,44 @@ const response = {
     },
   ],
 };
+
+test('batch lookup matches IDs regardless of order and preserves missing/country failures per app', async () => {
+  const second = {
+    ...response.results[0],
+    trackId: 222,
+    trackViewUrl: 'https://apps.apple.com/us/app/id222',
+  };
+  const results = await lookupAppleBatch(['222', '123456', '333'], {
+    beforeAttempt: async () => {},
+    fetcher: async (url) => {
+      expect(url).toBe(
+        'https://itunes.apple.com/lookup?id=222,123456,333&country=kr&entity=software',
+      );
+      return Response.json({ resultCount: 2, results: [response.results[0], second] });
+    },
+  });
+  expect(results[0]).toEqual({ appStoreId: '222', error: 'countryMismatch' });
+  expect(results[1].metadata?.app_store_id).toBe('123456');
+  expect(results[2]).toEqual({ appStoreId: '333', error: 'notFound' });
+});
+
+test('batch lookup rejects duplicate/unrequested results and excessive request sizes', async () => {
+  for (const rows of [
+    [response.results[0], response.results[0]],
+    [{ ...response.results[0], trackId: 999 }],
+  ]) {
+    await expect(
+      lookupAppleBatch(['123456', '222'], {
+        beforeAttempt: async () => {},
+        fetcher: async () => Response.json({ resultCount: rows.length, results: rows }),
+      }),
+    ).rejects.toThrow('malformed');
+  }
+  await expect(lookupAppleBatch(['123456', '123456'])).rejects.toThrow('invalidUrl');
+  await expect(
+    lookupAppleBatch(Array.from({ length: 21 }, (_, i) => String(i + 1))),
+  ).rejects.toThrow('invalidUrl');
+});
 
 test('store URLs are parsed to IDs, never treated as arbitrary fetch destinations', () => {
   expect(appleId(`${url}?l=en`)).toBe('123456');

@@ -5,7 +5,9 @@ import type {
   Locale,
   RealDirectoryApp,
   PublicHistory,
+  DirectoryStats,
 } from '../directory/types.ts';
+import { assertDirectoryStats } from '../directory/stats.ts';
 const PAGE_SIZE = 24;
 
 // Call only inside an anonymous-role transaction. All query input is bound data;
@@ -15,20 +17,10 @@ export async function queryDirectory(
   query: DirectoryQuery,
   locale: Locale,
 ): Promise<DirectoryResult> {
-  const where = `publication='published'
-    AND ($2='all' OR snapshot->>'category'=$2)
+  const where = `($2='all' OR snapshot->>'category'=$2)
     AND ($3='all' OR snapshot->>'status'=$3)
     AND strpos(lower(normalize(concat_ws(' ', snapshot->'names'->>'ko', snapshot->'names'->>'en',
       (SELECT string_agg(value,' ') FROM jsonb_array_elements_text(snapshot->'aliases'))),NFC)),lower(normalize($1,NFC)))>0`;
-  const values = [query.q, query.category, query.status];
-  const total = (
-    await db.query<{ total: number }>(
-      `SELECT count(*)::integer AS total FROM public.directory_entries WHERE ${where}`,
-      values,
-    )
-  ).rows[0].total;
-  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const page = Math.min(Math.max(1, query.page), pages);
   const language = locale === 'ko' ? 'ko' : 'en';
   const nameOrder = `snapshot->'names'->>'${language}',slug`;
   const sort =
@@ -37,15 +29,43 @@ export async function queryDirectory(
       : query.sort === 'name'
         ? nameOrder
         : `array_position(ARRAY['supported','planned','unknown','unsupported'],snapshot->>'status'),reviewed_at DESC,${nameOrder}`;
-  const result = await db.query<{ snapshot: RealDirectoryApp }>(
-    `SELECT snapshot || jsonb_build_object('iconUrl',
-      CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=directory_entries.app_id)
-      THEN '/api/app-icons/' || app_id::text ELSE NULL END) AS snapshot
-    FROM public.directory_entries WHERE ${where}
-    ORDER BY ${sort} LIMIT $4 OFFSET $5`,
-    [...values, PAGE_SIZE, (page - 1) * PAGE_SIZE],
+  // Counts, filtering, page clamping and rows share one PostgreSQL statement snapshot.
+  // Separate SELECTs under READ COMMITTED can otherwise disagree during publication.
+  const result = await db.query<{
+    apps: RealDirectoryApp[];
+    total: number;
+    page: number;
+    pages: number;
+    stats: DirectoryStats;
+  }>(
+    `WITH published AS MATERIALIZED (
+      SELECT * FROM public.directory_entries WHERE publication='published' AND country='KR'
+    ), scoped AS MATERIALIZED (
+      SELECT * FROM published WHERE ${where}
+    ), pagination AS (
+      SELECT count(*)::int AS total,greatest(1,(count(*)+${PAGE_SIZE - 1})/${PAGE_SIZE})::int AS pages FROM scoped
+    ), bounds AS (
+      SELECT *,least(greatest(1,$4::int),pages) AS page FROM pagination
+    ), ordered AS (
+      SELECT app_id,snapshot,row_number() OVER(ORDER BY ${sort}) AS position FROM scoped
+      ORDER BY ${sort} LIMIT ${PAGE_SIZE} OFFSET (SELECT (page-1)*${PAGE_SIZE} FROM bounds)
+    ), overview AS (
+      SELECT jsonb_build_object('total',count(*)::int,
+        'supported',count(*) FILTER(WHERE snapshot->>'status'='supported')::int,
+        'planned',count(*) FILTER(WHERE snapshot->>'status'='planned')::int,
+        'unknown',count(*) FILTER(WHERE snapshot->>'status'='unknown')::int,
+        'unsupported',count(*) FILTER(WHERE snapshot->>'status'='unsupported')::int) AS stats
+      FROM published
+    )
+    SELECT bounds.*,overview.stats,
+      coalesce((SELECT jsonb_agg(snapshot || jsonb_build_object('iconUrl',
+        CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=ordered.app_id)
+        THEN '/api/app-icons/' || app_id::text ELSE NULL END) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
+    FROM bounds CROSS JOIN overview`,
+    [query.q, query.category, query.status, query.page],
   );
-  return { apps: result.rows.map((row) => row.snapshot), total, page, pages };
+  const row = result.rows[0];
+  return { ...row, stats: assertDirectoryStats(row.stats) };
 }
 
 export async function queryApp(
