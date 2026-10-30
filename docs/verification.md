@@ -984,3 +984,23 @@ footer copy in ko/en messages and updated the existing navigation E2E locator.
 Logs: `/tmp/duoready-footer-{lint,types,unit,e2e-retry,build,build-retry,webpack}.log`.
 The footer commit uses the GitHub noreply identity already present in repository
 history. Unrelated in-progress changes are excluded from this commit.
+
+## AdSense ads.txt — 2026-10-30
+
+Added `public/ads.txt` with the user's publisher ID:
+`google.com, pub-8224851078290204, DIRECT, f08c47fec0942fa0`.
+Local GET `/ads.txt` returned HTTP 200 and `text/plain; charset=UTF-8`, with no
+redirect and byte-identical content (59 bytes). The locale proxy excludes this path.
+
+- `npm run lint`, `npm run typecheck`: PASS.
+- `npm test`: 18 files, 89 tests PASS (shared workspace, including unrelated work).
+- `DUO_TEST_PORT=3397 npm run test:e2e`: 28 passed, 2 existing navigation tests
+  timed out (language switching and submit navigation).
+- `DUO_TEST_PORT=3397 npm run test:e2e -- --last-failed --workers=1`: both PASS.
+- `npm run build`: FAIL, existing Turbopack CSS port-binding EPERM.
+- `npm run build -- --webpack`: PASS.
+- `git diff --check`: PASS.
+
+Only ads.txt and its documentation are selected for this commit; concurrent
+application/data work is excluded. Production HTTP verification follows deployment.
+Logs: `/tmp/duoready-adstxt-{e2e,e2e-retry,build,webpack}.log`.
