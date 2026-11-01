@@ -1821,3 +1821,32 @@ changes. The requested commit includes only the Info message changes, their 001
 spec/plan/tasks and this verification entry; pending changes are preserved separately.
 No database/schema or dependency changes and no direct deployment were performed.
 Chromium was checked; Safari, Firefox and physical devices were not exercised.
+
+## 001 — 기기 커버 화면 좌우 정정 (2026-11-02, Asia/Seoul)
+
+사용자가 지적한 닫힌 기기의 좌우 배치를 Apple 공식 이미지
+(https://www.apple.com/kr/iphone-duo/images/overview/media-hero/hero_startframe__fcol1x2us8i2_large.jpg)
+와 대조했다. 공식 이미지의 커버 화면 정면은 왼쪽 힌지·우측 상단 카메라 홀이다.
+기존 모델은 내부 화면 정면 기준 오른쪽 패널에 커버 화면이 있어 닫았을 때 반대였다.
+커버 화면을 왼쪽 패널 뒷면으로, 후면 카메라를 오른쪽 패널 뒷면으로 교환했다.
+커버 베젤의 후면 외곽·힌지 쪽 모서리와 카메라 홀 위치도 맞췄다. 회전·접힘 부호,
+UV·블러·조작·번역·fallback 로직은 유지한다. 외부 이미지나 새 의존성은 추가하지 않았다.
+
+- npm run lint: PASS, 기존 .data/evidence-rescan-2026-10-30/review.mjs의 unused variable 경고 1건.
+- npm run typecheck: PASS.
+- npm test: 18 files / 89 tests PASS.
+- 첫 제한 환경 E2E 시도: 127.0.0.1:3396 listen EPERM으로 시작 실패.
+- 권한을 확장한 DUO_TEST_PORT=3396 npm run test:e2e: 30 PASS / 2 FAIL.
+  두 초기 기기 테스트는 ready 이후 canvas를 찾지 못했다. 이 실행 초반 device-scene.tsx
+  주석 저장과 HMR이 겹쳤으며 원인을 확정하지 않는다. 소스 수정 없이 새 서버에서
+  같은 포트로 두 시나리오를 재실행: 2/2 PASS (19.5s). 나머지 30개는 반복하지 않았다.
+  ko/en 회전·초기화·접힘, 모바일 터치, 블러, reduced motion, WebGL fallback 및 axe 포함.
+- npm run build: Turbopack CSS 프로세스의 포트 바인딩 EPERM으로 FAIL.
+- npm run build -- --webpack: PASS. 기본 Turbopack 통과로 보고하지 않는다.
+- git diff --check: PASS.
+
+IAB 로컬 화면에서 닫힘·yaw 89°로 커버 화면 정면의 왼쪽 힌지와 우측 상단 홀을 확인했다.
+output/playwright/duo-cover-hinge-left.png에 페이지 맥락을 포함해 저장했다.
+재실행에서 생성한 test-results/device-ko-back.png의 카메라 왼쪽·커버 오른쪽 배치와
+펼친 내부 화면·접힌 화면도 직접 확인했다. Chromium/IAB 검증이며 물리 기기 검증은 없다.
+공유 작업 폴더의 다른 진행 중 변경은 보존했다. 커밋·푸시·배포는 수행하지 않았다.

@@ -140,7 +140,7 @@ const Panel = memo(function Panel({
         side,
       ),
       back: new ShapeGeometry(outline(width - 0.055, height - 0.055, inner, outer), 32),
-      cover: displayGeometry(width - 0.12, height - 0.13, 0.145, 0.145),
+      cover: displayGeometry(width - 0.12, height - 0.13, 0.012, 0.145),
     };
   }, [left, side]);
   useEffect(() => () => Object.values(geometry).forEach((item) => item.dispose()), [geometry]);
@@ -184,7 +184,8 @@ const Panel = memo(function Panel({
             clearcoat={0.35}
           />
         </mesh>
-        {left ? (
+        {/* Inner-display view: cover on the left half, rear cameras on the right. */}
+        {side === 'right' ? (
           <>
             <RoundedBox
               args={[1.37, 0.47, 0.065]}
@@ -207,13 +208,13 @@ const Panel = memo(function Panel({
           </>
         ) : (
           <>
-            <mesh geometry={geometry.bezel} position={[0, 0, 0.003]}>
+            <mesh geometry={geometry.back} position={[0, 0, 0.003]}>
               <meshStandardMaterial color="#090b0d" roughness={0.18} />
             </mesh>
             <mesh geometry={geometry.cover} position={[0, 0, 0.006]}>
               <DeviceScreenMaterial texture={texture} blur={blur} />
             </mesh>
-            <mesh position={[0, 1.08, 0.009]}>
+            <mesh position={[width / 2 - 0.21, 1.08, 0.009]}>
               <circleGeometry args={[0.027, 32]} />
               <meshPhysicalMaterial color="#080b10" clearcoat={1} roughness={0.15} />
             </mesh>
