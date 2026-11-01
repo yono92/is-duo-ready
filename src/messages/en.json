@@ -136,20 +136,20 @@
     "suggestCorrection": "Request a correction"
   },
   "Info": {
-    "methodologyTitle": "Support status guide",
-    "methodologyBody": "Apps with explicit official support wording are listed as supported. Other apps are listed as unsupported with an unverified-evidence label.",
+    "methodologyTitle": "How do we check Duo support?",
+    "methodologyBody": "We use official App Store and developer sources to explain whether an app supports Duo. Here’s what each status means.",
     "statusDescriptions": {
-      "supported": "Official sources confirm that Duo support is available now.",
-      "planned": "Duo support has been officially announced but is not available yet.",
-      "unknown": "No support evidence has been confirmed for this initial listing. This is not an official statement of non-support; the status will change when evidence is verified.",
-      "unsupported": "The developer has stated that the app does not support Duo."
+      "supported": "Official sources say that Duo support is available now.",
+      "planned": "Duo support has been announced but is not available yet.",
+      "unknown": "We haven’t found official sources that explicitly confirm Duo support. “Unsupported · unverified” means support is still unconfirmed. It is separate from a developer’s statement that the app does not support Duo.",
+      "unsupported": "The developer has stated that the app does not currently support Duo."
     },
-    "evidence": "Sources we check",
-    "evidenceBody": "We check App Store Duo support badges, release notes, developer documentation and Apple announcements, including supported versions and release dates. General iPhone or iPad compatibility and search snippets alone do not confirm Duo support.",
-    "review": "Information updates",
-    "reviewBody": "We update information after checking support wording and sources. The update date records publication of the information, not a device test. Missing release notes or fetch failures do not remove existing evidence.",
-    "region": "South Korea App Store",
-    "regionBody": "We cover apps and versions available in South Korea. Switching to English does not change the store region."
+    "evidence": "Which sources do we check?",
+    "evidenceBody": "We look at App Store Duo support badges, release notes, developer documentation and Apple announcements. We also check supported versions and release dates. General iPhone or iPad compatibility and search snippets alone do not confirm Duo support.",
+    "review": "How do we update information?",
+    "reviewBody": "We update information after checking the support wording and its sources. “Information updated” is the date we updated the site, not the date of a device test. Existing evidence stays in place if new release notes omit support details or a source cannot be loaded.",
+    "region": "Which App Store region do we use?",
+    "regionBody": "We cover apps and versions available in the South Korea App Store. The same region applies whichever language you choose."
   },
   "NotFound": {
     "title": "Page not found",

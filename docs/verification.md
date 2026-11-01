@@ -1789,3 +1789,35 @@ Checks:
 The final Git commit, Vercel deployment, CI and public browser verification are stored
 in ignored .data/release/apple-chart-release-result.json. Safari/Firefox and physical
 devices are outside this Chromium check.
+
+## Methodology copy and support-status clarity — 2026-11-02
+
+Requested on 2026-10-30: rewrite the Korean methodology page in conversational
+haeyo style with question headings, and align the English explanation. The Info
+messages now explicitly distinguish unverified support from an official developer
+statement of non-support. Existing status labels and evidence/publication rules,
+information-update versus device-test dates, evidence preservation on fetch failure,
+and the KR store region independent of display language remain unchanged.
+
+Checks:
+- npm run lint PASS with the existing unused-variable warning in ignored
+  .data/evidence-rescan-2026-10-30/review.mjs; npm run typecheck PASS.
+- npm test: 18 files / 89 tests PASS.
+- DUO_TEST_PORT=3488 npm run test:e2e -- --workers=1: 32/32 Chromium PASS (1.8m).
+  The earlier 3486 run had 21 passes and 11 timeouts in WebGL/readiness, navigation
+  and keyboard scenarios. The fresh full rerun passed without product/test changes
+  or increased timeouts; no root-cause fix is claimed for those earlier failures.
+- npm run build -- --webpack PASS. npm run build FAIL in both sandboxed and
+  escalated runs with the previously recorded Turbopack process/port EPERM in
+  device-preview.module.css; the default build is not reported as passing.
+- Playwright CLI checked every Info message, locale, theme and horizontal overflow
+  at ko/en × light/dark × 360/1440px: all 8 combinations PASS. Screenshots under
+  /tmp/duo-methodology-review/ were captured; Korean light 360px and English dark
+  1440px were visually reviewed. No clipped text or horizontal overflow was found.
+- Prettier for both message dictionaries and git diff --check PASS.
+
+Validation used the existing working tree, including unrelated pending detail/history
+changes. The requested commit includes only the Info message changes, their 001
+spec/plan/tasks and this verification entry; pending changes are preserved separately.
+No database/schema or dependency changes and no direct deployment were performed.
+Chromium was checked; Safari, Firefox and physical devices were not exercised.
