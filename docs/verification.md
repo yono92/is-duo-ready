@@ -2054,3 +2054,31 @@ timeout; that unchanged test passed on an isolated one-worker rerun. New ko/en
 privacy and fixture ad-traffic checks passed. Default Turbopack hit the existing
 port EPERM; Webpack production build passed. Production activation is still pending
 at this checkpoint and is not represented as approved or serving ads.
+
+
+## 008 Auto ads production activation - 2026-11-02
+
+Owner-authorized account and existing production changes are now saved. CMP policy
+URL was updated to the public HTTPS English privacy page and the message list
+showed Published with the actual 2026-11-02 modification date. Eight page exclusions
+were saved. Production-only ad Config was enabled. Source a818ca0 built with the
+remote default Turbopack builder and deployment dpl_F7r861b3f6PWf7VbYdNCgc4PRzvR
+was inspected before promotion to the existing domain. No database or catalogue
+change was included.
+
+After the idle-loading adjustment, AdSense E2E passed 4/4 and typecheck passed.
+Actual public browser checks verified one correct publisher bootstrap on real ko/en
+home content, no manual slots, and no ad scripts/frames after home-to-policy,
+home-to-submission and empty-search navigation. Direct methodology, administrator
+login and missing-app documents were also free of ad scripts/frames. Search query
+and hash were retained. The observed policy themes had no horizontal overflow at
+1280px; the attempted live viewport override did not resize it, so 360px coverage
+comes from local E2E only.
+
+Public ads.txt is correct; the account still reports Not found and Preparing /
+under review. The official forced GDPR preview did not display a CMP at this
+checkpoint. Publication, approval, actual consent behavior and real ad fill are
+separate facts. Refusal/revocation and actual creative delivery remain unverified.
+Console warnings about Three.Clock and Google's unsupported data-nscript attribute
+were observed; SDK and subsequent request-frame execution did occur. Full release
+IDs, limits and rollback are in [launch record](adsense-launch-2026-11-02.md).

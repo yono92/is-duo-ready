@@ -59,3 +59,50 @@ built successfully with the remote default Turbopack builder, verified with an
 authenticated HTTP 200 policy response, then promoted to the existing domain.
 The public English privacy page and footer were verified in a browser before
 updating the CMP URL. Production activation and its results follow separately.
+
+
+## Production activation and browser results
+
+Production-only Config `ADSENSE_AUTO_ADS_ENABLED=true` was added to the existing
+project. No other environment setting was changed. An isolated `git archive` of
+`a818ca0` was deployed; no dirty workspace content, `.env.local`, `.data`, output
+or credentials were uploaded. Existing deployment protection was retained.
+
+Final deployment: `dpl_F7r861b3f6PWf7VbYdNCgc4PRzvR`,
+`https://is-duo-ready-i8nyc69cx-yonos-projects-8566d4cb.vercel.app`.
+Remote default Turbopack build passed. Authenticated staged policy/home HTTP
+responses passed: privacy had no ad scripts, hints or idle loader payload; home
+had the idle loader payload. Promotion to the existing public domain succeeded.
+
+Actual public browser checks:
+
+- Korean and English real-content home: one publisher bootstrap with the exact
+  publisher ID, Google managed script and later Google-generated request frames;
+  zero application-authored manual ad slots. No ad was clicked.
+- Home to Korean/English privacy: zero advertising/CMP scripts, hints and frames.
+- Home to submission and home search to an empty result: zero advertising scripts
+  and frames. Search query and directory hash were preserved.
+- Direct methodology, administrator login and missing-app documents: zero ad
+  scripts and frames. No login or administrative data mutation was performed.
+- English policy had eight sections, no horizontal overflow at the observed
+  1280px browser width, and both themes rendered. The attempted browser viewport
+  override did not change its reported width, so this is not a live 360px claim;
+  the local 360px E2E assertions passed separately.
+- Public `/ads.txt` returned the exact publisher record. The account still showed
+  Not found, and the site detail remained Preparing / under review / review
+  requested. No new review request or site deletion was performed.
+- The official forced GDPR preview query produced no visible CMP dialog or
+  Funding Choices script at this checkpoint. Message publication was verified
+  separately. Propagation, region behavior, refusal/revocation and real ad fill
+  remain unverified; do not infer the precise cause or claim approval.
+- Console warnings included existing Three.Clock deprecation and Google's
+  unsupported `data-nscript` attribute notice. The Google SDK and subsequent
+  request frame did execute. No warning fix is claimed.
+
+Release logs and response snapshots are `/tmp/duoready-ads-live-*`; they are not
+part of the public repository. To stop advertising, set the existing Production
+flag false and redeploy. When rolling back to a prior deployment, first ensure
+its captured flag was off; do not assume changing a Vercel environment setting
+changes an already immutable deployment. The previous privacy release
+`dpl_Gyx2h2rD9thicwigDbRRQubSbZib` had no enabled advertising flag and retains the
+published privacy page. The older pre-policy target is recorded above.

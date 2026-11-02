@@ -148,3 +148,21 @@ blocked by process/port EPERM; the Vercel build is checked independently.
 No database content, schema, environment or protection change is included.
 See docs/verification.md and the private latest-source-release-result.json release
 record for validation scope and final rollout evidence.
+
+
+## Auto ads activated on existing Production — 2026-11-02
+
+At the owner's request, privacy source 53f69b1 was released first, then the existing
+AdSense message's policy URL was saved and published. Auto ads retain eight saved
+section exclusions. Production-only ADSENSE_AUTO_ADS_ENABLED=true was added and
+source a818ca0 was deployed in isolation as dpl_F7r861b3f6PWf7VbYdNCgc4PRzvR.
+The remote default build passed, staged responses were checked and the existing
+public domain was promoted. No external project, database/content change or
+credential upload was included.
+
+Public browser checks confirmed the publisher loader on content and its absence
+on excluded, empty and missing-app screens. Google approval, ads.txt recognition,
+real ad fill and actual CMP consent/refusal/revocation remain external follow-up
+checks. The account still reports under review and ads.txt Not found, despite the
+correct public file; the forced GDPR test did not display a message. See
+[launch evidence and rollback](adsense-launch-2026-11-02.md).
