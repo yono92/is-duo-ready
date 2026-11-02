@@ -18,6 +18,10 @@ filters preserve locale/query state and scroll to the directory heading. Hash,
 external and modified/new-tab links retain their ordinary behavior. Local,
 fixture and Preview navigation retain the existing client router.
 
+The final ad loader uses `lazyOnload`. Installed Next.js preloads
+`afterInteractive` script resources during rendering; idle loading avoids
+advertising resource hints from prefetched content routes on privacy pages.
+
 ## Local verification
 
 - Lint PASS: zero errors, three existing ignored research-script warnings.
@@ -31,6 +35,8 @@ fixture and Preview navigation retain the existing client router.
 - Default Turbopack build failed with the existing CSS process/port EPERM.
 - Webpack production build passed compile, TypeScript and page generation.
 - Changed-file formatting and diff whitespace checks passed.
+- After switching to idle script loading, the targeted AdSense E2E suite passed
+  4/4 scenarios and typecheck passed again.
 
 Logs: `/tmp/duoready-ads-launch-{lint,lint-final,typecheck,unit,unit-final,e2e,e2e-retry,build,webpack}.log`.
 
@@ -40,11 +46,16 @@ Auto ads and auto optimization remain enabled. Eight section-prefix exclusions
 were saved and the account list showed 8: ko/en admin, submit, privacy and
 methodology. Other sites and their settings were left intact.
 
-The existing message used the HTTP homepage as its privacy URL. Its replacement
-with the real HTTPS policy is pending the policy release.
+The existing message previously used the HTTP homepage as its privacy URL. It now
+uses `https://is-duo-ready.vercel.app/en/privacy`. The site selection was confirmed
+and message changes were published. The message list showed Published with an
+actual modification date of 2026-11-02. Google notes up to one hour for propagation.
 
 ## Release status
 
 Previous production/rollback target: `dpl_C87P4722Vm3CVwQDZWxb5KQzTvFB`.
-At this preparation checkpoint no production ad flag, deployment or CMP URL has
-been changed. Actual release results will be recorded after verification.
+Privacy release: source `53f69b1`, deployment `dpl_Gyx2h2rD9thicwigDbRRQubSbZib`,
+built successfully with the remote default Turbopack builder, verified with an
+authenticated HTTP 200 policy response, then promoted to the existing domain.
+The public English privacy page and footer were verified in a browser before
+updating the CMP URL. Production activation and its results follow separately.
