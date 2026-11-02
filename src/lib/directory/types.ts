@@ -43,6 +43,8 @@ type DirectoryBase = {
   translations: Partial<Record<Locale, { summary: string; state: 'current' | 'needs-review' }>>;
   reviewedAt: string | null;
   supportChangedAt: string | null;
+  // Rank in the selected chart only; absent for unranked apps and other sorts.
+  chartRank?: number | null;
 };
 export type Evidence = {
   id: string;
@@ -50,7 +52,6 @@ export type Evidence = {
   title: string;
   kind: 'app_store' | 'developer' | 'apple';
   quote: string;
-  announcedAt: string | null;
   supportVersion: string | null;
   country: 'KR';
 };
@@ -74,6 +75,7 @@ export type DirectoryResult = {
   page: number;
   pages: number;
   stats: DirectoryStats;
+  ranking?: { sourceUrl: string; observedAt: string } | null;
 };
 export type PublicHistory = {
   id: string;
@@ -88,7 +90,7 @@ export type DirectoryQuery = {
   q: string;
   category: Category | 'all';
   status: SupportStatus | 'all';
-  sort: 'recommended' | 'updated' | 'name';
+  sort: 'top-free' | 'top-paid' | 'recommended' | 'updated' | 'name';
   page: number;
 };
 export const STORE_COUNTRY = 'KR' as const;

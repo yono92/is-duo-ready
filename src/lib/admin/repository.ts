@@ -45,7 +45,7 @@ export async function getAdminApp(actor: string, id: string): Promise<AdminDraft
     );
     const evidence = await db.query(
       `SELECT s.url,s.title,s.kind,s.official_confirmed,e.quote,
-      coalesce(to_char(e.announced_at,'YYYY-MM-DD'),'') AS announced_at,coalesce(e.support_version,'') AS support_version,
+      coalesce(e.support_version,'') AS support_version,
       coalesce((SELECT jsonb_agg(jsonb_build_object('key',f.feature_key,'description',f.description) ORDER BY f.feature_key)
         FROM app_private.support_features f WHERE f.app_id=ae.app_id AND f.evidence_id=e.id),'[]'::jsonb) AS features
       FROM app_private.app_evidence ae JOIN app_private.evidence e ON e.id=ae.evidence_id

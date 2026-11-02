@@ -22,7 +22,6 @@ test('imports deduplicate, preserve reviewed public data and remain invisible to
       source_url: 'https://example.com/fictional-import',
       evidence_summary: 'Fictional suggestion',
       proposed_status: 'supported',
-      announced_at: '',
       support_version: '1.0',
     };
     const imported = await asActor(

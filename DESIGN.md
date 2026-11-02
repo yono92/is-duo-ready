@@ -33,13 +33,18 @@
 - 데스크톱 176px 사이드바, 1/2/3열 카드, 모바일 Astryx Dialog 필터를 유지한다. 긴 한국어·영어에서도 가로 넘침이 없어야 한다.
 - 검색·필터·테마·언어·페이지·근거 등 기존 제품 기능과 URL 상태를 유지한다. 실제 공개 데이터가 없을 때 가짜 카드로 채우지 않는다.
 
+2026-11-02 인기순 정렬: 기본은 KR 전체 무료 인기순이며 기존 Astryx 정렬 메뉴에서 유료
+인기순과 기존 정렬을 선택한다. 별도 무료/유료 탭은 두지 않는다. 카드 오른쪽에는 실제
+관측 순위를 작은 파란 텍스트로 표시하고 목록 위에는 차트 출처·수집일을 한 줄로 안내한다.
+순위 없는 앱도 유지하며 자료가 없으면 이름순 대체 안내를 제공한다.
+
 ## 컴포넌트
 
 | 영역 | 실제 Astryx 컴포넌트 |
 | --- | --- |
 | 검색·이메일·비밀번호·URL·일반 입력 | TextInput |
 | 긴 글·선택·확인 | TextArea / Selector / CheckboxInput |
-| 날짜·CSV | DateInput / FileInput |
+| CSV | FileInput |
 | 동작·링크·탐색 | Button / Link / TopNav / TopNavItem / SideNavItem / Pagination |
 | 앱·관리 패널 | Card / ClickableCard |
 | 필터·접기·알림·진행·빈 결과 | Dialog / Collapsible / Banner / ProgressBar / EmptyState |
@@ -47,7 +52,7 @@
 
 공개·관리자 모두 실제 컴포넌트를 사용한다. HTML input에 겉모양만 씌우는 방식으로 되돌리지 않는다.
 숨겨진 서버 데이터·봇 방지 필드, form/fieldset/legend 등 의미 구조는 HTML을 유지한다.
-FormData·필수 검증·날짜·파일·초기화·키보드 초점은 디자인 변경과 독립된 계약이다.
+FormData·필수 검증·파일·초기화·키보드 초점은 디자인 변경과 독립된 계약이다.
 
 2026-10-30 사용자 선택: 지원 현황의 가로 누적 차트는 Recharts를 사용한다. 일반 UI와
 툴팁 표면은 실제 Astryx를 유지하며 차트와 범례 색상은 Astryx 데이터 시각화 토큰으로 맞춘다.

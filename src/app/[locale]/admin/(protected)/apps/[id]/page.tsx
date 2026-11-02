@@ -82,11 +82,6 @@ export default async function EditApp({
                 {proposal.evidence_summary && (
                   <p className="whitespace-pre-wrap break-words">{proposal.evidence_summary}</p>
                 )}
-                {proposal.announced_at && (
-                  <p>
-                    {t('fields.announced_at')}: {proposal.announced_at}
-                  </p>
-                )}
                 {proposal.support_version && (
                   <p>
                     {t('fields.support_version')}: {proposal.support_version}

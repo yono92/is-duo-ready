@@ -162,9 +162,6 @@ export default async function AppDetail({
                     >
                       {source.title}
                     </Link>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      {source.announcedAt ? date(source.announcedAt) : t('dateUndisclosed')}
-                    </p>
                     <blockquote className="mt-4 whitespace-pre-wrap border-l-2 pl-4 text-sm leading-relaxed">
                       {source.quote}
                     </blockquote>
@@ -175,7 +172,7 @@ export default async function AppDetail({
             </ul>
           )}
         </section>
-        {history && (
+        {history && history.items.length > 0 && (
           <section className="mt-8 border-t pt-8">
             <h2 className="mb-5 text-lg font-semibold">{t('history')}</h2>
             <HistoryList items={history.items} locale={locale} />

@@ -6,6 +6,8 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import type { Client } from 'pg';
 import { connect, asActor } from '../integration/helpers.ts';
+import { fictionalCharts } from '../fixtures/chart-rankings.ts';
+import { syncChartRankings } from '../../scripts/lib/chart-rankings.ts';
 
 async function seed(suffix: string) {
   const client = await connect();
@@ -59,6 +61,75 @@ async function seed(suffix: string) {
   }
 }
 
+test('free and paid chart sorts preserve the catalogue, source and mobile locale state', async ({
+  page,
+}) => {
+  const suffixes = ['77301', '77302', '77303'];
+  for (const suffix of suffixes) await seed(suffix);
+  const db = await connect();
+  try {
+    await asActor(db, process.env.LOCAL_ADMIN_USER_ID!, (client) =>
+      syncChartRankings(
+        client,
+        fictionalCharts(
+          [`990003${suffixes[1]}`, `990003${suffixes[0]}`],
+          [`990003${suffixes[0]}`, `990003${suffixes[1]}`],
+        ),
+      ),
+    );
+  } finally {
+    await db.end();
+  }
+  const search = 'Fictional public 773';
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(`/en?q=${encodeURIComponent(search)}`);
+  await waitForDevice(page);
+  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('app-card').first()).toContainText(
+    `Fictional public ${suffixes[1]}`,
+  );
+  await expect(page.getByTestId('chart-rank')).toHaveText(['#1', '#2']);
+  await expect(page.getByTestId('ranking-note').getByRole('link')).toHaveAttribute(
+    'href',
+    'https://rss.marketingtools.apple.com/api/v2/kr/apps/top-free/100/apps.json',
+  );
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Directory.sort) }),
+    en.Directory.topPaid,
+  );
+  await expect(page).toHaveURL(/sort=top-paid/);
+  await expect(page.getByTestId('app-card').first()).toContainText(
+    `Fictional public ${suffixes[0]}`,
+  );
+  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('ranking-note').getByRole('link')).toHaveAttribute(
+    'href',
+    'https://rss.marketingtools.apple.com/api/v2/kr/apps/top-paid/100/apps.json',
+  );
+  await page.screenshot({ path: 'test-results/rankings-en-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 360, height: 1000 });
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto(`/ko?q=${encodeURIComponent(search)}&sort=top-paid`);
+  await waitForDevice(page);
+  await expect(page.getByRole('combobox', { name: fieldName(ko.Directory.sort) })).toContainText(
+    ko.Directory.topPaid,
+  );
+  await expect(page.getByTestId('chart-rank')).toHaveText(['1위', '2위']);
+  expect(
+    (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
+      .violations,
+  ).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+  await page.screenshot({ path: 'test-results/rankings-ko-mobile-dark.png', fullPage: true });
+  await page.goto(`/ko?q=${encodeURIComponent(search)}&sort=recommended`);
+  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('chart-rank')).toHaveCount(0);
+  await expect(page.getByTestId('ranking-note')).toHaveCount(0);
+});
+
 for (const [index, locale] of ['ko', 'en'].entries())
   for (const [themeIndex, theme] of ['light', 'dark'].entries()) {
     test(`reviewed database app search and sources ${locale} ${theme}`, async ({
@@ -81,7 +152,14 @@ for (const [index, locale] of ['ko', 'en'].entries())
         page.getByRole('link', { name: 'Fictional official source for testing' }),
       ).toHaveAttribute('href', `https://example.com/fictional-${suffix}`);
       await expect(page.getByText('Fictional evidenced feature', { exact: true })).toBeVisible();
-      await expect(page.getByText('Fictional public review', { exact: true })).toBeVisible();
+      await expect(page.getByText('Fictional public review', { exact: true })).toHaveCount(0);
+      await expect(
+        page.getByRole('heading', {
+          name: locale === 'ko' ? ko.Detail.history : en.Detail.history,
+        }),
+      ).toHaveCount(0);
+      // Source cards show the evidence without publication-date metadata.
+      await expect(page.locator('[id^="evidence-"]').getByText(/2026/)).toHaveCount(0);
       await expect(page.getByText('3.0', { exact: true })).toBeVisible();
       await expect(page.getByText('2.0', { exact: true })).toBeVisible();
       expect(await page.evaluate(() => Object.hasOwn(window, 'fakeEvidence'))).toBe(false);
@@ -105,10 +183,48 @@ for (const [index, locale] of ['ko', 'en'].entries())
             fullPage: true,
           });
       }
+      const client = await connect();
+      try {
+        await asActor(client, process.env.LOCAL_ADMIN_USER_ID!, async (db) => {
+          await db.query(
+            `UPDATE app_private.evidence SET quote=quote || ' Corrected source excerpt.'
+            WHERE id IN (SELECT evidence_id FROM app_private.app_evidence WHERE app_id=$1)`,
+            [app.id],
+          );
+          await db.query('SELECT app_private.publish_app($1,2,$2)', [
+            app.id,
+            'Fictional evidence correction',
+          ]);
+        });
+      } finally {
+        await client.end();
+      }
+      await page.reload();
+      const messages = locale === 'ko' ? ko : en;
+      await expect(page.getByRole('heading', { name: messages.Detail.history })).toBeVisible();
+      await expect(
+        page
+          .getByRole('article')
+          .getByText(messages.Updates.corrected.replace('{status}', messages.Status.supported), {
+            exact: true,
+          }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole('article').getByText('Fictional evidence correction', { exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText('Fictional public review', { exact: true })).toHaveCount(0);
       await page.goto(`/${locale}/updates`);
       await expect(
-        page.getByRole('link', { name: `Fictional public ${suffix}`, exact: true }),
+        page
+          .getByRole('listitem')
+          .filter({
+            has: page.getByRole('link', { name: `Fictional public ${suffix}`, exact: true }),
+          })
+          .filter({
+            hasText: messages.Updates.initial.replace('{status}', messages.Status.supported),
+          }),
       ).toBeVisible();
+      await expect(page.getByText('Fictional public review', { exact: true })).toHaveCount(0);
       expect(errors).toEqual([]);
     });
   }

@@ -7,7 +7,7 @@
   These internal slugs select a subset of official Apple category names, not the complete taxonomy
   or Apple API identifiers. Labels/sources: docs/references/app-store-categories.md.
 - `status`: supported, planned, unknown, unsupported; omitted/invalid = all.
-- `sort`: recommended (default), updated, name.
+- `sort`: top-free (default), top-paid, recommended, updated, name. Free/paid refer to separate overall KR App Store chart order, not price filters. Preserve unranked apps after ranked ones.
 - `page`: default 1; invalid = 1; beyond last page clamped. 24 items/page.
 - Duplicate known params use first value. Unknown query keys are ignored by filtering.
 - Recommended: supported first, then remaining groups (planned, unknown, unsupported), review descending,

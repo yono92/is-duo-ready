@@ -23,8 +23,22 @@ export async function queryDirectory(
       (SELECT string_agg(value,' ') FROM jsonb_array_elements_text(snapshot->'aliases'))),NFC)),lower(normalize($1,NFC)))>0`;
   const language = locale === 'ko' ? 'ko' : 'en';
   const nameOrder = `snapshot->'names'->>'${language}',slug`;
-  const sort =
-    query.sort === 'updated'
+  const chartKind = query.sort === 'top-free' || query.sort === 'top-paid' ? query.sort : null;
+  // Compatible rollout: the new UI can run before the additive ranking migration.
+  // Missing observations have an explicit name-order fallback, never invented ranks.
+  const available =
+    chartKind !== null &&
+    (
+      await db.query<{ available: boolean }>(
+        "SELECT to_regclass('public.app_chart_rankings') IS NOT NULL AS available",
+      )
+    ).rows[0].available;
+  const rankings = available
+    ? `SELECT app_id,rank,source_url,observed_at FROM public.app_chart_rankings WHERE country='KR' AND chart_kind=$5`
+    : `SELECT NULL::uuid AS app_id,NULL::integer AS rank,NULL::text AS source_url,NULL::timestamptz AS observed_at WHERE false AND $5::text IS NOT NULL`;
+  const sort = chartKind
+    ? `chart_rank ASC NULLS LAST,${nameOrder}`
+    : query.sort === 'updated'
       ? `support_changed_at DESC,${nameOrder}`
       : query.sort === 'name'
         ? nameOrder
@@ -37,9 +51,12 @@ export async function queryDirectory(
     page: number;
     pages: number;
     stats: DirectoryStats;
+    ranking: DirectoryResult['ranking'];
   }>(
-    `WITH published AS MATERIALIZED (
-      SELECT * FROM public.directory_entries WHERE publication='published' AND country='KR'
+    `WITH selected_rankings AS MATERIALIZED (${rankings}), published AS MATERIALIZED (
+      SELECT e.*,r.rank AS chart_rank FROM public.directory_entries e
+      LEFT JOIN selected_rankings r ON r.app_id=e.app_id
+      WHERE e.publication='published' AND e.country='KR'
     ), scoped AS MATERIALIZED (
       SELECT * FROM published WHERE ${where}
     ), pagination AS (
@@ -47,7 +64,7 @@ export async function queryDirectory(
     ), bounds AS (
       SELECT *,least(greatest(1,$4::int),pages) AS page FROM pagination
     ), ordered AS (
-      SELECT app_id,snapshot,row_number() OVER(ORDER BY ${sort}) AS position FROM scoped
+      SELECT app_id,snapshot,chart_rank,row_number() OVER(ORDER BY ${sort}) AS position FROM scoped
       ORDER BY ${sort} LIMIT ${PAGE_SIZE} OFFSET (SELECT (page-1)*${PAGE_SIZE} FROM bounds)
     ), overview AS (
       SELECT jsonb_build_object('total',count(*)::int,
@@ -58,11 +75,13 @@ export async function queryDirectory(
       FROM published
     )
     SELECT bounds.*,overview.stats,
+      (SELECT jsonb_build_object('sourceUrl',min(source_url),'observedAt',min(observed_at))
+        FROM selected_rankings HAVING count(*)>0) AS ranking,
       coalesce((SELECT jsonb_agg(snapshot || jsonb_build_object('iconUrl',
         CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=ordered.app_id)
-        THEN '/api/app-icons/' || app_id::text ELSE NULL END) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
+        THEN '/api/app-icons/' || app_id::text ELSE NULL END,'chartRank',chart_rank) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
     FROM bounds CROSS JOIN overview`,
-    [query.q, query.category, query.status, query.page],
+    [query.q, query.category, query.status, query.page, chartKind],
   );
   const row = result.rows[0];
   return { ...row, stats: assertDirectoryStats(row.stats) };
@@ -90,7 +109,10 @@ export async function queryHistory(
   requestedPage = 1,
   appId: string | null = null,
 ): Promise<{ items: PublicHistory[]; total: number; page: number; pages: number }> {
-  const where = "e.publication='published' AND ($1::uuid IS NULL OR h.app_id=$1::uuid)";
+  // Detail history shows changes after registration. Filter before counting/paging
+  // so an initial entry cannot create an empty section or a redundant next page.
+  const where = `e.publication='published' AND ($1::uuid IS NULL OR h.app_id=$1::uuid)
+    AND ($1::uuid IS NULL OR h.before_snapshot IS NOT NULL)`;
   const total = (
     await db.query<{ total: number }>(
       `SELECT count(*)::integer AS total FROM public.support_history h

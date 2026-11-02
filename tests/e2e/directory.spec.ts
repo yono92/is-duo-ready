@@ -107,6 +107,16 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
 test('pagination, sorting, filters and query normalization', async ({ page }) => {
   await page.goto('/en');
   await waitForDevice(page);
+  await expect(page.getByRole('combobox', { name: fieldName(en.Directory.sort) })).toContainText(
+    en.Directory.topFree,
+  );
+  await expect(page.getByTestId('ranking-note')).toContainText(en.Directory.rankingUnavailable);
+  await selectOption(
+    page,
+    page.getByRole('combobox', { name: fieldName(en.Directory.sort) }),
+    en.Directory.topPaid,
+  );
+  await expect(page).toHaveURL(/sort=top-paid/);
   await page.getByRole('button', { name: en.Directory.next }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByTestId('app-card')).toHaveCount(6);

@@ -95,8 +95,8 @@ test('CSV rejects ambiguous headers, malformed quoting, unsafe proposals and res
   expect(parseImport(`app_store_url,source_url\n${url},https://localhost/x`, 'csv')[0].error).toBe(
     'invalidProposal',
   );
-  expect(parseImport(`app_store_url,announced_at\n${url},2026-02-30`, 'csv')[0].error).toBe(
-    'invalidProposal',
+  expect(() => parseImport(`app_store_url,announced_at\n${url},2026-02-30`, 'csv')).toThrow(
+    'headers',
   );
   expect(parseImport(`app_store_url\n${url},extra`, 'csv')[0].error).toBe('columns');
 });

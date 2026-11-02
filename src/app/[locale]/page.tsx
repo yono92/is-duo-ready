@@ -2,7 +2,7 @@ import { Card, EmptyState } from '@/components/ui/surfaces';
 import { DevicePreview } from '@/components/device-preview';
 import type { Metadata } from 'next';
 import { Fragment } from 'react';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { ArrowRight, Globe2, SearchX } from 'lucide-react';
 import { Link } from '@/components/ui/link';
 import { redirect } from '@/i18n/navigation';
@@ -35,6 +35,7 @@ export default async function Home({
   const t = await getTranslations('Home');
   const d = await getTranslations('Directory');
   const n = await getTranslations('Nav');
+  const format = await getFormatter();
   const query = parseQuery(await searchParams);
   const data = await getDirectoryPage(query, locale);
   const result = data.kind === 'available' ? data.result : null;
@@ -82,6 +83,36 @@ export default async function Home({
             <>
               {data.fictional && <FixtureNotice />}
               <DirectoryOverview stats={result.stats} fictional={data.fictional} />
+              {(query.sort === 'top-free' || query.sort === 'top-paid') && (
+                <p
+                  className="mt-4 text-xs leading-relaxed text-muted-foreground"
+                  data-testid="ranking-note"
+                >
+                  {result.ranking ? (
+                    <>
+                      <Link
+                        href={result.ranking.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-4"
+                      >
+                        {d('rankingAsOf', {
+                          kind: query.sort === 'top-free' ? 'free' : 'paid',
+                          date: format.dateTime(new Date(result.ranking.observedAt), {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          }),
+                        })}
+                      </Link>
+                      {' · '}
+                      {d('unrankedLast')}
+                    </>
+                  ) : (
+                    d('rankingUnavailable')
+                  )}
+                </p>
+              )}
               <div className="mt-5">
                 <DirectoryControls
                   query={query}

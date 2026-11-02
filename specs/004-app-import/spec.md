@@ -42,7 +42,7 @@
 ### Functional Requirements
 
 - **FR-001**: 스토어 URL과 CSV 입력을 지원하고 관리자 권한을 모든 가져오기 요청에서 검사한다.
-- **FR-002**: CSV 열은 app_store_url, source_url, proposed_status, evidence_summary, announced_at, support_version을 지원한다.
+- **FR-002**: CSV 열은 app_store_url, source_url, proposed_status, evidence_summary, support_version을 지원한다. 2026-11-02 사용자 결정으로 발표일 열은 제거하며 이전 열이 포함된 CSV는 알 수 없는 헤더로 거부한다.
 - **FR-003**: 앱 ID와 KR 지역으로 기본 정보를 가져오며 응답에 없는 값은 누락으로 남긴다. 다른 국가로 조용히 대체하지 않는다.
 - **FR-004**: 정상 행·잘못된 입력·중복·조회 실패·근거 누락을 구분하고 앱 편집 링크를 제공한다.
 - **FR-005**: 앱과 근거의 반복 등록을 방지한다. 신규 앱은 초안으로 저장하고 공개 판정은 자동 변경하지 않는다.

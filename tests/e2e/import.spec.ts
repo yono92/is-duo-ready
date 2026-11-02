@@ -38,7 +38,7 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
           a = messages.Admin;
         const id = `990004${index}${themeIndex}${width}${info.repeatEachIndex}1`;
         const source = `https://example.com/fictional-import-${id}`;
-        const csv = `app_store_url,source_url,proposed_status,evidence_summary,announced_at,support_version\nhttps://apps.apple.com/kr/app/id${id},${source},supported,Fictional unverified proposal,,1.0\ninvalid,,,,,`;
+        const csv = `app_store_url,source_url,proposed_status,evidence_summary,support_version\nhttps://apps.apple.com/kr/app/id${id},${source},supported,Fictional unverified proposal,1.0\ninvalid,,,,`;
         const errors: string[] = [];
         page.on('pageerror', (error) => errors.push(error.message));
         await login(page, locale);
@@ -104,12 +104,6 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
           .getByLabel(fieldName(a.fields.title), { exact: true })
           .fill('Fictional verified source');
         await page.getByLabel(fieldName(a.fields.url), { exact: true }).fill(source);
-        const announcedDate = page.getByRole('combobox', {
-          name: fieldName(a.fields.announced_at),
-        });
-        await announcedDate.fill('2026-10-20');
-        await announcedDate.press('Tab');
-        await expect(announcedDate).not.toHaveAttribute('aria-invalid', 'true');
         await page
           .getByLabel(fieldName(a.fields.quote), { exact: true })
           .fill('Fictional evidence for isolated browser testing only');
@@ -118,9 +112,9 @@ for (const [index, locale] of (['ko', 'en'] as const).entries()) {
           .check();
         await page.getByRole('button', { name: a.saveDraft, exact: true }).click();
         await expect(page).toHaveURL(/saved=1/);
-        // DateInput commits an ISO date into the draft payload; verify persistence.
+        // Evidence remains editable and persists without the retired date field.
         const savedPayload = JSON.parse(await page.locator('input[name="payload"]').inputValue());
-        expect(savedPayload.evidence[0].announced_at).toBe('2026-10-20');
+        expect(savedPayload.evidence[0]).not.toHaveProperty('announced_at');
         await page
           .getByLabel(fieldName(a.fields.changeReason), { exact: true })
           .fill('Fictional imported app review');

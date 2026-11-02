@@ -7,7 +7,7 @@
 - app_store_listings: app_id+country unique, country KR, HTTPS store URL on apps.apple.com with matching ID, nullable current_version <=100 and release_notes <=20000, last_fetch_success_at nullable UTC. Successful imports never set reviewed_at.
 - app_support: app_id+country unique, status enum, summary <=4000, support_version nullable <=100, investigation_reason <=4000, reviewed_at nullable UTC. Explicit publication records review; unknown requires reason, other states require official evidence.
 - sources: UUID, canonical HTTPS URL unique (no credentials, local/private hosts or fragments), title 1..500, kind app_store/developer/apple, official_confirmed boolean explicitly asserted by administrator.
-- evidence: source_id, quote 1..4000, announced_at nullable date, support_version nullable, country KR; normalized content fingerprint prevents duplicates.
+- evidence: source_id, quote 1..4000, support_version nullable, country KR; normalized content fingerprint prevents duplicates. Publication dates were retired on 2026-11-02 by migration 007; existing IDs and relationships remain stable.
 - app_evidence: app_id+evidence_id composite key; many-to-many.
 - support_features: app_id+feature_key, description 1..1000, evidence_id linked to same app; only evidenced features publish.
 - review_events: app_id, actor UUID, internal_note <=4000, action, UTC; private append-only audit.

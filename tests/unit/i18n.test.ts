@@ -2,6 +2,7 @@ import { expect, it } from 'vitest';
 import ko from '@/messages/ko.json';
 import en from '@/messages/en.json';
 import { fixtureApps } from '@/lib/data/fixtures';
+import { createTranslator } from 'next-intl';
 import { appContent } from '@/lib/directory/content';
 function keys(value: object, prefix = ''): string[] {
   return Object.entries(value)
@@ -10,6 +11,34 @@ function keys(value: object, prefix = ''): string[] {
 }
 it('keeps dictionaries complete and matched', () => {
   expect(keys(ko)).toEqual(keys(en));
+});
+it('formats free/paid ranking attribution in both languages without ICU errors', () => {
+  for (const [locale, messages] of [
+    ['ko', ko],
+    ['en', en],
+  ] as const) {
+    const t = createTranslator({
+      locale,
+      messages,
+      namespace: 'Directory',
+      onError(error) {
+        throw error;
+      },
+    });
+    for (const kind of ['free', 'paid']) {
+      const result = t('rankingAsOf', { kind, date: '2026-11-02' });
+      expect(result).toContain('2026-11-02');
+      expect(result).toContain(
+        locale === 'ko'
+          ? kind === 'free'
+            ? '전체 무료'
+            : '전체 유료'
+          : kind === 'free'
+            ? 'overall free'
+            : 'overall paid',
+      );
+    }
+  }
 });
 it('uses original content for missing and stale translations', () => {
   for (const index of [1, 2]) {

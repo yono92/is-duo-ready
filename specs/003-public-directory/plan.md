@@ -23,3 +23,38 @@ Implementation: src/lib/data/, src/lib/directory/, src/app/[locale]/page.tsx, sr
 
 ## Dependencies and delivery
 002 → 003 → 004; each feature records tests independently, integrated importer→review→public checks close the combined scope. No feature is marked complete based only on another feature's tests.
+
+## Detail date/history amendment — 2026-10-30
+
+Remove evidence date rendering and its unused ko/en fallback key. Keep date storage untouched.
+Filter initial registrations only for app-scoped history in the shared SQL predicate before counts
+and pagination; retain registrations in the global feed. Render the detail history only when it
+has changes. Use localized registration/correction labels and omit initial batch reasons.
+Verify populated-date omission, registration-only hiding, same-status corrections and actual
+status changes with isolated PostgreSQL and public-data Chromium tests, then run repository gates.
+No schema, production data or deployment changes are required. Evidence/privacy principles and
+001 theme, locale, keyboard and fixture boundaries remain satisfied.
+
+## Full date-field retirement — 2026-11-02
+
+Remove the admin control/re-export, validators, import proposal field and public DTO key.
+Use the existing db/migrations checksum runner with additive migration 007; preserve 001–006.
+Replace save/publish/import functions as SECURITY INVOKER with existing grants, rehash evidence
+without dates while preserving IDs, strip current JSON keys, then drop the column without CASCADE.
+Guard date-only evidence/proposal collisions before mutations. Keep historical audit snapshots intact.
+Test an actual 006→007 upgrade with dated records, deduplication, rollback on ambiguity, unchanged
+review/history timestamps and existing non-owner RLS; verify admin import/edit/public browser flows.
+Back up and migrate the local DB after isolated tests. Hosted removal must accompany compatible app
+code in a release; do not break the running production admin by dropping its column ahead of code.
+
+## Overall chart sort — 2026-11-02
+
+Add migration 008 for published-only KR free/paid overall chart observations, with admin-only
+writes and explicit source/collection times. Validate both complete 100-entry overall charts;
+sync only registered identities atomically and reject stale replacements. Recreate chart observations
+with their separate sync CLI; keep existing curated-content export and support snapshots/history untouched. Default URL sort is top-free; top-paid remains
+explicit and existing sorts remain compatible. Join the selected chart before pagination in the
+same stats/rows SQL statement; unranked apps use deterministic name/slug order. A catalog probe
+supports a safe name-order fallback before the additive migration is installed. Show collection
+date/source and contextual rank labels with existing Astryx controls/cards. Test SQL/URL ordering,
+RLS, stale/incomplete imports, atomicity, fixtures without invented ranks and both locales/mobile.

@@ -28,4 +28,14 @@ Independent test: publication updates both locales; metadata-only imports do not
 
 ## Completion evidence
 
+- [x] T018 Add separate published-only chart observations, validated atomic sync and source/rank projection; preserve support data. Apply 008 and connect actual overall charts to local registered apps (8 free / 5 paid).
+- [x] T019 Default main to overall KR free chart order; add paid sort and accessible contextual ranks/source dates; preserve URL/filters and unranked entries.
+- [x] T020 Verify free/paid order, stale/invalid feed rejection, rollback, missing-table fallback, RLS and both-language/mobile browser behavior: final 93 unit, 18 DB, 32 public and 7 database browser checks pass. Record initial failures/fixes, Webpack success/Turbopack EPERM and local-only delivery in docs/verification.md.
+
+- [x] T016 Remove announcement dates from admin UI, CSV/proposal validation, repository reads, messages and public DTO; add migration 007 for functions, fingerprints, current JSON cleanup and column removal.
+- [x] T017 Verify 006→007 upgrade/rollback, deduplication and RLS (17 DB tests), 89 unit and 32 public browser tests; verify 23 admin/public scenarios (initial 21 PASS/2 selector failures, targeted rerun 2 PASS). Back up and migrate local data; record Webpack success, default Turbopack EPERM and hosted release ordering.
+
+- [x] T014 Remove evidence date UI, omit initial registration from detail history before pagination, and distinguish global registrations from same-status corrections in ko/en.
+- [x] T015 Verify date omission and registration/correction/status-change behavior: 89 unit, 16 isolated DB, 6 public-data Chromium and 32 public regression tests passed; lint/typecheck and Webpack build passed. Record the default Turbopack EPERM and the corrected test selector in docs/verification.md.
+
 Local implementation and verification completed on 2026-10-29. See docs/verification.md, section “002·003·004 완료 감사”, for requirement-by-requirement evidence and explicit external launch boundaries. No external project or deployment was created.

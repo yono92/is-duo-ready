@@ -6,7 +6,6 @@ export type Proposal = {
   source_url: string;
   proposed_status: string;
   evidence_summary: string;
-  announced_at: string;
   support_version: string;
 };
 export type ImportInput = {
@@ -21,7 +20,6 @@ const columns = [
   'source_url',
   'proposed_status',
   'evidence_summary',
-  'announced_at',
   'support_version',
 ];
 
@@ -102,7 +100,6 @@ export function parseImport(raw: unknown, mode: unknown): ImportInput[] {
         source_url: '',
         proposed_status: '',
         evidence_summary: '',
-        announced_at: '',
         support_version: '',
       },
       error: null,
@@ -116,24 +113,18 @@ export function parseImport(raw: unknown, mode: unknown): ImportInput[] {
     try {
       const source = data.source_url ? publicSourceUrl(data.source_url) : '';
       const status = data.proposed_status ?? '';
-      const date = data.announced_at ?? '';
       const quote = data.evidence_summary ?? '';
       const version = data.support_version ?? '';
       if (
         (status && !statuses.includes(status as (typeof statuses)[number])) ||
         quote.length > 4000 ||
-        version.length > 100 ||
-        (date &&
-          (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-            !Number.isFinite(Date.parse(date)) ||
-            new Date(date).toISOString().slice(0, 10) !== date))
+        version.length > 100
       )
         throw new Error();
       result.proposal = {
         source_url: source,
         proposed_status: status,
         evidence_summary: quote,
-        announced_at: date,
         support_version: version,
       };
     } catch {

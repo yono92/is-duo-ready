@@ -118,12 +118,27 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       assert.ok(app && 'app' in app);
       assert.equal(app.app.slug, 'public-query-test-0');
       const history = await queryHistory(db, 1, ids[0]);
-      assert.equal(history.total, 1);
+      assert.equal(history.total, 0);
+      assert.deepEqual(history.items, []);
+      assert.equal(history.pages, 1);
+      // The global feed keeps registrations, while detail retains corrections
+      // even when the support status itself has not changed.
+      const feed = await queryHistory(db);
+      assert.ok(feed.items.some((item) => item.beforeStatus === null));
+      const correction = await queryHistory(db, 999, ids[2]);
+      assert.equal(correction.total, 1);
+      assert.equal(correction.page, 1);
+      assert.equal(correction.items[0].beforeStatus, 'unknown');
+      assert.equal(correction.items[0].afterStatus, 'unknown');
+      assert.equal(correction.items[0].reason, 'Fictional recency test');
       assert.ok(!JSON.stringify(history).includes(actor));
       assert.ok(!JSON.stringify(history).includes('PRIVATE QUERY NOTE'));
     });
     await asActor(client, actor, async (db) => {
       await db.query("UPDATE app_private.apps SET slug='new-public-query-slug' WHERE id=$1", [
+        ids[0],
+      ]);
+      await db.query("UPDATE app_private.app_support SET status='planned' WHERE app_id=$1", [
         ids[0],
       ]);
       await db.query('SELECT app_private.publish_app($1,2,$2)', [ids[0], 'Fictional URL update']);
@@ -132,6 +147,10 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       const alias = await queryApp(db, 'public-query-test-0');
       assert.ok(alias && 'redirect' in alias);
       assert.equal(alias.redirect, 'new-public-query-slug');
+      const history = await queryHistory(db, 1, ids[0]);
+      assert.equal(history.total, 1);
+      assert.equal(history.items[0].beforeStatus, 'supported');
+      assert.equal(history.items[0].afterStatus, 'planned');
     });
     await asActor(client, actor, async (db) => {
       await db.query('SELECT app_private.archive_app($1,3,$2)', [ids[0], 'Fictional archive']);

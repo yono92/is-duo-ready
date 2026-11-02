@@ -1,9 +1,9 @@
 'use client';
 import { Card, Banner } from '@/components/ui/surfaces';
 
-import { Select, TextArea, Checkbox, DateInput } from '@/components/ui/form-controls';
+import { Select, TextArea, Checkbox } from '@/components/ui/form-controls';
 
-import { useActionState, useState, type ComponentProps } from 'react';
+import { useActionState, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { saveAppAction, reviewAppAction } from '@/app/[locale]/admin/actions';
 import { type AdminDraft, type AdminEvidence } from '@/lib/admin/input';
@@ -19,7 +19,6 @@ const newEvidence = (): AdminEvidence => ({
   kind: 'developer',
   quote: '',
   official_confirmed: false,
-  announced_at: '',
   support_version: '',
   features: [],
 });
@@ -245,15 +244,6 @@ export function EditForm({ initial }: { initial: AdminDraft }) {
                       />
                     </div>
                   ))}
-                  <DateInput
-                    label={t('fields.announced_at')}
-                    value={
-                      (item.announced_at || undefined) as ComponentProps<typeof DateInput>['value']
-                    }
-                    onChange={(value) => evidence(index, { announced_at: value ?? '' })}
-                    presentation="adaptive-bottom-sheet"
-                    size="lg"
-                  />
                 </div>
                 <div className="block space-y-2 text-sm">
                   <Select

@@ -1,6 +1,6 @@
 # Interface contract
 
-POST through protected server actions: URL list or UTF-8 CSV <=512 KiB and <=200 rows. Columns app_store_url (required), source_url, proposed_status, evidence_summary, announced_at, support_version. Unknown columns rejected to catch typos. Source URL must be HTTPS, without credentials and public hostname; no network fetch occurs for it. Never accept actor or review timestamp from input.
+POST through protected server actions: URL list or UTF-8 CSV <=512 KiB and <=200 rows. Columns app_store_url (required), source_url, proposed_status, evidence_summary, support_version. Unknown columns, including the retired announcement-date column, are rejected to catch typos. Source URL must be HTTPS, without credentials and public hostname; no network fetch occurs for it. Never accept actor or review timestamp from input.
 Preview/parse reports input errors before fetch. Batches max 10 rows; output row number, original safe URL, outcome code, draft edit link. Resume/retry failed rows without duplicating app/evidence. Rate limit and timeout errors are translated. Cancel stops further batches; successful drafts persist.
 Lookup rejects country mismatch, wrong trackId, zero/multiple unexpected results, wrong wrapper type and oversized body. Imported API evidence fields are suggestions only; 002 manual review is required before public support state changes.
 

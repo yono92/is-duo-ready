@@ -5,7 +5,6 @@ import { Selector, type SelectorOptionType } from '@astryxdesign/core/Selector';
 import { TextArea as AstryxTextArea } from '@astryxdesign/core/TextArea';
 import { CheckboxInput } from '@astryxdesign/core/CheckboxInput';
 import { useFormValue } from './form-value';
-export { DateInput } from '@astryxdesign/core/DateInput';
 export { FileInput } from '@astryxdesign/core/FileInput';
 
 export function Select({

@@ -23,7 +23,7 @@ test('admin payload strips forged publication, actor and review fields and valid
   expect(() => parseDraft(JSON.stringify({ ...draft, id: 'forged', revision: 1 }))).toThrow();
 });
 
-test('source links reject script, credentials, internal hosts and malformed dates', () => {
+test('source links reject script, credentials, internal hosts; retired evidence dates are stripped', () => {
   for (const url of [
     'javascript:alert(1)',
     'https://localhost/test',
@@ -45,16 +45,15 @@ test('source links reject script, credentials, internal hosts and malformed date
     support_version: '',
     features: [],
   };
-  expect(() =>
-    parseDraft(
-      JSON.stringify({
-        ...emptyDraft,
-        app_store_id: '123',
-        slug: 'test',
-        name: 'Test',
-        developer: 'Test',
-        evidence: [evidence],
-      }),
-    ),
-  ).toThrow();
+  const parsed = parseDraft(
+    JSON.stringify({
+      ...emptyDraft,
+      app_store_id: '123',
+      slug: 'test',
+      name: 'Test',
+      developer: 'Test',
+      evidence: [evidence],
+    }),
+  );
+  expect(parsed.evidence[0]).not.toHaveProperty('announced_at');
 });

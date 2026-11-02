@@ -27,6 +27,12 @@ describe('directory URL contract', () => {
     expect(parseQuery(Object.fromEntries(new URLSearchParams(queryString(query))))).toEqual(query);
     expect(changeQuery(query, { category: 'graphics-design' }).page).toBe(1);
     expect(changeQuery(query, { page: 3 }).page).toBe(3);
+    for (const sort of ['top-free', 'top-paid', 'recommended', 'updated', 'name'] as const) {
+      const sorted = { ...defaultQuery, sort };
+      expect(parseQuery(Object.fromEntries(new URLSearchParams(queryString(sorted))))).toEqual(
+        sorted,
+      );
+    }
   });
   it('normalizes the legacy creativity category and emits the canonical URL slug', () => {
     const legacy = parseQuery({ category: 'creativity', status: 'supported' });
@@ -99,12 +105,29 @@ describe('directory URL contract', () => {
       reviewedAt: '2026-02-01T00:00:00Z',
       supportChangedAt: '2026-03-01T00:00:00Z',
     };
-    expect(selectApps([a, b], defaultQuery, 'en').apps[0].slug).toBe(b.slug);
+    expect(selectApps([a, b], { ...defaultQuery, sort: 'recommended' }, 'en').apps[0].slug).toBe(
+      b.slug,
+    );
     expect(selectApps([a, b], { ...defaultQuery, sort: 'updated' }, 'en').apps[0].slug).toBe(
       a.slug,
     );
-    expect(selectApps([a, { ...b, status: 'unsupported' }], defaultQuery, 'en').apps[0].slug).toBe(
-      a.slug,
-    );
+    expect(
+      selectApps(
+        [a, { ...b, status: 'unsupported' }],
+        { ...defaultQuery, sort: 'recommended' },
+        'en',
+      ).apps[0].slug,
+    ).toBe(a.slug);
+  });
+  it('defaults to free chart order, puts unranked apps last and keeps every app', () => {
+    expect(defaultQuery.sort).toBe('top-free');
+    const apps = [
+      { ...fixtureApps[0], chartRank: 8 },
+      { ...fixtureApps[1], chartRank: null },
+      { ...fixtureApps[2], chartRank: 2 },
+    ];
+    const result = selectApps(apps, defaultQuery, 'en');
+    expect(result.apps.map((app) => app.slug)).toEqual([apps[2].slug, apps[0].slug, apps[1].slug]);
+    expect(result.total).toBe(3);
   });
 });

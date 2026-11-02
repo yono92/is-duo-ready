@@ -66,7 +66,7 @@ test('every application table has RLS and public history cannot be updated or de
     const tables = await client.query(`SELECT n.nspname, c.relname, c.relrowsecurity
       FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
       WHERE c.relkind='r' AND (n.nspname='app_private' OR
-        (n.nspname='public' AND c.relname IN ('directory_entries','support_history')))`);
+        (n.nspname='public' AND c.relname IN ('directory_entries','support_history','app_chart_rankings')))`);
     assert.ok((tables.rowCount ?? 0) >= 13);
     assert.ok(tables.rows.every((row) => row.relrowsecurity));
     const rights = await client.query(`SELECT

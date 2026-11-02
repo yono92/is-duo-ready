@@ -5,7 +5,7 @@ export const defaultQuery: DirectoryQuery = {
   q: '',
   category: 'all',
   status: 'all',
-  sort: 'recommended',
+  sort: 'top-free',
   page: 1,
 };
 export type RawQuery = Record<string, string | string[] | undefined>;
@@ -23,7 +23,10 @@ export function parseQuery(raw: RawQuery): DirectoryQuery {
       ? (category as DirectoryQuery['category'])
       : 'all',
     status: statuses.includes(status as never) ? (status as DirectoryQuery['status']) : 'all',
-    sort: sort === 'name' || sort === 'updated' ? sort : 'recommended',
+    sort:
+      sort === 'name' || sort === 'updated' || sort === 'recommended' || sort === 'top-paid'
+        ? sort
+        : defaultQuery.sort,
     page: Number.isSafeInteger(page) && page > 0 ? Math.min(page, 10000) : 1,
   };
 }
@@ -52,6 +55,10 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
   const date = (value: string | null) => (value ? Date.parse(value) : 0);
   const collator = new Intl.Collator(locale);
   matched.sort((a, b) => {
+    if (query.sort === 'top-free' || query.sort === 'top-paid') {
+      const rank = (a.chartRank ?? Infinity) - (b.chartRank ?? Infinity);
+      if (rank) return rank;
+    }
     if (query.sort === 'recommended') {
       const statusOrder = statuses.indexOf(a.status) - statuses.indexOf(b.status);
       if (statusOrder) return statusOrder;

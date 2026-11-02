@@ -23,7 +23,11 @@ export async function AppCard({
     <ClickableCard
       padding={5}
       className="app-card"
-      label={app.names[locale]}
+      label={
+        app.chartRank
+          ? t('rankedApp', { name: app.names[locale], rank: app.chartRank })
+          : app.names[locale]
+      }
       href={`/apps/${app.slug}${query ? `?${query}` : ''}`}
 
       data-testid="app-card"
@@ -34,7 +38,17 @@ export async function AppCard({
           <h3 className="app-card-title">{app.names[locale]}</h3>
           <p className="mt-1 text-xs text-muted-foreground">{app.developer}</p>
         </div>
-        <ArrowUpRight size={16} className="app-card-arrow" aria-hidden="true" />
+        {app.chartRank ? (
+          <span
+            className="shrink-0 text-sm font-semibold text-primary"
+            aria-hidden="true"
+            data-testid="chart-rank"
+          >
+            {t('chartRank', { rank: app.chartRank })}
+          </span>
+        ) : (
+          <ArrowUpRight size={16} className="app-card-arrow" aria-hidden="true" />
+        )}
       </div>
       <p
         className="app-summary text-muted-foreground"

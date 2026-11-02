@@ -37,10 +37,16 @@ export async function HistoryList({
             </p>
             <p className="mt-3 text-sm">
               {item.beforeStatus
-                ? t('changed', { before: s(item.beforeStatus), after: s(item.afterStatus) })
+                ? item.beforeStatus === item.afterStatus
+                  ? t('corrected', { status: s(item.afterStatus) })
+                  : t('changed', { before: s(item.beforeStatus), after: s(item.afterStatus) })
                 : t('initial', { status: s(item.afterStatus) })}
             </p>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">{item.reason}</p>
+            {item.beforeStatus && (
+              <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">
+                {item.reason}
+              </p>
+            )}
           </Card>
         </li>
       ))}

@@ -35,7 +35,7 @@ export function DirectoryControls({
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
   const active = Number(query.category !== 'all') + Number(query.status !== 'all');
-  const modified = active > 0 || !!query.q || query.sort !== 'recommended';
+  const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
   function navigate(next: DirectoryQuery) {
     const qs = queryString(next);
     startTransition(() => router.push(`/${qs ? `?${qs}` : ''}`, { scroll: false }));
@@ -84,6 +84,8 @@ export function DirectoryControls({
         value={query.sort}
         onChange={(value) => update({ sort: value as DirectoryQuery['sort'] })}
         options={[
+          { value: 'top-free', label: t('topFree') },
+          { value: 'top-paid', label: t('topPaid') },
           { value: 'recommended', label: t('recommended') },
           { value: 'updated', label: t('updated') },
           { value: 'name', label: t('name') },

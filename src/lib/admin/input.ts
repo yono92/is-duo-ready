@@ -13,7 +13,6 @@ export type AdminEvidence = {
   kind: 'app_store' | 'developer' | 'apple';
   quote: string;
   official_confirmed: boolean;
-  announced_at: string;
   support_version: string;
   features: { key: string; description: string }[];
 };
@@ -152,14 +151,6 @@ export function parseDraft(raw: unknown): AdminDraft {
     translations,
     evidence: data.evidence.map((value) => {
       const item = object(value);
-      const date = text(item.announced_at, 10);
-      if (
-        date &&
-        (!/^\d{4}-\d{2}-\d{2}$/.test(date) ||
-          !Number.isFinite(Date.parse(date)) ||
-          new Date(date).toISOString().slice(0, 10) !== date)
-      )
-        throw new InputError('invalid');
       if (
         typeof item.official_confirmed !== 'boolean' ||
         !Array.isArray(item.features) ||
@@ -172,7 +163,6 @@ export function parseDraft(raw: unknown): AdminDraft {
         kind: oneOf(item.kind, ['app_store', 'developer', 'apple']),
         quote: text(item.quote, 4000, true),
         official_confirmed: item.official_confirmed,
-        announced_at: date,
         support_version: text(item.support_version, 100),
         features: item.features.map((value) => {
           const feature = object(value);

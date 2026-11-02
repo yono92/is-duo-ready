@@ -18,7 +18,7 @@
 - Fixture support statuses are UI demonstration states, not publishable judgments. No synthetic evidence,
   no support versions, no fabricated review dates. Real publication validation belongs to 002.
 - Translation fallback: if absent or needs-review use original content and show localized source-language notice.
-- Query: q trimmed/NFC, max 100 chars; category/status enum or all; sort recommended|updated|name;
+- Query: q trimmed/NFC, max 100 chars; category/status enum or all; sort top-free (default)|top-paid|recommended|updated|name;
   page positive integer ≤10000, effective page clamped to actual page count. Page size 24.
 - Query changes other than page reset page=1. Reset restores defaults including search and sort.
 - Asset: local path, source record, rights, localized alt, width/height, placeholder boolean.

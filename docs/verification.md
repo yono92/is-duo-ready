@@ -1790,6 +1790,46 @@ The final Git commit, Vercel deployment, CI and public browser verification are 
 in ignored .data/release/apple-chart-release-result.json. Safari/Firefox and physical
 devices are outside this Chromium check.
 
+## Detail evidence dates and registration history — 2026-10-30
+
+The user's final direction removes the evidence publication/release date UI entirely,
+including the unknown-date placeholder. Existing source dates remain stored; no release
+dates were backfilled and no database/schema or production deployment was changed.
+App-scoped history excludes initial registration before counting/pagination, and the
+detail section is omitted when no subsequent changes exist. Global updates retain
+registrations with a localized directory-registration label and omit initial batch
+reasons. Same-status corrections use a correction label instead of a repeated status
+arrow; actual support transitions and public correction reasons remain visible.
+
+Checks:
+- npm run lint PASS, with the existing single unused-variable warning in ignored
+  .data/evidence-rescan-2026-10-30/review.mjs; npm run typecheck PASS.
+- npm test: 18 unit files / 89 tests PASS.
+- npm run test:db: 16 isolated PostgreSQL tests PASS, including registration-only empty
+  detail, global registration preservation, same-status correction, real status change,
+  page clamping and archived/private data boundaries. The sandboxed connection initially
+  failed with EPERM; the authorized local test rerun passed and cleaned up its test DB.
+- DUO_TEST_PORT=3477 npm run test:admin -- public-data.spec.ts: final 6/6 Chromium PASS
+  (37.4s). ko/en × light/dark verify that even a populated publication date is omitted,
+  registration-only detail has no history heading, same-status evidence corrections
+  become visible, and initial reasons remain hidden in detail/global feed. Existing
+  status-change, redirect, invalidation, archive, HTML safety and outage checks pass.
+  Initial run: 4 failures were caused by the new correction creating two app links in
+  the global feed; the test now targets the registration row by its localized label.
+  No product change or timeout/retry increase was needed for those failures.
+- DUO_TEST_PORT=3478 npm run test:e2e -- --workers=1: 32/32 Chromium PASS (1.8m).
+- npm run build: FAIL with the already observed Turbopack internal process/port EPERM
+  in device-preview.module.css, including one escalated retry. npm run build -- --webpack:
+  PASS, including TypeScript, static generation and build traces. Default Turbopack is
+  not reported as passing.
+- Edited-code Prettier and git diff --check PASS. Reviewed public-ko-light-360.png
+  and public-en-dark-1440.png from isolated tests: no evidence date or initial-history
+  section, readable source links/quotes, existing information-updated date retained.
+
+No commit, push, deployment, new external project, production write or new asset was
+performed. Browser coverage is Chromium; physical devices, Safari and Firefox were
+not exercised. Test-generated next-env.d.ts/tsconfig.json path changes were removed.
+
 ## Methodology copy and support-status clarity — 2026-11-02
 
 Requested on 2026-10-30: rewrite the Korean methodology page in conversational
@@ -1850,3 +1890,92 @@ output/playwright/duo-cover-hinge-left.png에 페이지 맥락을 포함해 저�
 재실행에서 생성한 test-results/device-ko-back.png의 카메라 왼쪽·커버 오른쪽 배치와
 펼친 내부 화면·접힌 화면도 직접 확인했다. Chromium/IAB 검증이며 물리 기기 검증은 없다.
 공유 작업 폴더의 다른 진행 중 변경은 보존했다. 커밋·푸시·배포는 수행하지 않았다.
+
+## 발표일 기능·DB 컬럼 제거 — 2026-11-02
+
+사용자 요청으로 관리자 날짜 입력·제안 표시·CSV 열·메시지·입력 검증·조회 SQL·공개 DTO와
+사용하지 않는 DateInput export를 제거했다. src/·scripts/에서 announced_at/announcedAt
+참조는 0개다. 이전 발표일 CSV 열은 unknown-header 오류로 거부하고, 예전 관리자 payload의
+필드는 whitelist에서 제외한다. 과거 수집 원본·001–006 마이그레이션·불변 감사 이력은 보존했다.
+
+007_remove_evidence_announcement_date.sql은 기존 checksum runner로 원자적으로 실행한다.
+SECURITY INVOKER와 기존 grants/RLS를 유지한 save/publish/import 함수 및 날짜 없는
+fingerprint로 교체하고, 근거 ID를 유지하며 현재 공개 JSON·가져오기 후보를 정리한 뒤
+컬럼을 DROP한다. 날짜만 다른 근거/제안의 충돌은 변경 전 23505로 중단한다. CASCADE나
+근거·이력 삭제는 없으며 검토일/지원 변경일을 갱신하지 않는다.
+
+로컬 적용:
+- 적용 전 근거 22개, 날짜 값 0개, 날짜 제외 중복 0개.
+- 비공개 백업: .data/migrations/before-007-local-1793576116165.json (0600).
+- 007 적용 후 information_schema에 컬럼 없음, 근거 22개 ID 보존, 이력 hash 동일.
+- 실제 변경 테이블은 evidence, import_rows, import_proposals뿐이었다. 로컬 공개 스냅샷은
+  기존에 없었으며, 공개 스냅샷 정리는 별도 격리 업그레이드 테스트에서 확인했다.
+
+검증:
+- npm run lint PASS (ignored .data 연구/병행 수집 코드의 unused-variable 경고 2개, 오류 0).
+- npm run typecheck PASS; npm test 18파일/89개 PASS.
+- npm run test:db 최종 17/17 PASS. 새 테스트는 006의 실제 날짜 있는 자료에서 007로
+  업그레이드, 근거/제안 중복별 롤백, 재적용 무변경, ID·기능 연결·검토/감사 이력 유지,
+  기존 payload 재저장·재가져오기 중복 방지와 익명 DTO를 확인했다.
+- DUO_TEST_PORT=3488 npm run test:e2e -- --workers=1: 32/32 PASS (2.3m).
+- DUO_TEST_PORT=3487 npm run test:admin -- import.spec.ts public-data.spec.ts:
+  최초 21 PASS / 2 FAIL (4.7m). ko dark 360/768은 날짜 저장 전의 Selector 옵션 클릭에서
+  60초 만료됐다. trace에서 레이아웃 이동 후 다른 하위 트리가 클릭을 가로채고 메뉴가
+  닫힌 것을 확인했다. 초기 trace는 .data/verification/announcement-retirement-initial-failures에
+  보존했다. 테스트 로직·timeout·retry 변경 없이 새 서버에서 해당 2건만 재실행: 2/2 PASS
+  (22.4s). CSV 재입력·편집·공개·두 언어/테마·반응형·axe·공개 상세 23개 고유 시나리오를
+  모두 통과했지만 최초 전체 실행의 실패를 통과로 바꾸어 기록하지 않는다.
+- npm run build는 기존 Turbopack CSS 프로세스/포트 EPERM으로 FAIL.
+  npm run build -- --webpack PASS (TypeScript·정적 생성·traces 포함).
+- 변경한 코드의 Prettier와 git diff --check PASS. 테스트가 추가한 3487/3488 설정만
+  정리했고 병행 작업의 3490 경로·기기 UI·자료 갱신 변경은 보존했다.
+
+운영 DB/배포에는 아직 적용하지 않았다. 기존 운영 관리자 SQL이 삭제 대상 컬럼을 참조하므로
+호환되는 코드 배포 후 기존 hosted migration runner로 적용해야 한다. 이번 작업은 새 외부
+프로젝트·운영 쓰기·배포·커밋·푸시를 수행하지 않았다. Chromium 외 실기기 검증은 없다.
+
+## 메인 무료·유료 인기순 — 2026-11-02
+
+기본 정렬을 KR 전체 무료 인기순으로 바꾸고 기존 Astryx 메뉴에 유료 인기순을 추가했다.
+공식 지원 우선·최근 변경·이름순과 검색/상태/카테고리/언어/페이지 URL을 유지한다.
+카드는 선택한 차트의 순위만 표시하고 미확인 순위 앱도 이름/slug 순으로 뒤에 유지한다.
+차트 출처·수집일을 표시하며 카테고리 순위를 전체 순위와 혼합하거나 다시 번호 매기지 않는다.
+테이블/관측이 없을 때는 이름순 대체를 명시한다. 실제 DB 오류를 빈 순위로 숨기지 않는다.
+
+008_app_chart_rankings.sql은 별도 현재 순위 테이블과 published-only 읽기/admin-only 쓰기
+RLS·제약·인덱스를 추가한다. 동기화 CLI는 완료된 KR 전체 무료/유료 각 100건을 검증하고
+기존 App Store ID만 연결한다. 두 차트를 원자적으로 교체하고 오래된 관측을 거부한다.
+지원 상태·근거·검토일·지원 변경일·이력·앱 수는 변경하지 않는다. 기존 curated-content
+백업/가져오기 경로는 그대로 두며 순위는 별도 CLI로 연결한다. 사용법은 docs/rankings.md.
+
+로컬 데이터: 008 적용 1건. 2026-11-02 08:27 KST에 수집된 실제 전체 차트 manifest로
+CLI dry-run과 apply를 실행해 등록된 무료 8개/유료 5개를 연결했다. 로컬 앱은 초안이므로
+익명 공개 순위나 운영 1,181개 전체 연결을 검증한 것으로 주장하지 않는다. 가짜 순위는
+격리 테스트 DB에만 사용했다. 운영 migration/동기화·코드 배포·스케줄러는 실행하지 않았다.
+
+검증:
+- npm run lint PASS (기존/병행 작업의 ignored .data unused-variable 경고 2개, 코드 오류 0).
+- npm run typecheck PASS. npm test: 최종 19파일/93개 PASS. URL 기본값/round-trip,
+  순위 없는 앱 보존, 원래 정렬, 무료/유료 출처 문구의 실제 ICU 포맷과 데이터 검증 포함.
+- npm run test:db: 최종 18/18 PASS. 실제 RLS, 서로 다른 무료/유료 순서, 초안 순위 비공개,
+  카테고리/상태 필터·전역 집계 유지, 중복 동기화, 오래된 두 번째 차트에서 전체 롤백,
+  지원/이력 불변, 008 미설치 대체 조회, 기존 콘텐츠 전송과 006→007 업그레이드 포함.
+- DUO_TEST_PORT=3498 npm run test:e2e -- --workers=1: 최종 32/32 PASS (1.8m).
+- DUO_TEST_PORT=3497 npm run test:admin -- public-data.spec.ts: 최종 7/7 PASS (43.5s).
+  실제 순위가 있는 가상 앱의 무료→유료 순서 변경, unranked 보존, source URL, ko/en,
+  360px 다크/1440px 라이트, axe·가로 넘침과 기존 상세/정정/보관 흐름을 확인했다.
+- 초기 브라우저 실행에서 정렬 옵션이 status Select에 들어간 연결 실수와 하이픈이 든
+  ICU select 키 오류를 발견해 수정하고 ICU 회귀 검사를 추가했다. 초기 공개 전체는
+  30 PASS/2 FAIL(메뉴와 dev 디렉터리 삭제에 따른 서버 재시작), 해당 2건 새 서버 재확인
+  후 최종 전체 32개를 다시 통과했다. 실제 DB 브라우저 7개 재검증 중 3건은 페이지 전환
+  중 전역 텍스트가 두 DOM에 잡혀 실패했다. 보이는 article에 검증 범위를 한정한 뒤 최종
+  7개 모두 통과했다. timeout/retry 설정을 늘리지 않았다. 초기/중간 trace는 ignored
+  .data/verification/ranking-sort-initial-failures 및 ranking-sort-streamed-details에 보존했다.
+- npm run build는 기존 Turbopack CSS 프로세스/포트 EPERM으로 FAIL. 최종
+  npm run build -- --webpack PASS (타입·정적 생성·traces 포함); 기본 빌드 성공으로 기록하지 않는다.
+- 수정 코드 Prettier와 git diff --check PASS. rankings-ko-mobile-dark.png를 직접 확인했다:
+  순위 1/2와 미확인 순위 앱의 구분, 유료 선택과 출처 날짜, 작은 화면의 줄바꿈을 유지한다.
+  테스트가 추가한 3497/3498 타입 경로만 정리하고 다른 작업 파일/데이터는 보존했다.
+
+커밋·푸시·운영 쓰기·배포나 새 외부 프로젝트 생성은 없다. Chromium 밖의 실제 기기/
+Safari/Firefox는 검증하지 않았다. 자동 순위 재수집은 별도 운영 작업이다.
