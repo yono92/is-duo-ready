@@ -14,6 +14,7 @@ import type { Locale, RealDirectoryApp } from '@/lib/directory/types';
 import { seoConfig } from '@/messages/seo';
 
 const production = {
+  ADSENSE_AUTO_ADS_ENABLED: 'false',
   PUBLIC_INDEXING: 'true',
   NODE_ENV: 'production',
   VERCEL_ENV: 'production',
@@ -105,13 +106,33 @@ test('unindexed production permits sharing crawlers while keeping general search
   expect(serializedRules).not.toMatch(/Googlebot|Bingbot|Yeti/);
 });
 
+test('auto ads permit exact ads.txt discovery and advertising crawlers without enabling search', () => {
+  productionEnvironment({ PUBLIC_INDEXING: 'false', ADSENSE_AUTO_ADS_ENABLED: 'true' });
+  const output = robots();
+  expect(output.sitemap).toBeUndefined();
+  expect(output.rules).toEqual([
+    { userAgent: '*', allow: '/ads.txt$', disallow: '/' },
+    {
+      userAgent: ['Mediapartners-Google', 'Google-Display-Ads-Bot'],
+      allow: ['/', '/api/og/'],
+      disallow: ['/ko/admin', '/en/admin', '/api/'],
+    },
+    {
+      userAgent: expect.arrayContaining(['Twitterbot', 'Slackbot', 'kakaotalk-scrap']),
+      allow: ['/', '/api/og/'],
+      disallow: ['/ko/admin', '/en/admin', '/api/'],
+    },
+  ]);
+  expect(pageMetadata('ko', 'home').robots).toEqual({ index: false, follow: false });
+});
+
 test.each([
   { DIRECTORY_DATA_SOURCE: 'fixtures' },
   { VERCEL_ENV: 'preview' },
   { NODE_ENV: 'development' },
   { NEXT_PUBLIC_SITE_URL: 'http://localhost:3000' },
 ])('nonpublic configuration %j does not grant a sharing crawler exception', (overrides) => {
-  productionEnvironment(overrides);
+  productionEnvironment({ ADSENSE_AUTO_ADS_ENABLED: 'true', ...overrides });
   expect(robots()).toEqual({ rules: [{ userAgent: '*', disallow: '/' }] });
 });
 
