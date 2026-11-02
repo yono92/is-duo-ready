@@ -166,3 +166,21 @@ real ad fill and actual CMP consent/refusal/revocation remain external follow-up
 checks. The account still reports under review and ads.txt Not found, despite the
 correct public file; the forced GDPR test did not display a message. See
 [launch evidence and rollback](adsense-launch-2026-11-02.md).
+
+
+## AdSense crawling follow-up — 2026-11-02
+
+Owner-authorized source 8f21e8a was deployed as dpl_9rAemkmHAXanuMRgFw6W4xT7cQJC
+and promoted after staged robots/home verification. The existing actual-production
+ad gate now allows exact ads.txt discovery and explicit advertising-bot public
+access; general search noindex, empty sitemap, private/API and nonproduction
+boundaries remain intact. No environment or database change. Local lint/types,
+98 unit tests and 36 E2E passed; Webpack and remote default builds passed; local
+default Turbopack retained its known EPERM limitation.
+
+Public robots/ads.txt returned expected HTTP 200 responses. The account still
+showed under review / ads.txt Not found and did not expose Check for updates.
+Private-browser consent diagnostics confirmed SDK 200, an empty Google ad response
+and no Funding Choices requests. Saved published message/site/policy URL matched.
+Provider-side message bootstrapping, approval and real ad fill remain unresolved.
+See [release and diagnostic evidence](adsense-crawl-2026-11-02.md).

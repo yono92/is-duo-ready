@@ -2082,3 +2082,29 @@ separate facts. Refusal/revocation and actual creative delivery remain unverifie
 Console warnings about Three.Clock and Google's unsupported data-nscript attribute
 were observed; SDK and subsequent request-frame execution did occur. Full release
 IDs, limits and rollback are in [launch record](adsense-launch-2026-11-02.md).
+
+
+## 008 AdSense crawl and consent diagnosis - 2026-11-02
+
+The owner authorized the crawl fix and consent diagnosis. Source 8f21e8a permits
+only exact ads.txt discovery and explicit advertising/site-verification crawler
+public access when the existing actual-production ad gate is enabled. General
+search remains blocked/noindex, sitemap empty, private/API exclusions retained.
+Disabled advertising, fixture, local and Preview boundaries were tested.
+
+Lint/typecheck passed, unit 20 files / 98 tests passed, full E2E 36/36 passed on
+3416. Default build reproduced the known CSS process/port EPERM; Webpack build
+passed. Remote default build passed for dpl_9rAemkmHAXanuMRgFw6W4xT7cQJC. Stage
+robots/home responses were checked before promotion, then public robots.txt and
+ads.txt returned 200 with exact content and sitemap.xml was empty. No environment,
+database or content setting was changed.
+
+Actual Whale private-window Network: publisher SDK 200; Google ad response 200
+with an empty HTML body; Funding Choices 0/71 requests. Console displayed only
+the two previously recorded warnings. Published message, selected site and saved
+policy URL were confirmed read-only in the account. After refreshing, the account
+still showed under review and ads.txt Not found. Its current details/snippet UI
+provided no Check for updates action, so no recrawl request is claimed. The
+precise reason for missing CMP bootstrapping remains unresolved; actual
+consent/refusal/revocation and creative fill remain unverified. See
+[crawl diagnosis](adsense-crawl-2026-11-02.md) for evidence, limits and release IDs.
