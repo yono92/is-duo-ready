@@ -7,6 +7,7 @@ import { Link } from '@/components/ui/link';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
 import { pageMetadata, siteVerification } from '@/lib/data/seo';
+import { adsensePublisher } from '@/lib/data/adsense';
 import '../globals.css';
 export async function generateMetadata({
   params,
@@ -19,7 +20,7 @@ export async function generateMetadata({
     ...pageMetadata(validLocale, 'home'),
     verification: siteVerification(),
     other: {
-      'google-adsense-account': 'ca-pub-8224851078290204',
+      'google-adsense-account': adsensePublisher,
     },
   };
 }

@@ -8,6 +8,7 @@ import { RoutePagination } from '@/components/ui/route-pagination';
 import { parseQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
 import { pageMetadata } from '@/lib/data/seo';
+import { AutoAds } from '@/components/auto-ads';
 export async function generateMetadata({
   params,
 }: {
@@ -31,6 +32,7 @@ export default async function Updates({
   const real = dataSource() === 'postgres';
   return (
     <main id="main" className="site-width py-12">
+      <AutoAds hasRealContent={real && history.items.length > 0} />
       <section className="mx-auto max-w-3xl">
         <h1 className="text-3xl font-semibold">{t('title')}</h1>
         <p className="mb-8 mt-4 text-muted-foreground">{t('description')}</p>

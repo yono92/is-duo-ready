@@ -14,6 +14,7 @@ import { StatusBadge } from '@/components/status-badge';
 import { HistoryList } from '@/components/directory/history-list';
 import { AppStoreBadge } from '@/components/app-store-badge';
 import { appMetadata } from '@/lib/data/seo';
+import { AutoAds } from '@/components/auto-ads';
 
 export async function generateMetadata({
   params,
@@ -53,6 +54,7 @@ export default async function AppDetail({
     format.dateTime(new Date(value), { year: 'numeric', month: 'short', day: 'numeric' });
   return (
     <main id="main" className="site-width py-10">
+      <AutoAds hasRealContent={!app.fictional} />
       <Link
         href={`/${qs ? `?${qs}` : ''}`}
         className="mb-7 inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground"

@@ -2006,3 +2006,39 @@ DB 조회는 페이지 분할 전에 정렬하며 격리 fixture 조회도 같�
 앞선 커밋·푸시 요청에 이은 정정 커밋으로 이 변경만 main에 후속 푸시한다. 병행 콘텐츠
 갱신 문서/데이터는 별도로 보존한다. 새 마이그레이션·운영 DB 쓰기·수동 배포는 없다.
 운영 순위 테이블/관측 연결은 기존처럼 별도 릴리스 작업이다. 실기기/Safari/Firefox는 미검증.
+
+
+## 자동 광고 전용 코드 준비 — 2026-11-02
+
+사용자 결정에 따라 홈 중간 고정 광고 공간·CSS·미사용 ko/en 광고 라벨을 제거했다.
+수동 광고 단위 ID는 연결하지 않았다. 공통 게시자 ID와 next/script afterInteractive 자동
+광고 로더를 추가하고 홈·앱 상세·변경 목록의 실제 콘텐츠에 연결했다.
+ADSENSE_AUTO_ADS_ENABLED=true 및 기존 Production/실데이터/HTTPS 경계를 모두 요구한다.
+현재 운영 스위치는 변경하지 않았으며 개인정보처리방침·CMP URL·계정 제외 설정과 실제
+탐색 중 광고 잔류 검증이 미완료이므로 활성화·배포하지 않았다.
+
+- `npm run lint`: PASS, 0 errors. 기존 .data 관측 스크립트의 경고 3개를 유지했다.
+  새 E2E 파일 추가 후 다시 실행해 같은 결과를 확인했다.
+- `npm run typecheck`: PASS. 새 E2E 파일의 타입 검사도 아래 Webpack 빌드에서 통과했다.
+- `npm test`: PASS, 20 files / 96 tests. 운영 opt-in·환경·실제 콘텐츠 게이트와 색인 독립성을 검증했다.
+- `DUO_TEST_PORT=3413 npm run test:e2e`: 초기 로컬 서버 listen EPERM으로 실행 불가.
+  로컬 서버 실행 권한을 허용한 재실행에서 기존 32 tests PASS (1.1m).
+- `ADSENSE_AUTO_ADS_ENABLED=true DUO_TEST_PORT=3413 npm run test:e2e -- tests/e2e/adsense.spec.ts`:
+  ko/en 2 tests PASS (7.6s). 홈 → 가상 앱 상세 → 변경 목록에서 광고 요청 0건,
+  홈 고정 공간·수동 슬롯 및 광고 스크립트 부재를 확인했다. 광고 도메인 요청은 감시하고
+  발생 시 중단하도록 구성하여 테스트 실패 시에도 실제 광고 트래픽을 보내지 않는다.
+  이는 fixture 경계 검증이며 실제 Production 광고 송출/동의 검증이 아니다.
+- `npm run build`: FAIL, 기존 device-preview.module.css PostCSS 처리 중
+  Turbopack 프로세스의 port binding EPERM. 권한 조정 재시도에서도 같은 오류.
+- `npm run build -- --webpack`: PASS, 컴파일·TypeScript·페이지 생성 완료.
+- `git diff --check`: PASS. 테스트 서버가 생성한 next-env.d.ts/tsconfig.json의 임시
+  포트별 경로 변경은 이번 변경에서 제외했다.
+
+React 검토: 새 클라이언트 effect·상태·외부 의존성을 추가하지 않고 next/script의
+중복 로딩 처리를 사용한다. 수동 ins/push 코드는 없다. 이미 실행된 타사 스크립트의
+부작용을 unmount만으로 제거한다고 주장하지 않으며, 계정 페이지 제외·빈 결과/오류
+이동 검증을 T075에 남겼다. 개인정보·쿠키 운영 정책을 임의로 만들지 않았다.
+
+계정 브라우저 관측과 운영 선행 조건은 docs/adsense.md에 기록했다. 외부 계정 설정,
+운영 환경 값, DB, 배포는 변경하지 않았다. 검증 로그는
+`/tmp/duoready-auto-ads-{lint,lint-final,typecheck,unit,e2e,e2e-retry,fixture-e2e,build,build-retry,webpack-build}.log`.
