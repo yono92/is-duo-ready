@@ -1,6 +1,9 @@
 'use client';
 import { Pagination } from '@astryxdesign/core/Pagination';
-import { useRouter } from '@/i18n/navigation';
+import { getPathname, useRouter } from '@/i18n/navigation';
+import { useLocale } from 'next-intl';
+import { useDocumentNavigation } from '@/components/ad-navigation';
+import type { Locale } from '@/lib/directory/types';
 import { useTransition } from 'react';
 
 export function RoutePagination({
@@ -17,6 +20,8 @@ export function RoutePagination({
   label: string;
 }) {
   const router = useRouter();
+  const locale = useLocale() as Locale;
+  const documentNavigation = useDocumentNavigation();
   const [pending, startTransition] = useTransition();
   return (
     <Pagination
@@ -31,6 +36,10 @@ export function RoutePagination({
         const [pathname, search] = path.split('?');
         const params = new URLSearchParams(search);
         params.set('page', String(next));
+        if (documentNavigation) {
+          window.location.assign(getPathname({ href: `${pathname}?${params}`, locale }));
+          return;
+        }
         startTransition(() => router.push(`${pathname}?${params}`));
       }}
     />

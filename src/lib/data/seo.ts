@@ -5,7 +5,7 @@ import { appContent } from '@/lib/directory/content';
 import type { DirectoryApp, Locale } from '@/lib/directory/types';
 
 type Environment = Record<string, string | undefined>;
-type Page = 'home' | 'updates' | 'methodology' | 'submit';
+type Page = 'home' | 'updates' | 'methodology' | 'submit' | 'privacy';
 
 export function publicSiteAllowed(env: Environment) {
   if (
@@ -102,7 +102,7 @@ export function pageMetadata(locale: Locale, page: Page, env: Environment = proc
     locale,
     page === 'home' ? '' : `/${page}`,
     page === 'home' ? title : `${title} · ${seoConfig.siteName}`,
-    env.DIRECTORY_DATA_SOURCE === 'fixtures' || !env.DIRECTORY_DATA_SOURCE
+    page !== 'privacy' && (env.DIRECTORY_DATA_SOURCE === 'fixtures' || !env.DIRECTORY_DATA_SOURCE)
       ? copy.fixtureDescription
       : description,
     page !== 'submit',

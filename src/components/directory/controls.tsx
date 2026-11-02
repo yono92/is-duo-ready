@@ -2,10 +2,12 @@
 import { Select } from '@/components/ui/form-controls';
 
 import { useId, useState, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { Link } from '@/components/ui/link';
-import { useRouter } from '@/i18n/navigation';
+import { getPathname, useRouter } from '@/i18n/navigation';
+import { useDocumentNavigation } from '@/components/ad-navigation';
+import type { Locale } from '@/lib/directory/types';
 import { categories, statuses, type DirectoryQuery } from '@/lib/directory/types';
 import { changeQuery, defaultQuery, queryString } from '@/lib/directory/query';
 import { Button } from '@/components/ui/button';
@@ -31,6 +33,8 @@ export function DirectoryControls({
   const c = useTranslations('Categories');
   const s = useTranslations('Status');
   const router = useRouter();
+  const locale = useLocale() as Locale;
+  const documentNavigation = useDocumentNavigation();
   const [pending, startTransition] = useTransition();
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
@@ -38,6 +42,12 @@ export function DirectoryControls({
   const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
   function navigate(next: DirectoryQuery) {
     const qs = queryString(next);
+    if (documentNavigation) {
+      window.location.assign(
+        getPathname({ href: `/${qs ? `?${qs}` : ''}#directory-heading`, locale }),
+      );
+      return;
+    }
     startTransition(() => router.push(`/${qs ? `?${qs}` : ''}`, { scroll: false }));
   }
   function update(patch: Partial<DirectoryQuery>) {

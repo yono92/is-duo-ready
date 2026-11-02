@@ -7,7 +7,8 @@ import { Link } from '@/components/ui/link';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
 import { pageMetadata, siteVerification } from '@/lib/data/seo';
-import { adsensePublisher } from '@/lib/data/adsense';
+import { adsensePublisher, autoAdsAllowed } from '@/lib/data/adsense';
+import { AdNavigation } from '@/components/ad-navigation';
 import '../globals.css';
 export async function generateMetadata({
   params,
@@ -44,29 +45,34 @@ export default async function LocaleLayout({
     >
       <body>
         <NextIntlClientProvider>
-          <Providers>
-            <Header />
-            {children}
-            <footer className="site-footer">
-              <div className="site-width flex flex-wrap justify-between gap-5 text-xs leading-relaxed text-muted-foreground">
-                <div className="space-y-2">
-                  <p>{f('copyright')}</p>
-                  <p>{f('description')}</p>
+          <AdNavigation enabled={autoAdsAllowed(true)}>
+            <Providers>
+              <Header />
+              {children}
+              <footer className="site-footer">
+                <div className="site-width flex flex-wrap justify-between gap-5 text-xs leading-relaxed text-muted-foreground">
+                  <div className="space-y-2">
+                    <p>{f('copyright')}</p>
+                    <p>{f('description')}</p>
+                  </div>
+                  <nav
+                    aria-label={f('navigation')}
+                    className="flex flex-wrap items-start gap-x-5 gap-y-2"
+                  >
+                    <Link href="/methodology" className="underline underline-offset-4">
+                      {f('methodology')}
+                    </Link>
+                    <Link href="/submit" className="underline underline-offset-4">
+                      {f('submit')}
+                    </Link>
+                    <Link href="/privacy" className="underline underline-offset-4">
+                      {f('privacy')}
+                    </Link>
+                  </nav>
                 </div>
-                <nav
-                  aria-label={f('navigation')}
-                  className="flex flex-wrap items-start gap-x-5 gap-y-2"
-                >
-                  <Link href="/methodology" className="underline underline-offset-4">
-                    {f('methodology')}
-                  </Link>
-                  <Link href="/submit" className="underline underline-offset-4">
-                    {f('submit')}
-                  </Link>
-                </nav>
-              </div>
-            </footer>
-          </Providers>
+              </footer>
+            </Providers>
+          </AdNavigation>
         </NextIntlClientProvider>
       </body>
     </html>

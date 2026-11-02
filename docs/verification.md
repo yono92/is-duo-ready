@@ -2042,3 +2042,15 @@ React 검토: 새 클라이언트 effect·상태·외부 의존성을 추가하�
 계정 브라우저 관측과 운영 선행 조건은 docs/adsense.md에 기록했다. 외부 계정 설정,
 운영 환경 값, DB, 배포는 변경하지 않았다. 검증 로그는
 `/tmp/duoready-auto-ads-{lint,lint-final,typecheck,unit,e2e,e2e-retry,fixture-e2e,build,build-retry,webpack-build}.log`.
+
+
+## 008 Auto ads launch preparation - 2026-11-02
+
+Owner-authorized production setup continues the prior auto-only code preparation.
+See [release evidence](adsense-launch-2026-11-02.md) for the verified privacy disclosure,
+document navigation boundary, saved eight AdSense exclusions and deployment checkpoints.
+Lint/typecheck and 97 unit tests passed. Full E2E: 35 passed, one existing sorting
+timeout; that unchanged test passed on an isolated one-worker rerun. New ko/en
+privacy and fixture ad-traffic checks passed. Default Turbopack hit the existing
+port EPERM; Webpack production build passed. Production activation is still pending
+at this checkpoint and is not represented as approved or serving ads.

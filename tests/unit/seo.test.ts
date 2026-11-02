@@ -21,6 +21,18 @@ const production = {
   NEXT_PUBLIC_SITE_URL: 'https://example.com',
 };
 
+test('privacy metadata describes the actual disclosure even in a fixture preview', () => {
+  for (const locale of ['ko', 'en'] as const) {
+    expect(
+      pageMetadata(locale, 'privacy', { ...production, DIRECTORY_DATA_SOURCE: 'fixtures' }),
+    ).toMatchObject({
+      title: `${seoConfig.locales[locale].privacy.title} · Is Duo Ready?`,
+      description: seoConfig.locales[locale].privacy.description,
+      alternates: { canonical: `https://example.com/${locale}/privacy` },
+    });
+  }
+});
+
 afterEach(() => vi.unstubAllEnvs());
 
 function productionEnvironment(overrides: Record<string, string | undefined> = {}) {

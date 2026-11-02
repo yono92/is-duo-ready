@@ -6,6 +6,7 @@ type SeoCopy = {
   updates: PageCopy;
   methodology: PageCopy;
   submit: PageCopy;
+  privacy: PageCopy;
   fixtureDescription: string;
   appTitle: string;
   appDescription: string;
@@ -21,6 +22,10 @@ export const seoConfig = {
   verification: { google: '', naver: '', bing: '' },
   locales: {
     ko: {
+      privacy: {
+        title: '개인정보처리방침',
+        description: 'Is Duo Ready?의 개인정보, 쿠키, 광고 및 이용자 선택에 관한 안내입니다.',
+      },
       home: {
         title: 'Is Duo Ready? — 아이폰 듀오 앱 지원 현황',
         description:
@@ -52,6 +57,11 @@ export const seoConfig = {
       },
     },
     en: {
+      privacy: {
+        title: 'Privacy policy',
+        description:
+          'How Is Duo Ready? handles information, cookies, advertising and your choices.',
+      },
       home: {
         title: 'Is Duo Ready? — iPhone Duo app support',
         description:

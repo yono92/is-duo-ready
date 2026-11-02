@@ -28,7 +28,8 @@
     "description": "An independent service, not affiliated with Apple or app developers.",
     "navigation": "Footer navigation",
     "methodology": "Support information",
-    "submit": "Submit information"
+    "submit": "Submit information",
+    "privacy": "Privacy policy"
   },
   "Directory": {
     "search": "Search apps",
@@ -515,5 +516,49 @@
     "summary": "Official evidence explicitly confirming Duo support has not yet been verified. This is not an official non-support statement or a device test result.",
     "investigation": "The latest Korean App Store release notes were checked, but no explicit official evidence sufficient to confirm Duo support was established. Product page badges and earlier developer announcements still need verification.",
     "reason": "Prioritized apps from the Korean App Store charts; support status reflects verified official evidence."
+  },
+  "Privacy": {
+    "title": "Privacy policy",
+    "effective": "Effective November 2, 2026",
+    "intro": "Is Duo Ready? is an independent app information service operated by the GitHub account yono92. This page explains information handling for browsing, submissions, administrator authentication and Google advertising.",
+    "browsing": {
+      "title": "Browsing information",
+      "body": "You can browse apps and official sources without signing up. Search terms, filters, sorting and page numbers are included in URLs. To deliver and secure the site, the hosting provider may process technical information such as IP addresses, requested URLs, access times, browser information and error logs. Do not enter personal information in search fields or URLs."
+    },
+    "preferences": {
+      "title": "Language and appearance",
+      "body": "The DUO_LOCALE cookie remembers your language for up to one year. Your theme is stored in the browser under duo-ready-theme until you delete it. These settings remember your language and appearance preferences. You can reset them by deleting cookies or site data in your browser."
+    },
+    "submissions": {
+      "title": "App and information submissions",
+      "body": "A submission stores its type, App Store app ID and URL, message and evidence URL. We do not ask for names or contact details and ask you to keep personal information out of submissions. Submissions and review records are retained to verify and correct information, keep a review history and prevent duplicates. They are not publicly queryable. Submissions currently have no automatic deletion deadline. You can request correction or deletion of personal information included by mistake through the contact channel below.\nTo limit repeated submissions, the duo-submission-visitor cookie lasts one hour. A hash of its random identifier and hourly request counts are stored. Rate-limit records older than one day are cleaned up when the next submission is received."
+    },
+    "administrators": {
+      "title": "Administrator authentication",
+      "body": "Administrator sign-in uses Supabase Auth and processes administrator emails, authentication information and session cookies. These support authentication and authorization and are not exposed to ordinary visitors. Signing out ends the browser authentication session."
+    },
+    "advertising": {
+      "title": "Google advertising and consent",
+      "body": "We use Google AdSense Auto ads on public content pages. Google and advertising partners may use cookies, web beacons, IP addresses, device and browser identifiers, and page information to deliver and measure ads, prevent abuse and personalize advertising according to your choices. Google explains its information use and retention through the official links below.\nGoogle consent messages are configured for visitors in regions where consent is required, including the EEA, the UK and Switzerland. These offer consent, refusal and options management. You can change or withdraw your choice through the Privacy and cookie settings link at the bottom of advertising pages where the message is available. This privacy policy page does not include advertising or consent-message tags."
+    },
+    "providers": {
+      "title": "Service providers and external links",
+      "body": "Vercel hosts and delivers the site. Supabase provides data storage and administrator authentication. Google provides advertising and consent messages. Information may be processed in other countries through these providers. Their privacy information is linked below. Provider-held technical and advertising information follows the relevant provider retention policies and settings. External sites, including the App Store, official sources and GitHub, apply their own policies when you open their links."
+    },
+    "choices": {
+      "title": "Your choices",
+      "body": "You can delete or block cookies and local storage in your browser. Blocking them may affect saved language and theme preferences, submissions or administrator sign-in. Google advertising personalization can be managed in My Ad Center. To change or withdraw advertising consent, use the settings link on a page where the consent message is available."
+    },
+    "contact": {
+      "title": "Contact and policy changes",
+      "body": "For privacy questions or access, correction or deletion requests, contact the operator through the service GitHub issue channel below. It is public: describe only the type of request and do not post names, contact details, passwords, cookie values or other personal information. We do not ask you to supply personal information on the public issue board for verification. When handling practices change, we update this page and its effective date."
+    },
+    "links": {
+      "google": "How Google uses information from partner sites",
+      "ads": "Google My Ad Center",
+      "vercel": "Vercel privacy notice",
+      "supabase": "Supabase privacy information",
+      "github": "Service GitHub contact channel"
+    }
   }
 }
