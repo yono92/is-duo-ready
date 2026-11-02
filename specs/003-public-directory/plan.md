@@ -54,7 +54,9 @@ writes and explicit source/collection times. Validate both complete 100-entry ov
 sync only registered identities atomically and reject stale replacements. Recreate chart observations
 with their separate sync CLI; keep existing curated-content export and support snapshots/history untouched. Default URL sort is top-free; top-paid remains
 explicit and existing sorts remain compatible. Join the selected chart before pagination in the
-same stats/rows SQL statement; unranked apps use deterministic name/slug order. A catalog probe
-supports a safe name-order fallback before the additive migration is installed. Show collection
+same stats/rows SQL statement. Before pagination, both chart sorts place all supported apps first,
+then rank ascending within each group; unranked apps use deterministic name/slug order at each
+group’s end. A catalog probe retains support priority with name order within groups before the
+additive migration is installed. Show collection
 date/source and contextual rank labels with existing Astryx controls/cards. Test SQL/URL ordering,
 RLS, stale/incomplete imports, atomicity, fixtures without invented ranks and both locales/mobile.

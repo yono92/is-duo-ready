@@ -26,7 +26,7 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
               developer: 'Isolated test only',
               category: index === 1 ? 'music' : 'productivity',
               original_locale: 'en',
-              status: 'unknown',
+              status: index === 0 || index === 3 ? 'supported' : 'unknown',
               investigation_reason: 'Fictional test; no support assertion',
               translations: {
                 en: {
@@ -35,7 +35,18 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
                   state: 'current',
                 },
               },
-              evidence: [],
+              evidence:
+                index === 0 || index === 3
+                  ? [
+                      {
+                        url: `https://example.com/fictional-ranking-${index}`,
+                        title: 'Isolated test source',
+                        kind: 'developer',
+                        official_confirmed: true,
+                        quote: 'Fictional support evidence for an isolated test only',
+                      },
+                    ]
+                  : [],
             },
           ])
         ).rows[0].app;
@@ -83,24 +94,30 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       assert.equal(free.total, 4);
       assert.deepEqual(
         free.apps.map((a) => a.slug),
-        [apps[2].slug, apps[1].slug, apps[0].slug, apps[3].slug],
+        [apps[0].slug, apps[3].slug, apps[2].slug, apps[1].slug],
       );
       assert.deepEqual(
         free.apps.map((a) => a.chartRank),
-        [1, 2, 3, null],
+        [3, null, 1, 2],
       );
       assert.ok(free.ranking);
       assert.equal(new Date(free.ranking.observedAt).toISOString(), '2026-11-02T00:00:00.000Z');
       const paid = await queryDirectory(client, { ...query, sort: 'top-paid' }, 'ko');
       assert.deepEqual(
         paid.apps.map((a) => a.slug),
-        [apps[0].slug, apps[2].slug, apps[1].slug, apps[3].slug],
+        [apps[0].slug, apps[3].slug, apps[2].slug, apps[1].slug],
       );
       assert.deepEqual(paid.stats, free.stats);
       const filtered = await queryDirectory(client, { ...query, category: 'music' }, 'ko');
       assert.equal(filtered.apps[0].chartRank, 2); // Overall rank, not renumbered within the category.
       assert.deepEqual(filtered.stats, free.stats);
-      const empty = await queryDirectory(client, { ...query, status: 'supported' }, 'en');
+      const supported = await queryDirectory(client, { ...query, status: 'supported' }, 'en');
+      assert.deepEqual(
+        supported.apps.map((app) => app.slug),
+        [apps[0].slug, apps[3].slug],
+      );
+      assert.deepEqual(supported.stats, free.stats);
+      const empty = await queryDirectory(client, { ...query, status: 'planned' }, 'en');
       assert.equal(empty.total, 0);
       assert.deepEqual(empty.stats, free.stats);
       const names = await queryDirectory(client, { ...query, sort: 'name' }, 'en');
@@ -149,6 +166,10 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       assert.equal(fallback.total, 4);
       assert.equal(fallback.ranking, null);
       assert.ok(fallback.apps.every((a) => a.chartRank === null));
+      assert.deepEqual(
+        fallback.apps.map((app) => app.slug),
+        [apps[0].slug, apps[3].slug, apps[1].slug, apps[2].slug],
+      );
     } finally {
       await db.query('ROLLBACK');
     }

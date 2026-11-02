@@ -31,6 +31,8 @@ Independent test: publication updates both locales; metadata-only imports do not
 - [x] T018 Add separate published-only chart observations, validated atomic sync and source/rank projection; preserve support data. Apply 008 and connect actual overall charts to local registered apps (8 free / 5 paid).
 - [x] T019 Default main to overall KR free chart order; add paid sort and accessible contextual ranks/source dates; preserve URL/filters and unranked entries.
 - [x] T020 Verify free/paid order, stale/invalid feed rejection, rollback, missing-table fallback, RLS and both-language/mobile browser behavior: final 93 unit, 18 DB, 32 public and 7 database browser checks pass. Record initial failures/fixes, Webpack success/Turbopack EPERM and local-only delivery in docs/verification.md.
+- [x] T021 Correct both chart sorts to put all officially supported apps first before pagination, then rank/name within each group, including missing-chart fallback and localized guidance.
+- [x] T022 Verify mixed support/rank ordering: 94 unit, 18 PostgreSQL, 32 fixture and 7 database browser checks pass; lint/typecheck and Webpack build pass. Record default Turbopack EPERM and follow-up commit/push scope in docs/verification.md.
 
 - [x] T016 Remove announcement dates from admin UI, CSV/proposal validation, repository reads, messages and public DTO; add migration 007 for functions, fingerprints, current JSON cleanup and column removal.
 - [x] T017 Verify 006→007 upgrade/rollback, deduplication and RLS (17 DB tests), 89 unit and 32 public browser tests; verify 23 admin/public scenarios (initial 21 PASS/2 selector failures, targeted rerun 2 PASS). Back up and migrate local data; record Webpack success, default Turbopack EPERM and hosted release ordering.

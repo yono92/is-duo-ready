@@ -122,12 +122,38 @@ describe('directory URL contract', () => {
   it('defaults to free chart order, puts unranked apps last and keeps every app', () => {
     expect(defaultQuery.sort).toBe('top-free');
     const apps = [
-      { ...fixtureApps[0], chartRank: 8 },
-      { ...fixtureApps[1], chartRank: null },
-      { ...fixtureApps[2], chartRank: 2 },
+      { ...fixtureApps[0], status: 'unknown' as const, chartRank: 8 },
+      { ...fixtureApps[1], status: 'unknown' as const, chartRank: null },
+      { ...fixtureApps[2], status: 'unknown' as const, chartRank: 2 },
     ];
     const result = selectApps(apps, defaultQuery, 'en');
     expect(result.apps.map((app) => app.slug)).toEqual([apps[2].slug, apps[0].slug, apps[1].slug]);
     expect(result.total).toBe(3);
+  });
+  it('puts every supported app before higher-ranked unverified apps in either chart', () => {
+    const apps = [
+      { ...fixtureApps[0], status: 'unknown' as const, chartRank: 1 },
+      { ...fixtureApps[1], status: 'supported' as const, chartRank: 30 },
+      { ...fixtureApps[2], status: 'supported' as const, chartRank: null },
+      { ...fixtureApps[3], status: 'supported' as const, chartRank: 10 },
+      { ...fixtureApps[4], status: 'planned' as const, chartRank: 2 },
+    ];
+    for (const sort of ['top-free', 'top-paid'] as const) {
+      const result = selectApps(apps, { ...defaultQuery, sort }, 'en');
+      expect(result.apps.map((app) => app.slug)).toEqual([
+        apps[3].slug,
+        apps[1].slug,
+        apps[2].slug,
+        apps[0].slug,
+        apps[4].slug,
+      ]);
+      expect(result.total).toBe(5);
+      const noRanks = selectApps(
+        apps.map((app) => ({ ...app, chartRank: null })),
+        { ...defaultQuery, sort },
+        'en',
+      );
+      expect(noRanks.apps.slice(0, 3).every((app) => app.status === 'supported')).toBe(true);
+    }
   });
 });

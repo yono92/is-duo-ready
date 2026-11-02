@@ -56,6 +56,8 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
   const collator = new Intl.Collator(locale);
   matched.sort((a, b) => {
     if (query.sort === 'top-free' || query.sort === 'top-paid') {
+      const supported = Number(b.status === 'supported') - Number(a.status === 'supported');
+      if (supported) return supported;
       const rank = (a.chartRank ?? Infinity) - (b.chartRank ?? Infinity);
       if (rank) return rank;
     }

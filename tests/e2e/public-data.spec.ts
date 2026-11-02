@@ -9,7 +9,7 @@ import { connect, asActor } from '../integration/helpers.ts';
 import { fictionalCharts } from '../fixtures/chart-rankings.ts';
 import { syncChartRankings } from '../../scripts/lib/chart-rankings.ts';
 
-async function seed(suffix: string) {
+async function seed(suffix: string, status: 'supported' | 'unknown' = 'supported') {
   const client = await connect();
   const payload = {
     app_store_id: `990003${suffix}`,
@@ -19,7 +19,8 @@ async function seed(suffix: string) {
     category: 'productivity',
     original_locale: 'en',
     aliases: [`공개검증${suffix}`],
-    status: 'supported',
+    status,
+    investigation_reason: 'Fictional test; no confirmed support evidence for unknown fixtures',
     current_version: '3.0',
     support_version: '2.0',
     translations: {
@@ -29,17 +30,20 @@ async function seed(suffix: string) {
         state: 'current',
       },
     },
-    evidence: [
-      {
-        url: `https://example.com/fictional-${suffix}`,
-        title: 'Fictional official source for testing',
-        kind: 'developer',
-        official_confirmed: true,
-        quote: 'Fictional support claim <script>window.fakeEvidence=true</script>',
-        support_version: '2.0',
-        features: [{ key: 'wide-layout', description: 'Fictional evidenced feature' }],
-      },
-    ],
+    evidence:
+      status === 'supported'
+        ? [
+            {
+              url: `https://example.com/fictional-${suffix}`,
+              title: 'Fictional official source for testing',
+              kind: 'developer',
+              official_confirmed: true,
+              quote: 'Fictional support claim <script>window.fakeEvidence=true</script>',
+              support_version: '2.0',
+              features: [{ key: 'wide-layout', description: 'Fictional evidenced feature' }],
+            },
+          ]
+        : [],
   };
   try {
     return await asActor(client, process.env.LOCAL_ADMIN_USER_ID!, async (db: Client) => {
@@ -64,16 +68,17 @@ async function seed(suffix: string) {
 test('free and paid chart sorts preserve the catalogue, source and mobile locale state', async ({
   page,
 }) => {
-  const suffixes = ['77301', '77302', '77303'];
-  for (const suffix of suffixes) await seed(suffix);
+  const suffixes = ['77301', '77302', '77303', '77304'];
+  for (const suffix of suffixes)
+    await seed(suffix, suffix === suffixes[1] ? 'unknown' : 'supported');
   const db = await connect();
   try {
     await asActor(db, process.env.LOCAL_ADMIN_USER_ID!, (client) =>
       syncChartRankings(
         client,
         fictionalCharts(
-          [`990003${suffixes[1]}`, `990003${suffixes[0]}`],
-          [`990003${suffixes[0]}`, `990003${suffixes[1]}`],
+          [`990003${suffixes[1]}`, `990003${suffixes[2]}`, `990003${suffixes[0]}`],
+          [`990003${suffixes[1]}`, `990003${suffixes[0]}`, `990003${suffixes[2]}`],
         ),
       ),
     );
@@ -84,11 +89,17 @@ test('free and paid chart sorts preserve the catalogue, source and mobile locale
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(`/en?q=${encodeURIComponent(search)}`);
   await waitForDevice(page);
-  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('app-card')).toHaveCount(4);
   await expect(page.getByTestId('app-card').first()).toContainText(
+    `Fictional public ${suffixes[2]}`,
+  );
+  await expect(page.getByTestId('chart-rank')).toHaveText(['#2', '#3', '#1']);
+  await expect(page.getByTestId('app-card').nth(2)).toContainText(
+    `Fictional public ${suffixes[3]}`,
+  );
+  await expect(page.getByTestId('app-card').last()).toContainText(
     `Fictional public ${suffixes[1]}`,
   );
-  await expect(page.getByTestId('chart-rank')).toHaveText(['#1', '#2']);
   await expect(page.getByTestId('ranking-note').getByRole('link')).toHaveAttribute(
     'href',
     'https://rss.marketingtools.apple.com/api/v2/kr/apps/top-free/100/apps.json',
@@ -102,7 +113,10 @@ test('free and paid chart sorts preserve the catalogue, source and mobile locale
   await expect(page.getByTestId('app-card').first()).toContainText(
     `Fictional public ${suffixes[0]}`,
   );
-  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('app-card')).toHaveCount(4);
+  await expect(page.getByTestId('app-card').last()).toContainText(
+    `Fictional public ${suffixes[1]}`,
+  );
   await expect(page.getByTestId('ranking-note').getByRole('link')).toHaveAttribute(
     'href',
     'https://rss.marketingtools.apple.com/api/v2/kr/apps/top-paid/100/apps.json',
@@ -115,7 +129,7 @@ test('free and paid chart sorts preserve the catalogue, source and mobile locale
   await expect(page.getByRole('combobox', { name: fieldName(ko.Directory.sort) })).toContainText(
     ko.Directory.topPaid,
   );
-  await expect(page.getByTestId('chart-rank')).toHaveText(['1위', '2위']);
+  await expect(page.getByTestId('chart-rank')).toHaveText(['2위', '3위', '1위']);
   expect(
     (await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze())
       .violations,
@@ -125,7 +139,7 @@ test('free and paid chart sorts preserve the catalogue, source and mobile locale
   );
   await page.screenshot({ path: 'test-results/rankings-ko-mobile-dark.png', fullPage: true });
   await page.goto(`/ko?q=${encodeURIComponent(search)}&sort=recommended`);
-  await expect(page.getByTestId('app-card')).toHaveCount(3);
+  await expect(page.getByTestId('app-card')).toHaveCount(4);
   await expect(page.getByTestId('chart-rank')).toHaveCount(0);
   await expect(page.getByTestId('ranking-note')).toHaveCount(0);
 });

@@ -1979,3 +1979,30 @@ CLI dry-run과 apply를 실행해 등록된 무료 8개/유료 5개를 연결했
 
 커밋·푸시·운영 쓰기·배포나 새 외부 프로젝트 생성은 없다. Chromium 밖의 실제 기기/
 Safari/Firefox는 검증하지 않았다. 자동 순위 재수집은 별도 운영 작업이다.
+
+## 인기순 공식 지원 우선 정정 — 2026-11-02
+
+사용자 지적에 따라 무료·유료 인기순의 우선순위를 공식 지원 여부 → 그룹 내 차트 순위 →
+이름/slug로 정정했다. 순위 없는 공식 지원 앱도 순위 1위 지원 미확인 앱보다 앞선다.
+DB 조회는 페이지 분할 전에 정렬하며 격리 fixture 조회도 같은 규칙을 따른다. 차트 테이블/
+관측이 없어도 공식 지원 우선·그룹 내 이름순을 유지하고 ko/en 안내에 명시한다.
+공식 지원 필터로 다른 상태를 숨기지 않으며 기존 지원 상태·근거·순위 관측은 바꾸지 않는다.
+
+검증:
+- npm run lint PASS (기존 ignored .data 연구 스크립트 경고 2개, 오류 0).
+- npm run typecheck PASS; npm test: 19파일/94개 PASS. 두 차트의 지원 여부·순위 혼합,
+  순위 없는 지원 앱과 최상위 미확인 앱, 관측 없는 경우를 검증한다.
+- npm run test:db: 18/18 PASS. 실제 SQL 정렬, 상태/카테고리 필터와 집계, 차트 테이블
+  미설치 대체 정렬, RLS와 지원 이력 불변을 확인했다.
+- DUO_TEST_PORT=3497 npm run test:admin -- public-data.spec.ts: 7/7 PASS (50.9s).
+  두 지원 앱의 차트별 순서 변경, 순위 없는 세 번째 지원 앱, 마지막의 미확인 1위 앱을
+  실제 DB→페이지에서 확인했다. ko/en·360px 다크·1440px 라이트·axe·가로 넘침 포함.
+  rankings-ko-mobile-dark.png를 직접 확인해 공식 지원 3개 뒤에 미확인 1위가 있음을 확인했다.
+- DUO_TEST_PORT=3498 npm run test:e2e -- --workers=1: 32/32 PASS (1.8m).
+- npm run build: FAIL, 기존 CSS Turbopack 프로세스/포트 EPERM 재현.
+  npm run build -- --webpack: PASS (컴파일·타입·정적 생성·traces).
+- 수정 코드 Prettier 및 git diff --check PASS. 테스트가 추가한 3497/3498 타입 경로만 정리했다.
+
+앞선 커밋·푸시 요청에 이은 정정 커밋으로 이 변경만 main에 후속 푸시한다. 병행 콘텐츠
+갱신 문서/데이터는 별도로 보존한다. 새 마이그레이션·운영 DB 쓰기·수동 배포는 없다.
+운영 순위 테이블/관측 연결은 기존처럼 별도 릴리스 작업이다. 실기기/Safari/Firefox는 미검증.

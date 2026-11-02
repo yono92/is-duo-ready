@@ -25,7 +25,7 @@ export async function queryDirectory(
   const nameOrder = `snapshot->'names'->>'${language}',slug`;
   const chartKind = query.sort === 'top-free' || query.sort === 'top-paid' ? query.sort : null;
   // Compatible rollout: the new UI can run before the additive ranking migration.
-  // Missing observations have an explicit name-order fallback, never invented ranks.
+  // Missing observations keep supported apps first, then use names within groups.
   const available =
     chartKind !== null &&
     (
@@ -37,7 +37,7 @@ export async function queryDirectory(
     ? `SELECT app_id,rank,source_url,observed_at FROM public.app_chart_rankings WHERE country='KR' AND chart_kind=$5`
     : `SELECT NULL::uuid AS app_id,NULL::integer AS rank,NULL::text AS source_url,NULL::timestamptz AS observed_at WHERE false AND $5::text IS NOT NULL`;
   const sort = chartKind
-    ? `chart_rank ASC NULLS LAST,${nameOrder}`
+    ? `CASE WHEN snapshot->>'status'='supported' THEN 0 ELSE 1 END,chart_rank ASC NULLS LAST,${nameOrder}`
     : query.sort === 'updated'
       ? `support_changed_at DESC,${nameOrder}`
       : query.sort === 'name'
