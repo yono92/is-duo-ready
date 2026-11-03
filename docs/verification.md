@@ -2108,3 +2108,40 @@ provided no Check for updates action, so no recrawl request is claimed. The
 precise reason for missing CMP bootstrapping remains unresolved; actual
 consent/refusal/revocation and creative fill remain unverified. See
 [crawl diagnosis](adsense-crawl-2026-11-02.md) for evidence, limits and release IDs.
+
+## 2026-11-03 — 009 국내 주요 앱 중심 탐색
+
+기본 목록을 국내 주요 앱으로 바꾸고 듀오 지원 확인·전체 앱 목록을 분리했다. 선정 78개와
+저장된 KR 무료 top 100을 합치되 지원 근거·상태·공개 여부와 독립적으로 처리한다.
+검색 제출은 전체 앱을 대상으로 하며 URL/언어/상세 복귀/페이지 경계와 선택 목록의 통계
+분모를 검증했다. 운영 앱·근거·스키마·외부 프로젝트·배포·스케줄은 변경하지 않았다.
+
+- `npm run lint`: 오류 0, 기존 `.data` 연구/검증 스크립트 경고 3개.
+- `npm run typecheck`: 최초 collection 필수 타입 추가 후 기존 통합 테스트 입력 3곳 누락을
+  찾아 수정했고 재실행 통과했다.
+- `npm test`: 20개 파일, 100개 테스트 통과. collection URL 왕복·기본/명시 범위·전문 앱
+  전체 검색·선정과 지원 판정 독립성·목록별 통계 분모·기존 정렬 계약을 확인했다.
+- `npm run test:db`: 최초 sandbox EPERM으로 연결 실패. 권한 조정 실행에서 격리 DB
+  18개 통합 테스트 통과. 익명 RLS·무료 차트 합집합·정렬/언어와 무관한 목록 포함·초안
+  비노출·지원 목록의 비인기 앱 유지·차트 테이블 부재 시 Apple ID 선정 대체를 확인했다.
+- `npm run test:e2e`: Chromium 37개 중 최초 35개 통과·2개 실패. 영문 통계의 기존
+  소문자 문자열 기대를 현재 메시지 사전과 일치하도록 수정했다. 개인정보 링크 이동은
+  첫 실행에서 URL 대기 시간 초과였고 원인 수정은 하지 않았다. 두 시나리오를 지정해
+  재실행하여 2개 모두 통과했다. 단일 전체 실행 37/37 통과라고 기록하지 않는다.
+- 신규 목록 전환·지원 목록·전체 검색·언어·상세 복귀 흐름, 기존 ko/en 라이트/다크,
+  360/768/1440px·모바일 필터·axe 검사 통과. 생성된 ko/light 모바일·en/dark 데스크톱
+  화면을 직접 확인했고 버튼 줄바꿈·선택 상태·통계·설명·카드에 가로 넘침을 발견하지 않았다.
+- React best practices 검토: 목록은 서버에서 조회·선택하고 기존 클라이언트 검색 컨트롤에
+  collection만 추가했다. 새 클라이언트 데이터 요청/효과/상태를 추가하지 않고 실제 Astryx
+  링크 버튼과 `aria-current`·명시적 목록 설명을 유지했다.
+- `npm run build`: 첫 실행은 다른 빌드 잠금으로 중단. 잠금 해소 뒤 기본 Turbopack은
+  기존 CSS 처리의 프로세스·포트 EPERM으로 실패했다. `npm run build -- --webpack`은
+  컴파일·타입 검사·정적 페이지 생성·trace까지 통과했다.
+- Supabase 읽기 전용 조회로 전체 공개 1,280개·지원 206개, 선정 78개(지원 13·예정 1·
+  미확인 64)를 확인했다. 운영 차트 테이블이 없어 최초 차트 조인 조회는 relation 부재로
+  실패했고, 존재 확인·선정 전용 조회로 확인했다. 기본 목록 78개 대체 동작은 명시적으로
+  지원한다. 신규 코드를 운영에 배포했거나 운영에 순위 테이블을 적용한 것으로 주장하지 않는다.
+
+검증 중 같은 checkout에서 별도 README 작업이 실행되고 있었으며 그 문서 변경과
+검증 기록·001 작업 목록은 보존했다. 009 작업 항목은 `specs/009-core-directory/tasks.md`에
+별도로 기록했다.

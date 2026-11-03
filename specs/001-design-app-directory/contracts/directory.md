@@ -2,12 +2,17 @@
 
 - `/` negotiates locale; `/ko` and `/en` are authoritative. Unsupported prefix returns 404.
 - `q`: names/aliases case-insensitive NFC substring search in BOTH languages, max 100 chars.
+- `collection`: core (default browse), supported, all. Searches without an explicit collection default
+  to all; submitting a new search selects all. Explicit collection searches and detail return URLs
+  retain their scope. Collection changes clear search/category/status/page and preserve sort.
+  Core contains editorial Apple IDs plus published KR overall free top-100 apps; support evidence
+  is independent. Support overview counts the selected collection, independently of search/filters.
 - `category`: productivity, graphics-design, music, books, travel, navigation, photo-video, entertainment, lifestyle; omitted/invalid = all.
   Legacy `creativity` is accepted as `graphics-design`; newly serialized URLs use the canonical slug.
   These internal slugs select a subset of official Apple category names, not the complete taxonomy
   or Apple API identifiers. Labels/sources: docs/references/app-store-categories.md.
 - `status`: supported, planned, unknown, unsupported; omitted/invalid = all.
-- `sort`: top-free (default), top-paid, recommended, updated, name. Free/paid refer to separate overall KR App Store chart order, not price filters. Both chart sorts place all supported apps first, then order each group by rank and name/slug. Preserve unranked apps after ranked ones within each group. Missing chart data retains support priority with name order within groups.
+- `sort`: top-free (default), top-paid, recommended, updated, name. Free/paid refer to separate overall KR App Store chart order, not price filters. In core, rank takes priority and unranked editorial selections follow by name. Other collections keep supported apps first, then rank/name within groups. Missing chart data uses editorial membership with name order in core, and support priority/name order in other collections.
 - `page`: default 1; invalid = 1; beyond last page clamped. 24 items/page.
 - Duplicate known params use first value. Unknown query keys are ignored by filtering.
 - Recommended: supported first, then remaining groups (planned, unknown, unsupported), review descending,

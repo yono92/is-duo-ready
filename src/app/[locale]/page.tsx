@@ -7,7 +7,7 @@ import { ArrowRight, Globe2, SearchX } from 'lucide-react';
 import { Link } from '@/components/ui/link';
 import { redirect } from '@/i18n/navigation';
 import { getDirectoryPage } from '@/lib/data/directory';
-import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
+import { changeQuery, parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
 import { FixtureNotice } from '@/components/fixture-notice';
 import { DirectoryControls } from '@/components/directory/controls';
@@ -85,6 +85,21 @@ export default async function Home({
           {data.kind === 'available' && result ? (
             <>
               {data.fictional && <FixtureNotice />}
+              <nav aria-label={d('collections')} className="mb-3 flex flex-wrap gap-2">
+                {(['core', 'supported', 'all'] as const).map((collection) => (
+                  <ButtonLink
+                    key={collection}
+                    href={`/?${queryString(changeQuery(query, { collection }))}#directory-heading`}
+                    variant={query.collection === collection ? 'default' : 'outline'}
+                    aria-current={query.collection === collection ? 'page' : undefined}
+                  >
+                    {d(`collection.${collection}`)}
+                  </ButtonLink>
+                ))}
+              </nav>
+              <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
+                {d(`collectionDescription.${query.collection}`)}
+              </p>
               <DirectoryOverview stats={result.stats} fictional={data.fictional} />
               {(query.sort === 'top-free' || query.sort === 'top-paid') && (
                 <p
@@ -109,10 +124,10 @@ export default async function Home({
                         })}
                       </Link>
                       {' · '}
-                      {d('unrankedLast')}
+                      {d(query.collection === 'core' ? 'coreUnrankedLast' : 'unrankedLast')}
                     </>
                   ) : (
-                    d('rankingUnavailable')
+                    d(query.collection === 'core' ? 'coreRankingUnavailable' : 'rankingUnavailable')
                   )}
                 </p>
               )}

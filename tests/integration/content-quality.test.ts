@@ -105,7 +105,11 @@ test('quality checks detect broken public contracts without rewriting pending ed
       get(before, 'invalid_public_snapshot') + 1,
     );
     await assert.rejects(
-      queryDirectory(db, { q: '', category: 'all', status: 'all', sort: 'name', page: 1 }, 'en'),
+      queryDirectory(
+        db,
+        { collection: 'all', q: '', category: 'all', status: 'all', sort: 'name', page: 1 },
+        'en',
+      ),
       /do not reconcile/,
     );
     await db.query(

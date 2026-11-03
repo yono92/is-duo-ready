@@ -31,6 +31,48 @@ async function chooseTheme(page: Page, locale: 'ko' | 'en', theme: 'light' | 'da
   await expect(toggle).toBeChecked({ checked });
 }
 
+test('core and support collections stay distinct, while search reaches the full catalogue', async ({
+  page,
+}) => {
+  await page.goto('/ko');
+  await waitForDevice(page);
+  const collections = page.getByRole('navigation', { name: ko.Directory.collections });
+  await expect(
+    collections.getByRole('link', { name: ko.Directory.collection.core, exact: true }),
+  ).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByTestId('directory-stats').locator('[data-stat="total"]')).toContainText(
+    '24',
+  );
+  await collections
+    .getByRole('link', { name: ko.Directory.collection.supported, exact: true })
+    .click();
+  await expect(page).toHaveURL(/collection=supported/);
+  await expect(page.getByTestId('app-card')).toHaveCount(8);
+  await expect(page.getByTestId('directory-stats').locator('[data-stat="total"]')).toContainText(
+    '8',
+  );
+  await chooseLanguage(page, 'ko', 'en');
+  await expect(page).toHaveURL(/\/en\?collection=supported/);
+  await page.getByRole('searchbox', { name: en.Directory.search }).fill('형태연구');
+  await page.getByRole('button', { name: en.Directory.searchButton, exact: true }).click();
+  await expect(page.getByTestId('app-card')).toHaveCount(1);
+  await expect(page.getByTestId('app-card')).toContainText('Form Study');
+  await expect(
+    page
+      .getByRole('navigation', { name: en.Directory.collections })
+      .getByRole('link', { name: en.Directory.collection.all, exact: true }),
+  ).toHaveAttribute('aria-current', 'page');
+  await page.getByTestId('app-card').click();
+  await page.getByRole('link', { name: en.Directory.back }).click();
+  await expect(page.getByRole('searchbox')).toHaveValue('형태연구');
+  await page
+    .getByRole('navigation', { name: en.Directory.collections })
+    .getByRole('link', { name: en.Directory.collection.core, exact: true })
+    .click();
+  await expect(page.getByRole('searchbox')).toHaveValue('');
+  await expect(page.getByTestId('app-card')).toHaveCount(24);
+});
+
 test('Astryx skip link is the first keyboard stop and reaches main content', async ({ page }) => {
   await page.goto('/en');
   await waitForDevice(page);
@@ -105,7 +147,7 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
 });
 
 test('pagination, sorting, filters and query normalization', async ({ page }) => {
-  await page.goto('/en');
+  await page.goto('/en?collection=all');
   await waitForDevice(page);
   await expect(page.getByRole('combobox', { name: fieldName(en.Directory.sort) })).toContainText(
     en.Directory.topFree,
@@ -125,7 +167,7 @@ test('pagination, sorting, filters and query normalization', async ({ page }) =>
     page.getByRole('combobox', { name: fieldName(en.Directory.sort) }),
     en.Directory.name,
   );
-  await expect(page).toHaveURL(/sort=name$/);
+  await expect(page).toHaveURL(/sort=name/);
   await expect(page.getByTestId('app-card')).toHaveCount(24);
   await page.getByRole('button', { name: en.Categories['graphics-design'], exact: true }).click();
   await expect(page).toHaveURL(/category=graphics-design/);
@@ -139,7 +181,7 @@ test('pagination, sorting, filters and query normalization', async ({ page }) =>
   await expect(
     page.getByRole('button', { name: en.Categories['graphics-design'], exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
-  await page.goto('/en?page=9999');
+  await page.goto('/en?collection=all&page=9999');
   await waitForDevice(page);
   await expect(page).toHaveURL(/page=2/);
   await expect(page.getByTestId('app-card')).toHaveCount(6);

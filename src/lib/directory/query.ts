@@ -2,6 +2,7 @@ import { categories, statuses, type DirectoryApp, type DirectoryQuery, type Loca
 import { directoryStats } from './stats';
 export const PAGE_SIZE = 24;
 export const defaultQuery: DirectoryQuery = {
+  collection: 'core',
   q: '',
   category: 'all',
   status: 'all',
@@ -17,8 +18,16 @@ export function parseQuery(raw: RawQuery): DirectoryQuery {
   const status = get('status');
   const sort = get('sort');
   const page = Number(get('page'));
+  const q = (get('q') ?? '').normalize('NFC').trim().slice(0, 100);
+  const collection = get('collection');
   return {
-    q: (get('q') ?? '').normalize('NFC').trim().slice(0, 100),
+    collection:
+      collection === 'core' || collection === 'supported' || collection === 'all'
+        ? collection
+        : q
+          ? 'all'
+          : 'core',
+    q,
     category: categories.includes(category as never)
       ? (category as DirectoryQuery['category'])
       : 'all',
@@ -33,16 +42,28 @@ export function parseQuery(raw: RawQuery): DirectoryQuery {
 export function queryString(query: DirectoryQuery): string {
   const params = new URLSearchParams();
   for (const key of Object.keys(defaultQuery) as (keyof DirectoryQuery)[]) {
+    if (key === 'collection') continue;
     if (query[key] !== defaultQuery[key]) params.set(key, String(query[key]));
   }
+  // Searches without an explicit collection include the entire catalogue.
+  if (query.collection !== (query.q ? 'all' : 'core')) params.set('collection', query.collection);
   return params.toString();
 }
 export function changeQuery(query: DirectoryQuery, patch: Partial<DirectoryQuery>) {
-  return { ...query, ...patch, page: patch.page ?? 1 };
+  const reset =
+    patch.collection && patch.q === undefined
+      ? { q: '', category: 'all' as const, status: 'all' as const }
+      : {};
+  return { ...query, ...reset, ...patch, page: patch.page ?? 1 };
 }
 export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: Locale) {
   const needle = query.q.toLocaleLowerCase().normalize('NFC');
-  const matched = apps.filter(
+  const collectionApps = apps.filter(
+    (app) =>
+      query.collection === 'all' ||
+      (query.collection === 'core' ? app.core === true : app.status === 'supported'),
+  );
+  const matched = collectionApps.filter(
     (app) =>
       app.publication === 'published' &&
       app.country === 'KR' &&
@@ -56,7 +77,10 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
   const collator = new Intl.Collator(locale);
   matched.sort((a, b) => {
     if (query.sort === 'top-free' || query.sort === 'top-paid') {
-      const supported = Number(b.status === 'supported') - Number(a.status === 'supported');
+      const supported =
+        query.collection === 'core'
+          ? 0
+          : Number(b.status === 'supported') - Number(a.status === 'supported');
       if (supported) return supported;
       const rank = (a.chartRank ?? Infinity) - (b.chartRank ?? Infinity);
       if (rank) return rank;
@@ -80,6 +104,6 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
     total: matched.length,
     page,
     pages,
-    stats: directoryStats(apps),
+    stats: directoryStats(collectionApps),
   };
 }

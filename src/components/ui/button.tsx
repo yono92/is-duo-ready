@@ -53,10 +53,12 @@ export function ButtonLink({
   href,
   children,
   variant = 'default',
+  'aria-current': ariaCurrent,
 }: {
   href: string;
   children: string;
   variant?: Variant;
+  'aria-current'?: 'page';
 }) {
   return (
     <AstryxButton
@@ -65,6 +67,7 @@ export function ButtonLink({
       label={children}
       variant={variants[variant]}
       size="lg"
+      aria-current={ariaCurrent}
     />
   );
 }

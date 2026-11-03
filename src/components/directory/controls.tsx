@@ -39,7 +39,8 @@ export function DirectoryControls({
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
   const active = Number(query.category !== 'all') + Number(query.status !== 'all');
-  const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
+  const modified =
+    active > 0 || !!query.q || query.sort !== defaultQuery.sort || query.collection !== 'core';
   function navigate(next: DirectoryQuery) {
     const qs = queryString(next);
     if (documentNavigation) {
@@ -113,6 +114,7 @@ export function DirectoryControls({
                 event.preventDefault();
                 const data = new FormData(event.currentTarget);
                 update({
+                  collection: 'all',
                   q: String(data.get('q') ?? '')
                     .normalize('NFC')
                     .trim()

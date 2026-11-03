@@ -302,6 +302,7 @@ export const fixtureApps: DirectoryApp[] = names.map(
     },
     reviewedAt: null,
     supportChangedAt: null,
+    core: index < 24,
     evidence: [],
   }),
 );

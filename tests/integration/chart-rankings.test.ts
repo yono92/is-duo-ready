@@ -6,6 +6,7 @@ import { fictionalCharts } from '../fixtures/chart-rankings.ts';
 import { syncChartRankings } from '../../scripts/lib/chart-rankings.ts';
 import { queryDirectory } from '../../src/lib/data/postgres-query.ts';
 import type { DirectoryQuery } from '../../src/lib/directory/types.ts';
+import { coreAppStoreIds } from '../../src/lib/directory/core-apps.ts';
 
 test('chart sorting preserves the catalogue, support history and public/admin boundaries', async () => {
   const db = await connect();
@@ -79,6 +80,7 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       );
     });
     const query: DirectoryQuery = {
+      collection: 'all',
       q: 'Ranking fixture',
       category: 'all',
       status: 'all',
@@ -101,6 +103,47 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
         [3, null, 1, 2],
       );
       assert.ok(free.ranking);
+      const core = await queryDirectory(client, { ...query, collection: 'core' }, 'en');
+      assert.deepEqual(
+        core.apps.map((app) => app.slug),
+        [apps[2].slug, apps[1].slug, apps[0].slug],
+      );
+      assert.equal(core.stats.total, 3);
+      assert.equal(core.stats.supported, 1);
+      // Membership must not depend on the sort or language, or admit unranked supported apps.
+      const coreNames = await queryDirectory(
+        client,
+        { ...query, collection: 'core', sort: 'name' },
+        'ko',
+      );
+      assert.deepEqual(
+        coreNames.apps.map((app) => app.slug).sort(),
+        core.apps.map((app) => app.slug).sort(),
+      );
+      assert.deepEqual(coreNames.stats, core.stats);
+      const corePaid = await queryDirectory(
+        client,
+        { ...query, collection: 'core', sort: 'top-paid' },
+        'en',
+      );
+      assert.deepEqual(
+        corePaid.apps.map((app) => app.slug),
+        [apps[0].slug, apps[2].slug, apps[1].slug],
+      );
+      const supportedCollection = await queryDirectory(
+        client,
+        { ...query, collection: 'supported' },
+        'en',
+      );
+      assert.equal(supportedCollection.total, 2);
+      assert.equal(supportedCollection.stats.supported, 2);
+      const emptyCore = await queryDirectory(
+        client,
+        { ...query, collection: 'core', status: 'planned' },
+        'en',
+      );
+      assert.equal(emptyCore.total, 0);
+      assert.deepEqual(emptyCore.stats, core.stats);
       assert.equal(new Date(free.ranking.observedAt).toISOString(), '2026-11-02T00:00:00.000Z');
       const paid = await queryDirectory(client, { ...query, sort: 'top-paid' }, 'ko');
       assert.deepEqual(
@@ -160,12 +203,21 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
     // Rollout without the additive table falls back cleanly; other DB failures are not hidden.
     await db.query('BEGIN');
     try {
+      // Isolated fictional snapshot: verify editorial identity survives slug/name changes.
+      await db.query(
+        `UPDATE public.directory_entries SET snapshot=jsonb_set(snapshot,'{storeUrl}',to_jsonb($2::text)) WHERE app_id=$1`,
+        [apps[3].id, `https://apps.apple.com/kr/app/id${coreAppStoreIds[0]}`],
+      );
       await db.query('ALTER TABLE public.app_chart_rankings RENAME TO rankings_rollout_test');
       await db.query('SET LOCAL ROLE anon');
       const fallback = await queryDirectory(db, query, 'en');
       assert.equal(fallback.total, 4);
       assert.equal(fallback.ranking, null);
       assert.ok(fallback.apps.every((a) => a.chartRank === null));
+      const editorialOnly = await queryDirectory(db, { ...query, collection: 'core' }, 'en');
+      assert.equal(editorialOnly.total, 1);
+      assert.equal(editorialOnly.apps[0].slug, apps[3].slug);
+      assert.equal(editorialOnly.ranking, null);
       assert.deepEqual(
         fallback.apps.map((app) => app.slug),
         [apps[0].slug, apps[3].slug, apps[1].slug, apps[2].slug],

@@ -43,6 +43,8 @@ type DirectoryBase = {
   translations: Partial<Record<Locale, { summary: string; state: 'current' | 'needs-review' }>>;
   reviewedAt: string | null;
   supportChangedAt: string | null;
+  // Discovery membership computed independently from support evidence.
+  core?: boolean;
   // Rank in the selected chart only; absent for unranked apps and other sorts.
   chartRank?: number | null;
 };
@@ -87,6 +89,7 @@ export type PublicHistory = {
   changedAt: string;
 };
 export type DirectoryQuery = {
+  collection: 'core' | 'supported' | 'all';
   q: string;
   category: Category | 'all';
   status: SupportStatus | 'all';

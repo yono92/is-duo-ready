@@ -17,7 +17,7 @@
     "title": "iPhone Duo\napp support",
     "description": "Check which apps support Duo\nand which versions are supported.",
     "methodology": "How we check support",
-    "directoryDescription": "Search by name or filter by category and support status.",
+    "directoryDescription": "Start with key apps in Korea, or search the full catalogue for an app.",
     "region": "South Korea App Store",
     "fixture": "Sample data",
     "fixtureDescription": "These fictional apps are for previewing the site. Their support status is an example.",
@@ -33,7 +33,7 @@
   },
   "Directory": {
     "search": "Search apps",
-    "searchPlaceholder": "Search app names",
+    "searchPlaceholder": "Search the full app catalogue",
     "searchButton": "Search",
     "categories": "Categories",
     "all": "All apps",
@@ -74,12 +74,25 @@
     "retry": "Try again",
     "back": "Back to apps",
     "realResults": "{count, plural, one {# app} other {# apps}}",
-    "realEmptyDescription": "Change your search or filters. If an app is missing, you can suggest adding it."
+    "realEmptyDescription": "Change your search or filters. If an app is missing, you can suggest adding it.",
+    "collections": "Choose an app collection",
+    "collection": {
+      "core": "Key apps in Korea",
+      "supported": "Duo support confirmed",
+      "all": "All apps"
+    },
+    "collectionDescription": {
+      "core": "An editorial selection of everyday, finance, transport, content and work apps, plus the latest collected Korean top 100 free apps. Search covers the full catalogue.",
+      "supported": "Apps with Duo support confirmed by official sources, including specialist apps outside the key apps collection.",
+      "all": "All published apps, including specialist and international apps beyond the key apps collection."
+    },
+    "coreUnrankedLast": "Ranked apps appear first, followed by the remaining editorial selections.",
+    "coreRankingUnavailable": "No chart data is available. Editorially selected key apps in Korea are sorted by name."
   },
   "DirectoryStats": {
-    "shareOfTotal": "Share of all published apps",
+    "shareOfTotal": "Share of the selected collection",
     "distributionTitle": "App distribution by support status",
-    "title": "Published app support overview",
+    "title": "Support in the selected app collection",
     "sampleTitle": "Sample app support overview",
     "total": "Korean App Store · {count, number} {count, plural, one {app} other {apps}}",
     "sampleTotal": "Korean App Store · {count, number} sample {count, plural, one {app} other {apps}}",
@@ -87,8 +100,8 @@
     "planned": "Planned",
     "unknown": "Unverified",
     "unsupported": "Confirmed unsupported",
-    "scope": "All published apps · Independent of search and filters.",
-    "sampleScope": "Counts for fictional sample apps. These are not actual app support statistics."
+    "scope": "The entire selected collection · Independent of search, category and support status filters.",
+    "sampleScope": "Fictional sample apps in the selected collection. These are not actual app support statistics."
   },
   "Categories": {
     "productivity": "Productivity",

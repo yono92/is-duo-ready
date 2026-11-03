@@ -1,10 +1,12 @@
 import { expect, test } from '@playwright/test';
+import ko from '../../src/messages/ko.json' with { type: 'json' };
+import en from '../../src/messages/en.json' with { type: 'json' };
 
 for (const locale of ['ko', 'en']) {
   test(`overview keeps published sample totals separate from search in ${locale}`, async ({
     page,
   }) => {
-    await page.goto(`/${locale}`);
+    await page.goto(`/${locale}?collection=all`);
     const overview = page.getByTestId('directory-stats');
     await expect(overview).toBeVisible();
     const values = await overview.locator('dd').allTextContents();
@@ -48,9 +50,7 @@ for (const locale of ['ko', 'en']) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
-    await expect(overview).toContainText(
-      locale === 'ko' ? '가상 예시 앱' : 'fictional sample apps',
-    );
+    await expect(overview).toContainText((locale === 'ko' ? ko : en).DirectoryStats.sampleScope);
   });
 }
 
@@ -58,7 +58,7 @@ test.describe('server-rendered overview', () => {
   test.use({ javaScriptEnabled: false });
 
   test('counts remain readable without the chart runtime', async ({ page }) => {
-    await page.goto('/ko');
+    await page.goto('/ko?collection=all');
     const overview = page.getByTestId('directory-stats');
     await expect(overview.locator('[data-stat="total"]')).toContainText('30');
     await expect(overview.getByTestId('supported-count')).toHaveText('8');

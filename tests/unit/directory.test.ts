@@ -8,6 +8,45 @@ import {
 } from '@/lib/directory/query';
 import { fixtureApps } from '@/lib/data/fixtures';
 describe('directory URL contract', () => {
+  it('defaults to core browsing and full-catalogue search, preserving explicit scopes', () => {
+    expect(parseQuery({}).collection).toBe('core');
+    expect(parseQuery({ q: 'local' }).collection).toBe('all');
+    expect(parseQuery({ collection: 'bogus', q: 'local' }).collection).toBe('all');
+    for (const collection of ['core', 'supported', 'all'] as const) {
+      for (const q of ['', '메모']) {
+        const query = { ...defaultQuery, collection, q, page: 2 };
+        expect(parseQuery(Object.fromEntries(new URLSearchParams(queryString(query))))).toEqual(
+          query,
+        );
+      }
+    }
+    expect(
+      changeQuery(
+        { ...defaultQuery, q: 'notes', status: 'unknown', page: 2 },
+        {
+          collection: 'supported',
+        },
+      ),
+    ).toEqual({ ...defaultQuery, collection: 'supported' });
+  });
+  it('separates core discovery from support and keeps specialist apps searchable', () => {
+    const apps = [
+      { ...fixtureApps[0], core: true, status: 'unknown' as const, chartRank: 1 },
+      { ...fixtureApps[1], core: true, status: 'supported' as const, chartRank: null },
+      { ...fixtureApps[2], core: false, status: 'supported' as const, chartRank: null },
+      { ...fixtureApps[3], core: false, status: 'unknown' as const },
+      { ...fixtureApps[4], core: true, publication: 'draft' as const },
+    ];
+    const core = selectApps(apps, defaultQuery, 'ko');
+    expect(core.apps.map((app) => app.slug)).toEqual([apps[0].slug, apps[1].slug]);
+    expect(core.stats).toEqual({ total: 2, supported: 1, planned: 0, unknown: 1, unsupported: 0 });
+    expect(selectApps(apps, { ...defaultQuery, collection: 'supported' }, 'ko').total).toBe(2);
+    expect(selectApps(apps, parseQuery({ q: apps[3].names.en }), 'en').apps[0].slug).toBe(
+      apps[3].slug,
+    );
+    expect(selectApps(apps, { ...defaultQuery, collection: 'all' }, 'ko').total).toBe(4);
+    expect(selectApps(apps, { ...defaultQuery, q: 'no-match' }, 'ko').stats).toEqual(core.stats);
+  });
   it('normalizes malformed and duplicated inputs', () => {
     expect(
       parseQuery({
@@ -17,7 +56,7 @@ describe('directory URL contract', () => {
         status: 'bogus',
         sort: 'bad',
       }),
-    ).toEqual({ ...defaultQuery, q: '메모' });
+    ).toEqual({ ...defaultQuery, q: '메모', collection: 'all' });
     expect(parseQuery({ page: '1.5' }).page).toBe(1);
     expect(parseQuery({ page: '99999999' }).page).toBe(10000);
     expect(parseQuery({ q: 'a'.repeat(101) }).q).toHaveLength(100);
@@ -89,7 +128,9 @@ describe('directory URL contract', () => {
       filtered.apps.every((a) => a.category === 'graphics-design' && a.status === 'supported'),
     ).toBe(true);
     expect(selectApps(fixtureApps, defaultQuery, 'en').apps).toHaveLength(24);
-    expect(selectApps(fixtureApps, { ...defaultQuery, page: 100 }, 'en').apps).toHaveLength(6);
+    expect(
+      selectApps(fixtureApps, { ...defaultQuery, collection: 'all', page: 100 }, 'en').apps,
+    ).toHaveLength(6);
     expect(
       selectApps([{ ...fixtureApps[0], publication: 'draft' }], defaultQuery, 'en').total,
     ).toBe(0);
@@ -139,7 +180,7 @@ describe('directory URL contract', () => {
       { ...fixtureApps[4], status: 'planned' as const, chartRank: 2 },
     ];
     for (const sort of ['top-free', 'top-paid'] as const) {
-      const result = selectApps(apps, { ...defaultQuery, sort }, 'en');
+      const result = selectApps(apps, { ...defaultQuery, collection: 'all', sort }, 'en');
       expect(result.apps.map((app) => app.slug)).toEqual([
         apps[3].slug,
         apps[1].slug,
@@ -150,7 +191,7 @@ describe('directory URL contract', () => {
       expect(result.total).toBe(5);
       const noRanks = selectApps(
         apps.map((app) => ({ ...app, chartRank: null })),
-        { ...defaultQuery, sort },
+        { ...defaultQuery, collection: 'all', sort },
         'en',
       );
       expect(noRanks.apps.slice(0, 3).every((app) => app.status === 'supported')).toBe(true);

@@ -68,6 +68,7 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
     });
     await asActor(client, null, async (db) => {
       const query: DirectoryQuery = {
+        collection: 'all',
         q: '공개실험',
         category: 'all',
         status: 'all',

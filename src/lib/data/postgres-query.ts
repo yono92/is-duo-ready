@@ -8,6 +8,7 @@ import type {
   DirectoryStats,
 } from '../directory/types.ts';
 import { assertDirectoryStats } from '../directory/stats.ts';
+import { coreAppStoreIds } from '../directory/core-apps.ts';
 const PAGE_SIZE = 24;
 
 // Call only inside an anonymous-role transaction. All query input is bound data;
@@ -24,20 +25,18 @@ export async function queryDirectory(
   const language = locale === 'ko' ? 'ko' : 'en';
   const nameOrder = `snapshot->'names'->>'${language}',slug`;
   const chartKind = query.sort === 'top-free' || query.sort === 'top-paid' ? query.sort : null;
-  // Compatible rollout: the new UI can run before the additive ranking migration.
-  // Missing observations keep supported apps first, then use names within groups.
-  const available =
-    chartKind !== null &&
-    (
-      await db.query<{ available: boolean }>(
-        "SELECT to_regclass('public.app_chart_rankings') IS NOT NULL AS available",
-      )
-    ).rows[0].available;
+  // Core membership always reads the free chart, independently of the selected sort.
+  // Missing chart tables fall back to editorial membership during additive rollout.
+  const available = (
+    await db.query<{ available: boolean }>(
+      "SELECT to_regclass('public.app_chart_rankings') IS NOT NULL AS available",
+    )
+  ).rows[0].available;
   const rankings = available
-    ? `SELECT app_id,rank,source_url,observed_at FROM public.app_chart_rankings WHERE country='KR' AND chart_kind=$5`
-    : `SELECT NULL::uuid AS app_id,NULL::integer AS rank,NULL::text AS source_url,NULL::timestamptz AS observed_at WHERE false AND $5::text IS NOT NULL`;
+    ? `SELECT app_id,chart_kind,rank,source_url,observed_at FROM public.app_chart_rankings WHERE country='KR'`
+    : `SELECT NULL::uuid AS app_id,NULL::text AS chart_kind,NULL::integer AS rank,NULL::text AS source_url,NULL::timestamptz AS observed_at WHERE false`;
   const sort = chartKind
-    ? `CASE WHEN snapshot->>'status'='supported' THEN 0 ELSE 1 END,chart_rank ASC NULLS LAST,${nameOrder}`
+    ? `${query.collection === 'core' ? '' : "CASE WHEN snapshot->>'status'='supported' THEN 0 ELSE 1 END,"}chart_rank ASC NULLS LAST,${nameOrder}`
     : query.sort === 'updated'
       ? `support_changed_at DESC,${nameOrder}`
       : query.sort === 'name'
@@ -53,18 +52,26 @@ export async function queryDirectory(
     stats: DirectoryStats;
     ranking: DirectoryResult['ranking'];
   }>(
-    `WITH selected_rankings AS MATERIALIZED (${rankings}), published AS MATERIALIZED (
-      SELECT e.*,r.rank AS chart_rank FROM public.directory_entries e
+    `WITH rankings AS MATERIALIZED (${rankings}), selected_rankings AS MATERIALIZED (
+      SELECT * FROM rankings WHERE chart_kind=$5
+    ), published AS MATERIALIZED (
+      SELECT e.*,r.rank AS chart_rank,
+        (coalesce(substring(e.snapshot->>'storeUrl' from '/id([0-9]+)')=ANY($6::text[]),false)
+          OR EXISTS(SELECT 1 FROM rankings f WHERE f.app_id=e.app_id AND f.chart_kind='top-free')) AS core
+      FROM public.directory_entries e
       LEFT JOIN selected_rankings r ON r.app_id=e.app_id
       WHERE e.publication='published' AND e.country='KR'
+    ), collection_apps AS MATERIALIZED (
+      SELECT * FROM published WHERE $7='all' OR ($7='core' AND core)
+        OR ($7='supported' AND snapshot->>'status'='supported')
     ), scoped AS MATERIALIZED (
-      SELECT * FROM published WHERE ${where}
+      SELECT * FROM collection_apps WHERE ${where}
     ), pagination AS (
       SELECT count(*)::int AS total,greatest(1,(count(*)+${PAGE_SIZE - 1})/${PAGE_SIZE})::int AS pages FROM scoped
     ), bounds AS (
       SELECT *,least(greatest(1,$4::int),pages) AS page FROM pagination
     ), ordered AS (
-      SELECT app_id,snapshot,chart_rank,row_number() OVER(ORDER BY ${sort}) AS position FROM scoped
+      SELECT app_id,snapshot,chart_rank,core,row_number() OVER(ORDER BY ${sort}) AS position FROM scoped
       ORDER BY ${sort} LIMIT ${PAGE_SIZE} OFFSET (SELECT (page-1)*${PAGE_SIZE} FROM bounds)
     ), overview AS (
       SELECT jsonb_build_object('total',count(*)::int,
@@ -72,16 +79,24 @@ export async function queryDirectory(
         'planned',count(*) FILTER(WHERE snapshot->>'status'='planned')::int,
         'unknown',count(*) FILTER(WHERE snapshot->>'status'='unknown')::int,
         'unsupported',count(*) FILTER(WHERE snapshot->>'status'='unsupported')::int) AS stats
-      FROM published
+      FROM collection_apps
     )
     SELECT bounds.*,overview.stats,
       (SELECT jsonb_build_object('sourceUrl',min(source_url),'observedAt',min(observed_at))
         FROM selected_rankings HAVING count(*)>0) AS ranking,
       coalesce((SELECT jsonb_agg(snapshot || jsonb_build_object('iconUrl',
         CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=ordered.app_id)
-        THEN '/api/app-icons/' || app_id::text ELSE NULL END,'chartRank',chart_rank) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
+        THEN '/api/app-icons/' || app_id::text ELSE NULL END,'chartRank',chart_rank,'core',core) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
     FROM bounds CROSS JOIN overview`,
-    [query.q, query.category, query.status, query.page, chartKind],
+    [
+      query.q,
+      query.category,
+      query.status,
+      query.page,
+      chartKind,
+      coreAppStoreIds,
+      query.collection,
+    ],
   );
   const row = result.rows[0];
   return { ...row, stats: assertDirectoryStats(row.stats) };

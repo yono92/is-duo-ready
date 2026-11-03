@@ -36,7 +36,7 @@ describe('published KR support statistics', () => {
     );
     expect(empty.total).toBe(0);
     expect(empty.stats).toEqual(all.stats);
-    expect(all.stats.total).toBe(30);
+    expect(all.stats.total).toBe(24);
   });
   it('rejects inconsistent, non-finite, fractional and negative counts instead of showing a misleading zero', () => {
     const valid = { total: 10, supported: 2, planned: 1, unknown: 6, unsupported: 1 };
