@@ -2145,3 +2145,23 @@ consent/refusal/revocation and creative fill remain unverified. See
 검증 중 같은 checkout에서 별도 README 작업이 실행되고 있었으며 그 문서 변경과
 검증 기록·001 작업 목록은 보존했다. 009 작업 항목은 `specs/009-core-directory/tasks.md`에
 별도로 기록했다.
+
+## 2026-11-03 — 009 커밋·운영 반영과 운영 경계 검사 보정
+
+사용자 요청으로 009 변경만 `e07bf72`에 커밋해 `origin/main`에 푸시했다. 별도 README와
+이전 데이터 갱신 문서·임시 산출물은 포함하지 않았다. 연결된 기존 Vercel 프로젝트의
+Production Git 배포 `dpl_2JGh4JFqNosm2tGic21R3pAbJ4vv`가 READY에 도달하고
+`is-duo-ready.vercel.app` 별칭이 연결됐음을 확인했다. 운영 DB·스키마는 변경하지 않았다.
+
+Playwright CLI로 운영 ko 화면에서 국내 주요 앱 78개(지원 13), 지원 확인 206개,
+전체 1,280개와 기본 목록 밖 `Le Conjugueur`의 검색 결과 1개를 확인했다. 각 목록 링크와
+검색 제출을 실제로 조작했으며 운영 브라우저 console error는 0개였다. 기본 Chrome 경로가
+없어 최초 CLI 실행은 실패했고, 이미 설치된 Chromium 실행 경로를 지정한 뒤 확인했다.
+
+첫 원격 CI `41578398551`의 기본 빌드·격리 DB·fixture 노출 방지 검사는 통과했으나
+`test:production:db`가 기본 목록에서 모든 공개 앱을 기대해 실패했다. 이 검사를 명시적인
+`collection=all`로 옮기고 기본 목록에서 전문 fixture 제외·전체 검색으로 발견을 추가했다.
+로컬 재검사에서 최초 등록 사유를 화면에 기대하는 기존 이력 검사도 현재 UI 계약과 달라
+실패했다. 공개 앱의 이력 포함·보관 앱 이력 제외·최초 등록 사유 생략을 검증하도록 바로잡았다.
+수정 후 `npm run test:production:db`가 양 언어에서 통과했다. 전체 앱을 기본 목록에 다시
+넣거나 공개 경계를 완화하지 않았다. 후속 원격 CI 결과는 이 커밋 이후 별도로 확인한다.

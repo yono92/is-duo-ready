@@ -89,18 +89,27 @@ try {
   const sitemap = await (await fetch(`${base}/sitemap.xml`)).text();
   for (const locale of ['ko', 'en']) {
     assert.ok(sitemap.includes(`/${locale}/apps/fictional-production-published`));
-    const home = await (await fetch(`${base}/${locale}`)).text();
+    const core = await (await fetch(`${base}/${locale}`)).text();
+    assert.equal((core.match(/data-testid="app-card"/g) ?? []).length, 0);
+    assert.ok(!core.includes('Fictional production published'));
+    const home = await (await fetch(`${base}/${locale}?collection=all`)).text();
     assert.equal((home.match(/data-testid="app-card"/g) ?? []).length, 1);
     assert.ok(home.includes('Fictional production published'));
     assert.ok(!home.includes('PRIVATE_PRODUCTION_NOTE'));
+    const search = await (await fetch(`${base}/${locale}?q=Fictional%20production`)).text();
+    assert.equal((search.match(/data-testid="app-card"/g) ?? []).length, 1);
+    assert.ok(search.includes('Fictional production published'));
+    assert.ok(!search.includes('PRIVATE_PRODUCTION_NOTE'));
     const detail = await (
       await fetch(`${base}/${locale}/apps/fictional-production-published`)
     ).text();
     assert.ok(detail.includes('Fictional production verification'));
     assert.ok(!detail.includes('PRIVATE_PRODUCTION_NOTE'));
     const history = await (await fetch(`${base}/${locale}/updates`)).text();
-    assert.ok(history.includes('Fictional published review'));
-    assert.ok(!history.includes('Fictional archived review'));
+    assert.ok(history.includes('Fictional production published'));
+    assert.ok(!history.includes('Fictional production archived'));
+    // Initial registrations show the app and status, not a redundant review reason.
+    assert.ok(!history.includes('Fictional published review'));
     for (const state of ['draft', 'archived']) {
       const hidden = await (
         await fetch(`${base}/${locale}/apps/fictional-production-${state}`)
@@ -114,7 +123,7 @@ try {
   const robots = await (await fetch(`${base}/robots.txt`)).text();
   assert.ok(robots.includes('Disallow: /ko/admin') && robots.includes('Disallow: /en/admin'));
   console.log(
-    'PASS production DB: both locales, published-only sitemap/list/detail/history, hidden drafts/archives, private-field exclusion and admin robots.',
+    'PASS production DB: both locales, core exclusion/full-catalogue search, published-only sitemap/list/detail/history, hidden drafts/archives, private-field exclusion and admin robots.',
   );
 } finally {
   if (server && server.exitCode === null) {
