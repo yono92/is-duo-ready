@@ -147,6 +147,9 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
 });
 
 test('pagination, sorting, filters and query normalization', async ({ page }) => {
+  // Several full documents initialize the device; CI trace reached the last page
+  // correctly but exhausted the shared 30-second budget while it became ready.
+  test.setTimeout(60000);
   await page.goto('/en?collection=all');
   await waitForDevice(page);
   await expect(page.getByRole('combobox', { name: fieldName(en.Directory.sort) })).toContainText(

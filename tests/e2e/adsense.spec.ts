@@ -7,6 +7,7 @@ for (const locale of ['ko', 'en']) {
   test(`${locale} privacy disclosure is linked and has no advertising tags`, async ({ page }) => {
     const copy = locale === 'ko' ? ko : en;
     await page.goto(`/${locale}`);
+    await waitForDevice(page);
     await page.getByRole('link', { name: copy.Footer.privacy, exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/${locale}/privacy$`));
     await expect(page.getByRole('heading', { name: copy.Privacy.title, level: 1 })).toBeVisible();
