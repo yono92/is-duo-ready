@@ -110,9 +110,21 @@ test('Astryx skip link is the first keyboard stop and reaches main content', asy
   await expect(page).toHaveURL(/\/en#main$/);
   await expect(page.getByRole('main')).toBeInViewport();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('button', { name: en.Home.pauseApps, exact: true })).toBeFocused();
-  await page.keyboard.press('Space');
-  await expect(page.getByRole('button', { name: en.Home.resumeApps, exact: true })).toBeFocused();
+  await expect(
+    page.getByRole('group', { name: en.DevicePreview.label, exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('slider', { name: en.DevicePreview.leftEdge })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('slider', { name: en.DevicePreview.rightEdge })).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('button', { name: en.DevicePreview.reset, exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('searchbox', { name: en.Directory.search, exact: true }),
+  ).toBeFocused();
 });
 
 test('root negotiation, saved preference and explicit locale priority', async ({ browser }) => {

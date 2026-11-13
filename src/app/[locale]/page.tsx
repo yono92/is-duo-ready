@@ -66,26 +66,6 @@ export default async function Home({
       />
       <DirectoryNavigation query={query}>
         <section className="hero-surface">
-          {featured.kind === 'available' && (
-            <div className="site-width hero-apps">
-              {featured.fictional && <FixtureNotice />}
-              <AppMarquee
-                icons={featured.result.apps
-                  .filter((app) => app.publication === 'published')
-                  .map((app) => ({
-                    slug: app.slug,
-                    icon: app.icon,
-                    iconUrl: app.fictional ? null : app.iconUrl,
-                    name: app.names[locale],
-                    storeLinkLabel: assets('storeLink', { name: app.names[locale] }),
-                    storeUrl: app.fictional ? undefined : app.storeUrl,
-                  }))}
-                pauseLabel={t('pauseApps')}
-                resumeLabel={t('resumeApps')}
-                badgeAlt={assets('badgeAlt')}
-              />
-            </div>
-          )}
           <div className="hero site-width">
             <div className="hero-copy">
               <h1 className="hero-title">{t('title')}</h1>
@@ -108,6 +88,25 @@ export default async function Home({
               </Link>
             </div>
           </div>
+          {featured.kind === 'available' && (
+            <div className="site-width hero-apps">
+              {featured.fictional && <FixtureNotice />}
+              <AppMarquee
+                icons={featured.result.apps
+                  .filter((app) => app.publication === 'published')
+                  .map((app) => ({
+                    slug: app.slug,
+                    icon: app.icon,
+                    iconUrl: app.fictional ? null : app.iconUrl,
+                    name: app.names[locale],
+                    storeLinkLabel: assets('storeLink', { name: app.names[locale] }),
+                    storeUrl: app.fictional ? undefined : app.storeUrl,
+                  }))}
+                pauseLabel={t('pauseApps')}
+                resumeLabel={t('resumeApps')}
+              />
+            </div>
+          )}
         </section>
         <section aria-labelledby="directory-heading" className="directory-section">
           <div className="site-width">

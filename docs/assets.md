@@ -97,6 +97,11 @@ SHA-256, 형식·크기·수집 시각은 `public.app_icon_assets`에 보존한�
 
 ## 2026-11-13 — 검색 중심 홈의 앱 흐름과 화면 안내
 
+아래 배지 배치는 최초 구현 기록이다. 같은 날 사용자가 상단의 App Store 버튼 제거를 요청하여
+현재는 아이콘·이름 링크만 표시한다. 기존 앱 아이콘 원본·출처·해시와 KR App Store 목적지는
+유지하며 새 이미지·배지 변형본은 추가하지 않는다. 이 변경은 사용자 디자인 결정이며 새로운
+자산 허가를 취득했다는 기록은 아니다.
+
 - `src/components/app-marquee.tsx`: 기존 공개 앱 아이콘 API와 원본 App Store 배지만 재사용한다.
   [Apple Search API 안내](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)를
   다시 확인했으며, 앱별 이름·아이콘 옆에 120×40px 공식 배지와 10px 여백을 두고 해당 앱의 KR

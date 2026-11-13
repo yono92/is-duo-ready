@@ -7,7 +7,7 @@
 
 .rows {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .row {
@@ -33,22 +33,17 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: space-around;
-  gap: 32px;
+  gap: 24px;
   min-width: 100cqw;
-  padding-right: 32px;
+  padding-right: 24px;
 }
 
 .tile {
   display: flex;
-  flex: 0 0 208px;
+  flex: 0 0 100px;
   align-items: center;
-  width: 208px;
-  min-height: 88px;
-}
-
-.tile[data-fixture='true'] {
-  flex-basis: 100px;
   width: 100px;
+  min-height: 80px;
 }
 
 .appLink {
@@ -60,31 +55,19 @@
 .appLinkContent,
 .fixture {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 6px;
   width: 100%;
-  min-height: 88px;
+  min-height: 80px;
   padding: 4px;
   border-radius: 12px;
 }
 
-.fixture {
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-}
-
-.fixture .name {
-  max-width: 100%;
-}
-
-.details {
-  min-width: 0;
-  width: 140px;
-}
-
 .name {
   display: block;
+  max-width: 100%;
   overflow: hidden;
   color: var(--foreground);
   font-size: 12px;
@@ -92,23 +75,6 @@
   line-height: 18px;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.details .name {
-  padding-inline: 10px;
-}
-
-.storeBadge {
-  display: block;
-  width: 140px;
-  padding: 10px;
-}
-
-.storeBadge img {
-  display: block;
-  width: 120px;
-  height: 40px;
-  max-width: none;
 }
 
 .appLink:focus-visible {
@@ -155,8 +121,19 @@
   }
 
   .group {
-    gap: 20px;
-    padding-right: 20px;
+    gap: 16px;
+    padding-right: 16px;
+  }
+
+  .tile {
+    flex-basis: 88px;
+    width: 88px;
+    min-height: 72px;
+  }
+
+  .appLinkContent,
+  .fixture {
+    min-height: 72px;
   }
 
   .tile :global(.app-icon),

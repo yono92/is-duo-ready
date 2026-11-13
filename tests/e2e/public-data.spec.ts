@@ -95,20 +95,6 @@ test('homepage app links and change previews preserve public data and accessible
     'href',
     /^https:\/\/apps\.apple\.com\/kr\/app\/id/,
   );
-  const badge = originals.first().getByRole('img', { name: en.AppAssets.badgeAlt });
-  await expect(badge).toHaveCSS('width', '120px');
-  await expect(badge).toHaveCSS('height', '40px');
-  const geometry = await originals.first().evaluate((link) => {
-    const icon = link.querySelector('.app-icon')!.getBoundingClientRect();
-    const image = link.querySelector('img[src="/badges/app-store.svg"]')!.getBoundingClientRect();
-    return {
-      iconRight: icon.right,
-      badgeLeft: image.left,
-      height: link.getBoundingClientRect().height,
-    };
-  });
-  expect(geometry.iconRight).toBeLessThan(geometry.badgeLeft);
-  expect(geometry.height).toBeLessThanOrEqual(96);
 
   // The reversed row starts with its duplicate in view; it must still open the store.
   const clone = marquee

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { Pause, Play } from 'lucide-react';
 import { AppIcon } from '@/components/app-icon';
 import { Button } from '@/components/ui/button';
@@ -21,12 +20,10 @@ export function AppMarquee({
   icons,
   pauseLabel,
   resumeLabel,
-  badgeAlt,
 }: {
   icons: AppMarqueeIcon[];
   pauseLabel: string;
   resumeLabel: string;
-  badgeAlt: string;
 }) {
   const [paused, setPaused] = useState(false);
   if (!icons.length) return null;
@@ -49,7 +46,7 @@ export function AppMarquee({
                     aria-hidden={copy || undefined}
                   >
                     {row.map((icon) => (
-                      <div className={styles.tile} key={icon.slug} data-fixture={!icon.storeUrl}>
+                      <div className={styles.tile} key={icon.slug}>
                         {icon.storeUrl ? (
                           <Link
                             href={icon.storeUrl}
@@ -61,19 +58,7 @@ export function AppMarquee({
                           >
                             <span className={styles.appLinkContent}>
                               <AppIcon name={icon.icon} src={icon.iconUrl} />
-                              <span className={styles.details}>
-                                <span className={styles.name}>{icon.name}</span>
-                                <span className={styles.storeBadge}>
-                                  <Image
-                                    src="/badges/app-store.svg"
-                                    alt={badgeAlt}
-                                    width={120}
-                                    height={40}
-                                    loading="eager"
-                                    unoptimized
-                                  />
-                                </span>
-                              </span>
+                              <span className={styles.name}>{icon.name}</span>
                             </span>
                           </Link>
                         ) : (

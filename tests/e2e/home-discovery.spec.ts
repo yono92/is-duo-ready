@@ -18,14 +18,17 @@ for (const locale of ['ko', 'en']) {
     await expect(directory).toBeVisible();
     await expect
       .poll(async () => {
-        const [searchBounds, directoryBounds] = await Promise.all([
+        const [searchBounds, marqueeBounds, directoryBounds] = await Promise.all([
           search.boundingBox(),
+          page.getByTestId('app-marquee').boundingBox(),
           directory.boundingBox(),
         ]);
         return (
           searchBounds !== null &&
+          marqueeBounds !== null &&
           directoryBounds !== null &&
-          searchBounds.y + searchBounds.height <= directoryBounds.y
+          searchBounds.y + searchBounds.height <= marqueeBounds.y &&
+          marqueeBounds.y + marqueeBounds.height <= directoryBounds.y
         );
       })
       .toBe(true);

@@ -136,7 +136,7 @@
   background: var(--hero-surface);
 }
 .hero-apps {
-  padding-top: 16px;
+  padding-block: 12px 20px;
 }
 .hero {
   display: grid;
