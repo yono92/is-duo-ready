@@ -2384,10 +2384,25 @@ Vercel 미반영 문의도 확인했다. 이전 `d518cdc`의 Git 자동 배포
 add/correction 제보와 검토 계약은 유지된다. 적용 전후 공개 스냅샷 전체 해시와 공식 이력
 1,670건의 전체 해시가 동일했다. 새 3개 테이블의 RLS, 익명 원본 조회·공개 쓰기 금지와
 익명 공개 조회 0건을 확인했다. 새 사용 경험·이미지·원본 이미지도 모두 0건이며 운영에
-가짜 제보를 넣지 않았다. 운영 주소의 최종 검증은 배포 후 기록한다.
+가짜 제보를 넣지 않았다. 운영 주소의 최종 검증은 아래 기록을 따른다.
 
 Supabase 보안 advisory는 적용 전후 동일했다. 기존 비공개 submission_limits의 정책 없는
 RLS 안내와 [유출 비밀번호 차단 미설정](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection)
 경고만 남았으며 이번 변경의 새 경고는 없었다. submission_limits는 기존 권한 있는 ingress만
 접근하도록 막아 둔 테이블이며 [해당 RLS 안내](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)는
 이번 기능에서 새로 만든 문제가 아니다.
+
+코드 `522c7553ce38a832c76e51f89fa7eb53f9edb88a`를 기존 main에 푸시했고 Git 자동 운영
+배포 `dpl_J4GTmLBBgs7tpJ5enWK4hQ2riuDM`의 READY를 확인했다. 2026-11-13 13:30 KST에
+기존 https://is-duo-ready.vercel.app 주소에서 아래 공개 HTTP 8건이 통과했다.
+
+- 네이버지도 ko/en 상세 200: 제한적 개선 언급, 원래 App Store/개발사 관측 시각 보존.
+- CGV ko/en 상세 200: 자료 접근 실패와 사유·관측 시각 표시.
+- 50개 조사 비대상인 SNOW ko/en 상세 200: 공개 조사 내역 없음, 출처 관측일 생성 없음.
+- 미등록 UUID의 공개/관리자 이미지 API 익명 요청 각각 404와 private, no-store 확인.
+
+실제 운영 브라우저에서 네이버지도 조사 내역의 배치를 직접 보고 사용 경험 남기기 →
+앱 선택된 제보 화면의 환경·버전·날짜·화면 상태·파일·미체크 공개 동의를 확인했다.
+운영 테스트 제보는 전송하지 않았다. 신규 제보 승인·철회 전체 경로는 앞서 격리 DB로 검증했다.
+CLI 도움말 도구의 npm registry 접근이 실패해 운영 시각 검토에는 연결 브라우저를 사용했다.
+기존 별도 변경은 유지하고 이번 기능의 코드·명세·검증 문서만 커밋 범위로 분리했다.
