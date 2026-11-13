@@ -20,7 +20,7 @@ export function StatusBadge({
           {
             supported: 'success',
             planned: 'info',
-            unknown: 'warning',
+            unknown: 'neutral',
             unsupported: 'neutral',
           } as const
         )[status]

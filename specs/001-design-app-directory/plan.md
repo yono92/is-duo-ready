@@ -221,3 +221,9 @@ URL 왕복·이전 링크·조건 유지·정렬·페이지·전역 통계를 �
 
 구현 전 원칙 검토: 근거·검토일 변경 없음, locale/KR 독립과 fixture 운영 차단 보존,
 기존 RLS·공개 권한 및 비밀 보호 유지, 외부 프로젝트·배포 제외. 완료 시 검증 결과에 따라 재검토한다.
+
+## 지원 상태 표현 후속 구현 — 2026-11-13
+
+ko/en messages의 지원 확인·지원 정보 없음·지원 안 함 상태명과 설명을 일관되게 정리하고 StatusBadge의 unknown variant를 neutral로
+바꾼다. DirectoryControls는 unknown 선택 시 짧은 설명과 aria-describedby를 제공한다.
+기존 검색·모바일·통계 검사로 접근성·필터 보존을 검증하며 데이터·의존성·API는 변경하지 않는다.

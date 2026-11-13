@@ -31,6 +31,7 @@ export function DirectoryControls({
   const s = useTranslations('Status');
   const { pending, navigate, update } = useDirectoryNavigation();
   const descriptionId = useId();
+  const statusDescriptionId = useId();
   const [open, setOpen] = useState(false);
   const active = Number(query.category !== 'all') + Number(query.status !== 'all');
   const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
@@ -82,6 +83,11 @@ export function DirectoryControls({
                   key={status}
                   variant={query.status === status ? 'default' : 'outline'}
                   aria-pressed={query.status === status}
+                  aria-describedby={
+                    status === 'unknown' && query.status === 'unknown'
+                      ? statusDescriptionId
+                      : undefined
+                  }
                   disabled={pending}
                   onClick={() => update({ status })}
                 >
@@ -89,6 +95,14 @@ export function DirectoryControls({
                 </Button>
               ))}
             </div>
+            {query.status === 'unknown' && (
+              <p
+                id={statusDescriptionId}
+                className="mt-3 text-sm leading-relaxed text-muted-foreground"
+              >
+                {t('unknownDescription')}
+              </p>
+            )}
           </fieldset>
           <div className="directory-summary flex flex-wrap items-center justify-between gap-3 text-sm">
             <div className="flex flex-wrap items-center gap-3">

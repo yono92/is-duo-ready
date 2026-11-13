@@ -80,7 +80,9 @@ test.describe('server-rendered overview', () => {
     await expect(overview.locator('[data-stat="total"]')).toContainText('30');
     await expect(overview.getByTestId('supported-count')).toHaveText('8');
     await expect(overview.locator('dd')).toHaveText(['8', '8', '6', '8']);
-    await expect(overview.locator('[data-stat="unknown"]')).toContainText('근거 미확인');
+    await expect(overview.locator('[data-stat="unknown"]')).toContainText(
+      ko.DirectoryStats.unknown,
+    );
     await expect(overview.getByTestId('support-distribution').locator('svg')).toHaveCount(0);
   });
 });

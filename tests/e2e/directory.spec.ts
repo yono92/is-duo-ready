@@ -47,8 +47,17 @@ test('one catalogue exposes support filters and searches beyond familiar apps', 
   await expect(page).toHaveURL(/status=supported/);
   await expect(page).not.toHaveURL(/collection=/);
   await expect(page.getByTestId('app-card')).toHaveCount(8);
+  const unknown = statuses.getByRole('button', { name: ko.Status.unknown, exact: true });
+  await unknown.click();
+  await expect(unknown).toHaveAttribute('aria-pressed', 'true');
+  await expect(unknown).toHaveAccessibleDescription(ko.Directory.unknownDescription);
+  await expect(statuses.getByText(ko.Directory.unknownDescription, { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/status=unknown/);
+  await expect(page.getByTestId('app-card')).toHaveCount(8);
+  await page.screenshot({ path: 'test-results/status-unknown-ko.png', fullPage: true });
   const unsupported = statuses.getByRole('button', { name: ko.Status.unsupported, exact: true });
   await unsupported.click();
+  await expect(statuses.getByText(ko.Directory.unknownDescription, { exact: true })).toBeHidden();
   const category = page.getByRole('button', {
     name: ko.Categories['graphics-design'],
     exact: true,
@@ -331,11 +340,20 @@ test('mobile status filters stay visible outside the category dialog', async ({ 
   await page.goto('/en');
   await waitForDevice(page);
   const statuses = page.getByRole('group', { name: en.Directory.status, exact: true });
+  const unknown = statuses.getByRole('button', { name: en.Status.unknown, exact: true });
+  await unknown.click();
+  await expect(unknown).toHaveAttribute('aria-pressed', 'true');
+  await expect(unknown).toHaveAccessibleDescription(en.Directory.unknownDescription);
+  await expect(statuses.getByText(en.Directory.unknownDescription, { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/status=unknown/);
+  await expect(page.getByTestId('app-card')).toHaveCount(8);
+  await page.screenshot({ path: 'test-results/status-unknown-en-mobile.png', fullPage: true });
   const planned = statuses.getByRole('button', { name: en.Status.planned, exact: true });
   await expect(planned).toBeVisible();
   await planned.focus();
   await page.keyboard.press('Enter');
   await expect(planned).toHaveAttribute('aria-pressed', 'true');
+  await expect(statuses.getByText(en.Directory.unknownDescription, { exact: true })).toBeHidden();
   await expect(page.getByTestId('app-card')).toHaveCount(8);
   const trigger = page.getByRole('button', { name: /^Filters/ });
   await trigger.click();

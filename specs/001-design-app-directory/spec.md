@@ -237,7 +237,7 @@ UI library is Astryx instead of shadcn/ui. Existing user scenarios remain accept
 지원 상태 버튼은 검색 아래에서 모바일·데스크톱 모두 항상 보이며 카테고리는 기존 사이드바와
 모바일 Astryx Dialog에 둔다. 전체 지원 통계는 검색·필터 아래의 기본 접힘 Astryx Collapsible에서
 펼칠 수 있다. 분모는 전체 공개 KR 앱이며 검색 결과 수와 구분한다. `unknown`의 표시는
-“근거 미확인” / “Unconfirmed”으로 정리하여 공식 미지원과 구분한다. 2026-10-30의 이전
+“지원 정보 없음” / “No support information”으로 정리하여 공식 미지원과 구분한다. 2026-10-30의 이전
 표시 유지 결정은 이 문구 변경이 대체하며 판정·공식 근거·검토일은 보존한다.
 
 검색과 필터 변경 시 다른 조건을 유지하고 첫 페이지로 돌아간다. 새 URL은 `collection` 없이
@@ -253,3 +253,10 @@ UI library is Astryx instead of shadcn/ui. Existing user scenarios remain accept
 5. Given ko/en 및 모바일/데스크톱, When 키보드로 상태·카테고리·통계 조작, Then 초점·선택 상태와 화면 폭을 유지한다.
 
 데이터·스키마·운영 배포는 변경하지 않으며 fixture의 운영 노출 차단을 유지한다.
+
+### 지원 상태 표시 후속 결정 — 2026-11-13
+
+지원은 “지원 확인”, unknown은 “지원 정보 없음”, unsupported는 “지원 안 함”으로 필터·카드·통계·상세·지원 기준의 용어를 맞춘다.
+지원 정보 없음 배지는 neutral 회색이고 선택한 필터에는 공식 대응 정보를 아직 확인하지 못했으며 실제로
+지원할 수도 있음을 설명한다. 미지원·조사 진행·실기기 테스트를 암시하지 않는다.
+기존 status 값·검색/필터 URL·집계·판정·근거·버전·검토일은 변경하지 않는다.
