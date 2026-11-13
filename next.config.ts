@@ -8,6 +8,7 @@ if (
 export default createNextIntlPlugin('./src/i18n/request.ts')({
   poweredByHeader: false,
   devIndicators: false,
+  experimental: { serverActions: { bodySizeLimit: '3mb' } },
   // Kakao and other HTML-only share crawlers need metadata in the initial head.
   htmlLimitedBots: /.*/,
   distDir:

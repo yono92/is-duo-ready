@@ -1,0 +1,1597 @@
+{
+  "version": 1,
+  "country": "KR",
+  "selection": {
+    "kind": "editorial-core",
+    "description": {
+      "ko": "기존 편집 선정 주요 앱 중 조사 대상 선정 시 공개 상태가 지원 정보 없음이던 50개를 분야별로 골랐어요. 이용자 수·다운로드 순위 상위 50개라는 뜻은 아니에요.",
+      "en": "Selected 50 published apps with no support information at selection time from the existing editorial core, across categories. This is not a top-50 usage or download ranking."
+    }
+  },
+  "apps": [
+    {
+      "appStoreId": "1003139529",
+      "slug": "app-1003139529",
+      "name": "온라인 패션 스토어 무신사",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1003139529",
+          "checkedAt": "2026-11-13T00:17:21.140Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.musinsa.com/cs/faq?mainCategory=005&subCategory=005000",
+          "checkedAt": "2026-11-13T04:08:57Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 FAQ에 접속했지만 검색창과 메뉴만 읽혔고 질문·답변 본문은 확인하지 못했어요. 앱의 Duo 대응 여부는 판단할 수 없어요.",
+            "en": "The official FAQ returned only navigation and a search field, without question or answer content. Duo support could not be assessed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1017492454",
+      "slug": "app-1017492454",
+      "name": "YouTube Music",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1017492454",
+          "checkedAt": "2026-11-13T00:17:23.253Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.google.com/youtubemusic/answer/9027741?hl=ko&ref_topic=10204773",
+          "checkedAt": "2026-11-13T04:09:11Z",
+          "scope": "developer_help_article",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 문제 해결 도움말의 재생·연결 문제 안내를 확인했어요. 이 문서에는 iPhone Duo 대응을 명시한 안내가 없어요.",
+            "en": "Reviewed the official troubleshooting article about playback and connectivity. It contains no explicit statement about iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1080244833",
+      "slug": "app-1080244833",
+      "name": "컬리 - 마켓컬리, 뷰티컬리",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1080244833",
+          "checkedAt": "2026-11-13T00:17:28.358Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://newsroom.kurlycorp.com/",
+          "checkedAt": "2026-11-13T04:06:01Z",
+          "scope": "developer_news_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 뉴스룸에 표시된 보도자료 목록을 확인했어요. 읽힌 목록에는 Duo 대응 발표가 없었으며 개별 기사 전체를 조사한 것은 아니에요.",
+            "en": "Reviewed the visible official newsroom listing. No Duo announcement appeared in that listing; this was not a review of every article."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1084960428",
+      "slug": "app-1084960428",
+      "name": "에이블리 - 전 상품 무료배송",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1084960428",
+          "checkedAt": "2026-11-13T00:17:28.732Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://ably.team/news",
+          "checkedAt": "2026-11-13T04:06:16Z",
+          "scope": "developer_news_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 팀 소식 목록을 확인했어요. 읽힌 목록에서 Duo 대응 발표를 찾지 못했으며 모든 기사 본문을 조사한 것은 아니에요.",
+            "en": "Reviewed the visible official company news listing. No Duo announcement was found in that listing; individual articles were not exhaustively reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1113153706",
+      "slug": "app-1113153706",
+      "name": "Microsoft Teams",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1113153706",
+          "checkedAt": "2026-11-13T00:17:31.176Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.microsoft.com/en-us/teams/platform/what-s-new-in-microsoft-teams",
+          "checkedAt": "2026-11-13T04:06:16Z",
+          "scope": "developer_release_notes",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 새 기능 문서의 iOS 업데이트 항목을 확인했어요. 읽힌 릴리스 노트에는 iPhone Duo 대응 명시가 없어요.",
+            "en": "Reviewed the iOS updates in the official release-notes page. The retrieved notes do not explicitly state iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1141258007",
+      "slug": "app-1141258007",
+      "name": "PASS by SKT",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1141258007",
+          "checkedAt": "2026-11-13T00:17:34.383Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://m.sktpass.com/",
+          "checkedAt": "2026-11-13T04:08:57Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 모바일 사이트를 열었으나 요청 시간이 초과되어 본문을 확인하지 못했어요. Duo 지원 여부를 판단할 수 없어요.",
+            "en": "The official mobile website timed out, so its content could not be reviewed. Duo support could not be assessed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1147394645",
+      "slug": "app-1147394645",
+      "name": "PASS by U+",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1147394645",
+          "checkedAt": "2026-11-13T00:17:34.507Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://passvas.uplus.co.kr/vas/event/home",
+          "checkedAt": "2026-11-13T04:06:16Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 PASS by U+ 서비스 소개의 인증·신분증 기능 안내를 확인했어요. 이 소개 페이지에는 Duo 대응 명시가 없어요.",
+            "en": "Reviewed the official PASS by U+ product introduction covering authentication and identification features. This introduction does not explicitly state Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1147874819",
+      "slug": "app-1147874819",
+      "name": "네이버 파파고 - AI 통번역",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1147874819",
+          "checkedAt": "2026-11-13T00:17:34.237Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.naver.com/service/16448/contents/24479?lang=ko&osType=IOS",
+          "checkedAt": "2026-11-13T04:08:57Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "iOS 기본 번역 앱 설정 도움말을 확인했어요. 해당 기능 안내에 Duo 대응은 명시되지 않았으며 일반 iOS 기능을 Duo 최적화 근거로 삼지 않았어요.",
+            "en": "Reviewed the iOS default-translation-app help article. It does not mention Duo support; a general iOS feature was not treated as evidence of Duo optimization."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1178872627",
+      "slug": "app-1178872627",
+      "name": "케이뱅크",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1178872627",
+          "checkedAt": "2026-11-13T00:17:35.723Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.kbanknow.com/web/about/notice/list?tab=notice",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_notice_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 공지사항 첫 페이지에 표시된 목록을 확인했어요. 읽힌 목록에 Duo 대응 발표는 없었으며 전체 공지 이력을 확인한 것은 아니에요.",
+            "en": "Reviewed the first page of the official notice listing. No Duo announcement appeared in that list; the entire notice archive was not reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1213788923",
+      "slug": "app-1213788923",
+      "name": "밀리의서재",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1213788923",
+          "checkedAt": "2026-11-13T00:17:38.625Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.millie.co.kr/v3/customer/download?nav_hidden=y&viewer_call=y",
+          "checkedAt": "2026-11-13T04:09:11Z",
+          "scope": "developer_device_requirements",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 다운로드 안내를 열었지만 읽을 수 있는 본문이 반환되지 않았어요. 검색 요약만으로 OS 조건이나 Duo 대응을 판정하지 않았어요.",
+            "en": "The official download page returned no readable body. Search snippets were not used to establish OS requirements or Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1232780281",
+      "slug": "app-1232780281",
+      "name": "Notion: 메모, 작업, AI",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1232780281",
+          "checkedAt": "2026-11-13T00:17:39.849Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.notion.com/help/notion-for-mobile",
+          "checkedAt": "2026-11-13T04:06:36Z",
+          "scope": "developer_mobile_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 모바일 도움말의 화면 구성·기능 안내를 확인했어요. 일반 모바일 레이아웃 설명만으로 Duo 대응을 추정하지 않았으며 이 페이지에는 Duo 명시가 없어요.",
+            "en": "Reviewed the official mobile layout and feature guide. General mobile behavior was not used to infer Duo support, which is not explicitly stated on this page."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1235601864",
+      "slug": "app-1235601864",
+      "name": "TikTok 틱톡",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1235601864",
+          "checkedAt": "2026-11-13T00:17:39.925Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.tiktok.com/en/",
+          "checkedAt": "2026-11-13T04:06:36Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 도움말에 대한 자동 접근이 차단되어 본문을 확인하지 못했어요. Duo 대응 안내를 읽었다고 처리하지 않았어요.",
+            "en": "Automated access to the official help site was blocked, so its content could not be reviewed. No claim is made that Duo guidance was checked."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1258016944",
+      "slug": "app-1258016944",
+      "name": "카카오뱅크",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1258016944",
+          "checkedAt": "2026-11-13T00:18:01.426Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://m.kakaobank.com/Notices/view/15509",
+          "checkedAt": "2026-11-13T04:09:11Z",
+          "scope": "developer_requirements_notice",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 앱 이용 공지를 열었지만 회사 정보만 반환되고 공지 본문은 읽히지 않았어요. 검색 요약의 OS 정보로 Duo 대응을 판정하지 않았어요.",
+            "en": "The official app-use notice returned corporate information but not the notice body. OS information in search snippets was not used to infer Duo support."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://blog.kakaobank.com/posts/kakaobank-customer-ai-fast",
+          "checkedAt": "2026-11-13T04:11:48Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 블로그의 앱 고객센터·AI 검색 이용 가이드는 읽을 수 있었어요. 이 글에는 Duo 대응 명시가 없으며 별도로 시도한 앱 이용 공지는 여전히 본문 확인 실패로 남겨요.",
+            "en": "The official blog guide to in-app help and AI search was readable. It does not explicitly mention Duo support; the separate app-use notice remains an access failure."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1445504255",
+      "slug": "app-1445504255",
+      "name": "쿠팡이츠 - 와우회원 배달비 0원",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1445504255",
+          "checkedAt": "2026-11-13T00:18:10.679Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.coupangeats.com/",
+          "checkedAt": "2026-11-13T04:06:36Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 서비스 소개 페이지를 확인했어요. 이 페이지에는 Duo 대응 명시가 없으며 앱 업데이트 공지 전체를 확인한 것은 아니에요.",
+            "en": "Reviewed the official product introduction. It does not explicitly mention Duo support; this was not a review of all app release announcements."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1470181651",
+      "slug": "app-1470181651",
+      "name": "우리WON뱅킹",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1470181651",
+          "checkedAt": "2026-11-13T00:18:14.983Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://svc.wooribank.com/svc/Dream?withyou=SFCNT0004",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 아이폰 설치 안내를 확인했어요. 설치 방법만 안내되어 있으며 Duo 화면 대응이나 최적화는 명시되지 않았어요.",
+            "en": "Reviewed the official iPhone installation guide. It explains installation without explicitly stating Duo layout support or optimization."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1485193566",
+      "slug": "app-1485193566",
+      "name": "캐치테이블",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1485193566",
+          "checkedAt": "2026-11-13T00:18:19.101Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://app.catchtable.co.kr/",
+          "checkedAt": "2026-11-13T04:06:36Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 앱 웹사이트에서 JavaScript 실행 안내만 반환되어 서비스 본문을 확인하지 못했어요. Duo 대응 여부를 판단할 수 없어요.",
+            "en": "The official app website returned only a JavaScript requirement message, without readable product content. Duo support could not be assessed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1536885649",
+      "slug": "app-1536885649",
+      "name": "쿠팡플레이",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1536885649",
+          "checkedAt": "2026-11-13T00:19:09.182Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.coupangplay.com/faq",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 FAQ가 조사 환경에서 지역 이용 불가 페이지로 이동했어요. FAQ 본문을 확인하지 못했으며 한국 앱의 Duo 대응 여부와는 별개인 접근 실패예요.",
+            "en": "The official FAQ redirected to a regional-unavailability page in the research environment. Its body could not be reviewed; this access limitation says nothing about Duo support in Korea."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1554807824",
+      "slug": "app-1554807824",
+      "name": "네이버페이",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1554807824",
+          "checkedAt": "2026-11-13T00:19:11.848Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.pay.naver.com/",
+          "checkedAt": "2026-11-13T04:06:46Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 고객센터에 표시된 도움말 분류와 목록을 확인했어요. 읽힌 목록에는 Duo 대응 안내가 없으며 모든 도움말 본문을 검토한 것은 아니에요.",
+            "en": "Reviewed the visible categories and listings in the official help center. No Duo guidance appeared in those listings; all help articles were not reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "1599450372",
+      "slug": "app-1599450372",
+      "name": "대한민국 모바일 신분증",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id1599450372",
+          "checkedAt": "2026-11-13T00:19:14.394Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.mobileid.go.kr/mip/hps/svcIntrcn/svcIntrcnUser.do",
+          "checkedAt": "2026-11-13T04:08:57Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 모바일 신분증 사용자 안내의 QR 제시·인증·분실 대응 설명을 확인했어요. 이 안내에는 iPhone Duo 대응 명시가 없어요.",
+            "en": "Reviewed the official Mobile ID user guide covering QR presentation, authentication and lost-device handling. This guide does not explicitly state iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "284882215",
+      "slug": "app-284882215",
+      "name": "Facebook",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id284882215",
+          "checkedAt": "2026-11-13T00:20:03.798Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.facebook.com/help/",
+          "checkedAt": "2026-11-13T04:06:46Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 도움말 접속 시 로그인·일시 차단 화면이 표시되어 도움말 본문을 읽지 못했어요. Duo 대응을 확인한 것으로 처리하지 않았어요.",
+            "en": "The official help center showed a login or temporary-block page, preventing review of help content. Duo support was not considered checked."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "304608425",
+      "slug": "app-304608425",
+      "name": "카카오맵 - 대한민국 No.1 지도앱",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id304608425",
+          "checkedAt": "2026-11-13T00:20:08.606Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.kakaocorp.com/page/service/service/KakaoMap/",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 카카오맵 서비스 소개를 확인했어요. 이 소개에는 Duo 대응이 명시되지 않았으며 일반 지도 기능을 최적화 근거로 삼지 않았어요.",
+            "en": "Reviewed the official KakaoMap product introduction. It does not explicitly mention Duo support, and general map features were not treated as optimization evidence."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://kakaomap.tistory.com/451",
+          "checkedAt": "2026-11-13T04:11:55Z",
+          "scope": "developer_release_notes",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 블로그의 6.24.0 길찾기 화면 개편 안내를 확인했어요. 지도·경로 패널 조절은 일반 화면 기능이며 이 글은 iPhone Duo 대응을 명시하지 않아요.",
+            "en": "Reviewed the official 6.24.0 directions-layout update. Its adjustable map and route panels are general UI features; the post does not explicitly state iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "311867728",
+      "slug": "app-311867728",
+      "name": "네이버지도 - 장소의 발견과 예약, 내비게이션",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id311867728",
+          "checkedAt": "2026-11-13T00:20:10.786Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "limited_statement",
+          "note": {
+            "ko": "기존에 판정을 보류한 6.12.2(11월 6일)·6.12.1(11월 4일)의 Duo 사용성 개선 문구를 다시 확인했어요. 구체적 대응 범위는 명확하지 않아 기존 지원 상태를 유지하며 전체 최적화나 실기기 검증을 뜻하지 않아요.",
+            "en": "Reconfirmed the previously held Duo usability wording in saved notes for 6.12.2 (November 6) and 6.12.1 (November 4). The adaptation scope remains unclear, so the existing status is retained; this is not complete optimization or a device test."
+          },
+          "quote": "iPhone Duo 환경 사용성 개선"
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.naver.com/service/5637/contents/20104?osType=COMMONOS",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 지도 앱 장애 해결 도움말을 확인했어요. 읽힌 문제 해결 안내에는 Duo 대응 명시가 없으며 일반 iOS 오류 설명으로 Duo 상태를 판단하지 않았어요.",
+            "en": "Reviewed the official map-app troubleshooting article. It does not explicitly state Duo support; general iOS issues were not used to determine Duo status."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "324684580",
+      "slug": "app-324684580",
+      "name": "Spotify (스포티파이) : 뮤직 & 팟캐스트 앱",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id324684580",
+          "checkedAt": "2026-11-13T00:20:14.127Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.spotify.com/us/article/supported-devices-for-spotify/",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_device_requirements",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 지원 기기 문서의 iOS 요구사항을 확인했어요. 일반 OS 호환성은 Duo 최적화 근거가 아니며 페이지의 Premium Duo는 요금제 이름이에요.",
+            "en": "Reviewed the iOS requirements in the official supported-devices article. General OS compatibility is not Duo optimization evidence; Premium Duo on this page is a subscription plan."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "328813873",
+      "slug": "app-328813873",
+      "name": "네이버 블로그 - Naver Blog",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id328813873",
+          "checkedAt": "2026-11-13T00:20:15.585Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.naver.com/service/5593/contents/22199?lang=ko&osType=MOBILE",
+          "checkedAt": "2026-11-13T04:07:23Z",
+          "scope": "developer_device_requirements",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 블로그 앱 최소 OS 안내를 확인했어요. Duo 대응은 명시되지 않았으며 일반 iOS 최소 버전을 Duo 최적화 근거로 삼지 않았어요.",
+            "en": "Reviewed the official blog-app minimum-OS guidance. It does not explicitly mention Duo support; a general iOS requirement was not treated as evidence of Duo optimization."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "338813698",
+      "slug": "app-338813698",
+      "name": "만화 웹툰 웹소설 도서는 리디",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id338813698",
+          "checkedAt": "2026-11-13T00:20:19.639Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "limited_statement",
+          "note": {
+            "ko": "기존에 판정을 보류한 26.11.2(11월 9일)의 Duo 사용성 개선 문구를 다시 확인했어요. 구체적 대응 범위는 명확하지 않아 기존 지원 상태를 유지하며 두 쪽 보기 등 개별 기능의 Duo 동작을 보장하지 않아요.",
+            "en": "Reconfirmed the previously held Duo usability wording in saved notes for 26.11.2 (November 9). The adaptation scope remains unclear, so the existing status is retained; this does not confirm individual features such as two-page viewing on Duo."
+          },
+          "quote": "iPhone Duo 사용성 개선"
+        },
+        {
+          "kind": "developer",
+          "url": "https://ridihelp.ridibooks.com/support/solutions/articles/154000207409-os-%EA%B8%B0%EA%B8%B0%EB%B3%84-%EC%B5%9C%EC%86%8C-%EC%A7%80%EC%9B%90-%ED%99%98%EA%B2%BD-%EC%95%88%EB%82%B4",
+          "checkedAt": "2026-11-13T04:09:11Z",
+          "scope": "developer_device_requirements",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 최소 지원 환경 문서의 iOS 앱 버전별 조건을 확인했어요. 이 문서 자체에는 Duo 대응 명시가 없으며 OS 조건을 최적화 근거로 삼지 않았어요.",
+            "en": "Reviewed the official minimum-environment requirements for iOS app versions. This document itself does not explicitly state Duo support; OS requirements were not treated as optimization evidence."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://ridihelp.ridibooks.com/support/solutions/articles/154000186566-%EC%95%B1%EB%B7%B0%EC%96%B4-%ED%99%9C%EC%9A%A9-%EB%B0%A9%EB%B2%95",
+          "checkedAt": "2026-11-13T04:09:11Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 뷰어 도움말에서 두 쪽 보기·화면 폭에 따른 표시 안내를 확인했어요. 이 일반 기능 안내 자체가 Duo 대응을 명시하지는 않아요.",
+            "en": "Reviewed the official viewer guide on two-page viewing and behavior at different screen widths. These general features do not themselves explicitly establish Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "378084485",
+      "slug": "app-378084485",
+      "name": "배달의민족 - 배달팁 무료 배민클럽",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id378084485",
+          "checkedAt": "2026-11-13T00:21:06.788Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.baemin.com/",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 서비스 소개 페이지의 음식배달·장보기·결제 안내를 확인했어요. 이 페이지에서 iPhone Duo 대응을 명시한 문구는 찾지 못했어요.",
+            "en": "Reviewed the official product page covering delivery, shopping and payments. This page did not explicitly state iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "393499958",
+      "slug": "app-393499958",
+      "name": "네이버 - NAVER",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id393499958",
+          "checkedAt": "2026-11-13T00:21:09.379Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.naver.com/service/5630/category/bookmark",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "네이버앱 고객센터에 노출된 도움말 목록을 확인했어요. 목록에서 듀오 대응 안내는 찾지 못했으며 개별 도움말 전체를 조사한 것은 아니에요.",
+            "en": "Reviewed the visible NAVER app help index. No Duo support notice appeared in this index; individual help articles were not exhaustively reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "400101401",
+      "slug": "app-400101401",
+      "name": "TVING",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id400101401",
+          "checkedAt": "2026-11-13T00:21:11.675Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.tving.com/help/notice",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_notices",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 공지 페이지를 열었지만 메뉴와 고객센터 연락처만 읽혔어요. 공지 본문을 확보하지 못해 듀오 관련 안내를 확인할 수 없었어요.",
+            "en": "Opened the official notices page, but only navigation and contact details were readable. The notice contents could not be inspected for Duo information."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "415597317",
+      "slug": "app-415597317",
+      "name": "멜론(Melon)",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id415597317",
+          "checkedAt": "2026-11-13T00:21:14.321Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.melon.com/web/index.htm",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "멜론 고객지원센터 첫 페이지의 안내와 연결된 지원 항목을 확인했어요. 이 범위에서 듀오 대응 문구를 찾지 못했으며 개별 FAQ 전체를 조사한 것은 아니에요.",
+            "en": "Reviewed the Melon support landing page and its visible support topics. No explicit Duo statement appeared within that scope; not every FAQ was reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "417698849",
+      "slug": "app-417698849",
+      "name": "카카오내비 - 주차,발렛,전기차충전,세차,보험,중고차",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id417698849",
+          "checkedAt": "2026-11-13T00:21:15.995Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.kakaomobility.com/service-navi",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "카카오내비 공식 기능 소개를 확인했어요. 넓은 지도와 차량 디스플레이 연동 설명은 있지만 iPhone Duo 대응 명시는 찾지 못했어요.",
+            "en": "Reviewed the official Kakao Navi feature page. It describes map views and in-car display integration, but does not explicitly identify iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "420615104",
+      "slug": "app-420615104",
+      "name": "네이버 카페 – Naver Cafe",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id420615104",
+          "checkedAt": "2026-11-13T00:21:16.051Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.naver.com/service/5622/category/bookmark",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "카페 고객센터의 주요 도움말 목록과 구버전 앱 관련 항목을 확인했어요. 목록에서 듀오 대응 안내는 찾지 못했으며 개별 도움말 전체를 확인한 것은 아니에요.",
+            "en": "Reviewed the Cafe help index, including its older-app notice topic. The index did not show a Duo notice; individual articles were not exhaustively checked."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "422689480",
+      "slug": "app-422689480",
+      "name": "Gmail: Google이 제공하는 이메일",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id422689480",
+          "checkedAt": "2026-11-13T00:21:16.396Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.google.com/mail/answer/8494?co=GENIE.Platform%3DiOS&hl=ko",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "Google의 iPhone/iPad용 Gmail 계정 추가 안내를 확인했어요. 일반 iOS 사용법이며 iPhone Duo 화면 대응을 명시하지는 않아요.",
+            "en": "Reviewed Google’s iPhone/iPad Gmail sign-in instructions. They describe general iOS use and do not explicitly document iPhone Duo display support."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.google.com/mail/answer/18522?co=GENIE.Platform%3DiOS&hl=en",
+          "checkedAt": "2026-11-13T04:12:09Z",
+          "scope": "developer_ios_layout_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "Google 공식 iPhone/iPad 받은편지함 레이아웃 도움말을 확인했어요. 받은편지함 유형과 왼쪽 메뉴 표시·숨김 설명이며 iPhone Duo 화면 대응을 명시하지 않아요.",
+            "en": "Reviewed Google’s official iPhone/iPad inbox-layout help. It describes inbox types and showing/hiding the left menu, without explicitly identifying iPhone Duo display support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "431589174",
+      "slug": "app-431589174",
+      "name": "티맵 - 장소추천, 지도, 운전점수, 대중교통, 대리",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id431589174",
+          "checkedAt": "2026-11-13T00:21:17.771Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.tmapmobility.com/",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "티맵모빌리티 공식 첫 페이지의 서비스 소개와 표시된 소식을 확인했어요. 이 페이지에서 iPhone Duo 대응 문구는 찾지 못했어요.",
+            "en": "Reviewed the TMAP Mobility landing page, including its service overview and visible news. No explicit iPhone Duo statement appeared on this page."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.tmapmobility.com/support",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_notices",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 고객지원 페이지는 열렸지만 공지사항·이벤트 제목만 표시되고 게시글 목록과 본문을 읽을 수 없었어요.",
+            "en": "The official support page loaded, but only the notices/events heading was readable; the notice list and article contents were unavailable."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "454434967",
+      "slug": "app-454434967",
+      "name": "쿠팡(Coupang)-모바일 쇼핑",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id454434967",
+          "checkedAt": "2026-11-13T00:22:00.716Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.coupang.com/",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 사이트 요청이 HTTP 403으로 제한돼 내용을 확인하지 못했어요. 접근 제한을 미지원 근거로 사용하지 않아요.",
+            "en": "The official site returned HTTP 403, so its contents could not be reviewed. Access restrictions are not evidence of non-support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "466682252",
+      "slug": "app-466682252",
+      "name": "스타벅스",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id466682252",
+          "checkedAt": "2026-11-13T00:22:00.856Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.starbucks.co.kr/util/faq.do",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 FAQ 페이지에서 메뉴와 검색 영역은 읽혔지만 질문·답변 내용은 표시되지 않았어요. 듀오 대응 안내 확인은 완료하지 못했어요.",
+            "en": "The official FAQ exposed its navigation and search shell, but not the questions and answers. Duo-specific information could not be reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "515173864",
+      "slug": "app-515173864",
+      "name": "쏘카",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id515173864",
+          "checkedAt": "2026-11-13T00:22:08.382Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.socar.kr/guide",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "쏘카 공식 앱·웹 이용 안내를 확인했어요. 예약과 스마트키 사용법은 있지만 iPhone Duo 대응 문구는 찾지 못했어요.",
+            "en": "Reviewed SOCAR’s official app/web guide. It covers reservations and the smart key, but contains no explicit iPhone Duo support statement."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://socar-notice.zendesk.com/hc/ko/articles/62369705173913--%EA%B3%B5%EC%A7%80-%EC%8F%98%EC%B9%B4-%EC%95%B1-%EC%B5%9C%EC%86%8C-%EC%A7%80%EC%9B%90-%EC%82%AC%EC%96%91-%EB%B3%80%EA%B2%BD-%EC%95%88%EB%82%B4-2026-10-28-%EC%A0%81%EC%9A%A9",
+          "checkedAt": "2026-11-13T04:06:41Z",
+          "scope": "developer_requirements_notice",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 사이트에서 연결된 최소 지원 사양 공지를 확인했어요. 앱 18.16.0 이상·iOS 17 이상 안내이며 듀오 화면 최적화 확인 자료는 아니에요.",
+            "en": "Reviewed the minimum-requirements notice linked from SOCAR’s official site. It specifies app 18.16.0+ and iOS 17+, but does not establish Duo display optimization."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "543831532",
+      "slug": "app-543831532",
+      "name": "요기요 - 배달할 때마다 포인트 적립",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id543831532",
+          "checkedAt": "2026-11-13T00:22:11.407Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.yogiyo.co.kr/",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "요기요 공식 사이트가 HTTP 403을 반환해 내용을 확인하지 못했어요.",
+            "en": "Yogiyo’s official site returned HTTP 403, preventing content review."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.wesang.com/newsroom/press?nid=639",
+          "checkedAt": "2026-11-13T04:06:41Z",
+          "scope": "developer_news",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 개발사 검색 결과에서 앱 UI 개편 공지를 발견했지만 원문 요청은 HTTP 403으로 제한됐어요. 검색 요약을 지원 근거로 채택하지 않았어요.",
+            "en": "An official developer search result pointed to an app redesign announcement, but the original page returned HTTP 403. The search snippet was not accepted as support evidence."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "585027354",
+      "slug": "app-585027354",
+      "name": "Google Maps",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id585027354",
+          "checkedAt": "2026-11-13T00:23:00.975Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.google.com/maps/answer/144339?co=GENIE.Platform%3DiOS&hl=en",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "Google Maps의 공식 iPhone/iPad 경로 안내 도움말을 확인했어요. 일반적인 iOS 기능 설명이며 iPhone Duo 대응 명시는 찾지 못했어요.",
+            "en": "Reviewed the official Google Maps directions guide for iPhone/iPad. It describes general iOS features and does not explicitly state iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "586454505",
+      "slug": "app-586454505",
+      "name": "정부24(구 민원24)",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id586454505",
+          "checkedAt": "2026-11-13T00:23:02.281Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.gov.kr/",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "기존 정부24 주소에서는 읽을 수 있는 본문이 반환되지 않았어요.",
+            "en": "The older Government24 address returned no readable body."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://plus.gov.kr/",
+          "checkedAt": "2026-11-13T04:06:58Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "현재 정부24 공식 페이지의 서비스·고객센터 안내를 확인했어요. 이 첫 페이지에서 듀오 대응 문구는 찾지 못했으며 앱별 공지를 전수 확인한 것은 아니에요.",
+            "en": "Reviewed the current official Government24 landing page and its service/help navigation. No Duo statement appeared on this page; app notices were not exhaustively reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6443837919",
+      "slug": "app-6443837919",
+      "name": "ICN SMARTPASS (인천공항 스마트패스)",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6443837919",
+          "checkedAt": "2026-11-13T00:23:07.846Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 14건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 14 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.airport.kr/ap_ko/888/subview.do",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "인천국제공항의 스마트패스 앱 등록·이용 안내를 확인했어요. 앱 설치 링크와 이용 절차는 있지만 iPhone Duo 화면 대응 명시는 없어요.",
+            "en": "Reviewed Incheon Airport’s SmartPass app registration and usage guide. It provides installation links and usage steps, without an explicit iPhone Duo display statement."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6448311069",
+      "slug": "app-6448311069",
+      "name": "ChatGPT",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6448311069",
+          "checkedAt": "2026-11-13T00:23:10.672Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.openai.com/en/articles/8142208-chatgpt-ios-and-android-app-faq",
+          "checkedAt": "2026-11-13T04:05:45Z",
+          "scope": "developer_ios_help",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "OpenAI의 공식 모바일 앱 FAQ에서 기기 요구사항·앱 버전 확인 안내를 검토했어요. iPhone/iPad 안내를 듀오 최적화로 해석하지 않았고, 명시적 Duo 대응 문구는 찾지 못했어요.",
+            "en": "Reviewed OpenAI’s official mobile-app FAQ, including device requirements and version checks. iPhone/iPad guidance was not treated as Duo optimization, and no explicit Duo statement was found."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+          "checkedAt": "2026-11-13T04:12:09Z",
+          "scope": "developer_release_notes_excerpt",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "공식 릴리스 노트의 2026년 10~11월 현재 표시된 항목을 확인했어요. 모바일 계정 전환 등의 안내는 있지만 이 범위에서 iPhone Duo 화면 대응을 명시한 항목은 찾지 못했어요. 전체 과거 기록을 전수 검토한 것은 아니에요.",
+            "en": "Reviewed the visible October–November 2026 section of official release notes, including mobile account switching. No explicit iPhone Duo layout statement appeared within this scope; the entire historical archive was not reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6477489729",
+      "slug": "app-6477489729",
+      "name": "Google Gemini",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6477489729",
+          "checkedAt": "2026-11-13T00:23:17.749Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://gemini.google.com/app/download",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 다운로드 페이지에서는 로그인 메뉴만 읽혀 지원 설명을 확인할 수 없었어요.",
+            "en": "The official download page exposed only sign-in navigation, so its support content could not be reviewed."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.google.com/gemini/answer/14579026/?co=GENIE.Platform%3DiOS",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_ios_requirements",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "Google의 공식 Gemini iOS 기기 요구사항을 확인했어요. iOS 16 이상 iPhone/iPad 안내이며 iPhone Duo 최적화 명시는 찾지 못했어요.",
+            "en": "Reviewed Google’s official Gemini iOS device requirements. The article lists iPhones/iPads on iOS 16+, without an explicit iPhone Duo optimization statement."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6738063154",
+      "slug": "app-6738063154",
+      "name": "네이버플러스 스토어",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6738063154",
+          "checkedAt": "2026-11-13T00:24:10.241Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://help.pay.naver.com/faq/list.help?categoryId=11003",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "네이버플러스 스토어 이용방법 FAQ 목록을 확인했어요. 해당 목록에서 듀오 대응 안내는 찾지 못했으며 개별 질문 전체를 조사한 것은 아니에요.",
+            "en": "Reviewed the NAVER Plus Store usage FAQ index. No Duo notice appeared in this index; the individual questions were not exhaustively reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6738896323",
+      "slug": "app-6738896323",
+      "name": "CGV",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6738896323",
+          "checkedAt": "2026-11-13T00:24:10.622Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 10건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 10 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://cgv.co.kr/",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_help_index",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "공식 고객센터 주소가 CGV 첫 페이지로 이동했지만 읽을 수 있는 본문이 없었어요. 공지·도움말을 확인하지 못했어요.",
+            "en": "The official support address redirected to the CGV homepage without a readable body. Notices and help content could not be reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "6743190232",
+      "slug": "app-6743190232",
+      "name": "하나은행, 새로워진 하나원큐를 경험해 보세요",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id6743190232",
+          "checkedAt": "2026-11-13T00:24:17.084Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://m.hanabank.com/cont/hidden/html/Hana1QHandbook_1.html",
+          "checkedAt": "2026-11-13T04:06:41Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "하나은행의 공식 하나원큐 시작 안내에서 설치·인증 절차와 이미지 대체 텍스트를 확인했어요. 이 안내에 iPhone Duo 대응 명시는 없어요.",
+            "en": "Reviewed Hana Bank’s official Hana One Q onboarding instructions and image alternative text. The guide does not explicitly identify iPhone Duo support."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "695436326",
+      "slug": "app-695436326",
+      "name": "KB Pay",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id695436326",
+          "checkedAt": "2026-11-13T00:27:06.593Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://card.kbcard.com/FNC/DVIEW/HFAMCXPRIFIC0038",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "KB국민카드 공식 메뉴에서 연결된 KB Pay 소개 페이지를 열었지만 본문이 읽히지 않았어요. 듀오 대응 여부를 확인할 수 없었어요.",
+            "en": "Opened the KB Pay introduction linked from KB Kookmin Card’s official navigation, but no body was readable. Duo support information could not be assessed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "839333328",
+      "slug": "app-839333328",
+      "name": "토스",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id839333328",
+          "checkedAt": "2026-11-13T00:27:12.258Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://support.toss.im/",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "토스 공식 고객센터의 주요 도움말 목록을 확인했어요. 이 첫 페이지에서 듀오 대응 문구는 찾지 못했으며 개별 도움말 전체를 조사한 것은 아니에요.",
+            "en": "Reviewed the official Toss support landing page and visible help topics. No Duo statement appeared on this page; individual articles were not exhaustively reviewed."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://toss.im/notice",
+          "checkedAt": "2026-11-13T04:06:17Z",
+          "scope": "developer_notices",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "고객센터에서 연결된 공식 공지사항은 읽을 수 있는 본문을 반환하지 않았어요. 공지 목록 확인을 완료하지 못했어요.",
+            "en": "The official notices page linked from the help center returned no readable body, so the notices could not be reviewed."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "873779010",
+      "slug": "app-873779010",
+      "name": "올리브영",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id873779010",
+          "checkedAt": "2026-11-13T00:27:14.374Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.oliveyoung.co.kr/store/counsel/getFaqList.do",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_help_index",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "올리브영 공식 FAQ의 현재 노출된 질문·답변을 확인했어요. 주문·배송·반품 안내가 중심이며 이 범위에서 듀오 대응 문구는 찾지 못했어요.",
+            "en": "Reviewed the currently visible questions and answers in Olive Young’s official FAQ. They focus on orders, delivery and returns; no Duo statement appeared within this scope."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "884043462",
+      "slug": "app-884043462",
+      "name": "여기어때: 호텔, 모텔, 숙소, 항공권 여행 최저가",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id884043462",
+          "checkedAt": "2026-11-13T00:27:16.429Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.goodchoice.kr/",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_product_page",
+          "outcome": "access_failed",
+          "note": {
+            "ko": "기존 공식 사이트 주소가 HTTP 503을 반환해 내용을 읽지 못했어요.",
+            "en": "The older official site address returned HTTP 503, preventing content review."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.yeogi.com/",
+          "checkedAt": "2026-11-13T04:06:41Z",
+          "scope": "developer_product_page",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "여기어때의 현재 공식 페이지와 표시된 FAQ 목록을 확인했어요. 이 범위에서 iPhone Duo 대응 명시는 찾지 못했어요.",
+            "en": "Reviewed Yeogi’s current official landing page and visible FAQ topics. No explicit iPhone Duo statement appeared within this scope."
+          }
+        }
+      ]
+    },
+    {
+      "appStoreId": "981110422",
+      "slug": "app-981110422",
+      "name": "카카오 T - 택시, 세차, 주차, 바이크, 항공, 퀵",
+      "checks": [
+        {
+          "kind": "app_store",
+          "url": "https://apps.apple.com/kr/app/id981110422",
+          "checkedAt": "2026-11-13T00:28:03.743Z",
+          "scope": "saved_app_store_description_and_version_history",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "11월 13일 보관한 한국 App Store 설명과 버전 기록 25건에서 Duo 명시 문구를 재검색했어요. 이 범위에서는 대응 문구를 찾지 못했으며 실기기 검증이나 배지 직접 관측은 아니에요.",
+            "en": "Re-examined the saved November 13 Korean App Store description and 25 version notes for explicit Duo wording. None was found in that scope; this is neither a device test nor direct badge observation."
+          }
+        },
+        {
+          "kind": "developer",
+          "url": "https://www.kakaomobility.com/service-kakaot",
+          "checkedAt": "2026-11-13T04:05:55Z",
+          "scope": "developer_usage_guide",
+          "outcome": "no_explicit_statement",
+          "note": {
+            "ko": "카카오 T 공식 서비스 페이지의 앱 활용 가이드를 확인했어요. 검색·서비스 탭·즐겨찾기 설명은 있지만 iPhone Duo 대응 명시는 찾지 못했어요.",
+            "en": "Reviewed the app usage guide on Kakao T’s official service page. It describes search, service tabs and favorites, without explicitly stating iPhone Duo support."
+          }
+        }
+      ]
+    }
+  ]
+}

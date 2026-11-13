@@ -16,11 +16,11 @@ export async function generateMetadata({
 export default async function SubmitPage({
   searchParams,
 }: {
-  searchParams: Promise<{ app?: string }>;
+  searchParams: Promise<{ app?: string; kind?: string }>;
 }) {
   const t = await getTranslations('Submission');
   const d = await getTranslations('Directory');
-  const { app } = await searchParams;
+  const { app, kind } = await searchParams;
   let enabled = dataSource() === 'postgres';
   let storeUrl = '';
   if (enabled && app && app.length <= 150) {
@@ -40,7 +40,11 @@ export default async function SubmitPage({
       <section className="mx-auto my-8 max-w-2xl">
         <h1 className="text-3xl font-semibold">{t('title')}</h1>
         <p className="mt-4 text-muted-foreground">{t('intro')}</p>
-        <SubmissionForm enabled={enabled} storeUrl={storeUrl} />
+        <SubmissionForm
+          enabled={enabled}
+          storeUrl={storeUrl}
+          initialKind={kind === 'usage' ? 'usage' : undefined}
+        />
       </section>
     </main>
   );

@@ -101,6 +101,17 @@ export async function operationAction(
         }
         revalidatePath('/sitemap.xml');
       }
+    } else if (action === 'withdrawUsage') {
+      const reason = String(form.get('reason') ?? '').trim();
+      if (!reason || reason.length > 4000) throw new InputError('invalid');
+      await database(actor, (db) =>
+        db.query('SELECT app_private.withdraw_usage_report($1,$2,$3)', [
+          uuid(form.get('id')),
+          revision(Number(form.get('revision'))),
+          reason,
+        ]),
+      );
+      for (const lang of ['ko', 'en']) revalidatePath(`/${lang}/apps/[slug]`, 'page');
     } else if (action === 'link') {
       await database(actor, (db) =>
         db.query('SELECT app_private.link_submission($1,$2,$3)', [

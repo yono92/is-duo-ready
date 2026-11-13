@@ -1,4 +1,6 @@
 import { Card, Collapsible } from '@/components/ui/surfaces';
+import Image from 'next/image';
+import { UsageDetails } from '@/components/directory/usage-details';
 import { Select, TextArea, Checkbox } from '@/components/ui/form-controls';
 import { notFound } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -20,6 +22,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
       timeZone: 'Asia/Seoul',
     }).format(new Date(value));
   const t = await getTranslations('Operations');
+  const u = await getTranslations('Usage');
   const a = await getTranslations('Status');
   let id: string;
   try {
@@ -29,7 +32,8 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
   }
   const item = await getReview(actor, id);
   if (!item) notFound();
-  const draft = item.app_id ? await getAdminApp(actor, item.app_id) : null;
+  const isUsage = item.candidate_payload.kind === 'usage';
+  const draft = !isUsage && item.app_id ? await getAdminApp(actor, item.app_id) : null;
   const match =
     !item.app_id && item.submission_id && item.candidate_payload.app_store_id
       ? await matchingSubmissionApp(actor, item.candidate_payload.app_store_id)
@@ -41,6 +45,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
         <p>{t('none')}</p>
       ) : (
         <>
+          {value.usage && <UsageDetails usage={value.usage} />}
           {value.source_url && (
             <Link
               className="block break-all text-primary"
@@ -69,6 +74,26 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
           <p className="break-words whitespace-pre-wrap">
             {value.text ?? value.release_notes ?? t('noText')}
           </p>
+          {value.has_screenshot && item.submission_id && (
+            <Link
+              href={`/api/admin/usage-screenshots/${item.submission_id}`}
+              target="_blank"
+              rel="noreferrer"
+              className="block"
+            >
+              <Image
+                src={`/api/admin/usage-screenshots/${item.submission_id}`}
+                alt={u('screenshotAlt')}
+                width={800}
+                height={800}
+                unoptimized
+                className="h-auto max-h-96 w-auto max-w-full rounded-lg border object-contain"
+              />
+              <span className="mt-2 inline-block text-primary underline">
+                {u('openScreenshot')}
+              </span>
+            </Link>
+          )}
           {value.truncated && <p className="text-muted-foreground">{t('truncated')}</p>}
         </>
       )}
@@ -87,7 +112,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
         <p className="mt-2">
           {item.name ?? t('unlinkedApp')} · {t(`states.${item.state}`)}
         </p>
-        <p className="mt-3 text-muted-foreground">{t('compareHelp')}</p>
+        <p className="mt-3 text-muted-foreground">{isUsage ? u('reviewHelp') : t('compareHelp')}</p>
         <p className="mt-2 text-sm text-muted-foreground">
           {t('receivedAt')}: {date(item.created_at)}
         </p>
@@ -137,11 +162,13 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
           </Card>
         </section>
       </div>
-      <Card padding={5}>
-        <Collapsible defaultIsOpen={false} trigger={<>{t('previousObservation')}</>}>
-          {candidate(item.before_payload)}
-        </Collapsible>
-      </Card>
+      {!isUsage && (
+        <Card padding={5}>
+          <Collapsible defaultIsOpen={false} trigger={<>{t('previousObservation')}</>}>
+            {candidate(item.before_payload)}
+          </Collapsible>
+        </Card>
+      )}
       {draft && (
         <section>
           <Card padding={5} className="space-y-4 ">
@@ -220,7 +247,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
             operation: 'decide',
             id: item.id,
             revision: item.revision,
-            app_revision: draft?.revision ?? 0,
+            app_revision: draft?.revision ?? item.app_revision ?? 0,
           }}
           label={t('saveDecision')}
         >
@@ -232,7 +259,11 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
               options={[
                 { value: 'deferred', label: t('defer') },
                 { value: 'rejected', label: t('reject') },
-                { value: 'approved', label: t('approve'), disabled: !draft },
+                {
+                  value: 'approved',
+                  label: isUsage ? u('approve') : t('approve'),
+                  disabled: isUsage ? !item.app_id : !draft,
+                },
               ]}
             />
           </div>
@@ -240,8 +271,20 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
             <TextArea label={t('reason')} name="reason" required maxLength={4000} rows={3} />
           </div>
           <div className="flex min-h-11 items-start gap-3">
-            <Checkbox label={t('approveConfirm')} name="confirmed" />
+            <Checkbox
+              label={isUsage ? u('approveConfirm') : t('approveConfirm')}
+              name="confirmed"
+            />
           </div>
+        </OperationForm>
+      )}
+      {isUsage && item.state === 'approved' && item.submission_id && (
+        <OperationForm
+          fields={{ operation: 'withdrawUsage', id: item.submission_id, revision: item.revision }}
+          label={u('withdraw')}
+        >
+          <p className="text-sm text-muted-foreground">{u('withdrawHelp')}</p>
+          <TextArea label={u('withdrawReason')} name="reason" required maxLength={4000} rows={3} />
         </OperationForm>
       )}
     </section>

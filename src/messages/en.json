@@ -489,8 +489,8 @@
     "officialUnconfirmed": "Official source not yet confirmed"
   },
   "Submission": {
-    "title": "Request an app or correction",
-    "intro": "Tell us about a missing app or incorrect information. Reports are private. We check official sources before updating an entry.",
+    "title": "Share app information or an experience",
+    "intro": "Suggest an app, correct information, or share your Duo experience. We review sources and user observations separately.",
     "kind": "Report type",
     "add": "Add an app",
     "correction": "Correct app information",
@@ -500,15 +500,18 @@
     "privacy": "Do not include names, contact details or other personal information. A temporary cookie helps limit repeated reports.",
     "website": "Website",
     "received": "Report received",
-    "receivedBody": "We will check your report and sources. Only confirmed information will be added to the app entry.",
+    "receivedBody": "Your submission is awaiting review. With your consent, a user experience and its image may be published separately after review. Official support is never changed automatically.",
     "working": "Sending…",
     "send": "Send report",
     "errors": {
-      "invalid": "Check the South Korea App Store URL, source URL and report length (10–4,000 characters).",
+      "invalid": "Check the app URL, description and required fields. Experiences need a listed app, setup, date and publication consent.",
       "rateLimited": "The report limit has been reached. Try again at the start of the next hour.",
-      "unavailable": "Reports are unavailable right now. Try again shortly."
+      "unavailable": "Reports are unavailable right now. Try again shortly.",
+      "invalidScreenshot": "Choose one PNG, JPEG or WebP image up to 2MB. Damaged or animated images are not accepted."
     },
-    "storeUrlPlaceholder": "https://apps.apple.com/kr/app/id…"
+    "storeUrlPlaceholder": "https://apps.apple.com/kr/app/id…",
+    "usage": "User experience",
+    "optionalEvidenceUrl": "Related source URL (optional, https://)"
   },
   "AppAssets": {
     "storeLink": "View {name} on the App Store",
@@ -541,7 +544,7 @@
   },
   "Privacy": {
     "title": "Privacy policy",
-    "effective": "Effective November 2, 2026",
+    "effective": "Effective: November 13, 2026",
     "intro": "Is Duo Ready? is an independent app information service operated by the GitHub account yono92. This page explains information handling for browsing, submissions, administrator authentication and Google advertising.",
     "browsing": {
       "title": "Browsing information",
@@ -553,7 +556,7 @@
     },
     "submissions": {
       "title": "App and information submissions",
-      "body": "A submission stores its type, App Store app ID and URL, message and evidence URL. We do not ask for names or contact details and ask you to keep personal information out of submissions. Submissions and review records are retained to verify and correct information, keep a review history and prevent duplicates. They are not publicly queryable. Submissions currently have no automatic deletion deadline. You can request correction or deletion of personal information included by mistake through the contact channel below.\nTo limit repeated submissions, the duo-submission-visitor cookie lasts one hour. A hash of its random identifier and hourly request counts are stored. Rate-limit records older than one day are cleaned up when the next submission is received."
+      "body": "We store the submission type, South Korea App Store app ID and URL, text and any source URL. Usage reports also include the device or simulator, OS and app versions, display state, outcome, observation date, language, publication consent and optional screenshot. Screenshots are resized and image metadata is removed. We do not request names or contact details; remove personal information from text and images.\nRaw submissions, moderation reasons and unapproved images are private. With your consent and after moderator review, the report text, setup, source link and image may be published separately as a user experience. Administrators can withdraw publication. Raw submissions and review records are retained for verification, history and duplicate prevention; no automatic deletion period is configured. Use the contact channel below to request correction, deletion or withdrawal.\nThe duo-submission-visitor cookie lasts one hour. We store a hash of its random value and hourly request counts to limit repeated submissions. Limit records older than one day are removed on the next submission."
     },
     "administrators": {
       "title": "Administrator authentication",
@@ -582,5 +585,71 @@
       "supabase": "Supabase privacy information",
       "github": "Service GitHub contact channel"
     }
+  },
+  "Research": {
+    "title": "Research history",
+    "intro": "These records describe only the sources we checked. An app may support Duo even when no explicit statement was found.",
+    "empty": "No research history has been published for this app yet. Share a source or your experience.",
+    "sourceKinds": {
+      "app_store": "App Store description and updates",
+      "developer": "Official developer sources",
+      "badge": "Official badge"
+    },
+    "outcomes": {
+      "explicit_support": "Support statement found · awaiting assessment",
+      "limited_statement": "Duo improvement mentioned · scope unclear",
+      "no_explicit_statement": "No explicit support statement found in this source",
+      "access_failed": "Could not read this source"
+    },
+    "notChecked": "No published research record",
+    "checkedAt": "Source checked or attempted: {date}",
+    "originalQuote": "Original excerpt",
+    "contribute": "Share a source",
+    "scope": "Results apply to the linked sources; they do not represent a search of every developer resource."
+  },
+  "Usage": {
+    "title": "User experiences",
+    "intro": "User observations in specific environments. These are not device tests performed by us or official support determinations.",
+    "empty": "No reviewed user experiences have been published yet.",
+    "unavailable": "Could not load user experiences. Please try again later.",
+    "submit": "Share your experience",
+    "environmentTitle": "Your setup",
+    "formHelp": "Describe what you actually observed. Reports must concern a listed app. After moderator review, your text and image may be published as a user experience.",
+    "environment": "Test environment",
+    "environments": {
+      "device": "Physical device",
+      "simulator": "Simulator"
+    },
+    "deviceModel": "Device or simulator name",
+    "osVersion": "iOS version",
+    "appVersion": "App version",
+    "observedOn": "Date used (YYYY-MM-DD)",
+    "displayMode": "Display state observed",
+    "displayModes": {
+      "unfolded": "Unfolded display",
+      "folded": "Folded display",
+      "transition": "While folding or unfolding"
+    },
+    "result": "What happened",
+    "results": {
+      "works": "Worked in this setup",
+      "issues": "Encountered an issue"
+    },
+    "screenshot": "One screenshot (optional)",
+    "screenshotHelp": "PNG, JPEG or WebP · up to 2MB. Remove names, notifications, account details and other personal information.",
+    "consent": "I observed this myself and agree that my text, setup and image may be published after review.",
+    "screenshotAlt": "Usage screenshot submitted by the reporter",
+    "openScreenshot": "View screenshot",
+    "observedDate": "Date used: {date}",
+    "publishedDate": "Report published: {date}",
+    "reviewed": "User report published after review",
+    "originalLanguage": "Shown in the reporter’s original language.",
+    "evidenceLink": "Source provided by the reporter",
+    "reviewHelp": "Review the setup, text, screenshot and personal information. Approval publishes only the user experience and leaves official support unchanged.",
+    "approve": "Approve and publish experience",
+    "approveConfirm": "I reviewed the report, image and publication consent. Publish separately from official support.",
+    "withdraw": "Withdraw published experience",
+    "withdrawReason": "Withdrawal reason (private)",
+    "withdrawHelp": "Hide the public text and image while preserving the private submission and review history."
   }
 }

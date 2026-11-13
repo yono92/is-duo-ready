@@ -4,6 +4,7 @@ import en from '@/messages/en.json';
 import { fixtureApps } from '@/lib/data/fixtures';
 import { createTranslator } from 'next-intl';
 import { appContent } from '@/lib/directory/content';
+import type { RealDirectoryApp } from '@/lib/directory/types';
 function keys(value: object, prefix = ''): string[] {
   return Object.entries(value)
     .flatMap(([k, v]) => (typeof v === 'object' ? keys(v, `${prefix}${k}.`) : [`${prefix}${k}`]))
@@ -48,4 +49,32 @@ it('uses original content for missing and stale translations', () => {
     });
   }
   expect(appContent(fixtureApps[0], 'en').original).toBe(false);
+});
+
+it('replaces only the obsolete unsupported claim on unknown apps without altering source data', () => {
+  const app: RealDirectoryApp = {
+    ...fixtureApps[0],
+    fictional: false,
+    status: 'unknown',
+    evidence: [],
+    features: [],
+    storeUrl: 'https://apps.apple.com/kr/app/id990000010',
+    currentVersion: null,
+    supportVersion: null,
+    investigationReason: null,
+    previousSlugs: [],
+    originalLocale: 'ko',
+    translations: { ko: { summary: ko.InitialPublication.summary, state: 'current' } },
+  };
+  expect(appContent(app, 'ko').summary).toBe(ko.Directory.unknownDescription);
+  expect(appContent(app, 'en')).toEqual({
+    summary: en.Directory.unknownDescription,
+    original: false,
+  });
+  expect(app.translations.ko?.summary).toBe(ko.InitialPublication.summary);
+  app.translations.ko!.summary = 'Actual source-language research summary';
+  expect(appContent(app, 'en')).toEqual({
+    summary: 'Actual source-language research summary',
+    original: true,
+  });
 });

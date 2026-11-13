@@ -13,6 +13,7 @@ export default defineConfig({
     'import-control.spec.ts',
     'operations.spec.ts',
     'icons.spec.ts',
+    'usage-reports.spec.ts',
   ],
   workers: 1,
   // Split individual tests across isolated CI runners; each runner still uses

@@ -15,6 +15,8 @@ import { HistoryList } from '@/components/directory/history-list';
 import { AppStoreBadge } from '@/components/app-store-badge';
 import { appMetadata } from '@/lib/data/seo';
 import { AutoAds } from '@/components/auto-ads';
+import { ResearchHistory } from '@/components/directory/research-history';
+import { UsageReports } from '@/components/directory/usage-reports';
 
 export async function generateMetadata({
   params,
@@ -174,6 +176,12 @@ export default async function AppDetail({
             </ul>
           )}
         </section>
+        {!app.fictional && (
+          <ResearchHistory storeUrl={app.storeUrl} slug={app.slug} locale={locale} />
+        )}
+        {!app.fictional && result.id && (
+          <UsageReports appId={result.id} slug={app.slug} locale={locale} />
+        )}
         {history && history.items.length > 0 && (
           <section className="mt-8 border-t pt-8">
             <h2 className="mb-5 text-lg font-semibold">{t('history')}</h2>

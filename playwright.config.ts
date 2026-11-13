@@ -10,6 +10,7 @@ export default defineConfig({
     '**/import-control.spec.ts',
     '**/operations.spec.ts',
     '**/icons.spec.ts',
+    '**/usage-reports.spec.ts',
   ],
   fullyParallel: true,
   workers: process.env.CI ? 1 : 2,

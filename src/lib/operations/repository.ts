@@ -1,6 +1,7 @@
 import 'server-only';
 import { database } from '@/lib/db/server';
 import type { ReviewState } from './input';
+import type { UsageDetails } from './usage-types';
 
 export type Candidate = {
   source_url?: string;
@@ -12,6 +13,9 @@ export type Candidate = {
   truncated?: boolean;
   app_store_id?: string;
   kind?: string;
+  usage?: UsageDetails;
+  locale?: 'ko' | 'en';
+  has_screenshot?: boolean;
 };
 export type ReviewItem = {
   id: string;
