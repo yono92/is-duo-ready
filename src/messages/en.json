@@ -17,7 +17,7 @@
     "title": "iPhone Duo\napp support",
     "description": "Check which apps support Duo\nand which versions are supported.",
     "methodology": "How we check support",
-    "directoryDescription": "Start with key apps in Korea, or search the full catalogue for an app.",
+    "directoryDescription": "Find the apps you use and check their Duo support.",
     "region": "South Korea App Store",
     "fixture": "Sample data",
     "fixtureDescription": "These fictional apps are for previewing the site. Their support status is an example.",
@@ -33,7 +33,7 @@
   },
   "Directory": {
     "search": "Search apps",
-    "searchPlaceholder": "Search the full app catalogue",
+    "searchPlaceholder": "Search for an app",
     "searchButton": "Search",
     "categories": "Categories",
     "all": "All apps",
@@ -55,7 +55,7 @@
     "reset": "Clear search and filters",
     "done": "Show results",
     "close": "Close filters",
-    "filterDescription": "Filter by category and support status. Changes apply immediately.",
+    "filterDescription": "Category changes apply immediately. Choose support status below the search field.",
     "results": "{count, plural, one {# example app} other {# example apps}}",
     "page": "Page {page} of {pages}",
     "previous": "Previous page",
@@ -75,33 +75,23 @@
     "back": "Back to apps",
     "realResults": "{count, plural, one {# app} other {# apps}}",
     "realEmptyDescription": "Change your search or filters. If an app is missing, you can suggest adding it.",
-    "collections": "Choose an app collection",
-    "collection": {
-      "core": "Key apps in Korea",
-      "supported": "Duo support confirmed",
-      "all": "All apps"
-    },
-    "collectionDescription": {
-      "core": "An editorial selection of everyday, finance, transport, content and work apps, plus the latest collected Korean top 100 free apps. Search covers the full catalogue.",
-      "supported": "Apps with Duo support confirmed by official sources, including specialist apps outside the key apps collection.",
-      "all": "All published apps, including specialist and international apps beyond the key apps collection."
-    },
-    "coreUnrankedLast": "Ranked apps appear first, followed by the remaining editorial selections.",
-    "coreRankingUnavailable": "No chart data is available. Editorially selected key apps in Korea are sorted by name."
+    "familiar": "Familiar apps first",
+    "familiarDescription": "Editorial picks for Korea and top free chart apps appear first.",
+    "familiarUnavailable": "Editorial picks for Korea appear first."
   },
   "DirectoryStats": {
-    "shareOfTotal": "Share of the selected collection",
+    "shareOfTotal": "Share of all listed apps",
     "distributionTitle": "App distribution by support status",
-    "title": "Support in the selected app collection",
+    "title": "All apps support overview",
     "sampleTitle": "Sample app support overview",
     "total": "Korean App Store · {count, number} {count, plural, one {app} other {apps}}",
     "sampleTotal": "Korean App Store · {count, number} sample {count, plural, one {app} other {apps}}",
     "supported": "Official support",
     "planned": "Planned",
-    "unknown": "Unverified",
+    "unknown": "Unconfirmed",
     "unsupported": "Confirmed unsupported",
-    "scope": "The entire selected collection · Independent of search, category and support status filters.",
-    "sampleScope": "Fictional sample apps in the selected collection. These are not actual app support statistics."
+    "scope": "All listed apps · Independent of search, category and support status filters.",
+    "sampleScope": "All fictional sample apps. These are not actual app support statistics."
   },
   "Categories": {
     "productivity": "Productivity",
@@ -130,7 +120,7 @@
   "Status": {
     "supported": "Officially supported",
     "planned": "Support planned",
-    "unknown": "Unsupported · unverified",
+    "unknown": "Unconfirmed",
     "unsupported": "Not supported"
   },
   "Detail": {
@@ -160,7 +150,7 @@
     "statusDescriptions": {
       "supported": "Official sources say that Duo support is available now.",
       "planned": "Duo support has been announced but is not available yet.",
-      "unknown": "We haven’t found official sources that explicitly confirm Duo support. “Unsupported · unverified” means support is still unconfirmed. It is separate from a developer’s statement that the app does not support Duo.",
+      "unknown": "We haven’t found official sources that explicitly confirm Duo support. Support is still unconfirmed; this is separate from a developer’s statement that the app does not support Duo.",
       "unsupported": "The developer has stated that the app does not currently support Duo."
     },
     "evidence": "Which sources do we check?",

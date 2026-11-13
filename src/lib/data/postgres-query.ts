@@ -24,7 +24,12 @@ export async function queryDirectory(
       (SELECT string_agg(value,' ') FROM jsonb_array_elements_text(snapshot->'aliases'))),NFC)),lower(normalize($1,NFC)))>0`;
   const language = locale === 'ko' ? 'ko' : 'en';
   const nameOrder = `snapshot->'names'->>'${language}',slug`;
-  const chartKind = query.sort === 'top-free' || query.sort === 'top-paid' ? query.sort : null;
+  const chartKind =
+    query.sort === 'familiar'
+      ? 'top-free'
+      : query.sort === 'top-free' || query.sort === 'top-paid'
+        ? query.sort
+        : null;
   // Core membership always reads the free chart, independently of the selected sort.
   // Missing chart tables fall back to editorial membership during additive rollout.
   const available = (
@@ -35,13 +40,16 @@ export async function queryDirectory(
   const rankings = available
     ? `SELECT app_id,chart_kind,rank,source_url,observed_at FROM public.app_chart_rankings WHERE country='KR'`
     : `SELECT NULL::uuid AS app_id,NULL::text AS chart_kind,NULL::integer AS rank,NULL::text AS source_url,NULL::timestamptz AS observed_at WHERE false`;
-  const sort = chartKind
-    ? `${query.collection === 'core' ? '' : "CASE WHEN snapshot->>'status'='supported' THEN 0 ELSE 1 END,"}chart_rank ASC NULLS LAST,${nameOrder}`
-    : query.sort === 'updated'
-      ? `support_changed_at DESC,${nameOrder}`
-      : query.sort === 'name'
-        ? nameOrder
-        : `array_position(ARRAY['supported','planned','unknown','unsupported'],snapshot->>'status'),reviewed_at DESC,${nameOrder}`;
+  const sort =
+    query.sort === 'familiar'
+      ? `core DESC,chart_rank ASC NULLS LAST,${nameOrder}`
+      : chartKind
+        ? `CASE WHEN snapshot->>'status'='supported' THEN 0 ELSE 1 END,chart_rank ASC NULLS LAST,${nameOrder}`
+        : query.sort === 'updated'
+          ? `support_changed_at DESC,${nameOrder}`
+          : query.sort === 'name'
+            ? nameOrder
+            : `array_position(ARRAY['supported','planned','unknown','unsupported'],snapshot->>'status'),reviewed_at DESC,${nameOrder}`;
   // Counts, filtering, page clamping and rows share one PostgreSQL statement snapshot.
   // Separate SELECTs under READ COMMITTED can otherwise disagree during publication.
   const result = await db.query<{
@@ -61,11 +69,8 @@ export async function queryDirectory(
       FROM public.directory_entries e
       LEFT JOIN selected_rankings r ON r.app_id=e.app_id
       WHERE e.publication='published' AND e.country='KR'
-    ), collection_apps AS MATERIALIZED (
-      SELECT * FROM published WHERE $7='all' OR ($7='core' AND core)
-        OR ($7='supported' AND snapshot->>'status'='supported')
     ), scoped AS MATERIALIZED (
-      SELECT * FROM collection_apps WHERE ${where}
+      SELECT * FROM published WHERE ${where}
     ), pagination AS (
       SELECT count(*)::int AS total,greatest(1,(count(*)+${PAGE_SIZE - 1})/${PAGE_SIZE})::int AS pages FROM scoped
     ), bounds AS (
@@ -79,7 +84,7 @@ export async function queryDirectory(
         'planned',count(*) FILTER(WHERE snapshot->>'status'='planned')::int,
         'unknown',count(*) FILTER(WHERE snapshot->>'status'='unknown')::int,
         'unsupported',count(*) FILTER(WHERE snapshot->>'status'='unsupported')::int) AS stats
-      FROM collection_apps
+      FROM published
     )
     SELECT bounds.*,overview.stats,
       (SELECT jsonb_build_object('sourceUrl',min(source_url),'observedAt',min(observed_at))
@@ -88,15 +93,7 @@ export async function queryDirectory(
         CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=ordered.app_id)
         THEN '/api/app-icons/' || app_id::text ELSE NULL END,'chartRank',chart_rank,'core',core) ORDER BY position) FROM ordered),'[]'::jsonb) AS apps
     FROM bounds CROSS JOIN overview`,
-    [
-      query.q,
-      query.category,
-      query.status,
-      query.page,
-      chartKind,
-      coreAppStoreIds,
-      query.collection,
-    ],
+    [query.q, query.category, query.status, query.page, chartKind, coreAppStoreIds],
   );
   const row = result.rows[0];
   return { ...row, stats: assertDirectoryStats(row.stats) };

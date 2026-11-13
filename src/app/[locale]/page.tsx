@@ -1,4 +1,4 @@
-import { Card, EmptyState } from '@/components/ui/surfaces';
+import { Card, Collapsible, EmptyState } from '@/components/ui/surfaces';
 import { DevicePreview } from '@/components/device-preview';
 import type { Metadata } from 'next';
 import { AutoAds } from '@/components/auto-ads';
@@ -7,7 +7,7 @@ import { ArrowRight, Globe2, SearchX } from 'lucide-react';
 import { Link } from '@/components/ui/link';
 import { redirect } from '@/i18n/navigation';
 import { getDirectoryPage } from '@/lib/data/directory';
-import { changeQuery, parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
+import { parseQuery, queryString, type RawQuery } from '@/lib/directory/query';
 import type { Locale } from '@/lib/directory/types';
 import { FixtureNotice } from '@/components/fixture-notice';
 import { DirectoryControls } from '@/components/directory/controls';
@@ -34,6 +34,7 @@ export default async function Home({
   setRequestLocale(locale);
   const t = await getTranslations('Home');
   const d = await getTranslations('Directory');
+  const stats = await getTranslations('DirectoryStats');
   const n = await getTranslations('Nav');
   const format = await getFormatter();
   const query = parseQuery(await searchParams);
@@ -85,52 +86,6 @@ export default async function Home({
           {data.kind === 'available' && result ? (
             <>
               {data.fictional && <FixtureNotice />}
-              <nav aria-label={d('collections')} className="mb-3 flex flex-wrap gap-2">
-                {(['core', 'supported', 'all'] as const).map((collection) => (
-                  <ButtonLink
-                    key={collection}
-                    href={`/?${queryString(changeQuery(query, { collection }))}#directory-heading`}
-                    variant={query.collection === collection ? 'default' : 'outline'}
-                    aria-current={query.collection === collection ? 'page' : undefined}
-                  >
-                    {d(`collection.${collection}`)}
-                  </ButtonLink>
-                ))}
-              </nav>
-              <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
-                {d(`collectionDescription.${query.collection}`)}
-              </p>
-              <DirectoryOverview stats={result.stats} fictional={data.fictional} />
-              {(query.sort === 'top-free' || query.sort === 'top-paid') && (
-                <p
-                  className="mt-4 text-xs leading-relaxed text-muted-foreground"
-                  data-testid="ranking-note"
-                >
-                  {result.ranking ? (
-                    <>
-                      <Link
-                        href={result.ranking.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline underline-offset-4"
-                      >
-                        {d('rankingAsOf', {
-                          kind: query.sort === 'top-free' ? 'free' : 'paid',
-                          date: format.dateTime(new Date(result.ranking.observedAt), {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                          }),
-                        })}
-                      </Link>
-                      {' · '}
-                      {d(query.collection === 'core' ? 'coreUnrankedLast' : 'unrankedLast')}
-                    </>
-                  ) : (
-                    d(query.collection === 'core' ? 'coreRankingUnavailable' : 'rankingUnavailable')
-                  )}
-                </p>
-              )}
               <div className="mt-5">
                 <DirectoryControls
                   query={query}
@@ -138,6 +93,47 @@ export default async function Home({
                   pages={result.pages}
                   fictional={data.fictional}
                 >
+                  <div className="mb-5 space-y-3">
+                    <Collapsible defaultIsOpen={false} trigger={stats('title')}>
+                      <DirectoryOverview stats={result.stats} fictional={data.fictional} />
+                    </Collapsible>
+                    {(query.sort === 'familiar' ||
+                      query.sort === 'top-free' ||
+                      query.sort === 'top-paid') && (
+                      <p
+                        className="text-xs leading-relaxed text-muted-foreground"
+                        data-testid="ranking-note"
+                      >
+                        {result.ranking ? (
+                          <>
+                            <Link
+                              href={result.ranking.sourceUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline underline-offset-4"
+                            >
+                              {d('rankingAsOf', {
+                                kind: query.sort === 'top-paid' ? 'paid' : 'free',
+                                date: format.dateTime(new Date(result.ranking.observedAt), {
+                                  year: 'numeric',
+                                  month: 'short',
+                                  day: 'numeric',
+                                }),
+                              })}
+                            </Link>
+                            {' · '}
+                            {d(query.sort === 'familiar' ? 'familiarDescription' : 'unrankedLast')}
+                          </>
+                        ) : (
+                          d(
+                            query.sort === 'familiar'
+                              ? 'familiarUnavailable'
+                              : 'rankingUnavailable',
+                          )
+                        )}
+                      </p>
+                    )}
+                  </div>
                   {result.apps.length ? (
                     <div className="app-grid">
                       {result.apps.map((app) => (

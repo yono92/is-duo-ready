@@ -80,7 +80,6 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       );
     });
     const query: DirectoryQuery = {
-      collection: 'all',
       q: 'Ranking fixture',
       category: 'all',
       status: 'all',
@@ -103,47 +102,42 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
         [3, null, 1, 2],
       );
       assert.ok(free.ranking);
-      const core = await queryDirectory(client, { ...query, collection: 'core' }, 'en');
+      const familiar = await queryDirectory(client, { ...query, sort: 'familiar' }, 'en');
       assert.deepEqual(
-        core.apps.map((app) => app.slug),
-        [apps[2].slug, apps[1].slug, apps[0].slug],
+        familiar.apps.map((app) => app.slug),
+        [apps[2].slug, apps[1].slug, apps[0].slug, apps[3].slug],
       );
-      assert.equal(core.stats.total, 3);
-      assert.equal(core.stats.supported, 1);
-      // Membership must not depend on the sort or language, or admit unranked supported apps.
-      const coreNames = await queryDirectory(
-        client,
-        { ...query, collection: 'core', sort: 'name' },
-        'ko',
-      );
+      assert.equal(familiar.total, 4);
+      assert.deepEqual(familiar.stats, free.stats);
+      assert.deepEqual(familiar.ranking, free.ranking);
+      // A free-chart app is promoted independently of support status; specialists remain.
       assert.deepEqual(
-        coreNames.apps.map((app) => app.slug).sort(),
-        core.apps.map((app) => app.slug).sort(),
+        familiar.apps.map((app) => app.core),
+        [true, true, true, false],
       );
-      assert.deepEqual(coreNames.stats, core.stats);
-      const corePaid = await queryDirectory(
+      const names = await queryDirectory(client, { ...query, sort: 'name' }, 'ko');
+      assert.deepEqual(
+        names.apps.map((app) => app.slug).sort(),
+        familiar.apps.map((app) => app.slug).sort(),
+      );
+      assert.deepEqual(names.stats, familiar.stats);
+      const filteredFamiliar = await queryDirectory(
         client,
-        { ...query, collection: 'core', sort: 'top-paid' },
+        { ...query, sort: 'familiar', status: 'supported' },
         'en',
       );
       assert.deepEqual(
-        corePaid.apps.map((app) => app.slug),
-        [apps[0].slug, apps[2].slug, apps[1].slug],
+        filteredFamiliar.apps.map((app) => app.slug),
+        [apps[0].slug, apps[3].slug],
       );
-      const supportedCollection = await queryDirectory(
+      assert.deepEqual(filteredFamiliar.stats, familiar.stats);
+      const emptyFamiliar = await queryDirectory(
         client,
-        { ...query, collection: 'supported' },
+        { ...query, sort: 'familiar', status: 'planned' },
         'en',
       );
-      assert.equal(supportedCollection.total, 2);
-      assert.equal(supportedCollection.stats.supported, 2);
-      const emptyCore = await queryDirectory(
-        client,
-        { ...query, collection: 'core', status: 'planned' },
-        'en',
-      );
-      assert.equal(emptyCore.total, 0);
-      assert.deepEqual(emptyCore.stats, core.stats);
+      assert.equal(emptyFamiliar.total, 0);
+      assert.deepEqual(emptyFamiliar.stats, familiar.stats);
       assert.equal(new Date(free.ranking.observedAt).toISOString(), '2026-11-02T00:00:00.000Z');
       const paid = await queryDirectory(client, { ...query, sort: 'top-paid' }, 'ko');
       assert.deepEqual(
@@ -163,7 +157,6 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       const empty = await queryDirectory(client, { ...query, status: 'planned' }, 'en');
       assert.equal(empty.total, 0);
       assert.deepEqual(empty.stats, free.stats);
-      const names = await queryDirectory(client, { ...query, sort: 'name' }, 'en');
       assert.ok(names.apps.every((a) => a.chartRank === null));
       assert.equal(names.ranking, null);
     });
@@ -214,8 +207,13 @@ test('chart sorting preserves the catalogue, support history and public/admin bo
       assert.equal(fallback.total, 4);
       assert.equal(fallback.ranking, null);
       assert.ok(fallback.apps.every((a) => a.chartRank === null));
-      const editorialOnly = await queryDirectory(db, { ...query, collection: 'core' }, 'en');
-      assert.equal(editorialOnly.total, 1);
+      const editorialOnly = await queryDirectory(db, { ...query, sort: 'familiar' }, 'en');
+      assert.equal(editorialOnly.total, 4);
+      assert.deepEqual(editorialOnly.stats, fallback.stats);
+      assert.deepEqual(
+        editorialOnly.apps.map((app) => app.slug),
+        [apps[3].slug, apps[0].slug, apps[1].slug, apps[2].slug],
+      );
       assert.equal(editorialOnly.apps[0].slug, apps[3].slug);
       assert.equal(editorialOnly.ranking, null);
       assert.deepEqual(

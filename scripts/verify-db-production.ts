@@ -89,13 +89,22 @@ try {
   const sitemap = await (await fetch(`${base}/sitemap.xml`)).text();
   for (const locale of ['ko', 'en']) {
     assert.ok(sitemap.includes(`/${locale}/apps/fictional-production-published`));
-    const core = await (await fetch(`${base}/${locale}`)).text();
-    assert.equal((core.match(/data-testid="app-card"/g) ?? []).length, 0);
-    assert.ok(!core.includes('Fictional production published'));
-    const home = await (await fetch(`${base}/${locale}?collection=all`)).text();
+    const home = await (await fetch(`${base}/${locale}`)).text();
     assert.equal((home.match(/data-testid="app-card"/g) ?? []).length, 1);
     assert.ok(home.includes('Fictional production published'));
     assert.ok(!home.includes('PRIVATE_PRODUCTION_NOTE'));
+    for (const collection of ['core', 'all']) {
+      const legacy = await (await fetch(`${base}/${locale}?collection=${collection}`)).text();
+      assert.equal((legacy.match(/data-testid="app-card"/g) ?? []).length, 1);
+      assert.ok(legacy.includes('Fictional production published'));
+      assert.ok(!legacy.includes('PRIVATE_PRODUCTION_NOTE'));
+    }
+    const supported = await (await fetch(`${base}/${locale}?collection=supported`)).text();
+    assert.equal((supported.match(/data-testid="app-card"/g) ?? []).length, 0);
+    const explicitAll = await (
+      await fetch(`${base}/${locale}?collection=supported&status=all`)
+    ).text();
+    assert.equal((explicitAll.match(/data-testid="app-card"/g) ?? []).length, 1);
     const search = await (await fetch(`${base}/${locale}?q=Fictional%20production`)).text();
     assert.equal((search.match(/data-testid="app-card"/g) ?? []).length, 1);
     assert.ok(search.includes('Fictional production published'));
@@ -123,7 +132,7 @@ try {
   const robots = await (await fetch(`${base}/robots.txt`)).text();
   assert.ok(robots.includes('Disallow: /ko/admin') && robots.includes('Disallow: /en/admin'));
   console.log(
-    'PASS production DB: both locales, core exclusion/full-catalogue search, published-only sitemap/list/detail/history, hidden drafts/archives, private-field exclusion and admin robots.',
+    'PASS production DB: both locales, unified catalogue/search and legacy filters, published-only sitemap/list/detail/history, hidden drafts/archives, private-field exclusion and admin robots.',
   );
 } finally {
   if (server && server.exitCode === null) {

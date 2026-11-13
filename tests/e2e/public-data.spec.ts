@@ -87,7 +87,7 @@ test('free and paid chart sorts preserve the catalogue, source and mobile locale
   }
   const search = 'Fictional public 773';
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto(`/en?q=${encodeURIComponent(search)}`);
+  await page.goto(`/en?q=${encodeURIComponent(search)}&sort=top-free`);
   await waitForDevice(page);
   await expect(page.getByTestId('app-card')).toHaveCount(4);
   await expect(page.getByTestId('app-card').first()).toContainText(

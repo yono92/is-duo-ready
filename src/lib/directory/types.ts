@@ -45,7 +45,7 @@ type DirectoryBase = {
   supportChangedAt: string | null;
   // Discovery membership computed independently from support evidence.
   core?: boolean;
-  // Rank in the selected chart only; absent for unranked apps and other sorts.
+  // Rank in the selected chart (free for familiar order); absent for other sorts.
   chartRank?: number | null;
 };
 export type Evidence = {
@@ -89,11 +89,10 @@ export type PublicHistory = {
   changedAt: string;
 };
 export type DirectoryQuery = {
-  collection: 'core' | 'supported' | 'all';
   q: string;
   category: Category | 'all';
   status: SupportStatus | 'all';
-  sort: 'top-free' | 'top-paid' | 'recommended' | 'updated' | 'name';
+  sort: 'familiar' | 'top-free' | 'top-paid' | 'recommended' | 'updated' | 'name';
   page: number;
 };
 export const STORE_COUNTRY = 'KR' as const;

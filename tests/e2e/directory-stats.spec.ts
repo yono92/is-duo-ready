@@ -6,8 +6,19 @@ for (const locale of ['ko', 'en']) {
   test(`overview keeps published sample totals separate from search in ${locale}`, async ({
     page,
   }) => {
-    await page.goto(`/${locale}?collection=all`);
+    const messages = locale === 'ko' ? ko : en;
+    await page.goto(`/${locale}`);
     const overview = page.getByTestId('directory-stats');
+    const disclosure = page.getByRole('button', {
+      name: messages.DirectoryStats.title,
+      exact: true,
+    });
+    await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+    await expect(overview).not.toBeVisible();
+    await expect(page.getByRole('searchbox')).toBeVisible();
+    await disclosure.focus();
+    await disclosure.press('Enter');
+    await expect(disclosure).toHaveAttribute('aria-expanded', 'true');
     await expect(overview).toBeVisible();
     const values = await overview.locator('dd').allTextContents();
     expect(values.map(Number)).toEqual([8, 8, 6, 8]);
@@ -34,6 +45,7 @@ for (const locale of ['ko', 'en']) {
     await chart.press('ArrowRight');
     await expect(distribution.locator('.recharts-tooltip-wrapper')).toContainText('26.7%');
     await page.goto(`/${locale}?q=no-such-app&status=supported`);
+    await disclosure.click();
     await expect(page.getByTestId('directory-stats').locator('dd')).toHaveText(values);
     await expect(page.getByTestId('app-card')).toHaveCount(0);
     await page.setViewportSize({ width: 360, height: 900 });
@@ -50,16 +62,21 @@ for (const locale of ['ko', 'en']) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
-    await expect(overview).toContainText((locale === 'ko' ? ko : en).DirectoryStats.sampleScope);
+    await expect(overview).toContainText(messages.DirectoryStats.sampleScope);
+    await disclosure.click();
+    await expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+    await expect(overview).not.toBeVisible();
   });
 }
 
 test.describe('server-rendered overview', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('counts remain readable without the chart runtime', async ({ page }) => {
-    await page.goto('/ko?collection=all');
+  test('counts are present in server HTML without chart runtime', async ({ page }) => {
+    await page.goto('/ko');
     const overview = page.getByTestId('directory-stats');
+    // Next.js streams the page behind loading.tsx. This verifies server-rendered
+    // counts, not a JavaScript-free interactive or visible browsing experience.
     await expect(overview.locator('[data-stat="total"]')).toContainText('30');
     await expect(overview.getByTestId('supported-count')).toHaveText('8');
     await expect(overview.locator('dd')).toHaveText(['8', '8', '6', '8']);

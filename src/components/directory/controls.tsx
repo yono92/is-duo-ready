@@ -39,8 +39,7 @@ export function DirectoryControls({
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
   const active = Number(query.category !== 'all') + Number(query.status !== 'all');
-  const modified =
-    active > 0 || !!query.q || query.sort !== defaultQuery.sort || query.collection !== 'core';
+  const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
   function navigate(next: DirectoryQuery) {
     const qs = queryString(next);
     if (documentNavigation) {
@@ -71,21 +70,6 @@ export function DirectoryControls({
       })}
     </fieldset>
   );
-  const statusSelect = (
-    <div className="flex min-w-0 flex-col gap-2 text-sm">
-      <Select
-        label={t('status')}
-        isLabelHidden
-        disabled={pending}
-        value={query.status}
-        onChange={(value) => update({ status: value as DirectoryQuery['status'] })}
-        options={[
-          { value: 'all', label: t('allStatuses') },
-          ...statuses.map((status) => ({ value: status, label: s(status) })),
-        ]}
-      />
-    </div>
-  );
   const sortSelect = (
     <div className="flex items-center gap-2">
       <Select
@@ -95,6 +79,7 @@ export function DirectoryControls({
         value={query.sort}
         onChange={(value) => update({ sort: value as DirectoryQuery['sort'] })}
         options={[
+          { value: 'familiar', label: t('familiar') },
           { value: 'top-free', label: t('topFree') },
           { value: 'top-paid', label: t('topPaid') },
           { value: 'recommended', label: t('recommended') },
@@ -114,7 +99,6 @@ export function DirectoryControls({
                 event.preventDefault();
                 const data = new FormData(event.currentTarget);
                 update({
-                  collection: 'all',
                   q: String(data.get('q') ?? '')
                     .normalize('NFC')
                     .trim()
@@ -141,12 +125,27 @@ export function DirectoryControls({
             </form>
             <div className="hidden md:block">{sortSelect}</div>
           </div>
+          <fieldset disabled={pending} className="min-w-0">
+            <legend className="sr-only">{t('status')}</legend>
+            <div className="flex flex-wrap gap-2">
+              {(['all', ...statuses] as const).map((status) => (
+                <Button
+                  key={status}
+                  variant={query.status === status ? 'default' : 'outline'}
+                  aria-pressed={query.status === status}
+                  disabled={pending}
+                  onClick={() => update({ status })}
+                >
+                  {status === 'all' ? t('allStatuses') : s(status)}
+                </Button>
+              ))}
+            </div>
+          </fieldset>
           <div className="directory-summary flex flex-wrap items-center justify-between gap-3 text-sm">
             <div className="flex flex-wrap items-center gap-3">
               <div className="md:hidden">
                 <Button
                   variant="outline"
-
                   onClick={() => setOpen(true)}
                   aria-haspopup="dialog"
                   aria-expanded={open}
@@ -186,10 +185,6 @@ export function DirectoryControls({
                       {t('filterCount', { count: active })}
                     </p>
                     {categoryList}
-                    <fieldset disabled={pending}>
-                      <legend className="mb-2 text-sm font-semibold">{t('status')}</legend>
-                      {statusSelect}
-                    </fieldset>
                     <Button
                       disabled={pending || !modified}
                       variant="outline"
@@ -225,10 +220,6 @@ export function DirectoryControls({
         </fieldset>
       </div>
       <aside className="directory-sidebar hidden md:block">
-        <fieldset disabled={pending} className="mb-7">
-          <legend className="text-xs font-medium text-muted-foreground">{t('status')}</legend>
-          <div className="mt-3">{statusSelect}</div>
-        </fieldset>
         {categoryList}
         <div className="mt-6">
           <Link
