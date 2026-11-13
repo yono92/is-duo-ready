@@ -4,6 +4,13 @@
 **Input**: specs/001-design-app-directory/spec.md
 
 ## Summary
+
+2026-11-13 검색 중심 홈: 기존 데이터 어댑터에서 현재 검색 결과와 기본 공개 앱 목록·공개 이력을
+병렬 조회한다. 상단에는 최소 아이콘/링크 props만 전달하는 AppMarquee, 독립 DirectorySearch,
+작은 기존 DevicePreview를 조합한다. DirectoryControls의 중복 검색은 제거하고 필터·정렬은
+유지한다. HomeInsights는 서버에서 기존 공개 이력과 자체 SDK 도식을 렌더링한다. 마이그레이션,
+새 수집기·외부 이미지·운영 데이터 변경 없이 기존 자산/fixture 경계를 재사용한다.
+
 사용자의 품질 개선 지시에 따라 CSS 모형을 Three.js 0.186.1, React Three Fiber 9.8.2, Drei 10.7.9 기반 WebGL 모형으로 교체한다. 클라이언트에서 지연 로드하고 둥근 베벨·금속·유리·카메라·커버 화면·힌지를 실제 기하로 구성한다. 자체 생성한 사막 WebP 텍스처와 로컬 Lightformer 환경광을 사용하며 외부 CDN 모델/HDR 요청은 없다. 가장자리 직접 조작 핸들과 독립 Astryx 초기화 버튼, 포인터 캡처 및 키보드 조작을 제공한다. demand 렌더링, DPR 상한 2, reduced motion, WebGL 실패 시 자체 SVG 도식 대체를 제공한다. 2026-10-30 사용자 후속 지시에 따라 홈은 로컬 PNG 유무·Vercel 환경과 독립적으로 3D를 렌더링한다. 기존 PNG 라우트의 Vercel 404 및 파일 제외는 유지한다. 실제 캔버스 픽셀 변화·터치·접근성·컨텍스트 손실을 검증한다.
 
 Next.js 서버 렌더링 목록과 URL 기반 클라이언트 제어를 결합한다. 30개 가상 fixture로

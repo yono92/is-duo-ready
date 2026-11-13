@@ -110,7 +110,9 @@ test('Astryx skip link is the first keyboard stop and reaches main content', asy
   await expect(page).toHaveURL(/\/en#main$/);
   await expect(page.getByRole('main')).toBeInViewport();
   await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: en.Home.browse, exact: true })).toBeFocused();
+  await expect(page.getByRole('button', { name: en.Home.pauseApps, exact: true })).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(page.getByRole('button', { name: en.Home.resumeApps, exact: true })).toBeFocused();
 });
 
 test('root negotiation, saved preference and explicit locale priority', async ({ browser }) => {
@@ -144,8 +146,14 @@ test('search, history, filter, locale and detail preserve context', async ({ pag
   await expect(page).toHaveURL(/q=/);
   await expect(page.getByTestId('app-card')).toHaveCount(1);
   await expect(page.getByTestId('app-card')).toContainText('종이숲');
-  await page.getByRole('main').getByRole('link', { name: ko.Home.browse, exact: true }).click();
-  await expect(page).toHaveURL(/q=.+#directory-heading$/);
+  const heroSearch = page
+    .getByRole('search', { name: ko.Directory.search, exact: true })
+    .getByRole('searchbox');
+  await heroSearch.focus();
+  await heroSearch.press('Enter');
+  await expect(page).toHaveURL(
+    (url) => url.pathname === '/ko' && url.searchParams.get('q') === '메모',
+  );
   await expect(page.getByRole('searchbox')).toHaveValue('메모');
   await page
     .getByRole('group', { name: ko.Directory.status, exact: true })
@@ -293,9 +301,12 @@ test('theme follows OS by default and remembers an explicit toggle without hydra
   await expect(title).toBeVisible();
   await expect(title).toHaveCSS('animation-name', 'none');
   await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'auto');
-  const browse = page.getByRole('main').getByRole('link', { name: en.Home.browse, exact: true });
-  await browse.focus();
-  await page.keyboard.press('Enter');
+  const search = page.getByRole('searchbox', { name: en.Directory.search, exact: true });
+  await search.fill('Paper Grove');
+  await search.press('Enter');
+  await expect(page).toHaveURL((url) => url.searchParams.get('q') === 'Paper Grove');
+  await expect(page.getByTestId('app-card')).toHaveCount(1);
+  await expect(page.getByTestId('app-card')).toContainText('Paper Grove');
   await expect(page.getByRole('heading', { name: en.Nav.explore, exact: true })).toBeInViewport();
   const card = page.getByRole('main').getByTestId('app-card').first();
   await card.hover();

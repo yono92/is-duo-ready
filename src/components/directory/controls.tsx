@@ -1,17 +1,14 @@
 'use client';
 import { Select } from '@/components/ui/form-controls';
 
-import { useId, useState, useTransition } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useId, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { Link } from '@/components/ui/link';
-import { getPathname, useRouter } from '@/i18n/navigation';
-import { useDocumentNavigation } from '@/components/ad-navigation';
-import type { Locale } from '@/lib/directory/types';
 import { categories, statuses, type DirectoryQuery } from '@/lib/directory/types';
-import { changeQuery, defaultQuery, queryString } from '@/lib/directory/query';
+import { defaultQuery } from '@/lib/directory/query';
+import { useDirectoryNavigation } from './navigation';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { SideNavItem, Pagination } from '@/components/ui/surfaces';
 import { Dialog, DialogHeader } from '@astryxdesign/core/Dialog';
 
@@ -32,27 +29,11 @@ export function DirectoryControls({
   const t = useTranslations('Directory');
   const c = useTranslations('Categories');
   const s = useTranslations('Status');
-  const router = useRouter();
-  const locale = useLocale() as Locale;
-  const documentNavigation = useDocumentNavigation();
-  const [pending, startTransition] = useTransition();
+  const { pending, navigate, update } = useDirectoryNavigation();
   const descriptionId = useId();
   const [open, setOpen] = useState(false);
   const active = Number(query.category !== 'all') + Number(query.status !== 'all');
   const modified = active > 0 || !!query.q || query.sort !== defaultQuery.sort;
-  function navigate(next: DirectoryQuery) {
-    const qs = queryString(next);
-    if (documentNavigation) {
-      window.location.assign(
-        getPathname({ href: `/${qs ? `?${qs}` : ''}#directory-heading`, locale }),
-      );
-      return;
-    }
-    startTransition(() => router.push(`/${qs ? `?${qs}` : ''}`, { scroll: false }));
-  }
-  function update(patch: Partial<DirectoryQuery>) {
-    navigate(changeQuery(query, patch));
-  }
   const categoryList = (
     <fieldset disabled={pending} className="space-y-1">
       <legend className="mb-3 text-xs font-medium text-muted-foreground">{t('categories')}</legend>
@@ -93,38 +74,6 @@ export function DirectoryControls({
     <div className="directory-layout" aria-busy={pending}>
       <div className="directory-toolbar">
         <fieldset disabled={pending} className="space-y-3">
-          <div className="flex flex-wrap gap-3">
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                const data = new FormData(event.currentTarget);
-                update({
-                  q: String(data.get('q') ?? '')
-                    .normalize('NFC')
-                    .trim()
-                    .slice(0, 100),
-                });
-              }}
-              role="search"
-              className="flex min-w-0 flex-1 gap-2"
-            >
-              <div className="relative min-w-0 flex-1">
-                <Input
-                  key={query.q}
-                  name="q"
-                  type="search"
-                  maxLength={100}
-                  defaultValue={query.q}
-                  label={t('search')}
-                  isLabelHidden
-                  placeholder={t('searchPlaceholder')}
-                  startIcon={<Search size={18} aria-hidden="true" />}
-                />
-              </div>
-              <Button type="submit">{t('searchButton')}</Button>
-            </form>
-            <div className="hidden md:block">{sortSelect}</div>
-          </div>
           <fieldset disabled={pending} className="min-w-0">
             <legend className="sr-only">{t('status')}</legend>
             <div className="flex flex-wrap gap-2">
@@ -214,7 +163,7 @@ export function DirectoryControls({
                   {t('reset')}
                 </Button>
               )}
-              <div className="md:hidden">{sortSelect}</div>
+              {sortSelect}
             </div>
           </div>
         </fieldset>

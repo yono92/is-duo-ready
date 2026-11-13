@@ -14,14 +14,15 @@
     "en": "English"
   },
   "Home": {
-    "title": "아이폰 듀오\n앱 지원 현황",
-    "description": "앱별 듀오 지원 여부와\n지원 버전을 확인하세요.",
+    "title": "내 앱은 듀오에서도\n준비됐을까요?",
+    "description": "익숙한 앱을 찾고, 공식 자료로 듀오 지원을 확인하세요.",
+    "pauseApps": "앱 아이콘 움직임 멈추기",
+    "resumeApps": "앱 아이콘 움직임 재생",
     "methodology": "지원 기준 보기",
     "directoryDescription": "쓰는 앱을 찾아 듀오 지원 상태를 확인하세요.",
     "region": "한국 앱스토어 기준",
     "fixture": "예시 데이터",
-    "fixtureDescription": "화면 확인용 가상 앱입니다. 실제 앱이나 지원 정보가 아닙니다.",
-    "browse": "앱 목록 보기"
+    "fixtureDescription": "화면 확인용 가상 앱입니다. 실제 앱이나 지원 정보가 아닙니다."
   },
   "Footer": {
     "copyright": "© 2026 Is Duo Ready?",
@@ -268,6 +269,23 @@
       "slug": "영문 소문자와 숫자를 사용하세요. 단어 사이는 하이픈(-)으로 연결할 수 있습니다.",
       "required": "필수 항목입니다. 내용을 입력하세요."
     }
+  },
+  "HomeInsights": {
+    "guideTitle": "듀오에서 앱 화면은 어떻게 달라지나요?",
+    "guideSubtitle": "화면 여백부터 전체 화면 활용까지, 세 가지 예시로 알아보세요.",
+    "centeredTitle": "주변에 여백",
+    "centeredSdk": "iOS 26 SDK 이하",
+    "centeredDescription": "앱이 펼친 화면 중앙에 표시되고 주변에 여백이 남아요.",
+    "expandedTitle": "오른쪽에 여백",
+    "expandedSdk": "iOS 27 SDK",
+    "expandedDescription": "화면 대부분을 사용하고 오른쪽 상태 표시줄 영역을 비워 둬요.",
+    "fullTitle": "전체 화면 활용",
+    "fullSdk": "iOS 27.1 SDK 이상",
+    "fullDescription": "화면 전체를 사용하고 도구·탭 막대가 오른쪽에 세로로 배치돼요.",
+    "guideNote": "Apple의 빌드 SDK별 안내를 설명하는 도식이에요. 실제 앱 화면은 다를 수 있으며, 개별 앱의 공식 지원 근거와는 별개예요.",
+    "guideSource": "Apple 공식 안내",
+    "updatesTitle": "최근 달라진 지원 정보",
+    "updatesAll": "변경 내역 전체 보기"
   },
   "Updates": {
     "title": "지원 정보 변경 내역",

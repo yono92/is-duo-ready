@@ -1,0 +1,183 @@
+.marquee {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  padding-block: 6px;
+}
+
+.rows {
+  display: grid;
+  gap: 8px;
+}
+
+.row {
+  container-type: inline-size;
+  overflow: hidden;
+  padding-block: 4px;
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: drift 86s linear infinite;
+}
+
+.row:nth-child(2) .track {
+  animation-duration: 98s;
+  animation-direction: reverse;
+}
+
+.group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-around;
+  gap: 32px;
+  min-width: 100cqw;
+  padding-right: 32px;
+}
+
+.tile {
+  display: flex;
+  flex: 0 0 208px;
+  align-items: center;
+  width: 208px;
+  min-height: 88px;
+}
+
+.tile[data-fixture='true'] {
+  flex-basis: 100px;
+  width: 100px;
+}
+
+.appLink {
+  display: block;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.appLinkContent,
+.fixture {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 88px;
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.fixture {
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.fixture .name {
+  max-width: 100%;
+}
+
+.details {
+  min-width: 0;
+  width: 140px;
+}
+
+.name {
+  display: block;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.details .name {
+  padding-inline: 10px;
+}
+
+.storeBadge {
+  display: block;
+  width: 140px;
+  padding: 10px;
+}
+
+.storeBadge img {
+  display: block;
+  width: 120px;
+  height: 40px;
+  max-width: none;
+}
+
+.appLink:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.motionControl {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  border-radius: 50%;
+  background: var(--hero-surface);
+}
+
+.marquee[data-paused='true'] .track,
+.marquee:hover .track {
+  animation-play-state: paused;
+}
+
+/* Keep every original link reachable while keyboard focus is in a row. */
+.row:has(.group[data-copy='false'] :focus-visible) {
+  overflow-x: auto;
+  mask-image: none;
+}
+
+.row:has(.group[data-copy='false'] :focus-visible) .track {
+  animation: none;
+}
+
+.row:has(.group[data-copy='false'] :focus-visible) .group[data-copy='true'] {
+  display: none;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 767px) {
+  .rows {
+    gap: 4px;
+  }
+
+  .group {
+    gap: 20px;
+    padding-right: 20px;
+  }
+
+  .tile :global(.app-icon),
+  .tile :global(.app-icon) img {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+
+  .row {
+    overflow-x: auto;
+  }
+
+  .group[data-copy='true'],
+  .motionControl {
+    display: none;
+  }
+}

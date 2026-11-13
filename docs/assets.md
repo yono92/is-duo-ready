@@ -94,3 +94,19 @@ SHA-256, 형식·크기·수집 시각은 `public.app_icon_assets`에 보존한�
 키를 공유할 수 있다. 기존 의료 초안 5건은 익명 조회 0건을 유지했다. 실제 신규 Shazam
 아이콘은 운영 경로에서 200/image/jpeg, 34,266 bytes로 조회했다. 앱별 원본 URL·해시·
 수집 시각은 기존 아이콘 테이블에 기록하며 권리 미확인 이미지나 합성 증빙은 추가하지 않았다.
+
+## 2026-11-13 — 검색 중심 홈의 앱 흐름과 화면 안내
+
+- `src/components/app-marquee.tsx`: 기존 공개 앱 아이콘 API와 원본 App Store 배지만 재사용한다.
+  [Apple Search API 안내](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html)를
+  다시 확인했으며, 앱별 이름·아이콘 옆에 120×40px 공식 배지와 10px 여백을 두고 해당 앱의 KR
+  App Store 페이지로 직접 연결한다. 아이콘을 독립 장식 파일로 추출하거나 새로 배포하지 않는다.
+  반복 복제 링크도 같은 목적지로 연결하되 접근성 트리와 탭 순서에서는 제외한다. 기존 저장소의
+  앱별 출처·해시·원본 보존 정책을 유지한다. 로컬 fixture에는 자체 일반 아이콘과 예시 경고만
+  표시하며 실제 앱 배지·공식 지원 근거를 만들지 않는다.
+- `src/components/home-insights.module.css`: 저장소에서 직접 작성한 세 가지 기기/앱 화면 도식이다.
+  [Apple 공식 준비 안내](https://developer.apple.com/iphone-duo/prepare/)의 SDK별 일반적 화면 동작을
+  자체 CSS로 설명하며 Apple 사진·로고·스크린샷은 복제하지 않았다. 화면은 일반 예시이며 특정
+  앱의 테스트 결과나 지원 증거가 아님을 ko/en 문구로 표시한다.
+- 기존 자체 3D 기기는 상단의 보조 크기로 조정했다. 모델·텍스처·출처는 변경하지 않았으며
+  모바일에서도 가장자리 hit target이 잘리지 않도록 기기 영역의 가로세로 비율을 유지한다.

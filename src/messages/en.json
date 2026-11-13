@@ -14,14 +14,15 @@
     "en": "English"
   },
   "Home": {
-    "title": "iPhone Duo\napp support",
-    "description": "Check which apps support Duo\nand which versions are supported.",
+    "title": "Are your apps\nready for Duo?",
+    "description": "Find familiar apps and check Duo support with official sources.",
+    "pauseApps": "Pause app icon motion",
+    "resumeApps": "Resume app icon motion",
     "methodology": "How we check support",
     "directoryDescription": "Find the apps you use and check their Duo support.",
     "region": "South Korea App Store",
     "fixture": "Sample data",
-    "fixtureDescription": "These fictional apps are for previewing the site. Their support status is an example.",
-    "browse": "View app list"
+    "fixtureDescription": "These fictional apps are for previewing the site. Their support status is an example."
   },
   "Footer": {
     "copyright": "© 2026 Is Duo Ready?",
@@ -268,6 +269,23 @@
       "slug": "Use lowercase letters and numbers. Separate words with single hyphens if needed.",
       "required": "This field is required."
     }
+  },
+  "HomeInsights": {
+    "guideTitle": "How do apps use the Duo display?",
+    "guideSubtitle": "Explore three layouts, from surrounding margins to the full display.",
+    "centeredTitle": "Margins around the app",
+    "centeredSdk": "iOS 26 SDK or earlier",
+    "centeredDescription": "The app sits in the center of the unfolded display, with space around it.",
+    "expandedTitle": "Space on the right",
+    "expandedSdk": "iOS 27 SDK",
+    "expandedDescription": "The app fills most of the display, leaving room for the status bar on the right.",
+    "fullTitle": "Full display",
+    "fullSdk": "iOS 27.1 SDK or later",
+    "fullDescription": "The app uses the full display, with toolbars and tab bars arranged vertically on the right.",
+    "guideNote": "These diagrams illustrate Apple’s guidance for each build SDK. Actual app layouts may differ. They are separate from the official support evidence for individual apps.",
+    "guideSource": "Apple’s official guide",
+    "updatesTitle": "Recent support changes",
+    "updatesAll": "View all changes"
   },
   "Updates": {
     "title": "Support update history",

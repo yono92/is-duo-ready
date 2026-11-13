@@ -1,0 +1,304 @@
+.insights {
+  display: grid;
+  gap: 32px;
+}
+
+.guideTrigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: start;
+}
+
+.guideTrigger > svg {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.guideTitle {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.guideSubtitle {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.layouts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  padding-block: 28px 24px;
+}
+
+.layout {
+  min-width: 0;
+  margin: 0;
+}
+
+.device {
+  position: relative;
+  width: min(100%, 200px);
+  aspect-ratio: 1.38;
+  margin-bottom: 18px;
+  overflow: hidden;
+  border: 3px solid var(--foreground);
+  border-radius: 18px;
+  background: var(--muted);
+}
+
+.app {
+  position: absolute;
+  inset: 8px 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 10px;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primary) 9%, var(--background));
+}
+
+.device[data-layout='expanded'] .app {
+  inset: 6px 24px 6px 6px;
+}
+
+.device[data-layout='full'] .app {
+  inset: 6px;
+  padding-right: 30px;
+}
+
+.appTitle,
+.appLine,
+.appTile {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.appTitle {
+  width: 60%;
+  height: 7px;
+  margin-bottom: 3px;
+  background: var(--primary);
+}
+
+.appLine {
+  height: 4px;
+}
+
+.appLine:nth-of-type(3) {
+  width: 74%;
+}
+
+.appTile {
+  flex: 1;
+  min-height: 12px;
+  margin-top: 5px;
+}
+
+.statusBar {
+  position: absolute;
+  top: 15px;
+  right: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--foreground);
+}
+
+.toolbar {
+  position: absolute;
+  top: 37px;
+  right: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.toolbar i {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+.layoutTitle {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.sdk {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+.layoutDescription {
+  margin-top: 9px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+
+.guideFooter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+
+.guideFooter p {
+  max-width: 620px;
+}
+
+.sourceLink {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--primary);
+}
+
+.linkContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.linkContent > svg {
+  flex-shrink: 0;
+}
+
+.updatesHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.heading {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.updates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.update + .update {
+  border-top: 1px solid var(--border);
+}
+
+.updateLink {
+  display: block;
+  width: 100%;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.updateRow {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 16px;
+  padding-block: 16px;
+}
+
+.updateRow > svg {
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.updateCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.appName {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.change,
+.date {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+.change {
+  display: block;
+  margin-top: 4px;
+}
+
+.date {
+  flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  .layouts {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(100px, 0.85fr) 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .device {
+    margin-bottom: 0;
+  }
+
+  .app {
+    gap: 5px;
+    padding: 8px 6px;
+  }
+
+  .layoutTitle {
+    font-size: 14px;
+  }
+
+  .layoutDescription {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  .guideFooter {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .updateRow {
+    flex-wrap: wrap;
+    gap: 4px 12px;
+  }
+
+  .updateCopy {
+    flex-basis: calc(100% - 28px);
+  }
+
+  .date {
+    order: 1;
+    flex-basis: 100%;
+  }
+}

@@ -9,7 +9,11 @@ import { connect, asActor } from '../integration/helpers.ts';
 import { fictionalCharts } from '../fixtures/chart-rankings.ts';
 import { syncChartRankings } from '../../scripts/lib/chart-rankings.ts';
 
-async function seed(suffix: string, status: 'supported' | 'unknown' = 'supported') {
+async function seed(
+  suffix: string,
+  status: 'supported' | 'unknown' = 'supported',
+  published = true,
+) {
   const client = await connect();
   const payload = {
     app_store_id: `990003${suffix}`,
@@ -52,18 +56,93 @@ async function seed(suffix: string, status: 'supported' | 'unknown' = 'supported
           JSON.stringify(payload),
         ])
       ).rows[0].app;
-      await db.query('SELECT app_private.publish_app($1,$2,$3,$4)', [
-        app.id,
-        app.revision,
-        'Fictional public review',
-        'PRIVATE E2E NOTE',
-      ]);
+      if (published)
+        await db.query('SELECT app_private.publish_app($1,$2,$3,$4)', [
+          app.id,
+          app.revision,
+          'Fictional public review',
+          'PRIVATE E2E NOTE',
+        ]);
       return { id: app.id, slug: payload.slug };
     });
   } finally {
     await client.end();
   }
 }
+
+test('homepage app links and change previews preserve public data and accessible originals', async ({
+  page,
+  context,
+}) => {
+  await seed('88410');
+  const unknown = await seed('88411', 'unknown');
+  await seed('88412', 'supported', false);
+  await context.route('https://apps.apple.com/**', (route) =>
+    route.fulfill({ contentType: 'text/plain', body: 'Local App Store navigation test' }),
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/en');
+  const marquee = page.getByTestId('app-marquee');
+  await expect(marquee).toBeVisible();
+  await expect(page.getByTestId('app-card').first()).toBeInViewport();
+  await marquee.getByRole('button', { name: en.Home.pauseApps }).click();
+
+  const originals = marquee.locator('[data-copy="false"] a');
+  const originalCount = await originals.count();
+  expect(originalCount).toBeGreaterThanOrEqual(2);
+  await expect(marquee.getByRole('link')).toHaveCount(originalCount);
+  await expect(originals.first()).toHaveAttribute(
+    'href',
+    /^https:\/\/apps\.apple\.com\/kr\/app\/id/,
+  );
+  const badge = originals.first().getByRole('img', { name: en.AppAssets.badgeAlt });
+  await expect(badge).toHaveCSS('width', '120px');
+  await expect(badge).toHaveCSS('height', '40px');
+  const geometry = await originals.first().evaluate((link) => {
+    const icon = link.querySelector('.app-icon')!.getBoundingClientRect();
+    const image = link.querySelector('img[src="/badges/app-store.svg"]')!.getBoundingClientRect();
+    return {
+      iconRight: icon.right,
+      badgeLeft: image.left,
+      height: link.getBoundingClientRect().height,
+    };
+  });
+  expect(geometry.iconRight).toBeLessThan(geometry.badgeLeft);
+  expect(geometry.height).toBeLessThanOrEqual(96);
+
+  // The reversed row starts with its duplicate in view; it must still open the store.
+  const clone = marquee
+    .locator('[data-marquee-track]')
+    .nth(1)
+    .locator('[data-copy="true"] a')
+    .first();
+  await expect(clone).toHaveAttribute('tabindex', '-1');
+  const destination = await clone.getAttribute('href');
+  const popupPromise = page.waitForEvent('popup');
+  await clone.click();
+  const popup = await popupPromise;
+  await expect(popup).toHaveURL(destination!);
+  await popup.close();
+
+  const updates = page.getByRole('region', { name: en.HomeInsights.updatesTitle });
+  await expect(
+    updates.getByRole('listitem').filter({
+      has: page.locator(`a[href="/en/apps/${unknown.slug}"]`),
+    }),
+  ).toContainText(en.Updates.initial.replace('{status}', en.Status.unknown));
+  await expect(page.getByText('Fictional public 88412', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('PRIVATE E2E NOTE')).toHaveCount(0);
+  expect(
+    (
+      await new AxeBuilder({ page })
+        .include('[data-testid="app-marquee"]')
+        .include('section[aria-labelledby="home-updates-heading"]')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+        .analyze()
+    ).violations,
+  ).toEqual([]);
+  await page.screenshot({ path: 'test-results/home-public-promos.png', fullPage: true });
+});
 
 test('free and paid chart sorts preserve the catalogue, source and mobile locale state', async ({
   page,
