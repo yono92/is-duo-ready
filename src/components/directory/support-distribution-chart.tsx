@@ -3,17 +3,17 @@
 import { Bar, BarChart, Rectangle, Tooltip, XAxis, YAxis } from 'recharts';
 import { useFormatter, useTranslations } from 'next-intl';
 import { Card } from '@/components/ui/surfaces';
-import type { DirectoryStats } from '@/lib/directory/types';
+import { publicStatuses as statuses, type DirectoryStats } from '@/lib/directory/types';
+import { publicDirectoryStats } from '@/lib/directory/stats';
 
-const statuses = ['supported', 'planned', 'unsupported', 'unknown'] as const;
 const colors = {
   supported: 'var(--color-data-categorical-green)',
   planned: 'var(--color-data-categorical-blue)',
-  unsupported: 'var(--color-data-categorical-red)',
   unknown: 'var(--directory-chart-unknown)',
 };
 
-export default function DistributionChart({ stats }: { stats: DirectoryStats }) {
+export default function DistributionChart({ stats: storedStats }: { stats: DirectoryStats }) {
+  const stats = publicDirectoryStats(storedStats);
   const t = useTranslations('DirectoryStats');
   const format = useFormatter();
   const visibleStatuses = statuses.filter((status) => stats[status] > 0);

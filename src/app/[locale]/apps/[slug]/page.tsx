@@ -56,7 +56,7 @@ export default async function AppDetail({
     format.dateTime(new Date(value), { year: 'numeric', month: 'short', day: 'numeric' });
   return (
     <main id="main" className="site-width py-10">
-      <AutoAds hasRealContent={!app.fictional} />
+      <AutoAds hasRealContent={!app.fictional} pagePath={`/${locale}/apps/${app.slug}`} />
       <Link
         href={`/${qs ? `?${qs}` : ''}`}
         className="mb-7 inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground"

@@ -93,7 +93,7 @@ test('hero search resets pagination while preserving selected filters and sortin
     (url) =>
       url.searchParams.get('q') === '형태연구' &&
       url.searchParams.get('category') === 'graphics-design' &&
-      url.searchParams.get('status') === 'unsupported' &&
+      url.searchParams.get('status') === 'unknown' &&
       url.searchParams.get('sort') === 'name' &&
       !url.searchParams.has('page'),
   );
@@ -102,7 +102,7 @@ test('hero search resets pagination while preserving selected filters and sortin
   await expect(
     page
       .getByRole('group', { name: ko.Directory.status, exact: true })
-      .getByRole('button', { name: ko.Status.unsupported, exact: true }),
+      .getByRole('button', { name: ko.Status.unknown, exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(
     page.getByRole('button', { name: ko.Categories['graphics-design'], exact: true }),

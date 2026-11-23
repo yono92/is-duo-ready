@@ -1,3 +1,4 @@
+import { publicSupportStatus } from '@/lib/directory/types';
 import { ArrowRight, ArrowUpRight, PanelsTopLeft } from 'lucide-react';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { Link } from '@/components/ui/link';
@@ -98,13 +99,18 @@ export async function HomeInsights({ items, locale }: { items: PublicHistory[]; 
                       <span className={styles.appName}>{item.names[locale]}</span>
                       <span className={styles.change}>
                         {item.beforeStatus
-                          ? item.beforeStatus === item.afterStatus
-                            ? updates('corrected', { status: status(item.afterStatus) })
-                            : updates('changed', {
-                                before: status(item.beforeStatus),
-                                after: status(item.afterStatus),
+                          ? publicSupportStatus(item.beforeStatus) ===
+                            publicSupportStatus(item.afterStatus)
+                            ? updates('corrected', {
+                                status: status(publicSupportStatus(item.afterStatus)),
                               })
-                          : updates('initial', { status: status(item.afterStatus) })}
+                            : updates('changed', {
+                                before: status(publicSupportStatus(item.beforeStatus)),
+                                after: status(publicSupportStatus(item.afterStatus)),
+                              })
+                          : updates('initial', {
+                              status: status(publicSupportStatus(item.afterStatus)),
+                            })}
                       </span>
                     </span>
                     <time className={styles.date} dateTime={item.changedAt}>

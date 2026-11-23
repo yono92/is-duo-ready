@@ -21,10 +21,17 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
           category: 'productivity',
           original_locale: 'en',
           aliases: ['공개실험'],
-          status: index === 0 ? 'supported' : index === 1 ? 'planned' : 'unknown',
+          status:
+            index === 0
+              ? 'supported'
+              : index === 1
+                ? 'planned'
+                : index === 3
+                  ? 'unsupported'
+                  : 'unknown',
           investigation_reason: 'Fictional investigation. No actual support claim.',
           evidence:
-            index < 2
+            index < 2 || index === 3
               ? [
                   {
                     url: 'https://example.com/fictional-query-evidence',
@@ -78,6 +85,15 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       assert.equal(result.total, 30);
       assert.equal(result.apps.length, 24);
       assert.equal(result.pages, 2);
+      const informationMissing = await queryDirectory(db, { ...query, status: 'unknown' }, 'en');
+      assert.equal(informationMissing.total, 28);
+      assert.ok(informationMissing.apps.some((app) => app.status === 'unsupported'));
+      assert.ok(
+        informationMissing.apps.every(
+          (app) => app.status === 'unknown' || app.status === 'unsupported',
+        ),
+      );
+
       assert.equal(result.apps[0].names.en, 'Public query 00');
       assert.equal(
         result.stats.total,

@@ -1,7 +1,6 @@
 import { Card, Collapsible, EmptyState } from '@/components/ui/surfaces';
 import { DevicePreview } from '@/components/device-preview';
 import type { Metadata } from 'next';
-import { AutoAds } from '@/components/auto-ads';
 import { getFormatter, getTranslations, setRequestLocale } from 'next-intl/server';
 import { ArrowRight, Globe2, SearchX } from 'lucide-react';
 import { Link } from '@/components/ui/link';
@@ -57,9 +56,6 @@ export default async function Home({
     redirect({ href: `/?${queryString({ ...query, page: result.page })}`, locale });
   return (
     <main id="main">
-      <AutoAds
-        hasRealContent={data.kind === 'available' && !data.fictional && !!result?.apps.length}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: websiteStructuredData(locale) }}

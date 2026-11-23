@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from '@/components/ui/link';
-import { statuses, type Locale } from '@/lib/directory/types';
+import { publicStatuses, type Locale } from '@/lib/directory/types';
 import { pageMetadata } from '@/lib/data/seo';
 export async function generateMetadata({
   params,
@@ -35,7 +35,7 @@ export default async function InfoPage({ params }: { params: Promise<{ section: 
         </h1>
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{t('methodologyBody')}</p>
         <dl className="mt-9 divide-y border-y">
-          {statuses.map((status) => (
+          {publicStatuses.map((status) => (
             <div key={status} className="py-5 sm:grid sm:grid-cols-[10rem_1fr] sm:gap-5">
               <dt className="font-semibold">{s(status)}</dt>
               <dd className="mt-2 leading-relaxed text-muted-foreground sm:mt-0">
@@ -44,12 +44,24 @@ export default async function InfoPage({ params }: { params: Promise<{ section: 
             </div>
           ))}
         </dl>
-        {['evidence', 'review', 'region'].map((part) => (
-          <section key={part} className="mt-9">
-            <h2 className="text-xl font-semibold">{t(part)}</h2>
-            <p className="mt-3 leading-relaxed text-muted-foreground">{t(`${part}Body`)}</p>
-          </section>
-        ))}
+        {['evidence', 'reading', 'versions', 'unknown', 'experience', 'review', 'region'].map(
+          (part) => (
+            <section key={part} className="mt-9">
+              <h2 className="text-xl font-semibold">{t(part)}</h2>
+              <p className="mt-3 leading-relaxed text-muted-foreground">{t(`${part}Body`)}</p>
+            </section>
+          ),
+        )}
+        <section className="mt-9 border-t pt-9">
+          <h2 className="text-xl font-semibold">{t('corrections')}</h2>
+          <p className="mt-3 leading-relaxed text-muted-foreground">{t('correctionsBody')}</p>
+          <Link
+            href="/submit"
+            className="mt-4 inline-flex min-h-11 items-center text-primary underline underline-offset-4"
+          >
+            {t('correctionsLink')}
+          </Link>
+        </section>
       </article>
     </main>
   );

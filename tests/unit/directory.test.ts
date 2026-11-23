@@ -8,6 +8,26 @@ import {
 } from '@/lib/directory/query';
 import { fixtureApps } from '@/lib/data/fixtures';
 describe('directory URL contract', () => {
+  it('maps retired status links and fixtures into the public information-missing filter', () => {
+    const query = parseQuery({ status: 'unsupported', category: 'music', q: 'test', page: '2' });
+    expect(query).toEqual({
+      ...defaultQuery,
+      status: 'unknown',
+      category: 'music',
+      q: 'test',
+      page: 2,
+    });
+    expect(queryString(query)).toContain('status=unknown');
+    const apps = [
+      { ...fixtureApps[0], status: 'unknown' as const },
+      { ...fixtureApps[1], status: 'unsupported' as const },
+      { ...fixtureApps[2], status: 'supported' as const },
+    ];
+    const result = selectApps(apps, { ...defaultQuery, status: 'unknown' }, 'ko');
+    expect(result.total).toBe(2);
+    expect(result.apps.map((app) => app.slug).sort()).toEqual([apps[0].slug, apps[1].slug].sort());
+    expect(apps[1].status).toBe('unsupported');
+  });
   it('normalizes legacy collections into one catalogue without losing explicit filters', () => {
     expect(parseQuery({})).toEqual(defaultQuery);
     for (const collection of ['core', 'all', 'bogus']) {
@@ -23,7 +43,7 @@ describe('directory URL contract', () => {
     expect(queryString(legacySupport)).toBe('q=notes&status=supported&page=2');
     for (const status of ['all', 'supported', 'planned', 'unknown', 'unsupported'] as const) {
       const query = parseQuery({ collection: 'supported', status });
-      expect(query.status).toBe(status);
+      expect(query.status).toBe(status === 'unsupported' ? 'unknown' : status);
       expect(queryString(query)).not.toContain('collection');
     }
     expect(parseQuery({ collection: 'supported', status: 'bogus' }).status).toBe('supported');

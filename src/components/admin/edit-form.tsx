@@ -7,7 +7,7 @@ import { useActionState, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { saveAppAction, reviewAppAction } from '@/app/[locale]/admin/actions';
 import { type AdminDraft, type AdminEvidence } from '@/lib/admin/input';
-import { categories, locales, statuses } from '@/lib/directory/types';
+import { categories, locales, publicStatuses } from '@/lib/directory/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -184,7 +184,12 @@ export function EditForm({ initial }: { initial: AdminDraft }) {
                 label={t('fields.status')}
                 value={draft.status}
                 onChange={(value) => update('status', value as AdminDraft['status'])}
-                options={[...statuses.map((value) => ({ value: value, label: s(value) }))]}
+                options={[
+                  ...publicStatuses.map((value) => ({ value, label: s(value) })),
+                  ...(draft.status === 'unsupported'
+                    ? [{ value: 'unsupported', label: s('unsupported') }]
+                    : []),
+                ]}
               />
             </div>
             {field('support_version', 100)}

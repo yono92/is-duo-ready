@@ -7,7 +7,7 @@ import { Link } from '@/components/ui/link';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
 import { pageMetadata, siteVerification } from '@/lib/data/seo';
-import { adsensePublisher, autoAdsAllowed } from '@/lib/data/adsense';
+import { adsensePublisher, adsenseConfigured } from '@/lib/data/adsense';
 import { AdNavigation } from '@/components/ad-navigation';
 import '../globals.css';
 export async function generateMetadata({
@@ -45,7 +45,7 @@ export default async function LocaleLayout({
     >
       <body>
         <NextIntlClientProvider>
-          <AdNavigation enabled={autoAdsAllowed(true)}>
+          <AdNavigation enabled={adsenseConfigured()}>
             <Providers>
               <Header />
               {children}

@@ -1,4 +1,11 @@
-import { categories, statuses, type DirectoryApp, type DirectoryQuery, type Locale } from './types';
+import {
+  categories,
+  publicStatuses,
+  publicSupportStatus,
+  type DirectoryApp,
+  type DirectoryQuery,
+  type Locale,
+} from './types';
 import { directoryStats } from './stats';
 export const PAGE_SIZE = 24;
 export const defaultQuery: DirectoryQuery = {
@@ -14,7 +21,7 @@ export function parseQuery(raw: RawQuery): DirectoryQuery {
   // Keep links shared before the App Store taxonomy correction useful.
   const rawCategory = get('category');
   const category = rawCategory === 'creativity' ? 'graphics-design' : rawCategory;
-  const status = get('status');
+  const status = get('status') === 'unsupported' ? 'unknown' : get('status');
   const sort = get('sort');
   const page = Number(get('page'));
   const q = (get('q') ?? '').normalize('NFC').trim().slice(0, 100);
@@ -25,7 +32,7 @@ export function parseQuery(raw: RawQuery): DirectoryQuery {
       : 'all',
     // Older support-list links become a filter. Explicit filters always take precedence.
     status:
-      status === 'all' || statuses.includes(status as never)
+      status === 'all' || publicStatuses.includes(status as never)
         ? (status as DirectoryQuery['status'])
         : get('collection') === 'supported'
           ? 'supported'
@@ -57,7 +64,7 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
   const matched = publicApps.filter(
     (app) =>
       (query.category === 'all' || app.category === query.category) &&
-      (query.status === 'all' || app.status === query.status) &&
+      (query.status === 'all' || publicSupportStatus(app.status) === query.status) &&
       [...Object.values(app.names), ...app.aliases].some((name) =>
         name.normalize('NFC').toLocaleLowerCase().includes(needle),
       ),
@@ -80,7 +87,9 @@ export function selectApps(apps: DirectoryApp[], query: DirectoryQuery, locale: 
       if (rank) return rank;
     }
     if (query.sort === 'recommended') {
-      const statusOrder = statuses.indexOf(a.status) - statuses.indexOf(b.status);
+      const statusOrder =
+        publicStatuses.indexOf(publicSupportStatus(a.status)) -
+        publicStatuses.indexOf(publicSupportStatus(b.status));
       if (statusOrder) return statusOrder;
       const review = date(b.reviewedAt) - date(a.reviewedAt);
       if (review) return review;

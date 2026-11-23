@@ -91,7 +91,6 @@
     "supported": "Support confirmed",
     "planned": "Support planned",
     "unknown": "No support information",
-    "unsupported": "Not supported",
     "scope": "All listed apps · Independent of search, category and support status filters.",
     "sampleScope": "All fictional sample apps. These are not actual app support statistics."
   },
@@ -123,7 +122,7 @@
     "supported": "Support confirmed",
     "planned": "Support planned",
     "unknown": "No support information",
-    "unsupported": "Not supported"
+    "unsupported": "Legacy status record"
   },
   "Detail": {
     "evidenceTitle": "Support sources",
@@ -152,15 +151,25 @@
     "statusDescriptions": {
       "supported": "We have confirmed current Duo support in official sources. This does not mean we have tested the app on a device.",
       "planned": "Duo support has been announced but is not available yet.",
-      "unknown": "We haven’t confirmed official Duo support information yet. The app may already support Duo; this is not a finding that it is unsupported.",
-      "unsupported": "The developer has stated that the app does not currently support Duo."
+      "unknown": "We haven’t confirmed official Duo support information yet. The app may already support Duo; this is not a finding that it is unsupported."
     },
     "evidence": "Which sources do we check?",
     "evidenceBody": "We look at App Store Duo support badges, release notes, developer documentation and Apple announcements. We also check supported versions and release dates. General iPhone or iPad compatibility and search snippets alone do not confirm Duo support.",
     "review": "How do we update information?",
     "reviewBody": "We update information after checking the support wording and its sources. “Information updated” is the date we updated the site, not the date of a device test. Existing evidence stays in place if new release notes omit support details or a source cannot be loaded.",
     "region": "Which App Store region do we use?",
-    "regionBody": "We cover apps and versions available in the South Korea App Store. The same region applies whichever language you choose."
+    "regionBody": "We cover apps and versions available in the South Korea App Store. The same region applies whichever language you choose.",
+    "reading": "Does confirmed support mean every screen is optimized?",
+    "readingBody": "No. Confirmed support applies to the scope described in the official source. For example, release notes about an improved layout do not establish that work survives folding and unfolding, or that every screen works without issues. Read the quotation and source in the app’s support evidence to see which features are actually described. An official announcement is separate from a test on a device.",
+    "versions": "Why are the store version and supported version different?",
+    "versionsBody": "The store version is the latest release we have observed in the South Korea App Store. The supported version is the version associated with the Duo evidence. Later release notes may omit Duo without invalidating earlier evidence. A newer version alone does not establish support either. If the source gives no version, we leave it unspecified. A version with confirmed support is not necessarily the first version that supported Duo.",
+    "unknown": "What should I check when support information is missing?",
+    "unknownBody": "Start with the investigation history on the app page: which sources were checked and how much was accessible? Reading a particular developer announcement is different from failing to open a page. Without a published investigation history, its scope cannot be verified. App Store version history and developer help pages may describe Duo features, but general iPad compatibility or split-screen guidance alone does not establish Duo support. We keep the status as no support information when evidence is insufficient; this is not a finding that the app is unsupported.",
+    "experience": "What if an experience differs from official support?",
+    "experienceBody": "Official sources describe the support announced by the developer. User experiences describe behavior on a particular device, app version and OS. Neither replaces the other. For a problem, check reproducible conditions such as folded and unfolded states, rotation, clipped content or input failures. A published experience does not guarantee the same result in every environment, and one report does not automatically reverse an official support status.",
+    "corrections": "Found a new source or a different result?",
+    "correctionsBody": "For official information, include the original link and relevant wording. For a usage report, include the device, OS, app version and steps to reproduce. Remove account details, contact information and other personal data from screenshots. Reports are reviewed before publication, and user experiences are shown separately from official support evidence.",
+    "correctionsLink": "Submit a source or experience"
   },
   "NotFound": {
     "title": "Page not found",

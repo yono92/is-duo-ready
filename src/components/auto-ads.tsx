@@ -1,8 +1,14 @@
 import Script from 'next/script';
 import { adsensePublisher, autoAdsAllowed } from '@/lib/data/adsense';
 
-export function AutoAds({ hasRealContent }: { hasRealContent: boolean }) {
-  if (!autoAdsAllowed(hasRealContent)) return null;
+export function AutoAds({
+  hasRealContent,
+  pagePath,
+}: {
+  hasRealContent: boolean;
+  pagePath: string;
+}) {
+  if (!autoAdsAllowed(hasRealContent, pagePath)) return null;
 
   return (
     <Script

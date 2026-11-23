@@ -4,6 +4,43 @@ import ko from '../../src/messages/ko.json' with { type: 'json' };
 import en from '../../src/messages/en.json' with { type: 'json' };
 
 for (const locale of ['ko', 'en']) {
+  test(`${locale} support guide explains evidence limits and links to corrections`, async ({
+    page,
+  }) => {
+    const copy = locale === 'ko' ? ko : en;
+    const advertising = /https:\/\/[^/]*(?:googlesyndication|doubleclick|fundingchoices)\./;
+    const requests: string[] = [];
+    await page.route(advertising, (route) => {
+      requests.push(route.request().url());
+      return route.abort();
+    });
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto(`/${locale}/methodology`);
+    await expect(page.getByRole('heading', { name: copy.Info.methodologyTitle })).toBeVisible();
+    for (const section of [
+      'reading',
+      'versions',
+      'unknown',
+      'experience',
+      'corrections',
+    ] as const) {
+      await expect(
+        page.getByRole('heading', { name: copy.Info[section], exact: true }),
+      ).toBeVisible();
+    }
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+    ).toBe(true);
+    await expect(page.locator('script[src*="adsbygoogle"], ins.adsbygoogle')).toHaveCount(0);
+    await page.screenshot({
+      path: `output/adsense-remediation-${locale}-mobile.png`,
+      fullPage: true,
+    });
+    await page.getByRole('link', { name: copy.Info.correctionsLink, exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/submit$`));
+    expect(requests).toEqual([]);
+  });
+
   test(`${locale} privacy disclosure is linked and has no advertising tags`, async ({ page }) => {
     const copy = locale === 'ko' ? ko : en;
     await page.goto(`/${locale}`);

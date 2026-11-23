@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { Link } from '@/components/ui/link';
-import { categories, statuses, type DirectoryQuery } from '@/lib/directory/types';
+import { categories, publicStatuses, type DirectoryQuery } from '@/lib/directory/types';
 import { defaultQuery } from '@/lib/directory/query';
 import { useDirectoryNavigation } from './navigation';
 import { Button } from '@/components/ui/button';
@@ -78,7 +78,7 @@ export function DirectoryControls({
           <fieldset disabled={pending} className="min-w-0">
             <legend className="sr-only">{t('status')}</legend>
             <div className="flex flex-wrap gap-2">
-              {(['all', ...statuses] as const).map((status) => (
+              {(['all', ...publicStatuses] as const).map((status) => (
                 <Button
                   key={status}
                   variant={query.status === status ? 'default' : 'outline'}

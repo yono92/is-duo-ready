@@ -1,5 +1,15 @@
 import { statuses, type DirectoryApp, type DirectoryStats } from './types';
 
+export function publicDirectoryStats(stats: DirectoryStats) {
+  assertDirectoryStats(stats);
+  return {
+    total: stats.total,
+    supported: stats.supported,
+    planned: stats.planned,
+    unknown: stats.unknown + stats.unsupported,
+  };
+}
+
 export function assertDirectoryStats(stats: DirectoryStats) {
   if (
     [stats.total, ...statuses.map((status) => stats[status])].some(

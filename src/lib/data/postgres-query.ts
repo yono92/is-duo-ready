@@ -19,7 +19,7 @@ export async function queryDirectory(
   locale: Locale,
 ): Promise<DirectoryResult> {
   const where = `($2='all' OR snapshot->>'category'=$2)
-    AND ($3='all' OR snapshot->>'status'=$3)
+    AND ($3='all' OR snapshot->>'status'=$3 OR ($3='unknown' AND snapshot->>'status'='unsupported'))
     AND strpos(lower(normalize(concat_ws(' ', snapshot->'names'->>'ko', snapshot->'names'->>'en',
       (SELECT string_agg(value,' ') FROM jsonb_array_elements_text(snapshot->'aliases'))),NFC)),lower(normalize($1,NFC)))>0`;
   const language = locale === 'ko' ? 'ko' : 'en';
@@ -49,7 +49,7 @@ export async function queryDirectory(
           ? `support_changed_at DESC,${nameOrder}`
           : query.sort === 'name'
             ? nameOrder
-            : `array_position(ARRAY['supported','planned','unknown','unsupported'],snapshot->>'status'),reviewed_at DESC,${nameOrder}`;
+            : `CASE snapshot->>'status' WHEN 'supported' THEN 0 WHEN 'planned' THEN 1 ELSE 2 END,reviewed_at DESC,${nameOrder}`;
   // Counts, filtering, page clamping and rows share one PostgreSQL statement snapshot.
   // Separate SELECTs under READ COMMITTED can otherwise disagree during publication.
   const result = await db.query<{

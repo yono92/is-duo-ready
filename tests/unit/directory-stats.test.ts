@@ -1,10 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { assertDirectoryStats, directoryStats } from '@/lib/directory/stats';
+import { assertDirectoryStats, directoryStats, publicDirectoryStats } from '@/lib/directory/stats';
 import { selectApps, defaultQuery } from '@/lib/directory/query';
 import { fixtureApps } from '@/lib/data/fixtures';
 import { statuses, type DirectoryApp } from '@/lib/directory/types';
 
 describe('published KR support statistics', () => {
+  it('shows three public categories without losing or changing legacy stored counts', () => {
+    const stored = { total: 10, supported: 2, planned: 1, unknown: 6, unsupported: 1 };
+    expect(publicDirectoryStats(stored)).toEqual({
+      total: 10,
+      supported: 2,
+      planned: 1,
+      unknown: 7,
+    });
+    expect(stored.unknown).toBe(6);
+    expect(stored.unsupported).toBe(1);
+  });
   it('reconciles mutually exclusive statuses and excludes drafts', () => {
     const source: DirectoryApp[] = statuses.map((status, index) => ({
       ...fixtureApps[index],

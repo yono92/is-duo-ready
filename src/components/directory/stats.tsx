@@ -1,23 +1,23 @@
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { Card } from '@/components/ui/surfaces';
 import { SupportDistribution } from './support-distribution';
-import type { DirectoryStats } from '@/lib/directory/types';
+import { publicStatuses as statuses, type DirectoryStats } from '@/lib/directory/types';
+import { publicDirectoryStats } from '@/lib/directory/stats';
 
-const statuses = ['supported', 'planned', 'unsupported', 'unknown'] as const;
 const colors = {
   supported: 'var(--color-data-categorical-green)',
   planned: 'var(--color-data-categorical-blue)',
-  unsupported: 'var(--color-data-categorical-red)',
   unknown: 'var(--directory-chart-unknown)',
 };
 
 export async function DirectoryOverview({
-  stats,
+  stats: storedStats,
   fictional,
 }: {
   stats: DirectoryStats;
   fictional: boolean;
 }) {
+  const stats = publicDirectoryStats(storedStats);
   const [t, format] = await Promise.all([getTranslations('DirectoryStats'), getFormatter()]);
   return (
     <section
@@ -46,7 +46,7 @@ export async function DirectoryOverview({
             {t(fictional ? 'sampleTotal' : 'total', { count: stats.total })}
           </p>
         </div>
-        <SupportDistribution stats={stats} />
+        <SupportDistribution stats={storedStats} />
         <dl className="directory-overview-legend">
           {statuses.map((status) => (
             <div key={status} data-stat={status} className="directory-overview-legend-item">

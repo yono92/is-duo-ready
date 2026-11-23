@@ -1,3 +1,4 @@
+import { publicSupportStatus } from '@/lib/directory/types';
 import { Card } from '@/components/ui/surfaces';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { Link } from '@/components/ui/link';
@@ -37,10 +38,13 @@ export async function HistoryList({
             </p>
             <p className="mt-3 text-sm">
               {item.beforeStatus
-                ? item.beforeStatus === item.afterStatus
-                  ? t('corrected', { status: s(item.afterStatus) })
-                  : t('changed', { before: s(item.beforeStatus), after: s(item.afterStatus) })
-                : t('initial', { status: s(item.afterStatus) })}
+                ? publicSupportStatus(item.beforeStatus) === publicSupportStatus(item.afterStatus)
+                  ? t('corrected', { status: s(publicSupportStatus(item.afterStatus)) })
+                  : t('changed', {
+                      before: s(publicSupportStatus(item.beforeStatus)),
+                      after: s(publicSupportStatus(item.afterStatus)),
+                    })
+                : t('initial', { status: s(publicSupportStatus(item.afterStatus)) })}
             </p>
             {item.beforeStatus && (
               <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">

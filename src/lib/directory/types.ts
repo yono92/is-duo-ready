@@ -29,6 +29,12 @@ export const categories = [
 export type Category = (typeof categories)[number];
 export const statuses = ['supported', 'planned', 'unknown', 'unsupported'] as const;
 export type SupportStatus = (typeof statuses)[number];
+// Legacy stored states remain intact; the public directory uses three categories.
+export const publicStatuses = ['supported', 'planned', 'unknown'] as const;
+export type PublicSupportStatus = (typeof publicStatuses)[number];
+export function publicSupportStatus(status: SupportStatus): PublicSupportStatus {
+  return status === 'unsupported' ? 'unknown' : status;
+}
 type DirectoryBase = {
   slug: string;
   publication: 'published' | 'draft';
@@ -91,7 +97,7 @@ export type PublicHistory = {
 export type DirectoryQuery = {
   q: string;
   category: Category | 'all';
-  status: SupportStatus | 'all';
+  status: PublicSupportStatus | 'all';
   sort: 'familiar' | 'top-free' | 'top-paid' | 'recommended' | 'updated' | 'name';
   page: number;
 };

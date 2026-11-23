@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { indexingAllowed, publicSiteAllowed, siteOrigin } from '@/lib/data/seo';
-import { autoAdsAllowed } from '@/lib/data/adsense';
+import { adsenseConfigured } from '@/lib/data/adsense';
 export const dynamic = 'force-dynamic';
 export default function robots(): MetadataRoute.Robots {
   const index = indexingAllowed(process.env);
-  const ads = autoAdsAllowed(true);
+  const ads = adsenseConfigured();
   const publicPaths = {
     allow: ['/', '/api/og/'],
     disallow: ['/ko/admin', '/en/admin', '/api/'],
