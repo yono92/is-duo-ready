@@ -1,4 +1,4 @@
-<!-- Sync impact: scaffold -> 1.0.0; seven product principles added; delivery/governance defined; no deferred placeholders. -->
+<!-- Sync impact: 1.2.0 -> 1.3.0 (2026-11-23); principle I adds the evidence-backed partial status (specs/012). -->
 # Is Duo Ready? Constitution
 
 ## Core Principles
@@ -6,6 +6,7 @@
 ### I. 근거 기반 판정
 공식 지원·예정·미지원은 공식 출처가 뒷받침해야 한다. 정보 부재는 미지원이 아니다.
 초기 목록 공개에 한해 지원 근거 미확인 앱도 `unknown`으로 공개하며 “지원 정보 없음” / “No support information”으로 표시한다. 공식 미지원 판정과 구분하고 정보 반영일을 실기기 테스트일로 표현하지 않는다.
+2026-11-23 사용자 결정: 공식 출처가 iPhone Duo를 직접 언급하지만 대응 범위가 불명확하면 `partial`(“부분 대응” / “Partial support”)로 공개한다. `partial`도 공식 근거가 필요하며 일반 폴더블·태블릿 문구, 호환 기기 목록, Duo 버그 수정만 있는 노트, 제3자 목록은 근거가 아니다.
 지원 버전과 현재 버전, 수집 성공 시각과 사람의 검토 시각을 구분한다.
 
 ### II. 수집과 승인 분리
@@ -57,7 +58,7 @@ Next.js App Router, TypeScript, Astryx, Tailwind CSS, Supabase를 사용하며 V
 호환성을 깨면 major, 새 원칙은 minor, 설명 보완은 patch로 버전을 올린다.
 모든 기능 설계는 구현 전과 후에 본 원칙의 준수 여부를 기록한다.
 
-**Version**: 1.2.0 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-11-13
+**Version**: 1.3.0 | **Ratified**: 2026-10-29 | **Last Amended**: 2026-11-23
 
 Amendment 1.0.1 (2026-10-29): 사용자 승인에 따라 UI 기반을 shadcn/ui에서 Astryx로 교체한다. 제품·접근성·데이터 원칙은 유지한다.
 

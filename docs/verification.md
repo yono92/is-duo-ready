@@ -2961,3 +2961,53 @@ dry-run 후 KR 부재 2개를 보관하고 신규 101개를 등록·공개했다
 소개(en 1440px 다크)·보류 앱 상세(ko 390px 다크)의 가로 넘침 0을 확인했다.
 
 Google 재심사 요청은 수행하지 않았다(계정 작업).
+
+## 부분 대응 상태와 itsub 대조 재조사 — 2026-11-23 (로컬 코드)
+
+사용자 지시로 [specs/012](../specs/012-partial-support/spec.md)를 진행했다. 재조사 기록은
+[support-review-2026-11-23-itsub.md](support-review-2026-11-23-itsub.md), 반영 후보는
+`.data/itsub-review-2026-11-23/review-manifest.json`(10개, 미반영)이다.
+
+- 원칙 1.3.0, PRD 판정 표, 상태 타입·배지(Astryx teal)·필터·집계·분포 차트·정렬·sitemap·품질 검사·메시지 ko/en,
+  `db/migrations/010_partial_support.sql`. 가상 fixture 2개(차곡·집중숲, 이전 legacy 상태)를 `partial`로 바꿨다.
+- `npm run lint`: 통과, 기존 경고 3개·오류 0개.
+- `npm run typecheck`: 통과.
+- `npm test`: 23개 파일·139개 통과.
+- `npm run test:db`: 20개 통과(010 마이그레이션 적용, `partial`도 근거 없으면 공개 거부).
+- `npm run test:e2e`: 첫 실행은 Next.js 보안 안내로 서버가 시작되지 않았다. 두 번째 실행은 fixture 분포 변경으로
+  8개 실패해 기대값(지원 정보 없음 14→12, 집계 [8,2,8,12], 상태 버튼 5개)을 고치고 부분 대응 필터 검사를 추가했다.
+  세 번째 전체 실행은 개발 서버 문제로 대부분 실패했고, 같은 파일 단독 실행은 통과했다. 네 번째 전체 실행에서 59개 통과.
+- `npm run build`: 첫 실행은 `SecurityFatalError` 안내로 중단, 재실행에서 통과.
+
+운영 DB 쓰기·마이그레이션·배포는 수행하지 않았다.
+
+## Next.js 16.4.6 보안 패치 — 2026-11-23 (로컬 코드)
+
+`npm audit`가 `next@16.4.3`에 대해 moderate 권고 7건(`<=16.4.4`: `use cache` 캐시 누출·오염, 이미지 최적화 SVG 차단 우회,
+Edge HttpOnly 쿠키 헤더 노출, self-hosted 응답 혼입)을 보고했다. 앞 항목의 `SecurityFatalError` 안내도 같은 원인이다.
+소스에서 `use cache`·`unstable_cache`·`cacheComponents` 사용은 없다.
+
+- `next`, `@next/env`, `eslint-config-next`를 16.4.3 → 16.4.6(현재 latest, 패치 버전)으로 고정 갱신했다.
+- `npm audit`: Next 권고 0건. 남은 moderate 7건은 개발 의존성 `typescript-eslint` → `minimatch` 경로다.
+- `npm run lint`: 통과, 기존 경고 3개·오류 0개.
+- `npm run typecheck`: 통과.
+- `npm test`: 23개 파일·139개 통과.
+- `npm run test:e2e`: 59개 통과(첫 실행).
+- `npm run build`: 통과(첫 실행).
+
+`npm run test:db`는 이번에 다시 실행하지 않았다. 배포는 수행하지 않았다.
+
+### 검색 노출 활성화 — 2026-11-23
+
+사용자 요청으로 Vercel Production의 `PUBLIC_INDEXING`을 `true`로 바꾸고, 문서 커밋 `71916b6` 푸시로
+재배포했다(`dpl_B4N6TFbB6EwMzpE2XSjR2L6ngmFK`, 직전 `dpl_HB7jEBfPuvaVXftEzzn1nDXKgNTg`). 다른 환경 변수는
+바꾸지 않았다.
+
+- robots.txt: 모든 크롤러에 `/` 허용, 관리자·`/api/`(OG 이미지 제외) 차단, sitemap 주소를 안내한다.
+- sitemap.xml: URL 628개 = 홈·최근 변경·지원 안내·소개·리포트 목록·리포트 2건(언어별 7개 × 2) +
+  지원 확인 앱 상세 307개 × 2. ‘지원 정보 없음’ 앱 상세는 없다.
+- 페이지 robots: 홈·소개·리포트·지원 안내·지원 확인 상세·개인정보처리방침은 `index, follow`,
+  보류 앱 상세(unknown)는 `noindex, follow`, 제보는 기존대로 `noindex`.
+- 광고 로더는 계속 검토된 6개 경로에만 있다.
+
+Search Console·네이버·Bing 소유권 등록과 sitemap 제출은 계정 작업이라 수행하지 않았다.
