@@ -506,6 +506,10 @@
   background: #eaf0e4;
   color: #49643b;
 }
+.app-icon.app-icon-image {
+  overflow: hidden;
+  background: transparent;
+}
 .icon-palette {
   background: #f3e8df;
   color: #8c5b39;
