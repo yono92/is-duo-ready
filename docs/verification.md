@@ -2945,3 +2945,19 @@ dry-run 후 KR 부재 2개를 보관하고 신규 101개를 등록·공개했다
 - `npm run build`: 첫 실행은 Next.js `SecurityFatalError` 안내로 중단, 재실행에서 기본 Turbopack 통과.
 
 운영 배포·PUBLIC_INDEXING 전환·Google 재심사는 수행하지 않았다.
+
+### 운영 배포 — 2026-11-23
+
+사용자 승인으로 `ea0660c..60b49c2` 4개 커밋을 main에 푸시했다. Git 자동 운영 배포
+`dpl_HB7jEBfPuvaVXftEzzn1nDXKgNTg`가 Ready가 되어 https://is-duo-ready.vercel.app 에 연결됐다.
+이전 운영 배포는 `dpl_ERsdHFD8akRtyFoJyswVy2hbNBCy`다. 로컬의 Next.js 보안 안내 중단은 코딩 에이전트가
+감지될 때만 동작하는 기능이라 원격 빌드에는 영향이 없었다.
+
+운영 HTTP 15개 경로를 확인했다. 소개·리포트 목록/상세·지원 안내·홈·최근 변경·개인정보처리방침·
+앱 상세 2개는 모두 200이었다. 광고 로더는 검토 목록의 6개 경로(지원 안내·리포트 상세 ko/en)에만 있고
+홈·최근 변경·개인정보처리방침·소개·리포트 목록·앱 상세에는 없다. 앱 상세에는 최근 확인 내역과 같은
+카테고리 지원 확인 앱이 표시됐다. `PUBLIC_INDEXING`은 바꾸지 않아 모든 페이지가 noindex이고 sitemap은
+비어 있다. ads.txt와 광고 크롤러 robots 규칙은 그대로다. 광고 요청을 차단한 실제 브라우저에서 리포트(ko 390px)·
+소개(en 1440px 다크)·보류 앱 상세(ko 390px 다크)의 가로 넘침 0을 확인했다.
+
+Google 재심사 요청은 수행하지 않았다(계정 작업).
