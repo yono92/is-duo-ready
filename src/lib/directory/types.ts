@@ -25,6 +25,9 @@ export const categories = [
   'weather',
   'news',
   'social-networking',
+  'developer-tools',
+  'medical',
+  'magazines-newspapers',
 ] as const;
 export type Category = (typeof categories)[number];
 export const statuses = ['supported', 'partial', 'planned', 'unknown', 'unsupported'] as const;

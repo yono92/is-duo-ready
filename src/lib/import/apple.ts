@@ -59,6 +59,9 @@ export const categoryIds: Record<string, string> = {
   6001: 'weather',
   6009: 'news',
   6005: 'social-networking',
+  6026: 'developer-tools',
+  6020: 'medical',
+  6021: 'magazines-newspapers',
 };
 function field(value: unknown, max: number, required = false) {
   if (value == null || value === '') {

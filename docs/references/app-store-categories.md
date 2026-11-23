@@ -48,3 +48,15 @@ Apple은 기본 카테고리와 보조 카테고리를 구분하며 기본 카�
 ## Initial full-directory expansion (2026-10-29)
 
 The initial KR Lookup observations also include Reference 6006, Sports 6004, Utilities 6002, Games 6014, Food & Drink 6023, Shopping 6024, Finance 6015, Education 6017, Business 6000, Health & Fitness 6013, Weather 6001, News 6009 and Social Networking 6005. Preserve these observed IDs/names and map them to the corresponding locale labels; migration 006 expands the existing constraint without changing RLS. Source: stored KR Apple Lookup observations in `app_store_listings.observed_metadata`, fetched on 2026-10-29.
+
+## Developer Tools·Medical·Magazines & Newspapers 추가 (2026-11-23)
+
+사용자 요청으로 itsub 대조 신규 등록에서 분류가 없어 초안으로 남은 18개를 공개하기 위해 다음 공식 장르를 추가했다.
+KR Lookup의 기본 장르 ID와 이름을 그대로 매핑하며 migration 011이 제약만 넓힌다(RLS·공개 조건 불변).
+한국어 표기는 [Apple Developer 한국어 카테고리 문서](https://developer.apple.com/kr/app-store/categories/)를 2026-11-23에 확인했다.
+
+| Apple 장르 ID | 내부 slug              | 한국어       | English                |
+| ------------- | ---------------------- | ------------ | ---------------------- |
+| 6026          | `developer-tools`      | 개발자 도구  | Developer Tools        |
+| 6020          | `medical`              | 의학         | Medical                |
+| 6021          | `magazines-newspapers` | 잡지 및 신문 | Magazines & Newspapers |
