@@ -1,5 +1,48 @@
 # 001 검증 결과
 
+## 2026-11-03 12:36 — KR API notFound 국내 부재 기준 적용
+
+- 사용자 결정에 따라 정상 KR Lookup notFound는 국내 부재·공개 보관 제외 기준으로 문서화했다. 웹 404를 요구하지 않으며 timeout/403/429/5xx/파싱 오류와 구분한다. 상시 수집/자동화는 활성화하지 않았다.
+- FilmN Kankokuma: Ramune(`6587551050`)·FilmN foto_ycy: Travel(`6736601069`)의 현재 notFound를 재확인해 백업·dry-run 후 보관했다. 기존 지원 판정·근거·원본/이력·다른 앱은 보존했다.
+- 공개 1,280개·지원 206·예정 1·미확인 1,073, 초안 5·보관 5. 재실행 보관 0·건너뜀 2·16개 콘텐츠 테이블 해시 변경 0. 익명 대상 행/아이콘/지원 이력 각각 0.
+- 정합성 25규칙 오류 0·기존 경고 유지. 운영 ko/en 집계 2개·대상 상세 not-found 응답 4개·아이콘 404 2개와 배치 ESLint·diff 검사 통과. 제품 소스 변경이 없어 기존 단위/DB/E2E/빌드 결과를 재사용했고 새 실행으로 기록하지 않는다. [정책·처리 기록](kr-store-availability-2026-11-03.md).
+
+## 2026-11-03 12:15 — 듀오 지원 전수 재검사
+
+- 보관 제외 등록 앱 1,287개(공개 1,282·초안 5)를 새 기준으로 검사했다. 최초 KR Lookup 1,287개 성공, 제품 본문 1,285개 성공·2개 404, 포함된 버전 24,345건. 실패 2개는 후속 개별 KR Lookup도 notFound였으며 기존 미확인 상태를 보존했다.
+- 기존 지원 205개·예정 1개 근거 모두 재관측. 미확인 키워드 후보 21개를 검토하고 공식 개발사 지원 문서·App Store ID 연결이 확인된 Hinge Harp를 지원으로 반영했다. 지원 버전은 문서에 없어 null로 보존했다. 나머지 20개는 근거 불충분/준비/버그 수정/동음어를 구분했다.
+- 공개 집계 1,282개·지원 206·예정 1·미확인 1,075. 기존 근거·지원 버전·관련 없는 공개 앱 보존, 같은 배치 재실행 변경 0·16개 테이블 해시 불변.
+- 25개 정합성 규칙 오류 0·기존 경고 유지. 익명 초안/보관 행·아이콘 차단. 운영 ko/en 홈·상세 HTML 4개와 기존 아이콘 해시 확인. 배치 ESLint·diff 검사 통과.
+- 제품 소스·배포·스키마 변경 없음. 직전 98 단위·18 DB·36 E2E·Webpack 빌드 결과를 재사용했으며 새 실행으로 기록하지 않는다. [전수 범위·예외·반영 기록](duo-support-fullscan-2026-11-03.md).
+
+## 2026-11-03 — 한국 조회 불가 3개 제거 및 전체 국가 가용성 점검
+
+- 사용자 지정 홀리바이블·QR Reader Premium·Game Booster VIP를 현재 KR notFound/404로 재확인, 백업·dry-run 후 기존 보관 함수로 공개 목록에서 제거했다. 물리 삭제 없이 비공개 원본·이력은 보존했다.
+- 나머지 1,287개 전체의 KR Lookup 정상. 한국 제품 페이지 HTTP 200 1,286개, DramaWave 1개의 HTTP 403은 개별 GET/Lookup 재확인 후 접근 제한으로 기록했다. 해당 앱의 한국 API 조회는 정상이며 추가 미등록 확인 앱은 0개다.
+- 공개 1,282개(지원 205·예정 1·미확인 1,076), 의료 초안 5·보관 3. 반복 보관 0·16개 콘텐츠 테이블 해시 변경 0. 익명 보관 앱 행·아이콘·이력 각각 0.
+- 운영 ko/en 홈 집계 2개 일치, 보관 앱 상세 6개의 not-found 신호/noindex/본문 미반환 및 아이콘 3개 HTTP 404 확인. 최초 HTTP-only 검증 실패는 Next.js 스트리밍 notFound의 200 응답에 맞춰 바로잡았으며, 아이콘·캐시 노출 문제가 아니었다.
+- 정합성 25규칙 오류 0·기존 경고 유지. 배치 ESLint·diff check 통과. 제품 소스·스키마·배포 변경 없음. 직전 앱 단위·DB·E2E·빌드 결과를 재사용했으며 새 실행으로 보고하지 않는다. [범위·증빙](kr-store-availability-2026-11-03.md).
+
+## 2026-11-03 09:41 후속 재확인
+
+- 등록된 전체 1,290개를 새 Lookup과 비교: 1,287 성공·동일 3개 notFound. 후보 19개의 공식 제품 페이지 대조에서 실제 버전 변경 5개·홍보 문구의 API/웹 표시 차이 14개를 구분했다.
+- 더라운지 2.2.5의 명시적 Duo 대응, Wide Web 1.2의 내부 화면 Safari 분할 화면 지원을 save/publish로 반영했다. 신한 SOL페이·영풍문고·총잡이 고양이의 일반 버전·노트와 총 5개 아이콘 출처도 갱신했다. 기존 근거·지원 확인 버전·단순 버전 갱신의 검토 시각/이력은 보존했다.
+- 공개 1,285개·지원 205·예정 1·미확인 1,079. 등록 1,290·초안 5 유지. 동일 배치 재실행의 지원·메타데이터·아이콘 변경 0, 16개 테이블 해시 불변.
+- 정합성 25규칙 오류 0, 기존 경고(의료 초안 5·과거 근거 62) 유지. 익명 초안 행/아이콘 0. 운영 ko/en HTML 12개 및 변경 앱 5개 아이콘 HTTP·저장 해시 일치. 배치 코드 ESLint 통과.
+- 앱 소스 변경 없음. 직전 전체 최신화에서 실행한 98 단위·18 DB·36 E2E·Webpack 빌드 결과를 재사용하며, 이번 추가 배치에서는 데이터·운영 응답·재실행을 새로 검증했다. [상세 기록](data-refresh-2026-11-03.md), 증빙 `.data/recheck-2026-11-03-0941/` 참조.
+
+## 2026-11-03 — 사용자 승인 전체 데이터 최신화
+
+- 신규 104개를 반영해 등록 1,290개·공개 1,285개·지원 204개·예정 1개·공개 미확인 1,080개다. 의료 초안 5개는 유지했다.
+- 공식 KR 피드 46개와 전체 1,290개 앱의 Lookup·제품 페이지를 조회했다. 각각 1,287개 성공, 같은 3개의 notFound/404는 재조회 후 보존했다. 포함된 버전 기록 24,338건과 기존 Apple 공식 출처를 확인했다.
+- 기존 지원 188/188개 근거 재관측. 신규 지원 등록 12개·기존 미확인 정정 4개·기존 지원 기능 보완 3개. 기존 공개 앱 현재 버전 205개(지원 정정 단계 7개 + 일반 메타데이터 단계 198개)를 갱신했다. 일반 갱신의 지원 필드·검토일·이력·근거 불변을 검증했다.
+- 고정 배치의 import/support/metadata apply 재실행에서 신규 0·지원 변경 0·메타데이터 변경 0, 콘텐츠 16개 테이블 해시 변경 0. 임시 관리자 등록은 각 트랜잭션 안에서 제거했다.
+- `npm run data:check -- --target=production --project-ref=ixinxqxbwrkywulzlipt`: 25개 규칙, 오류 0개. 미매핑 초안 5개·최신 노트 밖의 공식/과거 근거 62개 경고. 익명 초안 행/아이콘 조회 각각 0개.
+- 운영 ko/en 홈·대표 상세 HTML 22개에서 DB 집계·요약·버전 일치. 신규 아이콘 104개 모두 HTTP 200·이미지 형식·저장 SHA-256 일치.
+- `npm run lint` 오류 0·기존 로컬 파일 경고 3개, `npm run typecheck` 통과, `npm test` 98개·`npm run test:db` 격리 DB 18개·`npm run test:e2e` Chromium 36개 통과. 최종 배치 실행 코드의 별도 ESLint도 오류·경고 없이 통과했다.
+- `npm run build`: 기존 Turbopack process/port EPERM 실패. 설치 Next.js CLI 문서를 확인한 `npm run build -- --webpack` 통과. 기본 빌드 성공으로 기록하지 않는다.
+- 앱 소스·스키마·배포·상시 수집·기존 계정·로컬 앱 DB·커밋/푸시 변경 없음. 공개 순위용 운영 테이블이 없어 새 순위는 비공개 발견 기록에 보존했다. [전체 기록](data-refresh-2026-11-03.md), 비공개 실행 증빙 `.data/refresh-2026-11-03/` 참조.
+
 ## 2026-10-29 — Apple 시각 기준 복원 + Meta Astryx + 모션 (T045–T046)
 
 사용자가 재확인한 기준은 **Apple 참고 디자인 + 실제 Meta Astryx 컴포넌트**다. 이전 Neutral-only 지침을 철회하고 DESIGN.md/AGENTS.md/PRD/001 명세를 정렬했다. `apple-theme.css` 한 곳에서 Astryx 공개 토큰에 제품 색·시스템 글꼴·모서리를 연결하며 라이브러리 소스는 변경하지 않았다.
@@ -1862,6 +1905,7 @@ spec/plan/tasks and this verification entry; pending changes are preserved separ
 No database/schema or dependency changes and no direct deployment were performed.
 Chromium was checked; Safari, Firefox and physical devices were not exercised.
 
+
 ## 001 — 기기 커버 화면 좌우 정정 (2026-11-02, Asia/Seoul)
 
 사용자가 지적한 닫힌 기기의 좌우 배치를 Apple 공식 이미지
@@ -1890,6 +1934,7 @@ output/playwright/duo-cover-hinge-left.png에 페이지 맥락을 포함해 저�
 재실행에서 생성한 test-results/device-ko-back.png의 카메라 왼쪽·커버 오른쪽 배치와
 펼친 내부 화면·접힌 화면도 직접 확인했다. Chromium/IAB 검증이며 물리 기기 검증은 없다.
 공유 작업 폴더의 다른 진행 중 변경은 보존했다. 커밋·푸시·배포는 수행하지 않았다.
+
 
 ## 발표일 기능·DB 컬럼 제거 — 2026-11-02
 
@@ -1933,6 +1978,66 @@ fingerprint로 교체하고, 근거 ID를 유지하며 현재 공개 JSON·가�
 운영 DB/배포에는 아직 적용하지 않았다. 기존 운영 관리자 SQL이 삭제 대상 컬럼을 참조하므로
 호환되는 코드 배포 후 기존 hosted migration runner로 적용해야 한다. 이번 작업은 새 외부
 프로젝트·운영 쓰기·배포·커밋·푸시를 수행하지 않았다. Chromium 외 실기기 검증은 없다.
+
+## KR ranking and official support refresh — 2026-11-02
+
+The owner requested a fresh source check and explicitly allowed adding missing highly
+ranked apps beyond the prior 1,000-app cap. Scope: official KR overall free/paid top
+100 plus free/paid top 20 across the 22 mapped categories, and a fresh source check
+of the existing 1,000 apps. The fixed baseline and content backup exclude credentials,
+auth accounts, visitor submissions and worker leases.
+
+Results:
+- 46 official chart scopes, 885 unique priority apps: 699 existing + 186 new. Overall
+  charts had 29 new apps and genre top-20 charts had 184; 27 overlap. New KR metadata
+  and product pages: 186/186 success; 2,939 embedded version records inspected.
+- Existing Lookup and product pages: final 999/1,000 successes each; 19,717 embedded
+  version records. App Store ID 364222241 remained notFound/HTTP404 after rechecks.
+  Existing content/status was retained; no permanent delisting or non-support claim.
+  Another initial page HTTP403 cleared on the single resumable rerun.
+- Original official support quotes reobserved for all 74 existing supported apps.
+- Production now has 1,186 registered, 1,181 published, 5 unchanged Medical drafts;
+  published status counts: supported188 / planned1 / unknown992 / unsupported0.
+- Supported increased by 114: 90 previously unreflected, now rechecked candidates
+  from the October30 research + 24 newly identified in this refresh (9 existing apps,
+  15 newly ranked apps). These are not all newly released since the prior scan.
+  Outlook uses planned based on Apple's upcoming-update statement, not assumed release.
+- New apps used the existing import/save/publish flow; support changes used save/publish
+  with a second save to confirm the reviewed translation state. All updated ko/en
+  summaries are current. Review notes distinguish AI-assisted source review, source
+  observations and actual publication time from named human review or device testing.
+  External-screen-only and simulator-only limitations remain explicit.
+- First supported correction batch changed100 rows (99 supported + planned1). A final
+  complete-history sweep found 6 more explicit support passages, so the next dry-run/
+  apply changed6 and skipped100. No retries/timeouts or product tests were weakened.
+- Repeated ranked batch: created0/existing186. Repeated support batch: changed0/skipped106.
+  Before/after replay hashes matched for all16 content/provenance tables, with no new
+  review/public history timestamps or duplicate apps. Existing supported statuses,
+  support versions and source quotes remained intact; unrelated public rows unchanged.
+- 25 content-quality rules: errors0. Expected warnings:5 unmapped Medical drafts and
+  41 historical/editorial/announcement quotes absent from latest release notes. Those
+  warnings do not erase the separately verified historical evidence.
+- Anonymous role saw0 draft entries and0 draft icons. Total app icon records1186.
+- Live ko/en home stats: total1181 / supported188 / planned1 / unknown992. Both locale
+  homes plus seven representative app details (16 HTML checks) returned200 with
+  matching DB summaries. FoxPeek icon returned200/image, 22,836 bytes; live SHA-256
+  matched stored metadata.
+
+Repository checks in the current shared working tree: lint PASS (the existing ignored
+research .mjs unused-variable warning), typecheck PASS, 18 unit files /89 tests PASS,
+17 isolated PostgreSQL tests PASS, DUO_TEST_PORT=3490 npm run test:e2e -- --workers=1:
+32 Chromium PASS (2.2m). npm run build failed with the previously recorded Turbopack
+process/port EPERM; npm run build -- --webpack passed. Unrelated product edits continued
+in the shared working tree, so these are time-scoped checks and not an immutable app
+release verification. Only this task's generated3490 tsconfig includes were removed.
+
+This operation changed production content through the existing project, with snapshots,
+dry-runs and explicit owner-authorized apply. No production schema, new external project,
+app deployment, scheduler, local catalogue content, Git commit or push was performed.
+The DB tests used their isolated test database. Detailed source links and counts are in
+docs/data-refresh-2026-11-02.md; private inputs, scripts, results, quality/HTTP evidence
+and the replay hashes are under .data/refresh-2026-11-02/ and docs/data/.
+
 
 ## 메인 무료·유료 인기순 — 2026-11-02
 
@@ -2006,6 +2111,39 @@ DB 조회는 페이지 분할 전에 정렬하며 격리 fixture 조회도 같�
 앞선 커밋·푸시 요청에 이은 정정 커밋으로 이 변경만 main에 후속 푸시한다. 병행 콘텐츠
 갱신 문서/데이터는 별도로 보존한다. 새 마이그레이션·운영 DB 쓰기·수동 배포는 없다.
 운영 순위 테이블/관측 연결은 기존처럼 별도 릴리스 작업이다. 실기기/Safari/Firefox는 미검증.
+
+
+## Production administrator setup — 2026-11-02
+
+The owner explicitly requested a permanent administrator and supplied the account email.
+Read-only provider queries first confirmed zero existing Auth users and zero administrator rows.
+The official server-side Supabase `auth.admin.createUser` API created the password-based account
+with confirmed email; its actual Auth UUID was then enabled in `app_private.admin_users`.
+No schema/RLS policy, catalogue row, deployment or environment variable changed. The random
+password is in ignored `.data/admin/production-credentials.txt`, mode 0600; secret keys,
+passwords, email and UUID are omitted from tracked documentation.
+
+Verification on `https://is-duo-ready.vercel.app` with Playwright CLI and the existing Chromium:
+- Submitted the real ko administrator email/password form and reached `/ko/admin/apps`.
+- All six ko sections (`/admin`, apps, import, collections, reviews, submissions) and the en app
+  list returned HTTP 200, retained their requested path and rendered the authenticated logout
+  control.
+- An explicit private app-icon request returned a successful image response; the authenticated
+  collection API returned 200.
+- Logged out through the UI; the collection API then returned 401 and the protected app list
+  redirected to `/ko/admin/login?error=authRequired`.
+- Final provider SQL confirmed email confirmation, enabled administrator membership and zero
+  remaining Auth sessions for the account.
+- Credential file Git exclusion and 0600 permissions verified. Private browser artifacts are under
+  ignored `.data/admin/browser`; no browser storage state or credentials were committed.
+
+The initial restricted-network account attempt failed before creating an identity; the authorized
+network-enabled retry succeeded. The CLI's default Chrome path was absent, so verification used
+an already installed Chromium executable. During section navigation the browser also logged a
+404 for a different app's private icon; the explicitly tested icon passed. No claim that all stored
+icons are available is made. Production save/import/publication mutations were not exercised;
+T011 retains that broader write-flow gate. No application code changed, so lint, typecheck, unit,
+local E2E and build suites were not rerun for this operational account setup.
 
 
 ## 자동 광고 전용 코드 준비 — 2026-11-02
@@ -2109,6 +2247,26 @@ precise reason for missing CMP bootstrapping remains unresolved; actual
 consent/refusal/revocation and creative fill remain unverified. See
 [crawl diagnosis](adsense-crawl-2026-11-02.md) for evidence, limits and release IDs.
 
+## README 정리 — 2026-11-03
+
+README를 제품 소개·기능·현재 기술 구성·로컬 실행·검증·문서 탐색 중심으로 정리했다.
+상단 shadcn/ui와 하단 Astryx의 충돌, 초기 128개를 현재 수량처럼 반복하는 문구,
+완료된 006을 후속 범위로 적은 문구와 과거 이전 설명을 제거했다. UI fixture 실행과
+DB/관리자 실행을 분리하고 세부 요구사항·운영 기록은 기존 문서로 연결했다.
+운영 데이터·앱 코드·외부 프로젝트·배포는 이번 README 작업에서 변경하지 않았다.
+
+- README의 상대 링크 27개와 npm script 15개가 실제 경로/`package.json`에 존재함을 확인했다. 외부 URL의 실시간 응답은 이번에 검증하지 않았다.
+- `npm run lint`: 통과, 기존 ignored local `.data` 도구의 경고 3개(오류 0개).
+- `npm run typecheck`: 통과.
+- `npm test`: 20개 파일, 100개 테스트 통과.
+- `DUO_TEST_PORT=3457 npm run test:e2e`: 최초 샌드박스 포트 EPERM으로 서버 시작 실패. 권한 조정 재실행은 **34개 통과·2개 실패**. `directory-stats.spec.ts`의 ko는 360px 차트 폭 검사, en은 SVG 상태 segment 4개 대기에서 각각 시간 초과했다. trace와 error context는 `test-results/fixtures-3457/`에 보존했다. 전체 E2E 통과로 기록하지 않는다.
+- `npm run build`: 기본/권한 조정 재실행 모두 기존 Turbopack CSS 처리의 프로세스·포트 EPERM으로 실패했다. `npm run build -- --webpack`은 타입 검사·정적 페이지 생성까지 포함해 통과했다. 기본 빌드 성공과 구분한다.
+
+검증 도중 같은 checkout의 009 관련 앱·메시지·테스트 파일이 다른 작업에서 변경되는 것을
+관찰했다. 위 결과는 실행 시점의 작업 폴더에 대한 것이며 고정된 소스 스냅샷의 전체 검증이나
+README 변경으로 발생한 회귀로 단정하지 않는다. 테스트 서버가 추가한 3457 전용 tsconfig
+include는 정리했으며 기존 병행 작업은 보존했다. 001 T076에 문서 작업을 반영했다.
+
 ## 2026-11-03 — 009 국내 주요 앱 중심 탐색
 
 기본 목록을 국내 주요 앱으로 바꾸고 듀오 지원 확인·전체 앱 목록을 분리했다. 선정 78개와
@@ -2181,6 +2339,200 @@ Playwright CLI로 운영 ko 화면에서 국내 주요 앱 78개(지원 13), 지
 `CI=1 npm run test:e2e -- --grep 'privacy disclosure|pagination, sorting'`는 최초 sandbox
 포트 EPERM 뒤 권한 조정 실행에서 단일 워커 3개 모두 통과(19.7초)했다. 변경 테스트의
 ESLint와 diff whitespace 검사도 통과했다. 새 원격 전체 결과는 후속 CI에서 확인한다.
+
+
+## 2026-11-04 — 운영 데이터 전수조사
+
+오늘 요청은 조사로 처리했다. 운영 1,290개 전부의 새 KR API·제품 본문과 공식 차트 46개,
+미등록 후보 71개를 확인했다. 기존 앱의 최종 API·제품 본문은 각각 1,285개 정상·보관 5개
+notFound/404이며, 포함된 버전 기록은 기존 24,366건·신규 916건이다. DramaWave 403은
+후속 제품 본문 재조회에서 해소됐다. FilmN 2개의 최초 일괄 성공과 후속 notFound를 모두 보존했다.
+
+첫 일괄 Lookup은 버전 차이 0개였으나 다른 구성의 새 배치에서는 DB보다 새 버전 90개가
+나왔다. 웹 대조 및 불일치 2개 앱의 추가 재조회 후 전부 버전이 일치했다. 원인으로 캐시나
+전파 시차를 의심할 수 있지만 제공자 내부 원인을 확정하지 않았다. 기존 지원 206·예정 1
+근거는 모두 재관측했고 기존 미확인 2개·미등록 8개에서 추가 지원 근거를 직접 확인했다.
+
+운영 데이터 반영은 수행하지 않았다. 읽기 전용 25개 정합성 규칙에서 오류 0·기존 경고
+의료 초안 5개 및 과거 발췌 62개를 확인했다. 같은 관측에서 공개 집계 1,280/206/1/1,073/0,
+초안·보관 10개의 익명 행/아이콘/이력 각각 0, 전후 16개 콘텐츠 테이블 해시 동일을 확인했다.
+운영 ko/en 전체 목록 집계 2개, 숨긴 상세 20개·아이콘 10개 차단도 통과했다.
+최초 홈 검사는 현재 기본 '국내 주요 앱' 지원 13개를 전체 206개와 비교해 실패했으며,
+`collection=all`을 명시해 검증 범위를 바로잡은 후 일치했다.
+
+- `npm run lint`: 오류 0, 기존 로컬 연구/검증 파일 경고 3개.
+- `npm run typecheck`: 통과.
+- `npm test`: 20파일·100개 통과.
+- `npm run test:e2e`: 37개 중 36개 통과, 앱 카드에서 상세로 이동 후 Back to apps를 찾던
+  한 시나리오가 30초 타임아웃. 원본 테스트를 변경하지 않고 집중 재실행한 1개는 통과했다.
+  전체 실행이 한 번에 37개 통과했다고 기록하지 않는다. 제품·테스트 소스 수정은 없다.
+- `npm run build`: 기본 Turbopack의 process/port EPERM. 권한 조정한 동일 명령도 같은 실패.
+  설치된 Next.js CLI 문서의 `npm run build -- --webpack`은 통과했다.
+- `git diff --check`: 통과. 빌드/개발 서버가 생성한 next-env.d.ts 차이는 이번 작업 전 상태로 복원했다.
+
+DB 격리 테스트는 이번 읽기 전용 조사에서 재실행하지 않았다. 계정·스키마·배포·자동화·
+커밋·푸시 변경은 없다. 상세 범위·원본 경로·후속 우선순위는
+[전수조사 기록](data-audit-2026-11-04.md), 비공개 실행/행렬/해시 증빙은
+`.data/fullscan-2026-11-04/`에 보존한다.
+
+
+## 2026-11-04 — 승인한 추가 지원 10개 운영 반영
+
+오늘 전수조사의 후속 승인으로 기존 Genius Scan Enterprise·포커스에그를 지원으로 정정하고,
+지원 근거를 검토한 미등록 8개만 새로 공개했다. 반영 직전 KR Lookup 10/10 정상,
+콘텐츠 백업·고정 manifest·dry-run 후 기존 import/save/publish 경로로 apply했다.
+공개 **1,288·지원 216·예정 1·미확인 1,071**, 등록 1,298·초안 5·보관 5다.
+
+지원 근거·현재 버전을 구분했고 Pocket Mac Lab의 지원 버전은 null이다. ko/en 요약을
+직접 검토해 current로 저장했다. 아이콘 10개를 기존 비공개 Storage 경로로 검증·저장했다.
+같은 배치 재실행은 신규/지원/아이콘 변경 0·건너뜀 10·16개 콘텐츠 테이블 해시 불변이다.
+독립 검증에서 대상 10개 근거/번역/버전/수집 시각과 모든 이전 근거·관련 없는 앱/이력의
+보존, 익명 초안/보관 10개 행·아이콘·이력 조회 각각 0을 확인했다.
+
+09:16 KST 운영 25규칙 검사에서 오류 0. 의료 미매핑 초안 5개 경고는 그대로다.
+최신 노트 밖의 App Store 발췌는 62→66개이며 추가 4개는 신규 앱의 과거 버전 3개·설명
+근거 1개다. 해당 원문과 지원 버전을 직접 확인했다. 보고서는 `.data/quality/audit-1793751401411.json`이다.
+운영 ko/en 전체 집계·대상 상세 HTML 22개와 아이콘 10개의 HTTP/형식/SHA-256 대조도 통과했다.
+
+이번 실행 코드 ESLint·diff whitespace 검사 통과. 제품·테스트 소스를 변경하지 않아 앞선
+전수조사의 전체 검사 결과를 재사용하며 새 전체 검사를 수행했다고 주장하지 않는다.
+스키마·기존 계정·환경·배포·스케줄러·커밋/푸시는 변경하지 않았다. 임시 관리자 권한 행은
+각 트랜잭션에서 제거했다. 세부 결과는 [지원 반영 기록](support-update-2026-11-04.md),
+비공개 백업·manifest·dry-run/apply/repeat·해시·독립/운영 검증·실행 코드는
+`.data/support-apply-2026-11-04/`에 보존한다.
+
+## 2026-11-09 — 운영 데이터 재검토
+
+등록 1,298개와 미등록 후보 175개를 한국 App Store API와 제품 페이지로 대조했다.
+등록 앱 1,293개는 두 경로 모두 정상이고 보관 5개는 API notFound·본문 404였다.
+미등록 175개는 두 경로 모두 정상이다. 기존 지원 216개의 근거를 재확인했고
+추가 지원 후보 29개 및 공개 DB와 다른 현재 버전 381개를 별도로 기록했다.
+[전수 검토 결과](data-audit-2026-11-09.md)
+
+09일 08:37 KST 운영 정합성 검사 25개 규칙에서 오류 0건, 의료 분류 5개·과거/설명 근거 66개
+경고를 확인했다. 보고서는 `.data/quality/audit-1794181025561.json`이다.
+읽기 전용 조사에서 콘텐츠 16개 테이블 해시가 일치했다. 익명 역할의 숨긴 행·아이콘·이력 0건,
+한영 전체 집계 2개, 숨긴 상세 20개와 아이콘 10개의 접근 차단을 확인했다.
+
+- `npm run lint` 오류 0건, 기존 로컬 파일 경고 3건.
+- `npm run typecheck` 통과.
+- `npm test` 20파일·100개 통과.
+- `npm run test:e2e` Chromium 37개 통과.
+- `npm run build` Turbopack 로컬 프로세스·포트 EPERM으로 실패.
+  `npm run build -- --webpack` 통과.
+- `git diff --check` 통과.
+
+## 2026-11-09 — 지원·현재 버전 운영 갱신
+
+운영 백업과 직전 한국 API 399개 확인 후 하나의 DB 트랜잭션으로 지원 29개와 별도
+버전 갱신 370개를 처리했다. 지원 정정과 겹치는 기존 앱 11개를 포함해 현재 버전 변경은
+381개다. dry-run과 실제 반영 모두 신규 17개, 지원 29개, 별도 버전 370개로 일치했다.
+재실행 변경 0건, 콘텐츠 16개 테이블 해시 일치를 확인했다.
+
+독립 읽기 검사에서 현재 버전·원문·지원 버전·한영 요약과 비공개 행/아이콘/이력 차단을 대조했다.
+운영 공개 집계는 1,305개, 공식 지원 245개, 예정 0개, 근거 미확인 1,060개다.
+운영 한영 집계·상세 HTML 66개, 지원 앱 아이콘 29개 SHA-256, Paprika 이전 이름 검색을 확인했다.
+정합성 25규칙 오류 0건과 의료 분류 5개·과거/설명 인용 108개 경고를 기록했다.
+정합성 보고서는 `.data/quality/audit-1794182152379.json`이다.
+
+배치 코드 ESLint와 `git diff --check`를 통과했다. 제품 코드 검증은 같은 날 앞선
+lint·typecheck·단위 100개·Chromium E2E 37개·Webpack 빌드 실행을 참조한다.
+[운영 갱신 상세](data-update-2026-11-09.md)
+
+## 운영 데이터 전체 최신화 — 2026-11-12
+
+사용자 요청으로 기존 등록 1,315개와 신규 후보 172개를 공식 한국 App Store 자료로 재검토했다.
+기존 API/제품 페이지는 각각 1,309개 정상·6개 notFound/404, 신규는 각각 172개 정상이며
+버전 기록은 27,154건이다. 수집기의 종료 코드 1은 확인된 부재 6개 때문이며 네트워크 실패를
+성공이나 부재로 바꾼 기록이 아니다. 기존 지원 245개는 241개 저장 인용과 4개 현재 설명으로
+재확인했다. 잠글시간의 일시적 API/페이지 버전 차이는 개별 API 재조회로 해소했다.
+
+운영 백업과 각 단계의 콘텐츠 16개 테이블 해시 검사, serializable 트랜잭션·advisory lock,
+dry-run 후 다음을 적용했다. 각 입력 재실행에서 같은 작업의 추가 변경은 0개였다.
+
+- 신규 172개: 지원 10개·근거 미확인 160개 공개, 의료 분류 2개 초안.
+- 기존 공개 앱 1,304개의 수집 정보와 현재 버전 335개 갱신; 일반 지원 판정·검토일·이력 보존.
+- 기존 7개 지원 정정과 해당 원문·지원 버전·한영 요약, 신규 포함 아이콘 179개 저장.
+- 정상 KR notFound를 반복 확인한 Ship Finder 1개 보관; 근거·이력 보존.
+- 같은 App Store ID의 Brim → Sidefill 명칭 및 이전 이름 검색 별칭; 상세 주소·지원 정보 보존.
+
+독립 DB 검사(`.data/refresh-2026-11-12/verify.mts`)는 한국 시간 16:47에 통과했다.
+등록 1,487개·공개 1,474개, 공식 지원 262개·근거 미확인 1,212개, 초안 7개·보관 6개다.
+공개 앱 1,474개 모두 현재 API 메타데이터와 일치하고 1,424개는 페이지 버전도 일치했다.
+정상 페이지에 버전 기록이 없는 기존 39개·신규 11개는 API 버전과 페이지 신원으로 확인했다.
+신규 172개의 차트 발견 출처, 이전 근거·일반 검토일·이력 보존, 최종 16개 테이블 해시를 확인했다.
+익명 역할에서 비공개 13개의 공개 행·아이콘·이력 조회는 각각 0개였다.
+정합성 25규칙 오류 0개, 의료 분류 경고 7개·최신 노트 밖 인용 경고 125개를 기록했다.
+
+운영 HTTP 검사(`live-check.mts`)는 16:49에 통과했다. 한영 전체 집계 2개, 지원 대상 17개의
+한영 상세 34개, 버전 표본 한영 6개, Brim/Sidefill 한영 검색 4개, 보관 상세 2개로 HTML 48개다.
+신규 공개 170개·기존 지원 정정 7개의 아이콘 SHA-256 177개가 DB와 일치했고 보관 아이콘은 404였다.
+최초 검사는 보관 상세에 HTTP 404를 고정 기대해 실패했다. 설치된 Next.js 문서의 스트리밍
+not-found 계약을 확인한 뒤 실제 HTTP 200·not-found 표식·noindex·앱 내용 부재를 대조해 통과했다.
+제품 코드는 변경하지 않았다. 최초 실패와 정정 후 성공 로그를 모두 보존했다.
+
+제품 코드 검사와 이번 배치 검사는 다음과 같다.
+
+- `npm run lint`: 통과, 기존 `.data` 스크립트 경고 3개.
+- `npm run typecheck`: 통과.
+- `npm test`: 20개 파일·100개 테스트 통과.
+- `npm run test:e2e`: 초기 sandbox localhost listen EPERM으로 시작 실패, 권한 조정 후 Chromium 37개 통과.
+- `npm run build`: 기본 Turbopack의 PostCSS 프로세스·포트 EPERM으로 실패. 권한 조정 재실행도 동일.
+- `npm run build -- --webpack`: 통과. 기본 빌드 성공으로 대체해 기록하지 않는다.
+- 이번 적용·독립 검증 스크립트의 명시적 ESLint 및 `git diff --check`: 통과.
+
+46개 차트 중 전체 유료는 재조회에서도 99개였다. 관측하지 못한 순위를 생성하지 않았고
+운영 순위 테이블이 없어 공개 인기순 동기화·스키마 변경·배포는 수행하지 않았다.
+차트는 신규 선정과 발견 출처다. 아이콘은 신규·지원 정정 대상에 한해 갱신했으며 기존 전체
+아이콘 URL 차이의 교체로 표현하지 않는다.
+
+원본·백업·검토·단계별 dry-run/apply/repeat·`verification.json`·`live-verification.json`·검사 로그는
+`.data/refresh-2026-11-12/`에 있다. [앱별 출처와 반영 상세](data-update-2026-11-12.md)
+
+## 운영 데이터 전체 최신화 — 2026-11-13
+
+기존 등록 1,487개 전부와 신규 후보 48개를 공식 한국 App Store 자료로 조사했다. 기존 API는
+1,480개 정상·7개 notFound, 제품 페이지는 1,479개 정상·7개 404·DramaWave 1개 403이다.
+신규 API·페이지는 각각 48개 정상이며 버전 기록은 총 27,903건이다. 정상 페이지에 버전 기록이
+없는 공개 앱 52개(기존 49·신규 3개)는 API 버전으로 확인했다. DramaWave는 공식 페이지
+3회 모두 403이나 API는 정상이라 메타데이터만 갱신하고 판정을 유지했다. 기존 지원 262개는
+256개 원문·5개 현재 설명을 재확인했고 Fold Counter 1개는 현재 명시적 문구를 재확인하지
+못해 과거 근거와 지원 판정을 유지했다. 이를 전부 현재 지원 재검증 성공으로 표현하지 않는다.
+
+운영 백업·단계별 콘텐츠 16개 테이블 해시 대조·serializable 트랜잭션·advisory lock과
+dry-run 후 신규 48개 공개, 기존 현재 버전 75개·릴리스 노트 차이 44개, 기존 지원 정정 1개와
+신규 지원 7개를 반영했다. Holy Rosary 1개는 정상 KR notFound 반복 확인 후 보관했다.
+동일 ID의 이름 26개를 갱신하고 이전 이름을 별칭으로 보존했다. 6개는 한국어 이름만 변경해
+영어를 보존했으며 Fold Counter 영어 이름은 한국 스토어 영어 페이지의 실제 제목을 사용했다.
+아이콘은 신규 48개·기존 지원 정정 1개를 저장했고 기존 URL 차이 617개 전체를 교체하지 않았다.
+보관·신규·메타데이터·지원·이름 단계의 같은 입력 재실행에서 추가 변경 0개 및 16개 테이블
+해시 불변을 확인했다. 각 이름 배치의 익명 구/신 이름 한영 검색 104개가 통과했다.
+
+한국 시간 09:35:16 독립 DB 검증에서 등록 1,535개·공개 1,521개, 공식 지원 270개·근거 미확인
+1,251개, 초안 7개·보관 7개를 확인했다. 공개 1,521개 API 메타데이터 일치, 제품 페이지
+1,520개 신원과 페이지 버전 1,468개 일치, 신규 48개 차트 발견 출처와 최종 콘텐츠 해시를
+확인했다. 기존 근거·일반 검토일·이력을 보존했고 비공개 14개의 익명 행·아이콘·이력은 각각
+조회 0개였다. 정합성 25규칙 오류 0개, 의료 초안 경고 7개·최신 노트 밖 인용 경고 131개다.
+
+09:36:13 운영 HTTP 검사에서 한영 집계 2개·지원 상세 16개·버전 표본 6개·이름 검색 104개·
+보관 안내 2개로 HTML 130개를 확인했다. 신규 48개와 기존 지원 정정 1개의 아이콘 49개
+SHA-256이 DB와 일치했다. Holy Rosary는 한영 상세 HTTP 200의 streamed not-found·noindex·
+앱 정보 부재, 아이콘 404를 확인했다. 최종 DB·운영 HTTP 검사는 각각 첫 실행에서 통과했다.
+
+- `npm run lint`: 통과, 기존 경고 3개.
+- `npm run typecheck`: 통과.
+- `npm test`: 20개 파일·100개 통과.
+- `npm run test:e2e`: 초기 sandbox의 localhost listen EPERM으로 테스트 전 실패; 권한 조정 후 Chromium 37개 통과.
+- `npm run build`: 기본·권한 조정 재실행 모두 Turbopack의 PostCSS 프로세스·포트 EPERM으로 실패.
+- `npm run build -- --webpack`: 통과. 기본 Turbopack 통과로 기록하지 않는다.
+- 적용·독립 검증 배치 7개의 ESLint와 `git diff --check`: 통과.
+
+오늘 전체 무료·유료 차트는 각각 100개이며 초기 timeout·502와 정상 재조회 원문을 보존했다.
+운영 순위 테이블은 없어서 차트는 발견 출처로만 사용했다. 공개 인기순 동기화·스키마 변경·
+배포·상시 수집 활성화는 수행하지 않았다. 원본·백업·검토·실행·최종 DB 및 운영 결과는
+`.data/refresh-2026-11-13/`에 있고 테스트 로그는 그 아래 `checks/`에 있다.
+[앱별 공식 출처·예외·반영 상세](data-update-2026-11-13.md)
+
 
 ## 통합 앱 탐색 — 2026-11-13 (로컬 코드)
 
@@ -2408,6 +2760,92 @@ CLI 도움말 도구의 npm registry 접근이 실패해 운영 시각 검토에
 기존 별도 변경은 유지하고 이번 기능의 코드·명세·검증 문서만 커밋 범위로 분리했다.
 
 
+## AdSense 콘텐츠 반려 대응 — 2026-11-13
+
+사용자 제공 화면에서 소유권 확인 통과와 ‘게시자 콘텐츠가 없는 화면에 Google 게재 광고’
+반려를 확인했다. 실제 데이터만 있으면 광고를 허용하던 조건을 정확한 언어별 앱 경로의
+편집 검토 목록으로 제한하고 홈·검색·최근 변경의 로더를 제거했다. 허용 목록은 현재 0개다.
+소유권 메타·ads.txt·광고/심사 봇 접근·문서 이동 격리는 보존했다. 한영 지원 안내에 근거
+해석·버전·미확인·사용 경험·정정 방법을 보강했다. DB·지원 판정·검토일은 변경하지 않았다.
+
+- `npm run lint`: 통과, 기존 경고 3개·오류 0개.
+- `npm run typecheck`: 통과.
+- `npm test`: 22개 파일 / 125개 통과. 운영 환경 조건에서 미검토 페이지의 광고 로더가
+  null인 경우, 정확한 경로·언어별 허용, 빈 콘텐츠·비운영·탐색 화면 차단을 포함한다.
+- `DUO_TEST_PORT=3428 ADSENSE_AUTO_ADS_ENABLED=true npm run test:e2e`: 최초 sandbox
+  서버 포트 EPERM으로 시작 실패, 권한 조정 후 45개 통과(1.4분). 한영 모바일 안내·제보
+  연결·광고 요청 부재 및 기존 전체 탐색 회귀를 포함한다.
+- `npm run build`: 로컬 Turbopack CSS 처리의 새 프로세스/포트 바인딩 EPERM으로 실패.
+  종료 전에 지연됐으나 강제 종료하지 않았고 실제 오류가 반환됐다.
+- `npm run build -- --webpack`: 컴파일·타입·페이지 생성 통과.
+- 변경 파일 Prettier, `git diff --check`: 통과. 테스트가 추가한 3428 전용 tsconfig 경로는 제거했다.
+- 한영 360px 밝은 테마 안내 스크린샷과 실제 운영 1440px 어두운 테마 안내를 직접 확인했다.
+
+Vercel 연결 도구는 기존 프로젝트 ID에 404를 반환했다. 기존 로그인 CLI에서 동일 팀/
+프로젝트를 확인한 뒤 격리된 `ea0660c` archive + 이번 제품 소스 11개만 배포했다.
+업로드 dry-run 301개 파일에 .env·.data·.git·output·node_modules가 없었다.
+원격 기본 Turbopack 빌드가 통과한 `dpl_6W3hfmzFJdSiYvVWv1BYuqfihHvq`를 단계적으로
+검증 후 기존 공개 도메인에 승격했다. 이전 복구 대상은 `dpl_66FMerb9ievhM26CjVnxqhek3ryi`다.
+
+배포 전후 각각 12개 HTTP 경로에서 광고 SDK/로더 부재·소유권·ads.txt·robots·추가 안내를
+확인했다. 실제 공개 브라우저에서 홈·한영 상세·검색·최근 변경·한영 안내·정책의 8개 화면을
+탐색하며 광고 도메인을 선제 차단했으며, 광고 요청 시도 및 광고 표시 요소가 0개였다.
+콘솔에는 기존 THREE.Clock 경고만 관찰했다. 초기 Playwright CLI의 Chrome 미설치와
+sandbox npm DNS 실패 후 설치된 Chromium과 권한 조정으로 검증했다. 최초 진단 코드의
+콜백 인자 오류는 페이지 탐색 전에 발생했고 수정 후 결과를 기록했다.
+
+운영 URL: https://is-duo-ready.vercel.app/ko/methodology
+로그·파일 해시·진단 근거·남은 편집 검토는 [반려 대응 기록](adsense-remediation-2026-11-13.md).
+Google 재심사를 요청하지 않았으며 콘텐츠 적합성·승인·광고 송출·CMP 동작을 해결했다고
+주장하지 않는다. 앱별 광고 재개 전 편집 검토와 Google 심사는 008 T016/T008에 남아 있다.
+
+
+## 공개 ‘지원 안 함’ 분류 제거 — 2026-11-13 후속
+
+사용자 최신 지시에 따라 공개 상태를 지원 확인·지원 예정·지원 정보 없음의 세 분류로
+정리했다. 필터·배지·상세·통계 범례/차트·최근 변경·지원 안내가 같은 투영을 사용한다.
+이전 `status=unsupported`는 unknown으로 해석하고 새 탐색 URL은 unknown을 직렬화한다.
+unknown 검색은 이전 내부 값을 포함하며 집계에서도 합쳐 총수를 유지한다. 저장된 상태·
+원문·이력·검토일은 변경하지 않았다. 관리자의 신규 상태 선택도 세 분류이며 이전 값은
+해당 기존 기록을 편집할 때만 ‘이전 상태 기록’으로 유지한다. 광고 허용 목록은 계속 비어 있다.
+
+- `npm run lint`: 기존 경고 3개·오류 0개로 통과.
+- `npm run typecheck`: 통과.
+- `npm test`: 단위 127개 통과. 최종 메시지/관리자 문구 정리 후 재실행도 127개 통과.
+- `npm run test:db`: 일회용 로컬 DB의 통합 20개 통과. 실제 SQL에 이전 내부 상태를 가진
+  fixture를 넣고 unknown 필터의 합집합·전체 수·비공개 경계를 확인했다. 테스트 DB는 정리됐다.
+- `DUO_TEST_PORT=3429 ADSENSE_AUTO_ADS_ENABLED=true npm run test:e2e`: 42개 통과,
+  통계 3개는 이전 네 범주의 기대값 때문에 실패했다. 기대값을 세 범주의 8/8/14와 차트
+  3개로 수정하고 삭제한 분류의 부재를 추가 검증했다. 동일 명령에
+  `-- tests/e2e/directory-stats.spec.ts`를 붙인 재실행에서 해당 3개 모두 통과(4.2초).
+- `npm run build`: 로컬 Turbopack CSS의 프로세스 생성/포트 바인딩 EPERM 실패.
+- `npm run build -- --webpack`: 컴파일·타입·페이지 생성 통과.
+- Vercel 기본 Turbopack 원격 빌드 통과. 기존 hooks/서버 경계·Astryx·키보드 접근을
+  유지했고 공개 상태 변환은 렌더링/읽기 조회에만 적용했다. 새 의존성·DB 마이그레이션 없음.
+- 테스트가 생성한 next-env.d.ts/tsconfig.json 변경은 이번 작업 직전 내용으로 복원했다.
+
+격리된 `ea0660c` archive에 현재 제품 소스 23개만 덮어써 이전 광고 대응도 보존했다.
+업로드 dry-run 301개 파일에서 로컬 비밀 설정·데이터·출력·node_modules를 제외했다.
+준비된 배포는 `dpl_ERsdHFD8akRtyFoJyswVy2hbNBCy`, 직전 복구 대상은
+`dpl_6W3hfmzFJdSiYvVWv1BYuqfihHvq`다. 운영 승격과 확인 결과는 아래에 추가한다.
+
+로그: `/tmp/duoready-status-{lint,types,unit,unit-final,db,e2e,e2e-stats,build,webpack,deploy}.log`.
+배포 소스 해시: `/tmp/duoready-status-manifest.json`.
+
+
+공개 도메인 승격 전후 각각 8개 HTTP 경로에서 ‘지원 안 함’/‘Not supported’와 이전 통계
+항목·광고 로더가 없음을 확인했다. `dpl_ERsdHFD8akRtyFoJyswVy2hbNBCy`를 기존 도메인에
+승격한 뒤 실제 공개 브라우저에서 한국어 1440px·영어 360px 화면을 확인했다.
+필터는 전체+세 공개 상태, 통계는 270/0/1,251이며 이전 unsupported URL은 지원 정보 없음
+버튼을 선택한다. 양 언어의 안내·표본 상세·변경 이력에도 삭제한 분류가 없었고 가로 넘침과
+광고 요청 시도는 0개였다. 두 스크린샷을 직접 확인했다. 작업용 브라우저만 닫았다.
+운영 데이터·원문·검토일·심사 계정은 변경하지 않았다.
+
+운영 증빙: `/tmp/duoready-status-{stage,live}-results.json`, `/tmp/duoready-status-browser.log`,
+`output/playwright/status-removal-{ko,en}.png`. 반영한 23개 제품 파일은 manifest의 해시와
+일치한다. 이번 범위의 작업은 009 T014–T015에 완료 표시했다.
+
+
 ## 운영 데이터 전체 최신화 — 2026-11-20
 
 반영 전 16개 콘텐츠 테이블 해시는 11-13 최종 검증값과 같았다. 기존 등록 1,535개 전부와
@@ -2442,3 +2880,36 @@ KR 부재 7개 보관, 신규 133개 등록(132개 공개·의료 미매핑 초�
 공개 인기순 동기화·스키마 변경·배포·Next.js 업그레이드는 수행하지 않았다. 원본·백업·검토·실행·
 최종 DB 및 운영 결과는 `.data/refresh-2026-11-20/`, 테스트 로그는 그 아래 `checks/`에 있다.
 [앱별 공식 출처·예외·반영 상세](data-update-2026-11-20.md)
+
+
+## 운영 데이터 전체 최신화 — 2026-11-23
+
+반영 전 16개 콘텐츠 테이블 해시는 11-20 최종 검증값과 같았다. 기존 등록 1,668개 전부와
+신규 후보 101개를 공식 한국 App Store 자료로 조사했다. 기존 API·제품 페이지는 각각 1,654개
+정상, 14개 notFound/404(같은 집합)다. 신규 101개는 모두 정상이고 버전 기록은 31,366건이다.
+기존 지원 293개 중 284개는 원문, 8개는 현재 공식 문구로 재확인했다. Fold Counter 1개는
+현재 명시적 문구를 재확인하지 못해 과거 근거와 판정을 유지했다. 이전에 보관한
+Holy Rosary·Oxford Deluxe가 한국 스토어에 다시 나타났다. 해제 정책이 없어 보관을 유지했다.
+
+dry-run 후 KR 부재 2개를 보관하고 신규 101개를 등록·공개했다. 기존 현재 버전 144개, 기존
+지원 정정 3개·신규 지원 11개, 동일 ID 이름 3개도 반영했다. 각 단계의 같은 입력 재실행에서
+추가 변경 0개와 해시 불변을 확인했다. 신규 등록의 첫 세 실행은 zsh에서 묶음 인자가 나뉘지
+않아 대상 지정 누락으로 사전 거부됐다. DB 반영 전 롤백이었고 인자를 풀어 다시 실행했다.
+
+한국 시간 09:23 독립 DB 검증에서 등록 1,769개·공개 1,745개를 확인했다. 공식 지원 307개,
+지원 정보 없음 1,438개, 초안 8개·보관 16개다. 공개 1,745개의 API 메타데이터와 제품 페이지
+신원이 일치했다. 페이지 버전 1,685개가 일치했고 버전 기록 부재는 60개다. 신규 101개의
+차트 발견 출처와 최종 해시도 확인했다. 비공개 24개의 익명 조회는 0개였다. 정합성 25규칙
+오류는 0개, 경고는 미매핑 초안 8개·최신 노트 밖 인용 169개다.
+
+09:24 운영 HTTP 검사에서 HTML 52개를 확인했다. 아이콘 104개 SHA-256은 DB와 일치했다.
+보관 2개의 아이콘은 404였다. 두 최종 검사 모두 첫 실행에서 통과했다.
+
+- `npm run lint`: 통과, 기존 경고 3개·오류 0개.
+- `npm run typecheck`: 통과.
+- `npm test`: 22개 파일·127개 통과.
+- `npm run test:e2e`: 첫 실행은 Next.js 16.4.3 보안 안내 종료로 테스트 전 실패; 재실행에서 Chromium 45개 통과.
+- `npm run build`: 첫 실행은 `SecurityFatalError`로 중단; 재실행에서 기본 Turbopack 빌드 통과.
+
+공개 인기순 동기화·스키마 변경·배포·Next.js 업그레이드는 수행하지 않았다.
+[앱별 공식 출처·예외·반영 상세](data-update-2026-11-23.md)

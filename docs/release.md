@@ -1,5 +1,19 @@
 # Release operations
 
+At the owner's 12:36 instruction on 2026-11-03, a valid KR Lookup notFound is now the operational criterion for KR absence and archival from the public catalogue; a product-page 404 is not required. Request/rate-limit/parsing errors remain verification failures. Two FilmN apps were freshly confirmed notFound and archived, preserving private history/evidence. Current public totals are **1,280: 206 supported, one planned, 1,073 unknown**, with five drafts and five archives. Repeated content hashes, quality checks and deployed ko/en exclusion checks passed. No collector scheduling, application deployment or schema change was performed. [Policy and record](kr-store-availability-2026-11-03.md).
+
+A fresh full Duo-support scan requested at 12:15 KST on 2026-11-03 covered all 1,287 non-archived apps. Hinge Harp was changed from unknown to supported using explicit official developer support documentation and a verified App Store ID link; no supported version was invented. Public totals are now **1,282: 206 supported, one planned, 1,075 unknown**. Existing evidence and unrelated content were preserved. Initial Lookup succeeded for all apps, while two FilmN products later returned 404 and individual KR notFound; their unknown records were retained. No deployment/schema change. [Full scan and verification](duo-support-fullscan-2026-11-03.md).
+
+On 2026-11-03, three owner-designated apps with repeated KR Lookup notFound and KR product HTTP 404 were archived through the existing workflow. Private rows/history remain; public entries, history and icons are hidden. Current public totals are **1,282: 205 supported, one planned, 1,076 unknown**, with five drafts and three archives. All remaining 1,287 apps resolve in KR Lookup; 1,286 product URLs return 200 and DramaWave's web 403 is recorded separately, with a successful fresh KR Lookup. No additional KR-unavailable app was confirmed. No deployment/schema change. [Availability and verification record](kr-store-availability-2026-11-03.md).
+
+Later on 2026-11-03, a fresh comparison of all 1,290 registered apps found five additional version changes. The owner-authorized follow-up added THE LOUNGE support and Wide Web inner-display Safari split screen evidence, and refreshed all five versions/icon sources. Current public counts are **1,285 total: 205 supported, one planned and 1,079 unknown**. Existing evidence and generic-version review dates/history were preserved. Repeated content hashes, 25 quality rules, 12 live ko/en HTML checks and five icon response hashes passed. No application deployment or schema change was made. [Record](data-refresh-2026-11-03.md).
+
+## Full content refresh — 2026-11-03
+
+The owner-requested refresh added 104 apps to the existing production database: 1,290 registered, 1,285 published and five medical-category drafts. Public counts are 204 supported, one planned and 1,080 unknown. Twelve new apps have verified support, four existing unknown apps were corrected to supported, and three existing supported apps received new feature evidence. Current versions changed for 205 existing public apps. Existing evidence and support versions were preserved; metadata-only updates preserved support review dates and history.
+
+Replaying the fixed batch changed zero content-table hashes (16 tables). Anonymous draft entries/icons remained inaccessible. Live ko/en HTML checks (22) and all 104 new icon response hashes passed. No application deployment, schema migration, scheduler activation, environment change, external project creation, commit or push was performed. Rankings remain discovery provenance because the production ranking table is not installed. See [the refresh record](data-refresh-2026-11-03.md) for scope, three retained notFound/404 failures and verification.
+
 ## Environments
 
 The maintained setup has **two environments**:
@@ -148,6 +162,21 @@ blocked by process/port EPERM; the Vercel build is checked independently.
 No database content, schema, environment or protection change is included.
 See docs/verification.md and the private latest-source-release-result.json release
 record for validation scope and final rollout evidence.
+
+
+## Production administrator provisioned — 2026-11-02
+
+At the owner's request, a permanent password-based Supabase Auth account was created in the
+existing `is-duo-ready` Production project and enabled in `app_private.admin_users` using its
+actual Auth user UUID. This supersedes the historical permanent-administrator blocker above.
+No schema, application deployment, environment configuration or catalogue content was changed.
+Account identifiers and credentials are excluded from this public record. The generated password
+is retained only in the ignored local `.data/admin/production-credentials.txt` file (0600).
+
+Actual deployed Chromium checks passed for password login, all six Korean administrator sections,
+the English app list, an authenticated private icon, the collection API and logout denial. The
+provider database confirmed no remaining sessions after logout. Production write-flow checks
+remain under T011; see [verification](verification.md).
 
 
 ## Auto ads activated on existing Production — 2026-11-02

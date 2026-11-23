@@ -35,3 +35,10 @@
 지원 확인/지원 정보 없음/지원 안 함 용어를 공통 messages로 정리하고 unknown 배지는 neutral로 표시한다.
 지원 정보 없음 필터를 선택할 때만 설명을 제공하며 상태 값·검색·정렬·페이지·집계 계약은 유지한다.
 001의 T083과 함께 한영·접근성·반응형 및 필수 검사를 수행한다.
+
+
+공개 상태 정정 후속: 내부 SupportStatus는 원본 호환을 위해 보존한다. 별도 publicStatuses와
+publicSupportStatus를 공개 필터·배지·이력·안내에 사용하고, 통계 투영은 unknown에 이전
+unsupported 수를 합쳐 분모를 보존한다. parseQuery는 이전 링크를 unknown으로 정규화하며
+fixture/SQL의 unknown 검색은 두 내부 값을 포함한다. 저장 데이터는 갱신하지 않는다.
+회귀 검사는 이전 링크·검색 합집합·집계 불변과 공개 화면의 제거된 분류 부재를 확인한다.
