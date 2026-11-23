@@ -10,6 +10,11 @@ vi.mock('@/lib/data/ad-content-reviews', () => ({
     '/ko': 'Must not allow a directory even if listed by mistake.',
     '/ko/updates': 'Must not allow a history page even if listed by mistake.',
     '/ko/submit': 'Must not allow an action page even if listed by mistake.',
+    '/ko/about': 'Must not allow the about page even if listed by mistake.',
+    '/ko/reports': 'Must not allow the report index even if listed by mistake.',
+    '/ko/privacy': 'Must not allow the privacy policy even if listed by mistake.',
+    '/en/reports/2026-11-23': 'Test-only review of an update report.',
+    '/en/methodology': 'Test-only review of the guide.',
   },
 }));
 
@@ -58,10 +63,23 @@ test.each([
   '/ko/submit',
   '/ko/privacy',
   '/ko/methodology',
+  '/ko/about',
+  '/ko/reports',
+  '/ko/reports/2026-11-23',
+  '/en/reports/2026-11-23/extra',
+  '/en/reports/latest',
   'toString',
 ])('real data alone never authorizes advertising on %s', (path) => {
   expect(autoAdsAllowed(true, path, production)).toBe(false);
 });
+
+test.each(['/en/reports/2026-11-23', '/en/methodology'])(
+  'reviewed document pages may carry ads: %s',
+  (path) => {
+    expect(autoAdsAllowed(true, path, production)).toBe(true);
+    expect(autoAdsAllowed(false, path, production)).toBe(false);
+  },
+);
 
 test('search indexing and advertising remain independent', () => {
   expect(autoAdsAllowed(true, reviewedPath, { ...production, PUBLIC_INDEXING: 'false' })).toBe(
@@ -85,9 +103,20 @@ test('verification remains configured while an unreviewed page has no ad script'
   expect(script?.props).toMatchObject({ id: 'adsense-auto-ads', strategy: 'lazyOnload' });
 });
 
-test('the shipped review list is empty pending actual editorial review', async () => {
+test('the shipped review list covers only reviewed document pages, never app pages', async () => {
   const actual = await vi.importActual<typeof import('@/lib/data/ad-content-reviews')>(
     '@/lib/data/ad-content-reviews',
   );
-  expect(actual.adContentReviews).toEqual({});
+  const { supportReports } = await import('@/lib/directory/reports');
+  const reportDates = new Set(supportReports.map((report) => report.date));
+  for (const [path, reason] of Object.entries(actual.adContentReviews)) {
+    expect(path).toMatch(/^\/(ko|en)\/(methodology|reports\/\d{4}-\d{2}-\d{2})$/);
+    expect(reason.trim().length).toBeGreaterThan(40);
+    const date = /reports\/(.+)$/.exec(path)?.[1];
+    if (date) expect(reportDates.has(date)).toBe(true);
+  }
+  // Each reviewed page is reviewed in both languages.
+  const paths = Object.keys(actual.adContentReviews);
+  for (const path of paths)
+    expect(paths).toContain(path.replace(/^\/(ko|en)/, (_, l) => (l === 'ko' ? '/en' : '/ko')));
 });

@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { seoConfig } from '@/messages/seo';
 import { appContent } from '@/lib/directory/content';
-import type { DirectoryApp, Locale } from '@/lib/directory/types';
+import { publicSupportStatus, type DirectoryApp, type Locale } from '@/lib/directory/types';
+import type { SupportReport } from '@/lib/directory/reports';
 
 type Environment = Record<string, string | undefined>;
-type Page = 'home' | 'updates' | 'methodology' | 'submit' | 'privacy';
+type Page = 'home' | 'updates' | 'methodology' | 'submit' | 'privacy' | 'about' | 'reports';
 
 export function publicSiteAllowed(env: Environment) {
   if (
@@ -102,7 +103,8 @@ export function pageMetadata(locale: Locale, page: Page, env: Environment = proc
     locale,
     page === 'home' ? '' : `/${page}`,
     page === 'home' ? title : `${title} · ${seoConfig.siteName}`,
-    page !== 'privacy' && (env.DIRECTORY_DATA_SOURCE === 'fixtures' || !env.DIRECTORY_DATA_SOURCE)
+    !['privacy', 'about', 'reports'].includes(page) &&
+      (env.DIRECTORY_DATA_SOURCE === 'fixtures' || !env.DIRECTORY_DATA_SOURCE)
       ? copy.fixtureDescription
       : description,
     page !== 'submit',
@@ -129,7 +131,29 @@ export function appMetadata(
     `/apps/${encodeURIComponent(app.slug)}`,
     `${replaceName(copy.appTitle)} · ${seoConfig.siteName}`,
     description,
-    !app.fictional,
+    // Pages without confirmed or planned support stay out of search results even when
+    // indexing is enabled; their shared copy differs little from app to app.
+    indexableApp(app),
+    env,
+  );
+}
+
+export function indexableApp(app: DirectoryApp) {
+  return !app.fictional && publicSupportStatus(app.status) !== 'unknown';
+}
+
+export function reportMetadata(
+  locale: Locale,
+  report: SupportReport,
+  env: Environment = process.env,
+): Metadata {
+  if (locale !== 'ko' && locale !== 'en') notFound();
+  return metadataFor(
+    locale,
+    `/reports/${report.date}`,
+    `${report.title[locale]} · ${seoConfig.siteName}`,
+    report.summary[locale],
+    true,
     env,
   );
 }

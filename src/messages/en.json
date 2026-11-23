@@ -5,7 +5,8 @@
     "submit": "Suggest an app",
     "methodology": "Support criteria",
     "skip": "Skip to content",
-    "menu": "Navigation"
+    "menu": "Navigation",
+    "reports": "Update reports"
   },
   "Preferences": {
     "language": "Language",
@@ -30,7 +31,9 @@
     "navigation": "Footer navigation",
     "methodology": "Support information",
     "submit": "Submit information",
-    "privacy": "Privacy policy"
+    "privacy": "Privacy policy",
+    "about": "About",
+    "reports": "Update reports"
   },
   "Directory": {
     "search": "Search apps",
@@ -660,5 +663,92 @@
     "withdraw": "Withdraw published experience",
     "withdrawReason": "Withdrawal reason (private)",
     "withdrawHelp": "Hide the public text and image while preserving the private submission and review history."
+  },
+  "About": {
+    "title": "About Is Duo Ready?",
+    "intro": "Is Duo Ready? is an independent service that uses official sources to show whether South Korea App Store apps are adapted to the iPhone Duo’s two displays and folding. It lets you check support and the evidence behind it in one place before you choose an app.",
+    "sections": {
+      "operator": {
+        "title": "Who runs it?",
+        "body": "It is run by the GitHub account yono92. It is not affiliated with Apple or app developers and is not paid to rate any app’s support."
+      },
+      "sources": {
+        "title": "Which sources do we check?",
+        "body": "We find apps through official South Korea App Store charts, then check each app’s Korean store listing, product page description and recent version history. Official developer documents and Apple announcements also count as evidence. Official text is compared directly with the help of AI tools, and the wording used as evidence is kept verbatim on each app page."
+      },
+      "limits": {
+        "title": "What don’t we do?",
+        "body": "We do not test on devices and do not use reviews or rankings as evidence. Apps without official wording stay at “No support information” — we never mark them as unsupported. A compatible-device list that includes iPhone Duo is not treated as support either."
+      },
+      "updates": {
+        "title": "How often is it updated?",
+        "body": "Each time we recheck the sources, we publish an update report with newly confirmed apps and other changes. Per-app status changes are listed under Recent changes."
+      },
+      "contact": {
+        "title": "Corrections and contact",
+        "body": "Use Submit information to report incorrect details or a missing app. For other questions, use the service’s GitHub contact page. It is public, so do not include personal information."
+      }
+    },
+    "links": {
+      "methodology": "Read the support criteria",
+      "reports": "See update reports",
+      "submit": "Submit information",
+      "github": "GitHub contact page"
+    }
+  },
+  "Reports": {
+    "title": "Update reports",
+    "description": "Each time we recheck South Korea App Store sources, we summarize newly confirmed apps, their evidence and what we checked.",
+    "read": "Read report",
+    "back": "All update reports",
+    "stats": {
+      "supported": "Apps with confirmed support",
+      "added": "Newly confirmed",
+      "published": "Published apps",
+      "reconfirmed": "Existing evidence rechecked"
+    },
+    "statValue": {
+      "supported": "{previous, number} → {count, number}",
+      "added": "{count, number}",
+      "published": "{count, number}",
+      "reconfirmed": "{count, number} of {total, number}"
+    },
+    "appsTitle": "Apps with newly confirmed support",
+    "kinds": {
+      "new": "Newly added",
+      "existing": "Existing app"
+    },
+    "supportVersion": "Evidence version {version}",
+    "versionUndisclosed": "Evidence version not stated",
+    "originalQuote": "Official wording",
+    "notListed": "This app is not in the current public list.",
+    "notCountedTitle": "What we did not count",
+    "otherChangesTitle": "Other changes",
+    "otherChanges": "This update added {newApps, number} new apps and updated the current version of {versions, number} apps and the names of {renamed, number}. {archived, number} apps that could no longer be found in the Korean store were removed from the list.",
+    "method": "Confirmed support means official wording was compared directly with the help of AI tools. It is not a device test or a badge observation, and the evidence version is not necessarily the first supported version."
+  },
+  "SourceScan": {
+    "title": "Latest check",
+    "checked": "On {date} we checked the South Korea App Store description and {count, number} recent version notes.",
+    "checkedNoVersions": "On {date} we checked the South Korea App Store description. No version history was published.",
+    "outcomes": {
+      "evidence_observed": "The stored support evidence was found again in official sources during this check.",
+      "alternative_observed": "The stored wording has changed, but the current official description still describes iPhone Duo adaptation.",
+      "evidence_not_reobserved": "This check did not find the stored support wording in current sources. There was no statement of non-support either, so the existing evidence and status stay as they were.",
+      "no_mention": "The description and version notes did not mention iPhone Duo adaptation.",
+      "compatibility_only": "iPhone Duo appears in the product page’s compatible-device list. That means the app installs and runs; it does not say the app adapts to the Duo’s displays.",
+      "generic_foldable": "Foldable devices are mentioned, but iPhone Duo is not named, so this is not classified as support.",
+      "bug_fix_only": "The notes only mention fixing a problem on iPhone Duo. They do not describe the scope of support, so this is not classified as support.",
+      "unspecified_improvement": "iPhone Duo improvements are mentioned, but not what changed, so this is not classified as support.",
+      "preparing": "The notes only say iPhone Duo support is being prepared, so this is not classified as support."
+    },
+    "excerpt": "Original excerpt",
+    "excerptVersion": "Version {version}",
+    "note": "This record shows what we checked; it does not change the support status.",
+    "noteUnconfirmed": "An app may support Duo even without a mention."
+  },
+  "Alternatives": {
+    "title": "Apps with confirmed support in this category",
+    "intro": "{category} apps whose iPhone Duo support is confirmed by official sources."
   }
 }

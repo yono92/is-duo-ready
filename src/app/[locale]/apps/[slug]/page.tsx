@@ -17,6 +17,8 @@ import { appMetadata } from '@/lib/data/seo';
 import { AutoAds } from '@/components/auto-ads';
 import { ResearchHistory } from '@/components/directory/research-history';
 import { UsageReports } from '@/components/directory/usage-reports';
+import { SourceScan } from '@/components/directory/source-scan';
+import { Alternatives } from '@/components/directory/alternatives';
 
 export async function generateMetadata({
   params,
@@ -176,6 +178,7 @@ export default async function AppDetail({
             </ul>
           )}
         </section>
+        {!app.fictional && <SourceScan storeUrl={app.storeUrl} locale={locale} />}
         {!app.fictional && (
           <ResearchHistory storeUrl={app.storeUrl} slug={app.slug} locale={locale} />
         )}
@@ -201,6 +204,7 @@ export default async function AppDetail({
             {t('suggestCorrection')}
           </Link>
         )}
+        {!app.fictional && <Alternatives category={app.category} slug={app.slug} locale={locale} />}
       </article>
     </main>
   );

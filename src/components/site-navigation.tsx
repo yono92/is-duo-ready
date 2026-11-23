@@ -26,6 +26,7 @@ export function SiteNavigation() {
               [
                 { href: '/', key: 'explore' },
                 { href: '/updates', key: 'updates' },
+                { href: '/reports', key: 'reports' },
                 { href: '/submit', key: 'submit' },
               ] as const
             ).map(({ href, key }) => (

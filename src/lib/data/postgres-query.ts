@@ -116,6 +116,23 @@ export async function queryApp(
   return row.slug === slug ? { id: row.app_id, app: row.snapshot } : { redirect: row.slug };
 }
 
+// Published apps only, in the requested order; unpublished or unknown slugs are omitted.
+export async function queryAppsBySlugs(
+  db: DatabaseClient,
+  slugs: string[],
+): Promise<RealDirectoryApp[]> {
+  const { rows } = await db.query<{ snapshot: RealDirectoryApp }>(
+    `SELECT snapshot || jsonb_build_object('iconUrl',
+      CASE WHEN EXISTS(SELECT 1 FROM public.app_icon_assets i WHERE i.app_id=e.app_id)
+      THEN '/api/app-icons/' || app_id::text ELSE NULL END) AS snapshot
+    FROM public.directory_entries e
+    WHERE publication='published' AND country='KR' AND slug=ANY($1::text[])
+    ORDER BY array_position($1::text[],slug)`,
+    [slugs],
+  );
+  return rows.map((row) => row.snapshot);
+}
+
 export async function queryHistory(
   db: DatabaseClient,
   requestedPage = 1,

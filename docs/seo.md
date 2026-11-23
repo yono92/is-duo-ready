@@ -49,8 +49,13 @@ NEXT_PUBLIC_SITE_URL=https://is-duo-ready.vercel.app
 전체 robots 차단을 유지한다. 관리자와 비공개 API의 인증은 robots 정책과 무관하게 계속 적용된다.
 
 검색 공개를 결정하면 배포 환경의 `PUBLIC_INDEXING`을 변경하고 재배포한 뒤 실제 HTML과
-`/robots.txt`, `/sitemap.xml`을 확인한다. 사이트맵에는 공개 앱·홈·업데이트·지원 안내만 포함하며
-각 경로의 ko/en/x-default 링크를 제공한다. 실제 검토일 외 임의 날짜를 넣지 않는다.
+`/robots.txt`, `/sitemap.xml`을 확인한다. 사이트맵에는 홈·업데이트·지원 안내·소개·갱신 리포트와
+**지원 확인·지원 예정 앱 상세만** 포함하며 각 경로의 ko/en/x-default 링크를 제공한다.
+실제 검토일 외 임의 날짜를 넣지 않는다.
+
+2026-11-23부터 ‘지원 정보 없음’ 앱 상세는 `PUBLIC_INDEXING=true`에서도 `noindex`이며 사이트맵에서 빠진다
+(`indexableApp`). 앱마다 내용 차이가 작은 페이지가 검색 결과를 채우지 않게 하려는 선택이다.
+페이지 자체와 공개 접근은 그대로다.
 
 Google Search Console·네이버 서치어드바이저·Bing Webmaster Tools는 소유 계정에서 등록하고,
 발급받은 **HTML 태그의 content 값만** `verification`에 넣는다. 계정 비밀번호/API 비밀 키를 넣지 않는다.

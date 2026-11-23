@@ -1,0 +1,749 @@
+{
+  "version": 1,
+  "country": "KR",
+  "reports": [
+    {
+      "date": "2026-11-23",
+      "record": "docs/data-update-2026-11-23.md",
+      "totals": {
+        "published": 1745,
+        "supported": 307,
+        "unknown": 1438,
+        "previousSupported": 293,
+        "newApps": 101,
+        "versionUpdates": 144,
+        "archived": 2,
+        "renamed": 3,
+        "reconfirmed": 292,
+        "existingSupported": 293
+      },
+      "title": {
+        "ko": "11월 23일 갱신: 지원 확인 앱 14개 추가",
+        "en": "November 23 update: 14 more apps with confirmed support"
+      },
+      "summary": {
+        "ko": "한국 App Store 공식 자료를 다시 확인해 지원 확인 앱이 293개에서 307개로 늘었어요. 새로 확인한 앱이 듀오 화면을 어떻게 쓰는지 정리했어요.",
+        "en": "A fresh check of official South Korea App Store sources raised confirmed apps from 293 to 307. Here is how the newly confirmed apps use the Duo’s displays."
+      },
+      "intro": {
+        "ko": "한국 App Store 공식 차트 46개와 등록된 앱 1,668개를 다시 확인했어요. 차트에서 새로 찾은 앱 101개 중 11개, 기존에 지원 정보가 없던 앱 중 3개에서 iPhone Duo 대응 문구를 확인했어요. 그래서 지원 확인 앱은 293개에서 307개가 됐어요. 기존 지원 앱 293개 중 292개는 이번에도 공식 원문에서 근거를 다시 확인했어요.",
+        "en": "We rechecked 46 official South Korea App Store charts and all 1,668 registered apps. iPhone Duo wording appeared in 11 of the 101 newly found chart apps and in 3 apps that previously had no support information, taking confirmed apps from 293 to 307. For 292 of the 293 previously confirmed apps, we found the supporting text in official sources again."
+      },
+      "groups": [
+        {
+          "heading": {
+            "ko": "펼친 화면에 나란히 보여 주기",
+            "en": "Side by side on the unfolded display"
+          },
+          "body": {
+            "ko": "라이브러리와 플레이어, 알람과 캘린더처럼 두 가지 정보를 펼친 화면에 함께 놓는 앱이 이번에도 가장 많았어요. 칵테일 레시피 앱은 iPad와 같은 여러 열 배치를 안쪽 화면에 그대로 가져왔어요.",
+            "en": "Again the most common pattern places two kinds of information together on the unfolded display — a library and player, or alarms and a calendar. The cocktail recipe app brings its iPad-style multi-column layout to the inner display."
+          },
+          "apps": [
+            "6809787936",
+            "6502886443",
+            "6822681002",
+            "6744274650"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "접힘 상태마다 다른 배치",
+            "en": "Different layouts for each fold state"
+          },
+          "body": {
+            "ko": "닫힘·열림·책·텐트처럼 접힘 상태를 구분해 화면을 바꾸는 앱이에요. 포커 타이머는 반쯤 펼치면 한쪽에 시계, 다른 쪽에 컨트롤을 두고 접히는 부분에는 아무것도 표시하지 않는다고 밝혀, 힌지를 피한 배치까지 확인할 수 있어요.",
+            "en": "These apps change their screens for each state — closed, open, book or tent. The poker timer states that when half-open it shows the clock on one side and controls on the other, with nothing on the fold itself."
+          },
+          "apps": [
+            "325307477",
+            "6828963028",
+            "6768040383",
+            "6821991160"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "화면 폭 맞춤과 부분 지원",
+            "en": "Width adaptation and partial support"
+          },
+          "body": {
+            "ko": "화면 너비에 맞춰 목록을 조정하거나 펼친 상태의 전체 화면만 먼저 지원하는 경우예요. 원격 플레이 앱은 접은 상태 지원을 다음 업데이트로 미룬다고 직접 밝혔어요. 이처럼 범위가 정해진 지원은 요약에도 그 범위를 그대로 적었어요.",
+            "en": "These apps adapt lists to the display width, or support only the unfolded full-screen mode for now. The remote-play app says folded-state support will come in a later update; we kept that scope in its summary."
+          },
+          "apps": [
+            "1488937601",
+            "6738534883"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "짧은 공지로 확인한 지원",
+            "en": "Support confirmed from short announcements"
+          },
+          "body": {
+            "ko": "“iOS 27 및 iPhone Duo 지원”, “Improved support for iPhone Duo”처럼 한 줄로 안내한 경우예요. 공식 문구이므로 지원 확인으로 분류했지만 구체적인 화면 변화는 원문에 없어요.",
+            "en": "Here a single line — such as “iOS 27 and iPhone Duo support” or “Improved support for iPhone Duo” — is all the official text says. We classify these as confirmed, but the original wording does not describe specific screen changes."
+          },
+          "apps": [
+            "453571750",
+            "6769314786",
+            "854618029",
+            "1043729482"
+          ]
+        }
+      ],
+      "notCounted": [
+        {
+          "ko": "제품 페이지 호환 기기 목록에 iPhone Duo가 있는 앱(예: GTA: San Andreas)은 지원으로 세지 않았어요. 설치하고 실행할 수 있다는 뜻일 뿐, 듀오 화면에 맞췄다는 설명은 아니에요.",
+          "en": "Apps whose product page simply lists iPhone Duo among compatible devices (for example GTA: San Andreas) were not counted. Compatibility means the app installs and runs, not that it adapts to the Duo’s displays."
+        },
+        {
+          "ko": "“폴더블 잠금화면 달력”처럼 듀오를 이름으로 밝히지 않은 일반 폴더블 대응, 게임 랭크 이름의 “Solo/Duo”, 접이식 메뉴를 뜻하는 “접히는” 같은 표현도 세지 않았어요. 세지 않았다고 해서 지원하지 않는다는 뜻은 아니에요.",
+          "en": "Generic foldable wording that never names the Duo (such as a “foldable lock-screen calendar”), “Solo/Duo” as a game rank name, and “collapsible” menu wording were not counted either. Not counting an app does not mean it lacks support."
+        },
+        {
+          "ko": "예전에 한국 스토어에서 사라져 목록에서 뺀 앱 2개가 다시 나타났어요. 다시 공개할지는 별도로 정하기로 하고 이번에는 그대로 두었어요.",
+          "en": "Two apps we had removed after they disappeared from the Korean store reappeared. They stay hidden for now while we decide whether to restore them."
+        }
+      ],
+      "apps": [
+        {
+          "appStoreId": "453571750",
+          "kind": "existing",
+          "name": "3D 로프 매듭 (Knots 3D)",
+          "supportVersion": "12.0.1",
+          "quote": "iOS 27 및 iPhone Duo 지원",
+          "sourceUrl": "https://apps.apple.com/kr/app/id453571750",
+          "observedAt": "2026-11-23T00:14:09.111Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 지원을 안내해요.",
+            "en": "Official release notes announce iPhone Duo support."
+          },
+          "slug": "app-453571750"
+        },
+        {
+          "appStoreId": "6769314786",
+          "kind": "existing",
+          "name": "Food Hunt: Pixel Puzzle",
+          "supportVersion": "1.37",
+          "quote": "Optimized the display and UI layout for iPhone Duo.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6769314786",
+          "observedAt": "2026-11-23T00:17:22.690Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오에 맞춘 화면·UI 배치 최적화를 안내해요.",
+            "en": "Official release notes describe display and UI layout optimization for iPhone Duo."
+          },
+          "slug": "app-6769314786"
+        },
+        {
+          "appStoreId": "6821991160",
+          "kind": "existing",
+          "name": "키냥: 기계식 키보드 타자 소리·키캡 꾸미기 테마",
+          "supportVersion": "1.1.11",
+          "quote": "iPhone Duo를 접거나 펼칠 때 화면 크기와 방향에 맞게 키보드가 조정돼요.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6821991160",
+          "observedAt": "2026-11-23T00:19:10.255Z",
+          "summary": {
+            "ko": "듀오를 접거나 펼치면 화면 크기와 방향에 맞춰 키보드가 조정돼요.",
+            "en": "Adjusts the keyboard to screen size and orientation as iPhone Duo folds or unfolds."
+          },
+          "slug": "app-6821991160"
+        },
+        {
+          "appStoreId": "6768040383",
+          "kind": "new",
+          "name": "GR Snap - 리코 GR Image Sync",
+          "supportVersion": "1.8.0",
+          "quote": "이제 iPhone Duo에서도 접거나 펼친 상태 모두 편하게 사진을 보고 조작할 수 있습니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6768040383",
+          "observedAt": "2026-11-23T00:11:21.632Z",
+          "summary": {
+            "ko": "듀오를 접거나 펼친 상태 모두에서 사진을 보고 조작할 수 있어요.",
+            "en": "Lets you view and control photos with iPhone Duo folded or unfolded."
+          },
+          "slug": "app-6768040383"
+        },
+        {
+          "appStoreId": "6828963028",
+          "kind": "new",
+          "name": "Action On You: 홀덤 포커 타이머",
+          "supportVersion": null,
+          "quote": "iPhone Duo: 완전히 펼치면 시계가 안쪽의 큰 화면을 가득 채웁니다. 반쯤 펼치면 한쪽에는 시계, 다른 쪽에는 컨트롤이 표시되며 접히는 부분에는 아무것도 표시하지 않습니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6828963028",
+          "observedAt": "2026-11-23T00:11:21.410Z",
+          "summary": {
+            "ko": "펼치면 시계가 안쪽 화면을 채우고, 반쯤 펼치면 시계와 컨트롤이 접힘 부분을 피해 나뉘어요.",
+            "en": "Fills the inner display with the clock when unfolded and splits clock and controls around the fold when half-open."
+          },
+          "slug": "app-6828963028"
+        },
+        {
+          "appStoreId": "1488937601",
+          "kind": "new",
+          "name": "Magic Packet: WOL Wake-on-LAN",
+          "supportVersion": "3.6.0",
+          "quote": "iPhone Duo 및 iPhone 가로 모드 지원: 목록과 호스트 화면이 모든 화면 너비에 맞게 조정됩니다",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1488937601",
+          "observedAt": "2026-11-23T00:11:23.273Z",
+          "summary": {
+            "ko": "듀오의 화면 너비에 맞춰 목록과 호스트 화면이 조정돼요.",
+            "en": "Adapts the host list and host screens to iPhone Duo display widths."
+          },
+          "slug": "app-1488937601"
+        },
+        {
+          "appStoreId": "854618029",
+          "kind": "new",
+          "name": "FileBrowser Professional",
+          "supportVersion": "26.9",
+          "quote": "Improved support for iPhone Duo.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id854618029",
+          "observedAt": "2026-11-23T00:11:23.512Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 지원 개선을 안내해요.",
+            "en": "Official release notes describe improved iPhone Duo support."
+          },
+          "slug": "app-854618029"
+        },
+        {
+          "appStoreId": "6809787936",
+          "kind": "new",
+          "name": "Audoc: 문서·PDF 읽어주기",
+          "supportVersion": "1.1.0",
+          "quote": "iPhone Duo와 iPad에서 라이브러리와 플레이어를 나란히 보기",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6809787936",
+          "observedAt": "2026-11-23T00:12:03.245Z",
+          "summary": {
+            "ko": "듀오에서 라이브러리와 플레이어를 나란히 볼 수 있어요.",
+            "en": "Shows the library and player side by side on iPhone Duo."
+          },
+          "slug": "app-6809787936"
+        },
+        {
+          "appStoreId": "325307477",
+          "kind": "new",
+          "name": "AudioTools, dB, 사운드 & 오디오",
+          "supportVersion": "18.14",
+          "quote": "닫힘, 열림, 북 및 텐트 모드에 맞게 모든 화면이 적응하며, 컨트롤이 측면 스트립에 배치됩니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id325307477",
+          "observedAt": "2026-11-23T00:12:06.706Z",
+          "summary": {
+            "ko": "듀오의 닫힘·열림·북·텐트 모드에 맞춰 화면이 바뀌고 컨트롤은 측면에 놓여요.",
+            "en": "Adapts every screen to iPhone Duo closed, open, book and tent modes with controls in a side strip."
+          },
+          "slug": "app-325307477"
+        },
+        {
+          "appStoreId": "6822681002",
+          "kind": "new",
+          "name": "Your Stressy",
+          "supportVersion": "1.2",
+          "quote": "Made for iPhone Duo: open it, and your whole day sits beside your reserve",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6822681002",
+          "observedAt": "2026-11-23T00:12:08.359Z",
+          "summary": {
+            "ko": "듀오를 펼치면 하루 기록이 수치 옆에 나란히 표시돼요.",
+            "en": "Shows your whole day beside your reserve when iPhone Duo is opened."
+          },
+          "slug": "app-6822681002"
+        },
+        {
+          "appStoreId": "6502886443",
+          "kind": "new",
+          "name": "FlexiAlarm: Apple Watch 알람",
+          "supportVersion": "4.2.0",
+          "quote": "Duo 전용 레이아웃. 알람과 캘린더를 나란히 표시하고 화면을 펼치거나 접거나 회전할 때 알맞게 배치합니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6502886443",
+          "observedAt": "2026-11-23T00:12:08.745Z",
+          "summary": {
+            "ko": "듀오 전용 레이아웃으로 알람과 캘린더를 나란히 보여 주고 접거나 펼칠 때 맞춰 배치해요.",
+            "en": "A dedicated iPhone Duo layout shows alarms and calendar side by side and adapts as you fold, unfold or rotate."
+          },
+          "slug": "app-6502886443"
+        },
+        {
+          "appStoreId": "1043729482",
+          "kind": "new",
+          "name": "Magic Fireplace",
+          "supportVersion": null,
+          "quote": "iPhone, iPhone Duo, iPad, Apple TV 완벽 지원.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1043729482",
+          "observedAt": "2026-11-23T00:12:10.337Z",
+          "summary": {
+            "ko": "공식 설명에서 듀오 지원을 명시한 벽난로 영상 앱이에요.",
+            "en": "A fireplace video app whose official description states iPhone Duo support."
+          },
+          "slug": "app-1043729482"
+        },
+        {
+          "appStoreId": "6738534883",
+          "kind": "new",
+          "name": "Console Remote",
+          "supportVersion": "28.0.11",
+          "quote": "Added support for full-screen mode on iPhone Duo when unfolded, support for the folded state will follow in a future update.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6738534883",
+          "observedAt": "2026-11-23T00:12:12.273Z",
+          "summary": {
+            "ko": "펼친 듀오에서 전체 화면을 지원하고, 접은 상태 지원은 이후 업데이트 예정이에요.",
+            "en": "Supports full-screen mode on unfolded iPhone Duo; folded-state support is planned for a later update."
+          },
+          "slug": "app-6738534883"
+        },
+        {
+          "appStoreId": "6744274650",
+          "kind": "new",
+          "name": "Bevnap: Cocktail Recipes",
+          "supportVersion": "4.6.0",
+          "quote": "Ready for iPhone Duo. Bevnap fills the inner display with the same multi-column layouts you get on iPad",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6744274650",
+          "observedAt": "2026-11-23T00:12:14.211Z",
+          "summary": {
+            "ko": "듀오 안쪽 화면을 여러 열 배치로 채우고 접고 펼칠 때 맞춰 바뀌어요.",
+            "en": "Fills the inner iPhone Duo display with multi-column layouts and adapts as you open, close and fold."
+          },
+          "slug": "app-6744274650"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "record": "docs/data-update-2026-11-20.md",
+      "totals": {
+        "published": 1646,
+        "supported": 293,
+        "unknown": 1353,
+        "previousSupported": 270,
+        "newApps": 133,
+        "versionUpdates": 508,
+        "archived": 7,
+        "renamed": 18,
+        "reconfirmed": 269,
+        "existingSupported": 270
+      },
+      "title": {
+        "ko": "11월 20일 갱신: 지원 확인 앱 23개 추가",
+        "en": "November 20 update: 23 more apps with confirmed support"
+      },
+      "summary": {
+        "ko": "한국 App Store 공식 자료를 다시 확인해 지원 확인 앱이 270개에서 293개로 늘었어요. 펼친 화면 활용 방식과 지원으로 세지 않은 표현을 함께 정리했어요.",
+        "en": "A fresh check of official South Korea App Store sources raised confirmed apps from 270 to 293. We also explain how the apps use the unfolded display and which wording we did not count."
+      },
+      "intro": {
+        "ko": "한국 App Store 공식 차트 46개와 등록된 앱 1,535개를 다시 확인했어요. 차트에서 새로 찾은 앱 133개 중 11개, 기존에 지원 정보가 없던 앱 중 12개에서 iPhone Duo 대응 문구를 확인했어요. 그래서 지원 확인 앱은 270개에서 293개가 됐어요. 기존 지원 앱 270개 중 269개는 이번에도 공식 원문에서 근거를 다시 확인했어요.",
+        "en": "We rechecked 46 official South Korea App Store charts and all 1,535 registered apps. iPhone Duo wording appeared in 11 of the 133 newly found chart apps and in 12 apps that previously had no support information, taking confirmed apps from 270 to 293. For 269 of the 270 previously confirmed apps, we found the supporting text in official sources again."
+      },
+      "groups": [
+        {
+          "heading": {
+            "ko": "펼친 화면에 나란히 보여 주기",
+            "en": "Side by side on the unfolded display"
+          },
+          "body": {
+            "ko": "펼친 안쪽 화면을 두 영역으로 나눠 쓰는 방식이에요. 악보와 건반, 지도와 운영 화면처럼 함께 봐야 하는 정보를 한 화면에 놓아요. 공식 문구가 어떤 정보를 나란히 두는지까지 적고 있어 지원 범위를 비교적 구체적으로 알 수 있어요.",
+            "en": "These apps split the inner display into two areas, placing information you use together — a staff and keyboard, or a map and operations view — on one screen. The official wording names what sits side by side, so the scope of support is relatively specific."
+          },
+          "apps": [
+            "284444548",
+            "6766557247",
+            "1236657805",
+            "6832929779"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "펼친 화면을 가득 채우기",
+            "en": "Filling the unfolded display"
+          },
+          "body": {
+            "ko": "넓어진 화면을 여백 없이 쓰는 방식이에요. 게임·전광판·글 읽기처럼 화면 크기가 곧 사용감인 앱에서 많이 보여요. 다만 접은 바깥 화면이나 반쯤 접은 상태에 대한 설명은 없는 경우가 많아요.",
+            "en": "These apps use the wider display without empty margins — common for games, LED banners and reading, where screen size is the experience. Most do not describe the folded outer display or half-folded postures."
+          },
+          "apps": [
+            "6790010650",
+            "289468215",
+            "6779939767",
+            "1502367642"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "접는 각도와 자세 활용",
+            "en": "Using fold angle and posture"
+          },
+          "body": {
+            "ko": "힌지 각도나 기기를 세운 자세에 반응하는 방식이에요. 책처럼 세우면 휴식, 평평하게 눕히면 다음 세트가 시작되는 운동 앱처럼 듀오만의 동작을 기능으로 쓰는 사례예요.",
+            "en": "These apps respond to the hinge angle or how the device stands — for example a workout app that rests when stood like a book and starts the next set when laid flat. They turn Duo-specific postures into features."
+          },
+          "apps": [
+            "775737172",
+            "6807421454",
+            "6444718902"
+          ]
+        },
+        {
+          "heading": {
+            "ko": "짧은 공지로 확인한 지원",
+            "en": "Support confirmed from short announcements"
+          },
+          "body": {
+            "ko": "업데이트 노트에 “듀오 지원”, “최적화” 정도로만 적힌 경우예요. 공식 지원 문구라서 지원 확인으로 분류하지만, 어떤 화면을 어떻게 바꿨는지는 알 수 없어요. 앱 상세에서 원문과 지원 버전을 함께 확인해 보세요.",
+            "en": "Here the release notes say little more than “iPhone Duo support” or “optimized”. They are official statements, so we classify them as confirmed, but they do not say which screens changed or how. Check the original wording and version on each app page."
+          },
+          "apps": [
+            "1052879175",
+            "1161387262",
+            "1370293473",
+            "1480640210",
+            "298398207",
+            "368169363",
+            "578665578",
+            "6739276631",
+            "1077134281",
+            "6446140905",
+            "346169668",
+            "717601887"
+          ]
+        }
+      ],
+      "notCounted": [
+        {
+          "ko": "제품 페이지 호환 기기 목록에만 iPhone Duo가 있는 앱 7개는 지원으로 세지 않았어요. 설치하고 실행할 수 있다는 뜻일 뿐, 듀오 화면에 맞췄다는 설명은 아니에요.",
+          "en": "Seven apps that only list iPhone Duo among compatible devices were not counted. Compatibility means the app installs and runs, not that it adapts to the Duo’s displays."
+        },
+        {
+          "ko": "“폴더블 기기 지원”처럼 듀오를 이름으로 밝히지 않은 표현, 듀오에서 생긴 버그만 고쳤다는 안내, “듀오에서 더 편하게” 같이 무엇이 바뀌었는지 알 수 없는 문구는 보류했어요. 세지 않았다고 해서 지원하지 않는다는 뜻은 아니에요.",
+          "en": "We held wording that never names the Duo (“foldable device support”), notes that only fix a Duo bug, and phrases like “more comfortable on iPhone Duo” that do not say what changed. Not counting an app does not mean it lacks support."
+        },
+        {
+          "ko": "한국 스토어 조회에서 찾을 수 없는 앱 7개는 목록에서 뺐어요. 모두 지원 정보가 없던 앱이고, 지원하지 않는다는 판정은 아니에요.",
+          "en": "Seven apps that could no longer be found in the Korean store were removed from the list. None had support information, and this is not a finding that they lack support."
+        }
+      ],
+      "apps": [
+        {
+          "appStoreId": "1052879175",
+          "kind": "existing",
+          "name": "Brave - 비공개 브라우저, 검색 엔진, VPN 등",
+          "supportVersion": "1.99",
+          "quote": "듀오 지원",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1052879175",
+          "observedAt": "2026-11-20T06:37:47.409Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 지원을 안내해요.",
+            "en": "Official release notes announce iPhone Duo support."
+          },
+          "slug": "app-1052879175"
+        },
+        {
+          "appStoreId": "1161387262",
+          "kind": "existing",
+          "name": "Windy.com: 날씨와 레이더",
+          "supportVersion": "51.040245",
+          "quote": "iPhone Duo에 최적화된 레이아웃",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1161387262",
+          "observedAt": "2026-11-20T06:37:59.318Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오에 최적화된 레이아웃을 안내해요.",
+            "en": "Official release notes describe a layout optimized for iPhone Duo."
+          },
+          "slug": "app-1161387262"
+        },
+        {
+          "appStoreId": "1370293473",
+          "kind": "existing",
+          "name": "VPN - Super Unlimited Proxy",
+          "supportVersion": "2.62.0",
+          "quote": "이제 iPhone Duo에서도 VPN Super가 멋지게 보입니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1370293473",
+          "observedAt": "2026-11-20T06:38:12.919Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 화면에 맞춘 표시를 안내해요.",
+            "en": "Official release notes describe an interface updated for iPhone Duo."
+          },
+          "slug": "app-1370293473"
+        },
+        {
+          "appStoreId": "1480640210",
+          "kind": "existing",
+          "name": "NetNewsWire: RSS Reader",
+          "supportVersion": "7.3",
+          "quote": "It also improves support for iPhone Duo.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1480640210",
+          "observedAt": "2026-11-20T06:39:05.802Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 지원 개선을 안내해요.",
+            "en": "Official release notes describe improved iPhone Duo support."
+          },
+          "slug": "app-1480640210"
+        },
+        {
+          "appStoreId": "1502367642",
+          "kind": "existing",
+          "name": "포스타입 POSTYPE",
+          "supportVersion": "3.98.0",
+          "quote": "iPhone Duo에서 화면을 더 넓게 볼 수 있어요.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1502367642",
+          "observedAt": "2026-11-20T06:39:11.857Z",
+          "summary": {
+            "ko": "듀오에서 화면을 더 넓게 볼 수 있어요.",
+            "en": "Shows a wider view on iPhone Duo."
+          },
+          "slug": "app-1502367642"
+        },
+        {
+          "appStoreId": "284444548",
+          "kind": "existing",
+          "name": "Better Ears - Ear Trainer",
+          "supportVersion": "4.1",
+          "quote": "Now with iPhone Duo support: Folded, use Better Ears as usual on the outer display. Unfold it for the big layout with staff, answers and keyboard side by side.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id284444548",
+          "observedAt": "2026-11-20T06:40:13.232Z",
+          "summary": {
+            "ko": "접으면 바깥 화면에서 그대로, 펼치면 악보·답·건반을 나란히 보여 줘요.",
+            "en": "Works as usual on the folded outer display and shows staff, answers and keyboard side by side when unfolded."
+          },
+          "slug": "app-284444548"
+        },
+        {
+          "appStoreId": "298398207",
+          "kind": "existing",
+          "name": "Road Trip MPG",
+          "supportVersion": "21.1",
+          "quote": "Updated for iPhone Duo.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id298398207",
+          "observedAt": "2026-11-20T06:40:17.248Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 대응을 안내해요.",
+            "en": "Official release notes state the app was updated for iPhone Duo."
+          },
+          "slug": "app-298398207"
+        },
+        {
+          "appStoreId": "368169363",
+          "kind": "existing",
+          "name": "Tempo Advance - Metronome",
+          "supportVersion": "2.6",
+          "quote": "iPhone Duo and iOS 27 compatibility",
+          "sourceUrl": "https://apps.apple.com/kr/app/id368169363",
+          "observedAt": "2026-11-20T06:41:19.847Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 호환을 안내해요.",
+            "en": "Official release notes announce iPhone Duo compatibility."
+          },
+          "slug": "app-368169363"
+        },
+        {
+          "appStoreId": "578665578",
+          "kind": "existing",
+          "name": "Threema. The Secure Messenger",
+          "supportVersion": "7.6",
+          "quote": "The app is optimized for the iPhone Duo",
+          "sourceUrl": "https://apps.apple.com/kr/app/id578665578",
+          "observedAt": "2026-11-20T06:44:07.667Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 최적화를 안내해요.",
+            "en": "Official release notes state the app is optimized for iPhone Duo."
+          },
+          "slug": "app-578665578"
+        },
+        {
+          "appStoreId": "6739276631",
+          "kind": "existing",
+          "name": "AI Catch(AI 캐치): AI 영상 생성기",
+          "supportVersion": "1.8.0",
+          "quote": "이제 iPhone Duo를 지원하며",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6739276631",
+          "observedAt": "2026-11-20T06:45:14.201Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 지원을 안내해요.",
+            "en": "Official release notes announce iPhone Duo support."
+          },
+          "slug": "app-6739276631"
+        },
+        {
+          "appStoreId": "6779939767",
+          "kind": "existing",
+          "name": "Runa: RPG Maker & VN Player",
+          "supportVersion": "1.5.5",
+          "quote": "Ready for iPhone Duo: your games fill the big inner screen, and Runa's own screens fit both displays.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6779939767",
+          "observedAt": "2026-11-20T06:47:02.417Z",
+          "summary": {
+            "ko": "게임은 듀오 안쪽 큰 화면을 채우고, 앱 화면은 두 디스플레이에 맞춰져요.",
+            "en": "Games fill the large inner iPhone Duo screen and the app’s own screens fit both displays."
+          },
+          "slug": "app-6779939767"
+        },
+        {
+          "appStoreId": "6807421454",
+          "kind": "existing",
+          "name": "팔굽혀펴기 100개: PushApe",
+          "supportVersion": "1.2",
+          "quote": "이제 iPad와 iPhone Duo에서도 사용할 수 있습니다. 큰 화면은 펼친 책처럼, Duo는 책처럼 세워서 쉬고 눕히면 다음 세트가 시작됩니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6807421454",
+          "observedAt": "2026-11-20T06:47:15.377Z",
+          "summary": {
+            "ko": "듀오를 책처럼 세우면 휴식, 평평하게 눕히면 다음 세트가 시작돼요.",
+            "en": "Rests when iPhone Duo stands like a book and starts the next set when laid flat."
+          },
+          "slug": "app-6807421454"
+        },
+        {
+          "appStoreId": "1077134281",
+          "kind": "new",
+          "name": "Smart Metronome & Tuner +",
+          "supportVersion": "18.2",
+          "quote": "iPhone Duo를 지원합니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1077134281",
+          "observedAt": "2026-11-20T06:42:05.462Z",
+          "summary": {
+            "ko": "공식 버전 기록에서 듀오 지원을 확인한 메트로놈·튜너 앱이에요.",
+            "en": "A metronome and tuner app with iPhone Duo support confirmed in its official version history."
+          },
+          "slug": "app-1077134281"
+        },
+        {
+          "appStoreId": "6444718902",
+          "kind": "new",
+          "name": "Moonlitt: 달 위치와 위상",
+          "supportVersion": "2.10",
+          "quote": "Made sure the interface beautifully adapts to all folded states and split arrangements.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6444718902",
+          "observedAt": "2026-11-20T06:42:05.234Z",
+          "summary": {
+            "ko": "듀오의 모든 접힘 상태와 분할 배치에 맞춰 화면이 조정돼요.",
+            "en": "Adapts its interface to every iPhone Duo folded state and split arrangement."
+          },
+          "slug": "app-6444718902"
+        },
+        {
+          "appStoreId": "6446140905",
+          "kind": "new",
+          "name": "Reader - 오프라인 뷰어 및 TTS",
+          "supportVersion": "26.10.7",
+          "quote": "iPhone Duo를 완벽하게 지원합니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6446140905",
+          "observedAt": "2026-11-20T06:42:05.583Z",
+          "summary": {
+            "ko": "공식 버전 기록에서 듀오 지원을 확인한 전자책 뷰어·읽어주기 앱이에요.",
+            "en": "An offline e-book viewer and read-aloud app with iPhone Duo support confirmed in its official version history."
+          },
+          "slug": "app-6446140905"
+        },
+        {
+          "appStoreId": "717601887",
+          "kind": "new",
+          "name": "ContiSystem",
+          "supportVersion": "2.0",
+          "quote": "iPhone, iPad, iPhone Duo의 세로 및 가로 화면에 맞춘 새 디자인",
+          "sourceUrl": "https://apps.apple.com/kr/app/id717601887",
+          "observedAt": "2026-11-20T06:42:08.974Z",
+          "summary": {
+            "ko": "듀오의 세로·가로 화면에 맞춘 새 디자인을 적용했어요.",
+            "en": "Introduces a new design fitted to iPhone Duo portrait and landscape screens."
+          },
+          "slug": "app-717601887"
+        },
+        {
+          "appStoreId": "775737172",
+          "kind": "new",
+          "name": "iA Writer",
+          "supportVersion": "8.1",
+          "quote": "Writer가 어떤 각도에서도 최적으로 맞춰집니다",
+          "sourceUrl": "https://apps.apple.com/kr/app/id775737172",
+          "observedAt": "2026-11-20T06:42:09.099Z",
+          "summary": {
+            "ko": "듀오를 어떤 각도로 접어도 편집 화면이 맞춰지고, 컨트롤이 엄지가 닿는 오른쪽에 놓여요.",
+            "en": "Adapts the writing view to any iPhone Duo angle and keeps controls within thumb reach on the right."
+          },
+          "slug": "app-775737172"
+        },
+        {
+          "appStoreId": "346169668",
+          "kind": "new",
+          "name": "연합뉴스",
+          "supportVersion": "7.2.5",
+          "quote": "iPhone Duo 기기 환경에 맞춰 화면을 최적화하고",
+          "sourceUrl": "https://apps.apple.com/kr/app/id346169668",
+          "observedAt": "2026-11-20T06:42:10.835Z",
+          "summary": {
+            "ko": "공식 업데이트에서 듀오 환경에 맞춘 화면 최적화를 안내해요.",
+            "en": "Official release notes describe screen optimization for the iPhone Duo."
+          },
+          "slug": "app-346169668"
+        },
+        {
+          "appStoreId": "6790010650",
+          "kind": "new",
+          "name": "나 혼자만 상한가 : 회귀 인생게임",
+          "supportVersion": "1.0.20",
+          "quote": "아이폰 듀오 화면에 맞췄습니다. 펼쳐도 검은 여백 없이 꽉 찬 화면으로 즐길 수 있어요.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6790010650",
+          "observedAt": "2026-11-20T06:43:03.529Z",
+          "summary": {
+            "ko": "듀오를 펼쳐도 검은 여백 없이 화면을 가득 채워요.",
+            "en": "Fills the unfolded iPhone Duo display without black margins."
+          },
+          "slug": "app-6790010650"
+        },
+        {
+          "appStoreId": "6766557247",
+          "kind": "new",
+          "name": "Sky Routes: 항공사 경영",
+          "supportVersion": "1.1",
+          "quote": "iPhone Duo: 펼치면 지도와 항공사가 나란히 놓입니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6766557247",
+          "observedAt": "2026-11-20T06:43:05.577Z",
+          "summary": {
+            "ko": "듀오를 펼치면 지도와 항공사 화면이 나란히 표시돼요.",
+            "en": "Shows the map and airline views side by side when iPhone Duo is unfolded."
+          },
+          "slug": "app-6766557247"
+        },
+        {
+          "appStoreId": "289468215",
+          "kind": "new",
+          "name": "Banner",
+          "supportVersion": "3.2.0",
+          "quote": "iPhone Duo를 지원합니다. 펼친 화면에서는 LED가 화면 너비 전체에 표시됩니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id289468215",
+          "observedAt": "2026-11-20T06:43:07.485Z",
+          "summary": {
+            "ko": "듀오를 펼치면 LED 배너가 화면 너비 전체에 표시돼요.",
+            "en": "Stretches the LED banner across the full width of the unfolded iPhone Duo display."
+          },
+          "slug": "app-289468215"
+        },
+        {
+          "appStoreId": "1236657805",
+          "kind": "new",
+          "name": "Cube CFOP: F2L, OLL & PLL",
+          "supportVersion": "7.0.0",
+          "quote": "Supports iPhone Duo, with two-column layouts on the inner screen.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id1236657805",
+          "observedAt": "2026-11-20T06:43:09.170Z",
+          "summary": {
+            "ko": "듀오 안쪽 화면에서 두 열 배치로 공식을 볼 수 있어요.",
+            "en": "Uses two-column layouts on the inner iPhone Duo screen."
+          },
+          "slug": "app-1236657805"
+        },
+        {
+          "appStoreId": "6832929779",
+          "kind": "new",
+          "name": "MangaDuo",
+          "supportVersion": null,
+          "quote": "MangaDuo는 내가 가진 만화 파일을 iPhone Duo에서 읽기 위한 뷰어입니다.",
+          "sourceUrl": "https://apps.apple.com/kr/app/id6832929779",
+          "observedAt": "2026-11-20T06:43:11.133Z",
+          "summary": {
+            "ko": "접어서 한 쪽씩, 펼치면 두 쪽 펼침면으로 만화를 읽는 듀오용 뷰어예요.",
+            "en": "A comic viewer built for iPhone Duo: single pages when folded, two-page spreads when unfolded."
+          },
+          "slug": "app-6832929779"
+        }
+      ]
+    }
+  ]
+}

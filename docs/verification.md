@@ -2913,3 +2913,35 @@ dry-run 후 KR 부재 2개를 보관하고 신규 101개를 등록·공개했다
 
 공개 인기순 동기화·스키마 변경·배포·Next.js 업그레이드는 수행하지 않았다.
 [앱별 공식 출처·예외·반영 상세](data-update-2026-11-23.md)
+
+
+## 콘텐츠 품질과 광고 재심사 준비 — 2026-11-23 (로컬 코드)
+
+사용자 지시로 [specs/011](../specs/011-content-quality/spec.md) 0~3단계를 진행했다.
+
+- 운영 `dpl_ERsdHFD8akRtyFoJyswVy2hbNBCy`의 배포 파일 300개 SHA-1을 Vercel API로 받아 작업 트리와 대조했다.
+  src·scripts·설정은 모두 같았고 문서만 달랐다. 운영 코드를 `4b2362b`, 미커밋 기록 문서를 `9c634e8`로 커밋했다.
+- 소개(`/about`), 갱신 리포트 목록·상세(`/reports`, 11-20·11-23), 앱 상세의 최근 확인 내역과 같은 카테고리
+  지원 확인 앱을 추가했다. 리포트 앱·인용·버전은 검토 manifest에서 생성했고 분석 문장은 직접 작성했다.
+  확인 내역은 `scripts/build-source-scans.ts`로 11-23 수집 결과에서 생성했다(공개 1,745개: 근거 재확인 298·
+  대체 문구 8·재확인 못함 1·언급 없음 1,357·호환 목록만 55·일반 폴더블 12·버그 수정만 7·범위 불명 5·준비 중 2).
+  보류 사유 분류는 33건을 직접 대조했고, 처음 잘못 분류된 2건은 분류 순서를 고쳐 재생성했다.
+- 광고 허용 경로 형식에 지원 안내·리포트 상세를 추가하고 검토 목록에 6개 경로를 기록했다. 앱 상세는 0개다.
+- `PUBLIC_INDEXING=true`에서도 unknown 상세는 noindex·sitemap 제외. 환경 변수는 바꾸지 않았다.
+
+로컬 미리보기: 별도 임시 DB `duo_preview`에 11-23 최종 스냅샷의 `apps`·`directory_entries`만 넣어
+실제 데이터로 리포트·상세를 확인했다. 아이콘 저장소는 없어 기본 아이콘으로 보였다. 확인 후 DB를 삭제했다.
+한영·light/dark·360/768/1440px 스크린샷 7장을 직접 확인했고 가로 넘침은 0이었다
+(`output/playwright/content-quality/`).
+
+- `npm run lint`: 통과, 기존 경고 3개·오류 0개.
+- `npm run typecheck`: 통과.
+- `npm test`: 23개 파일·139개 통과(새 콘텐츠 데이터·광고 경로·선택 색인 검사 포함).
+- 새 `tests/e2e/content-pages.spec.ts`: 14개 통과. 첫 실행들의 실패는 Next.js 보안 안내로 서버가 종료된 경우,
+  클릭 대상(카드 대신 내부 링크)과 not-found의 중복 robots 메타를 고려하지 않은 테스트 문제였다.
+- `npm run test:e2e` 전체: 58개 통과, `directory.spec.ts`의 pagination 테스트 1개가 60초 시간 초과.
+  같은 테스트 단독 재실행은 13.2초에 통과했다. 해당 테스트는 홈 목록과 3D 기기 준비만 다루며 이번 변경 경로를
+  지나지 않는다. 전체 실행 통과로 기록하지 않는다.
+- `npm run build`: 첫 실행은 Next.js `SecurityFatalError` 안내로 중단, 재실행에서 기본 Turbopack 통과.
+
+운영 배포·PUBLIC_INDEXING 전환·Google 재심사는 수행하지 않았다.

@@ -1,7 +1,10 @@
 import { afterEach, expect, test, vi } from 'vitest';
 import robots from '@/app/robots';
+import { supportReports } from '@/lib/directory/reports';
 import {
   appMetadata,
+  indexableApp,
+  reportMetadata,
   indexingAllowed,
   pageMetadata,
   publicSiteAllowed,
@@ -278,5 +281,38 @@ test('verification tags are omitted until real provider tokens are configured', 
     });
   } finally {
     Object.assign(seoConfig.verification, previous);
+  }
+});
+
+test('only confirmed or planned app pages are indexable, even with indexing enabled', () => {
+  const app = realApp();
+  for (const [status, index] of [
+    ['supported', true],
+    ['planned', true],
+    ['unknown', false],
+    ['unsupported', false],
+  ] as const) {
+    app.status = status;
+    expect(indexableApp(app)).toBe(index);
+    expect(appMetadata('ko', app, production).robots).toEqual({ index, follow: true });
+  }
+  expect(indexableApp({ ...fixtureApps[0], status: 'supported' })).toBe(false);
+});
+
+test('about and report pages describe real editorial content in either data mode', () => {
+  const fixtures = { ...production, DIRECTORY_DATA_SOURCE: 'fixtures' };
+  for (const locale of ['ko', 'en'] as const) {
+    for (const page of ['about', 'reports'] as const)
+      expect(pageMetadata(locale, page, fixtures)).toMatchObject({
+        description: seoConfig.locales[locale][page].description,
+        alternates: { canonical: `https://example.com/${locale}/${page}` },
+      });
+    const report = supportReports[0];
+    expect(reportMetadata(locale, report, production)).toMatchObject({
+      title: `${report.title[locale]} · Is Duo Ready?`,
+      description: report.summary[locale],
+      alternates: { canonical: `https://example.com/${locale}/reports/${report.date}` },
+      robots: { index: true, follow: true },
+    });
   }
 });

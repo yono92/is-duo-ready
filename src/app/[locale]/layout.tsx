@@ -59,8 +59,14 @@ export default async function LocaleLayout({
                     aria-label={f('navigation')}
                     className="flex flex-wrap items-start gap-x-5 gap-y-2"
                   >
+                    <Link href="/about" className="underline underline-offset-4">
+                      {f('about')}
+                    </Link>
                     <Link href="/methodology" className="underline underline-offset-4">
                       {f('methodology')}
+                    </Link>
+                    <Link href="/reports" className="underline underline-offset-4">
+                      {f('reports')}
                     </Link>
                     <Link href="/submit" className="underline underline-offset-4">
                       {f('submit')}

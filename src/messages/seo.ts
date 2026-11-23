@@ -7,6 +7,8 @@ type SeoCopy = {
   methodology: PageCopy;
   submit: PageCopy;
   privacy: PageCopy;
+  about: PageCopy;
+  reports: PageCopy;
   fixtureDescription: string;
   appTitle: string;
   appDescription: string;
@@ -45,6 +47,16 @@ export const seoConfig = {
         description:
           '아이폰 듀오 앱 목록에 추가할 앱이나 수정할 정보를 공식 출처와 함께 알려주세요.',
       },
+      about: {
+        title: 'Is Duo Ready? 소개',
+        description:
+          'Is Duo Ready?를 누가 운영하는지, 어떤 공식 자료로 아이폰 듀오 앱 지원을 확인하는지, 무엇을 하지 않는지 안내합니다.',
+      },
+      reports: {
+        title: '갱신 리포트',
+        description:
+          '한국 앱스토어 자료를 다시 확인할 때마다 새로 아이폰 듀오 지원이 확인된 앱과 근거, 확인 범위를 정리합니다.',
+      },
       fixtureDescription:
         '아이폰 듀오 앱 지원 현황의 개발용 미리보기입니다. 표시된 앱과 지원 상태는 가상 예시입니다.',
       appTitle: '{name} — 아이폰 듀오 지원 현황',
@@ -81,6 +93,16 @@ export const seoConfig = {
         title: 'Suggest an app or correction',
         description:
           'Suggest an app for the iPhone Duo directory or a correction, with an official source.',
+      },
+      about: {
+        title: 'About Is Duo Ready?',
+        description:
+          'Who runs Is Duo Ready?, which official sources we use to confirm iPhone Duo app support, and what we do not do.',
+      },
+      reports: {
+        title: 'Update reports',
+        description:
+          'Each time we recheck South Korea App Store sources, we summarize newly confirmed iPhone Duo apps, their evidence and what we checked.',
       },
       fixtureDescription:
         'A development preview of iPhone Duo app support. The apps and support labels shown are fictional examples.',
