@@ -3053,3 +3053,22 @@ For Reel을 추가했다. 운영 반영 수치는 [재조사 기록](support-rev
 - 운영 첫 화면: 앱 1,845개, 지원 확인 387 · 부분 대응 15 · 지원 예정 1 · 지원 정보 없음 1,442. 부분 대응 필터 15개.
   기존 5개 ko 상세가 200·‘부분 대응’, 리디 en 상세 200·‘Partial support’, 리디 아이콘 200(image/jpeg).
 - sitemap.xml URL 820개 = 고정 14 + (지원 확인 387 + 부분 대응 15 + 지원 예정 1) × 2.
+
+## 개발자 도구·의학·잡지 및 신문 분류 추가와 초안 18개 공개 — 2026-11-23
+
+사용자 요청(“개발자 도구 분류 추가해서 초안 18개도 공개해줘”)으로 진행했다. 초안 18개의 공식 장르가 Developer Tools 15 ·
+Medical 2 · Magazines & Newspapers 1이라 세 장르를 모두 추가했다. 한국어 표기는 Apple Developer 한국어 카테고리 문서
+기준(개발자 도구·의학·잡지 및 신문)이며 [분류 기준](references/app-store-categories.md)에 기록했다.
+
+- 코드 `fc95644`: 분류 목록·Apple 장르 매핑(6026·6020·6021)·ko/en 메시지, migration 011(분류 제약만 확장).
+  `npm run lint`(오류 0, 기존 `.data/` 경고 4) · `npm run typecheck` · `npm test` 139 · `npm run test:db` 20 ·
+  `npm run test:e2e` 59 · `npm run build` 통과. 이 과정에서 `.data/` 반영 스크립트의 `prefer-const` 오류 1건을 고쳤다.
+- 운영 010과 같은 방식으로 011만 선택 적용했다(dry-run 후 적용, 이력 체크섬 기록, 콘텐츠 해시 불변).
+- 푸시 후 운영 배포 `is-duo-ready-c1jnsomaw` READY를 확인하고, 공개 스크립트가 운영 분류 화면에 새 이름이 보이는지
+  먼저 검사한 뒤 실행했다. 18개 KR Lookup을 다시 수집했고(`docs/data/itsub-draft-lookup-2026-11-23.json`) 버전 변화는 없었다.
+- 공개: dry-run 후 적용. 개발자 도구·지원 확인 15, 의학·부분 대응 2, 잡지 및 신문·지원 확인 1. 지원 상태·근거·요약은
+  검토 당시 그대로이며 근거 행과 앱-근거 연결은 바뀌지 않았다. 대상 외 앱의 모든 비교 대상 행이 같다.
+- 운영 첫 화면: 앱 1,863개, 지원 확인 403 · 부분 대응 17 · 지원 예정 1 · 지원 정보 없음 1,442. 분류 필터 개발자 도구 15 ·
+  의학 2 · 잡지 및 신문 1. GitHub ko/en·SnoreLab·Voicepaper·Moshi 상세 200. sitemap URL 856개 = 14 + 421 × 2.
+- 기존 운영 초안 8개(AutoSnore, Essential Anatomy 5, Human Anatomy Atlas 2027, MD on Call, 건강보험25시, 나만의닥터,
+  닥터나우, 모바일 건강보험증)도 공식 장르가 Medical이고 지원 정보 없음이다. 요청 범위가 아니라 공개하지 않았다.
