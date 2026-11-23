@@ -1,8 +1,8 @@
-import { Check, Clock3, CircleHelp } from 'lucide-react';
+import { Check, Clock3, CircleHelp, Contrast } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { publicSupportStatus, type SupportStatus } from '@/lib/directory/types';
-const icons = { supported: Check, planned: Clock3, unknown: CircleHelp };
+const icons = { supported: Check, partial: Contrast, planned: Clock3, unknown: CircleHelp };
 export function StatusBadge({
   status: storedStatus,
   fictional = true,
@@ -20,6 +20,7 @@ export function StatusBadge({
         (
           {
             supported: 'success',
+            partial: 'teal',
             planned: 'info',
             unknown: 'neutral',
           } as const

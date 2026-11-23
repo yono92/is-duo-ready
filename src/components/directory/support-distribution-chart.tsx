@@ -8,6 +8,7 @@ import { publicDirectoryStats } from '@/lib/directory/stats';
 
 const colors = {
   supported: 'var(--color-data-categorical-green)',
+  partial: 'var(--color-data-categorical-teal)',
   planned: 'var(--color-data-categorical-blue)',
   unknown: 'var(--directory-chart-unknown)',
 };

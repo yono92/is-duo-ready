@@ -52,7 +52,7 @@ test('publication requires evidence, remains atomic on failure and preserves rev
     let app = await save(payload);
     await assert.rejects(publish(app), { code: '23514' });
     payload.id = app.id;
-    for (const status of ['planned', 'unsupported', 'unknown']) {
+    for (const status of ['partial', 'planned', 'unsupported', 'unknown']) {
       app = await save({ ...payload, status }, app.revision);
       await assert.rejects(publish(app), { code: '23514' });
     }

@@ -1,4 +1,4 @@
-import { statuses, type Category, type DirectoryApp } from '../directory/types';
+import type { Category, DirectoryApp, SupportStatus } from '../directory/types';
 // Entirely invented names, states and descriptions for UI development. No support evidence.
 // Categories are explicit fictional assignments, not fetched App Store metadata.
 const names: [string, string, string, string, string, string, Category][] = [
@@ -273,6 +273,9 @@ const names: [string, string, string, string, string, string, Category][] = [
     'graphics-design',
   ],
 ];
+const cycle: SupportStatus[] = ['supported', 'planned', 'unknown', 'unsupported'];
+// Two fictional legacy-state apps exercise the partial state; other assignments stay stable.
+const partialIndexes = new Set([12, 28]);
 export const fixtureApps: DirectoryApp[] = names.map(
   ([ko, en, icon, aliases, summaryKo, summaryEn, category], index) => ({
     slug: `sample-${String(index + 1).padStart(2, '0')}`,
@@ -283,7 +286,7 @@ export const fixtureApps: DirectoryApp[] = names.map(
     aliases: aliases.split(' '),
     developer: 'Sample Studio',
     category,
-    status: statuses[Math.floor(index / 4) % 4],
+    status: partialIndexes.has(index) ? 'partial' : cycle[Math.floor(index / 4) % cycle.length],
     icon,
     originalLocale: 'ko',
     translations: {

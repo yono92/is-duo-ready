@@ -37,7 +37,7 @@ export const qualityRules = [
   [
     'decided_support_without_evidence',
     'error',
-    `SELECT count(*)::int AS count FROM public.directory_entries d WHERE d.publication='published' AND d.snapshot->>'status' IN('supported','planned','unsupported') AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(CASE WHEN jsonb_typeof(d.snapshot->'evidence')='array' THEN d.snapshot->'evidence' ELSE '[]'::jsonb END) item JOIN app_private.evidence e ON e.id::text=item->>'id' JOIN app_private.sources s ON s.id=e.source_id WHERE s.official_confirmed AND e.country='KR' AND e.quote=item->>'quote' AND s.url=item->>'url' AND (s.kind<>'app_store' OR s.url=d.snapshot->>'storeUrl') AND (d.snapshot->>'supportVersion' IS NULL OR e.support_version IS NULL OR d.snapshot->>'supportVersion'=e.support_version))`,
+    `SELECT count(*)::int AS count FROM public.directory_entries d WHERE d.publication='published' AND d.snapshot->>'status' IN('supported','partial','planned','unsupported') AND NOT EXISTS(SELECT 1 FROM jsonb_array_elements(CASE WHEN jsonb_typeof(d.snapshot->'evidence')='array' THEN d.snapshot->'evidence' ELSE '[]'::jsonb END) item JOIN app_private.evidence e ON e.id::text=item->>'id' JOIN app_private.sources s ON s.id=e.source_id WHERE s.official_confirmed AND e.country='KR' AND e.quote=item->>'quote' AND s.url=item->>'url' AND (s.kind<>'app_store' OR s.url=d.snapshot->>'storeUrl') AND (d.snapshot->>'supportVersion' IS NULL OR e.support_version IS NULL OR d.snapshot->>'supportVersion'=e.support_version))`,
   ],
   [
     'evidence_app_url_mismatch',
@@ -72,12 +72,12 @@ export const qualityRules = [
   [
     'invalid_public_snapshot',
     'error',
-    `SELECT count(*)::int AS count FROM public.directory_entries d JOIN app_private.apps a ON a.id=d.app_id WHERE d.publication='published' AND (d.snapshot->>'slug' IS DISTINCT FROM d.slug OR d.snapshot->>'publication' IS DISTINCT FROM 'published' OR d.snapshot->>'country' IS DISTINCT FROM 'KR' OR d.snapshot->'fictional' IS DISTINCT FROM 'false'::jsonb OR d.snapshot->>'storeUrl' IS DISTINCT FROM 'https://apps.apple.com/kr/app/id'||a.app_store_id OR coalesce(d.snapshot->>'status','') NOT IN('supported','planned','unknown','unsupported') OR jsonb_typeof(d.snapshot->'names'->'ko') IS DISTINCT FROM 'string' OR jsonb_typeof(d.snapshot->'names'->'en') IS DISTINCT FROM 'string' OR btrim(coalesce(d.snapshot->'names'->>'ko',''))='' OR btrim(coalesce(d.snapshot->'names'->>'en',''))='')`,
+    `SELECT count(*)::int AS count FROM public.directory_entries d JOIN app_private.apps a ON a.id=d.app_id WHERE d.publication='published' AND (d.snapshot->>'slug' IS DISTINCT FROM d.slug OR d.snapshot->>'publication' IS DISTINCT FROM 'published' OR d.snapshot->>'country' IS DISTINCT FROM 'KR' OR d.snapshot->'fictional' IS DISTINCT FROM 'false'::jsonb OR d.snapshot->>'storeUrl' IS DISTINCT FROM 'https://apps.apple.com/kr/app/id'||a.app_store_id OR coalesce(d.snapshot->>'status','') NOT IN('supported','partial','planned','unknown','unsupported') OR jsonb_typeof(d.snapshot->'names'->'ko') IS DISTINCT FROM 'string' OR jsonb_typeof(d.snapshot->'names'->'en') IS DISTINCT FROM 'string' OR btrim(coalesce(d.snapshot->'names'->>'ko',''))='' OR btrim(coalesce(d.snapshot->'names'->>'en',''))='')`,
   ],
   [
     'public_decision_missing_evidence',
     'error',
-    `SELECT count(*)::int AS count FROM public.directory_entries WHERE publication='published' AND snapshot->>'status' IN('supported','planned','unsupported') AND CASE WHEN jsonb_typeof(snapshot->'evidence')='array' THEN jsonb_array_length(snapshot->'evidence') ELSE 0 END=0`,
+    `SELECT count(*)::int AS count FROM public.directory_entries WHERE publication='published' AND snapshot->>'status' IN('supported','partial','planned','unsupported') AND CASE WHEN jsonb_typeof(snapshot->'evidence')='array' THEN jsonb_array_length(snapshot->'evidence') ELSE 0 END=0`,
   ],
   [
     'published_missing_history',

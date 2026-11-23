@@ -5,11 +5,12 @@ import { fixtureApps } from '@/lib/data/fixtures';
 import { statuses, type DirectoryApp } from '@/lib/directory/types';
 
 describe('published KR support statistics', () => {
-  it('shows three public categories without losing or changing legacy stored counts', () => {
-    const stored = { total: 10, supported: 2, planned: 1, unknown: 6, unsupported: 1 };
+  it('shows four public categories without losing or changing legacy stored counts', () => {
+    const stored = { total: 11, supported: 2, partial: 1, planned: 1, unknown: 6, unsupported: 1 };
     expect(publicDirectoryStats(stored)).toEqual({
-      total: 10,
+      total: 11,
       supported: 2,
+      partial: 1,
       planned: 1,
       unknown: 7,
     });
@@ -24,8 +25,9 @@ describe('published KR support statistics', () => {
     }));
     source.push({ ...source[0], publication: 'draft' });
     expect(directoryStats(source)).toEqual({
-      total: 4,
+      total: 5,
       supported: 1,
+      partial: 1,
       planned: 1,
       unknown: 1,
       unsupported: 1,
@@ -33,6 +35,7 @@ describe('published KR support statistics', () => {
     expect(directoryStats([])).toEqual({
       total: 0,
       supported: 0,
+      partial: 0,
       planned: 0,
       unknown: 0,
       unsupported: 0,
@@ -50,9 +53,10 @@ describe('published KR support statistics', () => {
     expect(all.stats.total).toBe(30);
   });
   it('rejects inconsistent, non-finite, fractional and negative counts instead of showing a misleading zero', () => {
-    const valid = { total: 10, supported: 2, planned: 1, unknown: 6, unsupported: 1 };
+    const valid = { total: 11, supported: 2, partial: 1, planned: 1, unknown: 6, unsupported: 1 };
     for (const value of [
-      { ...valid, total: 11 },
+      { ...valid, total: 12 },
+      { ...valid, partial: 2 },
       { ...valid, unknown: -1 },
       { ...valid, supported: 2.5 },
       { ...valid, planned: NaN },

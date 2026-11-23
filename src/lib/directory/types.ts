@@ -27,10 +27,10 @@ export const categories = [
   'social-networking',
 ] as const;
 export type Category = (typeof categories)[number];
-export const statuses = ['supported', 'planned', 'unknown', 'unsupported'] as const;
+export const statuses = ['supported', 'partial', 'planned', 'unknown', 'unsupported'] as const;
 export type SupportStatus = (typeof statuses)[number];
-// Legacy stored states remain intact; the public directory uses three categories.
-export const publicStatuses = ['supported', 'planned', 'unknown'] as const;
+// Legacy stored states remain intact; the public directory uses four categories.
+export const publicStatuses = ['supported', 'partial', 'planned', 'unknown'] as const;
 export type PublicSupportStatus = (typeof publicStatuses)[number];
 export function publicSupportStatus(status: SupportStatus): PublicSupportStatus {
   return status === 'unsupported' ? 'unknown' : status;

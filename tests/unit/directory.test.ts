@@ -73,7 +73,14 @@ describe('directory URL contract', () => {
     const all = selectApps(apps, defaultQuery, 'ko');
     expect(all.apps.slice(0, 2).map((app) => app.slug)).toEqual([apps[0].slug, apps[1].slug]);
     expect(all.total).toBe(4);
-    expect(all.stats).toEqual({ total: 4, supported: 2, planned: 0, unknown: 2, unsupported: 0 });
+    expect(all.stats).toEqual({
+      total: 4,
+      supported: 2,
+      partial: 0,
+      planned: 0,
+      unknown: 2,
+      unsupported: 0,
+    });
     const supported = selectApps(apps, { ...defaultQuery, status: 'supported' }, 'ko');
     expect(supported.total).toBe(2);
     expect(supported.stats).toEqual(all.stats);

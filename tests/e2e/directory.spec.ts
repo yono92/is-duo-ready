@@ -39,7 +39,7 @@ test('one catalogue exposes support filters and searches beyond familiar apps', 
   await waitForDevice(page);
   await expect(page.getByRole('navigation', { name: '앱 목록 선택' })).toHaveCount(0);
   const statuses = page.getByRole('group', { name: ko.Directory.status, exact: true });
-  await expect(statuses.getByRole('button')).toHaveCount(4);
+  await expect(statuses.getByRole('button')).toHaveCount(5);
   const supported = statuses.getByRole('button', { name: ko.Status.supported, exact: true });
   await supported.focus();
   await page.keyboard.press('Space');
@@ -47,13 +47,20 @@ test('one catalogue exposes support filters and searches beyond familiar apps', 
   await expect(page).toHaveURL(/status=supported/);
   await expect(page).not.toHaveURL(/collection=/);
   await expect(page.getByTestId('app-card')).toHaveCount(8);
+  const partial = statuses.getByRole('button', { name: ko.Status.partial, exact: true });
+  await partial.click();
+  await expect(partial).toHaveAttribute('aria-pressed', 'true');
+  await expect(page).toHaveURL(/status=partial/);
+  await expect(page.getByTestId('app-card')).toHaveCount(2);
+  for (const card of await page.getByTestId('app-card').all())
+    await expect(card).toContainText(ko.Status.partial);
   const unknown = statuses.getByRole('button', { name: ko.Status.unknown, exact: true });
   await unknown.click();
   await expect(unknown).toHaveAttribute('aria-pressed', 'true');
   await expect(unknown).toHaveAccessibleDescription(ko.Directory.unknownDescription);
   await expect(statuses.getByText(ko.Directory.unknownDescription, { exact: true })).toBeVisible();
   await expect(page).toHaveURL(/status=unknown/);
-  await expect(page.getByTestId('app-card')).toHaveCount(14);
+  await expect(page.getByTestId('app-card')).toHaveCount(12);
   await page.screenshot({ path: 'test-results/status-unknown-ko.png', fullPage: true });
   await expect(statuses.getByRole('button', { name: '지원 안 함', exact: true })).toHaveCount(0);
   const category = page.getByRole('button', {
@@ -344,7 +351,7 @@ test('mobile status filters stay visible outside the category dialog', async ({ 
   await expect(unknown).toHaveAccessibleDescription(en.Directory.unknownDescription);
   await expect(statuses.getByText(en.Directory.unknownDescription, { exact: true })).toBeVisible();
   await expect(page).toHaveURL(/status=unknown/);
-  await expect(page.getByTestId('app-card')).toHaveCount(14);
+  await expect(page.getByTestId('app-card')).toHaveCount(12);
   await page.screenshot({ path: 'test-results/status-unknown-en-mobile.png', fullPage: true });
   const planned = statuses.getByRole('button', { name: en.Status.planned, exact: true });
   await expect(planned).toBeVisible();

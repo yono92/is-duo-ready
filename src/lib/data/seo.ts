@@ -131,7 +131,7 @@ export function appMetadata(
     `/apps/${encodeURIComponent(app.slug)}`,
     `${replaceName(copy.appTitle)} · ${seoConfig.siteName}`,
     description,
-    // Pages without confirmed or planned support stay out of search results even when
+    // Pages without confirmed, partial or planned support stay out of search results even when
     // indexing is enabled; their shared copy differs little from app to app.
     indexableApp(app),
     env,

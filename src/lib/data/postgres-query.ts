@@ -49,7 +49,7 @@ export async function queryDirectory(
           ? `support_changed_at DESC,${nameOrder}`
           : query.sort === 'name'
             ? nameOrder
-            : `CASE snapshot->>'status' WHEN 'supported' THEN 0 WHEN 'planned' THEN 1 ELSE 2 END,reviewed_at DESC,${nameOrder}`;
+            : `CASE snapshot->>'status' WHEN 'supported' THEN 0 WHEN 'partial' THEN 1 WHEN 'planned' THEN 2 ELSE 3 END,reviewed_at DESC,${nameOrder}`;
   // Counts, filtering, page clamping and rows share one PostgreSQL statement snapshot.
   // Separate SELECTs under READ COMMITTED can otherwise disagree during publication.
   const result = await db.query<{
@@ -81,6 +81,7 @@ export async function queryDirectory(
     ), overview AS (
       SELECT jsonb_build_object('total',count(*)::int,
         'supported',count(*) FILTER(WHERE snapshot->>'status'='supported')::int,
+        'partial',count(*) FILTER(WHERE snapshot->>'status'='partial')::int,
         'planned',count(*) FILTER(WHERE snapshot->>'status'='planned')::int,
         'unknown',count(*) FILTER(WHERE snapshot->>'status'='unknown')::int,
         'unsupported',count(*) FILTER(WHERE snapshot->>'status'='unsupported')::int) AS stats

@@ -92,6 +92,7 @@
     "total": "Korean App Store · {count, number} {count, plural, one {app} other {apps}}",
     "sampleTotal": "Korean App Store · {count, number} sample {count, plural, one {app} other {apps}}",
     "supported": "Support confirmed",
+    "partial": "Partial support",
     "planned": "Support planned",
     "unknown": "No support information",
     "scope": "All listed apps · Independent of search, category and support status filters.",
@@ -123,6 +124,7 @@
   },
   "Status": {
     "supported": "Support confirmed",
+    "partial": "Partial support",
     "planned": "Support planned",
     "unknown": "No support information",
     "unsupported": "Legacy status record"
@@ -153,6 +155,7 @@
     "methodologyBody": "We use official App Store and developer sources to explain whether an app supports Duo. Here’s what each status means.",
     "statusDescriptions": {
       "supported": "We have confirmed current Duo support in official sources. This does not mean we have tested the app on a device.",
+      "partial": "Official sources mention iPhone Duo improvements but do not say which screens or features are supported.",
       "planned": "Duo support has been announced but is not available yet.",
       "unknown": "We haven’t confirmed official Duo support information yet. The app may already support Duo; this is not a finding that it is unsupported."
     },
@@ -739,7 +742,7 @@
       "compatibility_only": "iPhone Duo appears in the product page’s compatible-device list. That means the app installs and runs; it does not say the app adapts to the Duo’s displays.",
       "generic_foldable": "Foldable devices are mentioned, but iPhone Duo is not named, so this is not classified as support.",
       "bug_fix_only": "The notes only mention fixing a problem on iPhone Duo. They do not describe the scope of support, so this is not classified as support.",
-      "unspecified_improvement": "iPhone Duo improvements are mentioned, but not what changed, so this is not classified as support.",
+      "unspecified_improvement": "iPhone Duo improvements are mentioned, but not what changed, so this is not classified as confirmed support.",
       "preparing": "The notes only say iPhone Duo support is being prepared, so this is not classified as support."
     },
     "excerpt": "Original excerpt",

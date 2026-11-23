@@ -10,8 +10,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     async (db) =>
       (
         await db.query<{ slug: string; reviewed_at: Date }>(
-          // Mirrors indexableApp(): pages without confirmed or planned support are noindex.
-          "SELECT slug,reviewed_at FROM public.directory_entries WHERE publication='published' AND snapshot->>'status' IN ('supported','planned') ORDER BY slug",
+          // Mirrors indexableApp(): pages without confirmed, partial or planned support are noindex.
+          "SELECT slug,reviewed_at FROM public.directory_entries WHERE publication='published' AND snapshot->>'status' IN ('supported','partial','planned') ORDER BY slug",
         )
       ).rows,
   );

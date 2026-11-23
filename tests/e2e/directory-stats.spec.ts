@@ -28,12 +28,12 @@ for (const locale of ['ko', 'en']) {
       }),
     ).toHaveCount(0);
     const values = await overview.locator('dd').allTextContents();
-    expect(values.map(Number)).toEqual([8, 8, 14]);
+    expect(values.map(Number)).toEqual([8, 2, 8, 12]);
     await expect(overview.locator('[data-stat="total"]')).toContainText('30');
     await expect(overview.getByTestId('supported-count')).toHaveText('8');
     const distribution = overview.getByTestId('support-distribution');
     const segments = distribution.locator('svg path[data-status]');
-    await expect(segments).toHaveCount(3);
+    await expect(segments).toHaveCount(4);
     await expect(segments.first()).toHaveAttribute('aria-label', /26\.7%/);
     expect(await segments.first().evaluate((mark) => getComputedStyle(mark).fill)).toBe(
       'rgb(11, 153, 31)',
@@ -42,7 +42,7 @@ for (const locale of ['ko', 'en']) {
       .locator('svg path[data-status]')
       .evaluateAll((segments) => segments.map((segment) => segment.getBoundingClientRect().width));
     const totalWidth = await distribution.evaluate((bar) => bar.getBoundingClientRect().width);
-    for (const [index, count] of [8, 8, 14].entries()) {
+    for (const [index, count] of [8, 2, 8, 12].entries()) {
       expect(widths[index] / totalWidth).toBeCloseTo(count / 30, 2);
     }
     await segments.first().hover();
@@ -86,7 +86,7 @@ test.describe('server-rendered overview', () => {
     // counts, not a JavaScript-free interactive or visible browsing experience.
     await expect(overview.locator('[data-stat="total"]')).toContainText('30');
     await expect(overview.getByTestId('supported-count')).toHaveText('8');
-    await expect(overview.locator('dd')).toHaveText(['8', '8', '14']);
+    await expect(overview.locator('dd')).toHaveText(['8', '2', '8', '12']);
     await expect(overview.locator('[data-stat="unknown"]')).toContainText(
       ko.DirectoryStats.unknown,
     );

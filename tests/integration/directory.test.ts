@@ -98,6 +98,7 @@ test('public SQL search, pagination, detail aliases and history exclude drafts a
       assert.equal(
         result.stats.total,
         result.stats.supported +
+          result.stats.partial +
           result.stats.planned +
           result.stats.unknown +
           result.stats.unsupported,

@@ -5,6 +5,7 @@ export function publicDirectoryStats(stats: DirectoryStats) {
   return {
     total: stats.total,
     supported: stats.supported,
+    partial: stats.partial,
     planned: stats.planned,
     unknown: stats.unknown + stats.unsupported,
   };
@@ -22,7 +23,14 @@ export function assertDirectoryStats(stats: DirectoryStats) {
 }
 
 export function directoryStats(apps: DirectoryApp[]) {
-  const stats: DirectoryStats = { total: 0, supported: 0, planned: 0, unknown: 0, unsupported: 0 };
+  const stats: DirectoryStats = {
+    total: 0,
+    supported: 0,
+    partial: 0,
+    planned: 0,
+    unknown: 0,
+    unsupported: 0,
+  };
   for (const app of apps) {
     if (app.publication !== 'published' || app.country !== 'KR') continue;
     stats.total++;
