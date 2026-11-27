@@ -3124,4 +3124,5 @@ dry-run 후 KR 부재 2개(Relax Melodies P·Fine° Rise)를 보관하고 신규
 - 수정: 홈 페이지와 로딩 화면을 route group `src/app/[locale]/(home)/`으로 옮겼다. URL은 바뀌지 않고, 앱 상세·보고서·섹션 페이지는 로딩 경계 밖에서 렌더링되므로 `notFound()`가 스트리밍 전에 실행된다.
 - 테스트: `tests/e2e/directory.spec.ts`(없는 앱·없는 페이지)와 `tests/e2e/content-pages.spec.ts`(없는 보고서 날짜, ko/en)에 HTTP 404 단언을 추가했다. 기존 위치에 `loading.tsx`를 임시로 되돌리면 3개 테스트가 모두 `Expected: 404, Received: 200`으로 실패하고, 수정 후에는 통과함을 확인했다.
 - 확인: lint 통과(오류 0, 경고 6, 모두 `.data/`), typecheck 통과, 단위 테스트 139개 통과, E2E 59개 통과, build 통과(기존 Turbopack 경고 4개). 첫 typecheck/build는 이전 dev 서버가 생성한 gitignore 대상 타입 캐시(`.next/dev`, `.next-test-3365`)가 옛 `[locale]/page` 경로를 참조해 실패했고, 이 캐시만 지운 뒤 다시 실행해 통과했다.
-- 남은 일: 운영 배포 전이므로 운영 URL은 아직 200을 반환한다. 배포 후 위 4개 URL이 404를 반환하는지 확인해야 한다. 홈 이외 페이지로 이동할 때는 홈 모양의 스켈레톤 대신 이전 화면이 응답이 올 때까지 유지된다.
+- 배포: `a7cc92b` 푸시 후 Vercel Git 자동 운영 배포 `8j5Hw2YdadE9iSZ6YiHQft7Wg1Vg`가 성공했다. 운영에서 보관된 앱 2개(`app-1255141711`, `app-331529422`), 없는 앱(ko/en), `/ko/foo`, `/ko/reports/2099-01-01`이 일반 브라우저와 Googlebot User-Agent 모두에서 404를 반환했다. 홈(ko/en), `/ko?status=partial`, updates, methodology, reports 목록·2026-11-23 보고서, sitemap에서 고른 앱 상세 7개는 200을 유지했고, sitemap URL 수는 916개로 그대로다.
+- 참고: 홈 이외 페이지로 이동할 때는 홈 모양의 스켈레톤 대신 이전 화면이 응답이 올 때까지 유지된다.
