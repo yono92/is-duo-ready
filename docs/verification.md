@@ -3117,3 +3117,11 @@ dry-run 후 KR 부재 2개(Relax Melodies P·Fine° Rise)를 보관하고 신규
 
 공개 인기순 동기화·스키마 변경·배포는 수행하지 않았다.
 [앱별 공식 출처·예외·반영 상세](data-update-2026-11-27.md)
+
+## 존재하지 않는 페이지의 HTTP 404 — 2026-11-27
+
+- 문제: Search Console 확인 중, 보관된 앱(`/ko/apps/app-1255141711`), 없는 앱(`/ko/apps/nonexistent-xyz`), 없는 섹션(`/ko/foo`), 없는 보고서 날짜(`/ko/reports/2099-01-01`)가 운영에서 HTTP 200과 not-found 화면, `noindex`를 함께 반환하는 것을 확인했다(소프트 404). `src/app/[locale]/loading.tsx`가 모든 하위 페이지를 감싸서, 페이지의 `notFound()`가 실행되기 전에 200으로 스트리밍이 시작됐기 때문이다(Next.js 16 `loading.md`의 Status codes 항목).
+- 수정: 홈 페이지와 로딩 화면을 route group `src/app/[locale]/(home)/`으로 옮겼다. URL은 바뀌지 않고, 앱 상세·보고서·섹션 페이지는 로딩 경계 밖에서 렌더링되므로 `notFound()`가 스트리밍 전에 실행된다.
+- 테스트: `tests/e2e/directory.spec.ts`(없는 앱·없는 페이지)와 `tests/e2e/content-pages.spec.ts`(없는 보고서 날짜, ko/en)에 HTTP 404 단언을 추가했다. 기존 위치에 `loading.tsx`를 임시로 되돌리면 3개 테스트가 모두 `Expected: 404, Received: 200`으로 실패하고, 수정 후에는 통과함을 확인했다.
+- 확인: lint 통과(오류 0, 경고 6, 모두 `.data/`), typecheck 통과, 단위 테스트 139개 통과, E2E 59개 통과, build 통과(기존 Turbopack 경고 4개). 첫 typecheck/build는 이전 dev 서버가 생성한 gitignore 대상 타입 캐시(`.next/dev`, `.next-test-3365`)가 옛 `[locale]/page` 경로를 참조해 실패했고, 이 캐시만 지운 뒤 다시 실행해 통과했다.
+- 남은 일: 운영 배포 전이므로 운영 URL은 아직 200을 반환한다. 배포 후 위 4개 URL이 404를 반환하는지 확인해야 한다. 홈 이외 페이지로 이동할 때는 홈 모양의 스켈레톤 대신 이전 화면이 응답이 올 때까지 유지된다.

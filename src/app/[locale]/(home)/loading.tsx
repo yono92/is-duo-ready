@@ -1,3 +1,5 @@
+// Scoped to the home route group on purpose: a loading boundary above detail, report and section
+// pages starts streaming with HTTP 200 before their notFound()/redirect checks run (soft 404).
 import { Skeleton } from '@/components/ui/skeleton';
 export default function Loading() {
   return (

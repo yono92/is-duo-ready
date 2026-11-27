@@ -53,7 +53,8 @@ for (const locale of ['ko', 'en'] as const) {
   });
 
   test(`${locale} unknown report dates are not found`, async ({ page }) => {
-    await page.goto(`/${locale}/reports/2000-01-01`);
+    const response = await page.goto(`/${locale}/reports/2000-01-01`);
+    expect(response?.status()).toBe(404);
     await expect(page.getByText(m.NotFound.title)).toBeVisible();
     // Next.js may stream the not-found metadata once per boundary; any copy suffices.
     await expect(page.locator('meta[name="robots"][content="noindex"]').first()).toBeAttached();

@@ -437,11 +437,14 @@ test('mobile dialog accessibility', async ({ page }) => {
 });
 
 test('unknown app, page and locale do not expose fixtures', async ({ page }) => {
-  await page.goto('/en/apps/missing');
+  // Missing pages must answer with a real HTTP 404, not a streamed 200 soft 404.
+  let response = await page.goto('/en/apps/missing');
+  expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { name: en.NotFound.title })).toBeVisible();
-  await page.goto('/ko/no-such-page');
+  response = await page.goto('/ko/no-such-page');
+  expect(response?.status()).toBe(404);
   await expect(page.getByRole('heading', { name: ko.NotFound.title })).toBeVisible();
-  const response = await page.goto('/fr');
+  response = await page.goto('/fr');
   expect(response?.status()).toBe(404);
   await expect(page.getByTestId('app-card')).toHaveCount(0);
 });
